@@ -13,6 +13,7 @@ namespace InitialProject.Model
         public string City { get; set; }
         public string Country { get; set; }
 
+        public Location() { }
         public Location(int id, string city, string country)
         {
             Id = id;

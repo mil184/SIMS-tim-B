@@ -12,6 +12,8 @@ namespace InitialProject.Model
         public int Id { get; set; }
         public string Url { get; set; }
 
+        public Image() { }
+
         public Image(int id, string url)
         {
             Id = id;

@@ -14,7 +14,6 @@ namespace InitialProject.Resources.Enums
         Guest1,
         Guest2,
         Guide
-
     }
 
 }
