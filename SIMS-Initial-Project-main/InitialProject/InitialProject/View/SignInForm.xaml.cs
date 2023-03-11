@@ -50,25 +50,25 @@ namespace InitialProject
             {
                 if(user.Password == txtPassword.Password)
                 {
-                    if (user.Type == InitialProject.Resources.Enums.UserType.Example)
+                    if (user.Type == InitialProject.Resources.Enums.UserType.example)
                     {
                         CommentsOverview commentsOverview = new CommentsOverview(user);
                         commentsOverview.Show();
                         Close();
                     }
-                    else if (user.Type == InitialProject.Resources.Enums.UserType.Owner) 
+                    else if (user.Type == InitialProject.Resources.Enums.UserType.owner) 
                     { 
 
                     }
-                    else if (user.Type == InitialProject.Resources.Enums.UserType.Guest1)
+                    else if (user.Type == InitialProject.Resources.Enums.UserType.guest1)
                     {
 
                     }
-                    else if (user.Type == InitialProject.Resources.Enums.UserType.Guide)
+                    else if (user.Type == InitialProject.Resources.Enums.UserType.guide)
                     {
 
                     }
-                    else if (user.Type == InitialProject.Resources.Enums.UserType.Guest2)
+                    else if (user.Type == InitialProject.Resources.Enums.UserType.guest2)
                     {
                         //
                     }
