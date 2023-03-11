@@ -27,6 +27,8 @@ namespace InitialProject.Model
 
         public int Duration;
 
+        public int GuideId;
+
         public ObservableCollection<Image> Images;
 
         public ObservableCollection<TourPoint> TourPoints;

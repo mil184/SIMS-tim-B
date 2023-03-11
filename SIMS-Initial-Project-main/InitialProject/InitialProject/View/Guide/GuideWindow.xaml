@@ -28,7 +28,7 @@
                     <!-- Tour list section -->
                     <StackPanel Orientation="Horizontal">
                         <TextBlock FontSize="18" FontWeight="Bold" Text="Tours" Margin="0 0 10 0"/>
-                        <Button Content="Create" Width="80" Margin="0 0 10 0"/>
+                        <Button Content="Create" Width="80" Margin="0 0 10 0" Click="CreateButton_Click"/>
                         <Button Content="Delete" Width="80" Margin="0 0 10 0"/>
                         <Button Content="Edit" Width="80"/>
                     </StackPanel>

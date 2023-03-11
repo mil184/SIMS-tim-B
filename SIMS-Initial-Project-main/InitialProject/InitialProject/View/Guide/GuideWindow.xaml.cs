@@ -15,5 +15,14 @@ namespace InitialProject.View.Guide
             DataContext = this;
             LoggedInUser = user;
         }
+
+        private void CreateButton_Click(object sender, RoutedEventArgs e)
+        {
+            CreateTour createTour = new CreateTour();
+            createTour.Show();
+            Close();
+        }
+
+ 
     }
 }
