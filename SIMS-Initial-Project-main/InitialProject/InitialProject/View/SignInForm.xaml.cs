@@ -1,6 +1,7 @@
 ﻿using InitialProject.Forms;
 using InitialProject.Model;
 using InitialProject.Repository;
+using InitialProject.View.Guide;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -66,7 +67,9 @@ namespace InitialProject
                     }
                     else if (user.Type == InitialProject.Resources.Enums.UserType.guide)
                     {
-
+                        GuideWindow guideWindow = new GuideWindow(user);
+                        guideWindow.Show();
+                        Close();
                     }
                     else if (user.Type == InitialProject.Resources.Enums.UserType.guest2)
                     {

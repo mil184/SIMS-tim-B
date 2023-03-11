@@ -11,6 +11,9 @@
     <None Remove="Resources\Images\add.png" />
     <None Remove="Resources\Images\delete.png" />
     <None Remove="Resources\Images\edit.png" />
+    <None Remove="Resources\Images\home.png" />
+    <None Remove="Resources\Images\tour-guide.png" />
+    <None Remove="Resources\Images\traveler.png" />
     <None Remove="Resources\Images\view.png" />
   </ItemGroup>
 
@@ -21,12 +24,27 @@
     <Content Include="Resources\Images\delete.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\Images\home.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\tour-guide.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Images\edit.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\traveler.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Images\view.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="View\Guest1\" />
+    <Folder Include="View\Guest2\" />
+    <Folder Include="View\Owner\" />
   </ItemGroup>
 
 </Project>
