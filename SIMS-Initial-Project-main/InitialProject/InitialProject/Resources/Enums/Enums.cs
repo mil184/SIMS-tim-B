@@ -6,15 +6,19 @@ using System.Threading.Tasks;
 
 namespace InitialProject.Resources.Enums
 {
-
-    public enum UserType { 
-        
-        Example,
-        Owner,
-        Guest1,
-        Guest2,
-        Guide
-
+    public enum UserType
+    { 
+        example,
+        owner,
+        guest1,
+        guest2,
+        guide
     }
 
+    public enum AccommodationType
+    {
+        apartment,
+        house,
+        hut
+    }
 }
