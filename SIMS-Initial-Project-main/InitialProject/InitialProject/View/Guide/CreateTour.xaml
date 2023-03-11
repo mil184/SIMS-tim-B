@@ -24,11 +24,11 @@
         </Grid.ColumnDefinitions>
 
         <TextBlock Text="Tour Name:" Grid.Row="0" Grid.Column="0"/>
-        <TextBox Name="txtTourName" Margin="5" Grid.Row="0" Grid.Column="1"/>
+        <TextBox Name="txtTourName" Margin="5" Grid.Row="0" Grid.Column="1" Text="{Binding Path=TourName, UpdateSourceTrigger=PropertyChanged}"/>
 
         <!-- Tour Description row -->
         <TextBlock Text="Tour Description:" Grid.Row="1" Grid.Column="0"/>
-        <TextBox Name="txtTourDescription" Margin="5" Height="100" Grid.Row="1" Grid.Column="1"/>
+        <TextBox Name="txtTourDescription" Margin="5" Height="100" Grid.Row="1" Grid.Column="1" Text="{Binding Path=Description, UpdateSourceTrigger=PropertyChanged}"/>
 
         <!-- Country/City/Language row -->
         <StackPanel Orientation="Horizontal" Margin="5" Grid.Row="2" Grid.ColumnSpan="2">
@@ -43,9 +43,9 @@
         <!-- Maximum Guests/Duration row -->
         <StackPanel Orientation="Horizontal" Margin="5" Grid.Row="3" Grid.ColumnSpan="2">
             <TextBlock Text="Maximum Guests:"/>
-            <TextBox Name="txtMaxGuests" Margin="5" Width="150"/>
+            <TextBox Name="txtMaxGuests" Margin="5" Width="150" Text="{Binding Path=MaxGuests, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Text="Duration:" Margin="10,0,0,0"/>
-            <TextBox Name="txtDuration" Margin="5" Width="150"/>
+            <TextBox Name="txtDuration" Margin="5" Width="150" Text="{Binding Path=Duration, UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
 
         <!-- Date/Time row -->
@@ -65,7 +65,7 @@
 
         <!-- Create Tour/Cancel buttons row -->
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="6" Grid.ColumnSpan="2">
-            <Button Name="btnCreateTour" Content="Create Tour" Margin="5"/>
+            <Button Name="btnCreateTour" Content="Create Tour" Margin="5" Click="btnCreateTour_Click"/>
             <Button Name="btnCancel" Content="Cancel" Margin="5"/>
         </StackPanel>
     </Grid>

@@ -1,11 +1,6 @@
 ﻿using InitialProject.Serializer;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace InitialProject.Model
 {
@@ -23,24 +18,40 @@ namespace InitialProject.Model
 
         public int MaxGuests;
 
-        public DateTime StartTime;
+       // public DateTime StartTime;
 
         public int Duration;
 
         public int GuideId;
 
-        public ObservableCollection<Image> Images;
+      //  public ObservableCollection<Image> Images;
 
-        public ObservableCollection<TourPoint> TourPoints;
+       // public ObservableCollection<TourPoint> TourPoints;
+
+        public Tour() { }
+        public Tour(string name, string description, string language, int maxGuests, int duration)
+        {
+            Name = name;
+            Description = description;
+            Language = language;
+            MaxGuests = maxGuests;
+            Duration = duration;
+        }
 
         public string[] ToCSV()
         {
-            throw new NotImplementedException();
+            string[] csvValues = { Id.ToString(),Name, Description, Language, MaxGuests.ToString(),Duration.ToString() };
+            return csvValues;
         }
 
         public void FromCSV(string[] values)
         {
-            throw new NotImplementedException();
+            Id = int.Parse(values[0]);
+            Name = values[1];
+            Description = values[2];
+            Language = values[3];
+            MaxGuests = int.Parse(values[4]);
+            Duration = int.Parse(values[5]);
         }
     }
 }
