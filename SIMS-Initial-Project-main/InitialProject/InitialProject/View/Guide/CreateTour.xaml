@@ -5,77 +5,94 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InitialProject.View.Guide"
         mc:Ignorable="d"
-        Title="Create Tour" Height="400" Width="525">
-    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        Title="Create Tour" Height="800" Width="500">
+    <Grid Margin="0,0,0,-187">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+        <!-- Tour Details Section -->
+        <GroupBox Header="Tour Details" Margin="10" Grid.Row="0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
 
-        <TextBlock Text="Tour Name:" Grid.Row="0" Grid.Column="0"/>
-        <TextBox Name="txtTourName" Margin="5" Grid.Row="0" Grid.Column="1" Text="{Binding Path=TourName, UpdateSourceTrigger=PropertyChanged}"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-        <!-- Tour Description row -->
-        <TextBlock Text="Tour Description:" Grid.Row="1" Grid.Column="0"/>
-        <TextBox Name="txtTourDescription" Margin="5" Height="100" Grid.Row="1" Grid.Column="1" Text="{Binding Path=Description, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Text="Tour Name:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" />
+                <TextBox Name="txtTourName" Margin="5" Text="{Binding Path=TourName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1" />
 
-        <!-- Country/City/Language row -->
-        <StackPanel Orientation="Horizontal" Margin="5" Grid.Row="2" Grid.ColumnSpan="2">
-            <TextBlock Text="Country:"/>
-            <TextBox Name="txtCountry" Margin="5" Width="100" Text="{Binding Path=Country, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Text="City:" Margin="10,0,0,0"/>
-            <TextBox Name="txtCity" Margin="5" Width="100" Text="{Binding Path=City, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Text="Language:" Margin="10,0,0,0"/>
-            <TextBox Name="txtLanguage" Margin="5" Width="100" Text="{Binding Path=TourLanguage, UpdateSourceTrigger=PropertyChanged}"/>
-        </StackPanel>
+                <TextBlock Text="Tour Description:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" />
+                <TextBox Name="txtTourDescription" Margin="5" Height="100" Text="{Binding Path=Description, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" />
 
-        <!-- Maximum Guests/Duration row -->
-        <StackPanel Orientation="Horizontal" Margin="5" Grid.Row="3" Grid.ColumnSpan="2">
-            <TextBlock Text="Maximum Guests:"/>
-            <TextBox Name="txtMaxGuests" Margin="5" Width="150" Text="{Binding Path=MaxGuests, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Text="Duration:" Margin="10,0,0,0"/>
-            <TextBox Name="txtDuration" Margin="5" Width="150" Text="{Binding Path=Duration, UpdateSourceTrigger=PropertyChanged}"/>
-        </StackPanel>
+                <TextBlock Text="Country:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" />
+                <TextBox Name="txtCountry" Margin="5" Text="{Binding Path=Country, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1" />
 
-        <!-- Date/Time row -->
-        <StackPanel Orientation="Horizontal" Margin="5" Grid.Row="4" Grid.ColumnSpan="2">
-            <TextBlock Text="Date:"/>
-            <DatePicker Name="dpDate" Margin="5" Width="150"/>
-            <TextBlock Text="Time:" Margin="10,0,0,0"/>
-            <ComboBox Name="Hours_cb" SelectionChanged="Hours_cb_SelectionChanged" Width="75" Margin="5">
-                <ComboBox.Effect>
-                    <DropShadowEffect/>
-                </ComboBox.Effect>
-            </ComboBox>
-            <ComboBox Name="Minutes_cb" SelectionChanged="Minutes_cb_SelectionChanged" Width="75" Margin="5">
-                <ComboBox.Effect>
-                    <DropShadowEffect/>
-                </ComboBox.Effect>
-            </ComboBox>
-        </StackPanel>
+                <TextBlock Text="City:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" />
+                <TextBox Name="txtCity" Margin="5" Text="{Binding Path=City, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1" />
 
-        <!-- Photo upload row -->
-        <StackPanel Orientation="Horizontal" Margin="5" Grid.Row="5" Grid.ColumnSpan="2">
-            <TextBlock Text="Upload Photo:"/>
-            <Button Name="btnBrowse" Content="Browse" Margin="5"/>
-            <TextBlock Name="txtPhotoFilename" Margin="5"/>
-        </StackPanel>
+                <TextBlock Text="Language:" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" />
+                <TextBox Name="txtLanguage" Margin="5" Text="{Binding Path=TourLanguage, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" Grid.Column="1" />
 
-        <!-- Create Tour/Cancel buttons row -->
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="6" Grid.ColumnSpan="2">
-            <Button Name="btnCreateTour" Content="Create Tour" Margin="5" Click="btnCreateTour_Click"/>
-            <Button Name="btnCancel" Content="Cancel" Margin="5"/>
+                <TextBlock Text="Maximum Guests:" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" />
+                <TextBox Name="txtMaxGuests" Margin="5" Text="{Binding Path=MaxGuests, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="1" />
+
+                <TextBlock Text="Duration (hours):" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" />
+                <TextBox Name="txtDuration" Margin="5" Text="{Binding Path=Duration, UpdateSourceTrigger=PropertyChanged}" Grid.Row="6" Grid.Column="1" />
+
+                <TextBlock Text="Date and Time:" Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" />
+                <StackPanel Orientation="Horizontal" Margin="5" Grid.Row="7" Grid.Column="1">
+                    <DatePicker Name="dpDate" Width="150" VerticalAlignment="Center" />
+                    <ComboBox Name="Hours_cb" SelectionChanged="Hours_cb_SelectionChanged" Width="75" Margin="5" VerticalAlignment="Center">
+                        <ComboBox.Effect>
+                            <DropShadowEffect />
+                        </ComboBox.Effect>
+                    </ComboBox>
+                    <ComboBox Name="Minutes_cb" SelectionChanged="Minutes_cb_SelectionChanged" Width="75" Margin="5" VerticalAlignment="Center">
+                        <ComboBox.Effect>
+                            <DropShadowEffect />
+                        </ComboBox.Effect>
+                    </ComboBox>
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="Image URLs" Grid.Row="1">
+            <StackPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="UrlTextBox" Width="200" Margin="5" Grid.Row="0" Grid.Column="0" />
+                    <Button Name="AddImageButton" Content="Add" Margin="5" Grid.Row="0" Grid.Column="1" Click="AddImageButton_Click" />
+                </Grid>
+                <ListBox x:Name="UrlListBox" Width="Auto" Height="Auto" Margin="5" ItemsSource="{Binding ImageUrls}" />
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Header="Checkpoints" Grid.Row="2">
+            
+        </GroupBox>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="3">
+            <Button Content="Save" Margin="10" Click="btnCreateTour_Click"/>
+            <Button Content="Cancel" Margin="10"/>
         </StackPanel>
     </Grid>
 </Window>

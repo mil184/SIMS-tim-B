@@ -1,11 +1,13 @@
 ﻿using InitialProject.Model;
 using InitialProject.Repository;
 using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using Image = InitialProject.Model.Image;
 
 namespace InitialProject.View.Guide
 {
@@ -17,6 +19,8 @@ namespace InitialProject.View.Guide
         private readonly TourRepository _repository;
 
         private readonly LocationRepository _locationRepository;
+
+        private readonly ImageRepository _imageRepository;
 
         private readonly User LoggedInUser;
 
@@ -143,6 +147,20 @@ namespace InitialProject.View.Guide
             }
         }
 
+        private ObservableCollection<string> _imageUrls = new ObservableCollection<string>();
+        public ObservableCollection<string> ImageUrls
+        {
+            get => _imageUrls;
+            set
+            {
+                if (_imageUrls != value)
+                {
+                    _imageUrls = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
@@ -153,8 +171,12 @@ namespace InitialProject.View.Guide
         {
             InitializeComponent();
             DataContext = this;
+
             _repository = new TourRepository();
             _locationRepository = new LocationRepository();
+            _imageRepository = new ImageRepository();
+
+
             LoggedInUser = user;
 
             for (int i = 0; i < 24; i++)
@@ -189,13 +211,16 @@ namespace InitialProject.View.Guide
         {
             Minutes = ((ComboBox)sender).SelectedItem.ToString();
         }
-        private string FixComboBoxFormat(string comboBoxInput)
+
+        private void AddImageButton_Click(object sender, RoutedEventArgs e)
         {
-            if (comboBoxInput[0] == '0')
+            string imageUrl = UrlTextBox.Text;
+            if (!string.IsNullOrEmpty(imageUrl))
             {
-                comboBoxInput = comboBoxInput.Substring(1);
+                ImageUrls.Add(imageUrl);
+                _imageRepository.Save(new Image(imageUrl));
             }
-            return comboBoxInput;
+            UrlTextBox.Text = string.Empty;
         }
     }
 }
