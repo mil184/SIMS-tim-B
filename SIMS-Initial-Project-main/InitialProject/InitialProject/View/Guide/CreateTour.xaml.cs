@@ -14,6 +14,8 @@ namespace InitialProject.View.Guide
     {
         private readonly TourRepository _repository;
 
+        private readonly LocationRepository _locationRepository;    
+
         private string _name;
         public string TourName
         {
@@ -83,6 +85,34 @@ namespace InitialProject.View.Guide
             }
         }
 
+        private string _country;
+        public string Country
+        {
+            get => _country;
+            set
+            {
+                if (value != _country)
+                {
+                    _country = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _city;
+        public string City
+        {
+            get => _city;
+            set
+            {
+                if (value != _city)
+                {
+                    _city = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
@@ -94,12 +124,15 @@ namespace InitialProject.View.Guide
             InitializeComponent();
             DataContext = this;
             _repository = new TourRepository();
+            _locationRepository = new LocationRepository();
     
         }
 
         private void btnCreateTour_Click(object sender, RoutedEventArgs e)
         {
-            Tour tour = new Tour(TourName ,Description, TourLanguage, int.Parse(MaxGuests), int.Parse(Duration));
+            Location TourLocation = new Location(Country, City);
+            _locationRepository.Save(TourLocation);
+            Tour tour = new Tour(TourName, TourLocation.Id, Description, TourLanguage, int.Parse(MaxGuests), int.Parse(Duration));
             _repository.Save(tour);
             Close();
 

@@ -29,9 +29,10 @@ namespace InitialProject.Model
        // public ObservableCollection<TourPoint> TourPoints;
 
         public Tour() { }
-        public Tour(string name, string description, string language, int maxGuests, int duration)
+        public Tour(string name, int locationId, string description, string language, int maxGuests, int duration)
         {
             Name = name;
+            LocationId = locationId;
             Description = description;
             Language = language;
             MaxGuests = maxGuests;
@@ -40,7 +41,7 @@ namespace InitialProject.Model
 
         public string[] ToCSV()
         {
-            string[] csvValues = { Id.ToString(),Name, Description, Language, MaxGuests.ToString(),Duration.ToString() };
+            string[] csvValues = { Id.ToString(),Name, LocationId.ToString(), Description, Language, MaxGuests.ToString(),Duration.ToString() };
             return csvValues;
         }
 
@@ -48,10 +49,11 @@ namespace InitialProject.Model
         {
             Id = int.Parse(values[0]);
             Name = values[1];
-            Description = values[2];
-            Language = values[3];
-            MaxGuests = int.Parse(values[4]);
-            Duration = int.Parse(values[5]);
+            LocationId = int.Parse(values[2]);
+            Description = values[3];
+            Language = values[4];
+            MaxGuests = int.Parse(values[5]);
+            Duration = int.Parse(values[6]);
         }
     }
 }
