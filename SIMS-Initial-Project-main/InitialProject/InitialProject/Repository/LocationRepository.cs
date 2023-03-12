@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using InitialProject.Model;
 using InitialProject.Serializer;
 
@@ -41,6 +42,11 @@ namespace InitialProject.Repository
             _serializer.ToCSV(FilePath, _locations);
 
             return location;
+        }
+        public Location GetById(int id)
+        {
+            _locations = _serializer.FromCSV(FilePath);
+            return _locations.Find(c => c.Id == id);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using InitialProject.Serializer;
+﻿using InitialProject.Repository;
+using InitialProject.Serializer;
 using System;
 using System.Collections.ObjectModel;
 
@@ -6,27 +7,25 @@ namespace InitialProject.Model
 {
     public class Tour : ISerializable
     {
-        public int Id;
+        public int Id { get; set; }
 
-        public string Name;
+        public string Name { get; set; }    
 
-        public int LocationId;
+        public int LocationId { get; set; }
+        public string Description { get; set; }
+        public string Language { get; set; }
 
-        public string Description;
+        public int MaxGuests { get; set; }
 
-        public string Language;
+        public DateTime StartTime { get; set; }
 
-        public int MaxGuests;
+        public int Duration { get; set; }
 
-        public DateTime StartTime;
+        public int GuideId { get; set; }
 
-        public int Duration;
+        //  public ObservableCollection<Image> Images;
 
-        public int GuideId;
-
-      //  public ObservableCollection<Image> Images;
-
-       // public ObservableCollection<TourPoint> TourPoints;
+        // public ObservableCollection<TourPoint> TourPoints;
 
         public Tour() { }
         public Tour(string name, int locationId, string description, string language, int maxGuests, DateTime startTime, int duration, int guideId)
@@ -39,6 +38,7 @@ namespace InitialProject.Model
             StartTime = startTime;
             Duration = duration;
             GuideId = guideId;
+ 
         }
 
         public string[] ToCSV()

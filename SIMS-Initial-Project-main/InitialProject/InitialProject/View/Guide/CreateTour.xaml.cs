@@ -7,6 +7,9 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media.Animation;
+using System.Windows.Media;
 using Image = InitialProject.Model.Image;
 
 namespace InitialProject.View.Guide
@@ -222,5 +225,6 @@ namespace InitialProject.View.Guide
             }
             UrlTextBox.Text = string.Empty;
         }
+
     }
 }
