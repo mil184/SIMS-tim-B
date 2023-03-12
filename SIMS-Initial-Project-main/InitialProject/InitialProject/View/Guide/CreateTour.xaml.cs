@@ -2,8 +2,10 @@
 using InitialProject.Repository;
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace InitialProject.View.Guide
 {
@@ -14,7 +16,9 @@ namespace InitialProject.View.Guide
     {
         private readonly TourRepository _repository;
 
-        private readonly LocationRepository _locationRepository;    
+        private readonly LocationRepository _locationRepository;
+
+        private readonly User LoggedInUser;
 
         private string _name;
         public string TourName
@@ -112,6 +116,32 @@ namespace InitialProject.View.Guide
                 }
             }
         }
+        private string _hours;
+        public string Hours
+        {
+            get => _hours;
+            set
+            {
+                if (value != _hours)
+                {
+                    _hours = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private string _minutes;
+        public string Minutes
+        {
+            get => _minutes;
+            set
+            {
+                if (value != _minutes)
+                {
+                    _minutes = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -119,23 +149,53 @@ namespace InitialProject.View.Guide
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public CreateTour()
+        public CreateTour(User user)
         {
             InitializeComponent();
             DataContext = this;
             _repository = new TourRepository();
             _locationRepository = new LocationRepository();
-    
+            LoggedInUser = user;
+
+            for (int i = 0; i < 24; i++)
+            {
+                string hour = i.ToString("D2");
+                Hours_cb.Items.Add(hour);
+            }
+            for (int i = 0; i < 60; i++)
+            {
+                string minute = i.ToString("D2");
+                Minutes_cb.Items.Add(minute);
+            }
+
         }
 
         private void btnCreateTour_Click(object sender, RoutedEventArgs e)
         {
+            DateTime selectedDate = dpDate.SelectedDate.GetValueOrDefault();
+
             Location TourLocation = new Location(Country, City);
             _locationRepository.Save(TourLocation);
-            Tour tour = new Tour(TourName, TourLocation.Id, Description, TourLanguage, int.Parse(MaxGuests), int.Parse(Duration));
+            Tour tour = new Tour(TourName, TourLocation.Id, Description, TourLanguage, int.Parse(MaxGuests), new DateTime(selectedDate.Year,selectedDate.Month,selectedDate.Day,int.Parse(Hours),int.Parse(Minutes),0),int.Parse(Duration), LoggedInUser.Id);
             _repository.Save(tour);
             Close();
 
+        }
+        private void Hours_cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Hours = ((ComboBox)sender).SelectedItem.ToString();
+        }
+        private void Minutes_cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Minutes = ((ComboBox)sender).SelectedItem.ToString();
+        }
+        private string FixComboBoxFormat(string comboBoxInput)
+        {
+            if (comboBoxInput[0] == '0')
+            {
+                comboBoxInput = comboBoxInput.Substring(1);
+            }
+            return comboBoxInput;
         }
     }
 }

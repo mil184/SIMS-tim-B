@@ -18,7 +18,7 @@ namespace InitialProject.View.Guide
 
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
-            CreateTour createTour = new CreateTour();
+            CreateTour createTour = new CreateTour(LoggedInUser);
             createTour.Show();
             Close();
         }
