@@ -1,9 +1,12 @@
 ﻿using InitialProject.Repository;
 using InitialProject.Serializer;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace InitialProject.Model
 {
@@ -24,12 +27,12 @@ namespace InitialProject.Model
 
         public int GuideId { get; set; }
 
-        //  public ObservableCollection<Image> Images;
+        public ObservableCollection<int> ImageIds;
 
         // public ObservableCollection<TourPoint> TourPoints;
 
         public Tour() { }
-        public Tour(string name, int locationId, string description, string language, int maxGuests, int currentGuestCount, DateTime startTime, int duration, int guideId)
+        public Tour(string name, int locationId, string description, string language, int maxGuests, int currentGuestCount, DateTime startTime, int duration, int guideId, ObservableCollection<int> imageIds)
         {
             Name = name;
             LocationId = locationId;
@@ -40,11 +43,25 @@ namespace InitialProject.Model
             StartTime = startTime;
             Duration = duration;
             GuideId = guideId;
+            ImageIds = imageIds;    
  
         }
         public string[] ToCSV()
         {
-            string[] csvValues = { Id.ToString(),Name, LocationId.ToString(), Description, Language, MaxGuests.ToString(), CurrentGuestCount.ToString(), StartTime.ToString(), Duration.ToString(), GuideId.ToString() };
+            string imageIds = "";
+            const char ListDelimiter = ',';
+            StringBuilder stringBuilder = new StringBuilder();
+
+            foreach(int id in ImageIds) 
+            {
+                stringBuilder.Append(id);
+                stringBuilder.Append(ListDelimiter);
+            }
+
+            stringBuilder.Length--;
+            imageIds = stringBuilder.ToString();
+
+            string[] csvValues = { Id.ToString(),Name, LocationId.ToString(), Description, Language, MaxGuests.ToString(), CurrentGuestCount.ToString(), StartTime.ToString(), Duration.ToString(), GuideId.ToString(), imageIds };
             return csvValues;
         }
 
@@ -59,7 +76,18 @@ namespace InitialProject.Model
             CurrentGuestCount = int.Parse(values[6]);
             StartTime = DateTime.Parse(values[7]);
             Duration = int.Parse(values[8]);
-            GuideId = int.Parse(values[9]); 
+            GuideId = int.Parse(values[9]);
+
+            string imageIds = values[10];
+            string[] intSubstrings = imageIds.Split(',');
+
+            foreach(string id in intSubstrings) 
+            {
+                ImageIds.Add(int.Parse(id));
+            } 
+
         }
+
     }
+
 }
