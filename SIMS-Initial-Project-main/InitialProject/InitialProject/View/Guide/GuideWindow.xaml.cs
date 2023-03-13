@@ -88,7 +88,6 @@ namespace InitialProject.View.Guide
         {
             CreateTour createTour = new CreateTour(LoggedInUser);
             createTour.Show();
-            Close();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

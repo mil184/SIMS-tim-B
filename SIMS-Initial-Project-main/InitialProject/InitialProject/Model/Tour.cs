@@ -14,9 +14,8 @@ namespace InitialProject.Model
         public int LocationId { get; set; }
         public string Description { get; set; }
         public string Language { get; set; }
-
         public int MaxGuests { get; set; }
-
+        public int CurrentGuestCount { get; set; }
         public DateTime StartTime { get; set; }
 
         public int Duration { get; set; }

@@ -1,5 +1,6 @@
 ﻿using InitialProject.Model;
 using InitialProject.Serializer;
+using InitialProject.View.Guide;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -13,11 +14,14 @@ namespace InitialProject.Repository
 
         private readonly Serializer<Tour> _serializer;
 
+        private readonly LocationRepository _locationRepository; 
+
         private List<Tour> _tours;
         public TourRepository()
         {
             _serializer = new Serializer<Tour>();
             _tours = _serializer.FromCSV(FilePath);
+            _locationRepository = new LocationRepository(); 
         }
 
         public int NextId()
@@ -71,6 +75,36 @@ namespace InitialProject.Repository
             }
             return upcomingTours;
         }
+        public List<Tour> GetByCity(Location location)
+        {
+            List<Tour> toursByCity = new List<Tour>();
 
+            foreach (Tour tour in _tours) 
+            {
+                if (_locationRepository.GetById(tour.LocationId).City == location.City) 
+                {
+                    toursByCity.Add(tour);
+                }
+            }
+            return toursByCity;
+        }
+        public List<Tour> GetByCountry(Location location)
+        {
+            List<Tour> toursByCountry = new List<Tour>();
+
+            foreach (Tour tour in _tours)
+            {
+                if (_locationRepository.GetById(tour.LocationId).Country == location.Country)
+                {
+                    toursByCountry.Add(tour);
+                }
+            }
+            return toursByCountry;
+        }
+
+        public bool HasAvailableSpace(Tour tour, int guestsToAdd) 
+        {
+            return (tour.CurrentGuestCount + guestsToAdd < tour.MaxGuests);
+        }
     }
 }
