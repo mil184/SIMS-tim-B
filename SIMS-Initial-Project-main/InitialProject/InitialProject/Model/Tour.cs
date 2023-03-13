@@ -31,7 +31,7 @@ namespace InitialProject.Model
 
         // public ObservableCollection<TourPoint> TourPoints;
 
-        public Tour() { }
+        public Tour() { ImageIds = new ObservableCollection<int>(); }
         public Tour(string name, int locationId, string description, string language, int maxGuests, int currentGuestCount, DateTime startTime, int duration, int guideId, ObservableCollection<int> imageIds)
         {
             Name = name;

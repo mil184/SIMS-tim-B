@@ -229,5 +229,9 @@ namespace InitialProject.View.Guide
             UrlTextBox.Text = string.Empty;
         }
 
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }
