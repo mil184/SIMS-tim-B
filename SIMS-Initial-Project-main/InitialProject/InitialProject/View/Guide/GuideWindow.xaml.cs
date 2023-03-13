@@ -12,81 +12,43 @@ using System.Windows.Media;
 using System;
 using System.Globalization;
 using System.Windows.Data;
+using InitialProject.Resources.Observer;
 
 namespace InitialProject.View.Guide
 {
-    /// <summary>
-    /// Interaction logic for Window1.xaml
-    /// </summary>
-    public partial class GuideWindow : Window
+    public partial class GuideWindow : Window, INotifyPropertyChanged, IObserver
     {
         public User LoggedInUser { get; set; }
-        private Tour _currentTour;
-        public Tour CurrentTour
-        {
-            get => _currentTour;
-            set
-            {
-                _currentTour = value;
-                OnPropertyChanged(nameof(CurrentTour));
-                OnPropertyChanged(nameof(CurrentTourCountry));
-                OnPropertyChanged(nameof(CurrentTourCity));
-            }
-        }
-        public List<Tour> UpcomingTours { get; set; }
+        public ObservableCollection<Tour> CurrentTours { get; set; }
+        public ObservableCollection<Tour> UpcomingTours { get; set; }
 
         private readonly TourRepository _repository;
         private readonly LocationRepository _locationRepository;
+        private readonly ImageRepository _imageRepository;
 
-        private string _currentTourCountry;
-        public string CurrentTourCountry
-        {
-            get {
-                if (CurrentTour != null)
-                {
-                    return _locationRepository.GetById(CurrentTour.Id).Country;
-                }
-                return null;
-            } 
-            set
-            {
-                    _currentTourCountry = value;                  
-            }
-        }
-        private string _currentTourCity;
-        public string CurrentTourCity
-        {
-            get
-            {
-                if (CurrentTour != null)
-                {
-                    return _locationRepository.GetById(CurrentTour.Id).City;
-                }
-                return null;
-            }
-            set
-            {
-                _currentTourCity = value;
-            }
-        }
         public GuideWindow(User user)
         {
             InitializeComponent();
+
             DataContext = this;
             LoggedInUser = user;
+
             _repository = new TourRepository();
+            _repository.Subscribe(this);
+            _imageRepository = new ImageRepository();
+            _imageRepository.Subscribe(this);
             _locationRepository = new LocationRepository();
+            _locationRepository.Subscribe(this);
 
-            CurrentTour = _repository.GetCurrentTour();
-
-            UpcomingTours = _repository.GetUpcomingTours();
+            CurrentTours = new ObservableCollection<Tour>(_repository.GetTodaysTours());
+            UpcomingTours = new ObservableCollection<Tour>(_repository.GetUpcomingTours());
             var view = CollectionViewSource.GetDefaultView(UpcomingTours);
             view.SortDescriptions.Add(new SortDescription("StartTime", ListSortDirection.Ascending));
         }
 
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
-            CreateTour createTour = new CreateTour(LoggedInUser);
+            CreateTour createTour = new CreateTour(LoggedInUser, _repository, _locationRepository, _imageRepository);
             createTour.Show();
         }
 
@@ -101,6 +63,20 @@ namespace InitialProject.View.Guide
             MessageBox.Show("Clicked");
         }
 
+        void IObserver.Update()
+        {
+            UpcomingTours.Clear();
+            foreach (Tour tour in _repository.GetUpcomingTours())
+            {
+                UpcomingTours.Add(tour);
+            }
+
+            CurrentTours.Clear();
+            foreach (Tour tour in _repository.GetTodaysTours())
+            {
+                CurrentTours.Add(tour);
+            }
+        }
     }
 
 }

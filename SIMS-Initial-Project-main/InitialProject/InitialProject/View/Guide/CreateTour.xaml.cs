@@ -17,7 +17,7 @@ namespace InitialProject.View.Guide
     /// <summary>
     /// Interaction logic for Window1.xaml
     /// </summary>
-    public partial class CreateTour : Window
+    public partial class CreateTour : Window,INotifyPropertyChanged
     {
         private readonly TourRepository _repository;
 
@@ -170,15 +170,14 @@ namespace InitialProject.View.Guide
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public CreateTour(User user)
+        public CreateTour(User user, TourRepository _tourRepository, LocationRepository locationRepository, ImageRepository imageRepository)
         {
             InitializeComponent();
             DataContext = this;
 
-            _repository = new TourRepository();
-            _locationRepository = new LocationRepository();
-            _imageRepository = new ImageRepository();
-
+            _repository = _tourRepository;
+            _locationRepository = locationRepository;
+            _imageRepository =  imageRepository;
 
             LoggedInUser = user;
 

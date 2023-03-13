@@ -1,4 +1,5 @@
 ﻿using InitialProject.Model;
+using InitialProject.Resources.Observer;
 using InitialProject.Serializer;
 using InitialProject.View.Guide;
 using System;
@@ -8,12 +9,13 @@ using System.Linq;
 
 namespace InitialProject.Repository
 {
-    public class TourRepository
+    public class TourRepository: ISubject
     {
         private const string FilePath = "../../../Resources/Data/tours.csv";
 
         private readonly Serializer<Tour> _serializer;
 
+        private readonly List<IObserver> _observers;
         private readonly LocationRepository _locationRepository; 
 
         private List<Tour> _tours;
@@ -21,7 +23,8 @@ namespace InitialProject.Repository
         {
             _serializer = new Serializer<Tour>();
             _tours = _serializer.FromCSV(FilePath);
-            _locationRepository = new LocationRepository(); 
+            _locationRepository = new LocationRepository();
+            _observers = new List<IObserver>();
         }
 
         public int NextId()
@@ -41,38 +44,41 @@ namespace InitialProject.Repository
             _tours = _serializer.FromCSV(FilePath);
             _tours.Add(tour);
             _serializer.ToCSV(FilePath, _tours);
+            NotifyObservers();
 
             return tour;
         }
-        public Tour GetCurrentTour()
+        public List<Tour> GetTodaysTours()
         {
-            DateTime currentDateTime = DateTime.Now;
+            DateTime currentDate = DateTime.Now.Date; // get current date only
+            List<Tour> currentTours = new List<Tour>();
+
             foreach (Tour tour in _tours)
             {
-                DateTime tourStartDateTime = tour.StartTime;
-                DateTime tourEndDateTime = tour.StartTime.AddHours(tour.Duration);
+                DateTime tourStartDate = tour.StartTime.Date; // get tour start date only
 
-                if (currentDateTime >= tourStartDateTime && currentDateTime <= tourEndDateTime)
+                if (currentDate == tourStartDate)
                 {
-                    return tour;
+                    currentTours.Add(tour);
                 }
             }
-            return null;
+            return currentTours;
         }
 
         public List<Tour> GetUpcomingTours()
         {
             List<Tour> upcomingTours = new List<Tour>();
 
-            DateTime currentDateTime = DateTime.Now;
+            DateTime currentDate = DateTime.Now.Date;
             foreach (Tour tour in _tours)
             {
-                DateTime tourStartDateTime = tour.StartTime;
-                if (tourStartDateTime > currentDateTime)
+                DateTime tourStartDate = tour.StartTime.Date;
+                if (tourStartDate >= currentDate)
                 {
                     upcomingTours.Add(tour);
                 }
             }
+
             return upcomingTours;
         }
         public List<Tour> GetByCity(Location location)
@@ -105,6 +111,24 @@ namespace InitialProject.Repository
         public bool HasAvailableSpace(Tour tour, int guestsToAdd) 
         {
             return (tour.CurrentGuestCount + guestsToAdd < tour.MaxGuests);
+        }
+
+        public void Subscribe(IObserver observer)
+        {
+            _observers.Add(observer);
+        }
+
+        public void Unsubscribe(IObserver observer)
+        {
+            _observers.Remove(observer);
+        }
+
+        public void NotifyObservers()
+        {
+            foreach (var observer in _observers)
+            {
+                observer.Update();
+            }
         }
     }
 }

@@ -2,6 +2,8 @@
 using InitialProject.Serializer;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace InitialProject.Model
 {
@@ -40,7 +42,6 @@ namespace InitialProject.Model
             GuideId = guideId;
  
         }
-
         public string[] ToCSV()
         {
             string[] csvValues = { Id.ToString(),Name, LocationId.ToString(), Description, Language, MaxGuests.ToString(), CurrentGuestCount.ToString(), StartTime.ToString(), Duration.ToString(), GuideId.ToString() };
