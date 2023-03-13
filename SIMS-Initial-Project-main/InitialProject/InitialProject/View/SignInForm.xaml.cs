@@ -1,6 +1,7 @@
 ﻿using InitialProject.Forms;
 using InitialProject.Model;
 using InitialProject.Repository;
+using InitialProject.View.Owner;
 using InitialProject.View.Guide;
 using InitialProject.View.Guest2;
 using System.ComponentModel;
@@ -59,8 +60,10 @@ namespace InitialProject
                         Close();
                     }
                     else if (user.Type == InitialProject.Resources.Enums.UserType.owner) 
-                    { 
-
+                    {
+                        OwnerWindow ownerWindow = new OwnerWindow(user);
+                        ownerWindow.Show();
+                        Close();
                     }
                     else if (user.Type == InitialProject.Resources.Enums.UserType.guest1)
                     {

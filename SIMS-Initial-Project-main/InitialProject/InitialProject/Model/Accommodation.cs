@@ -12,30 +12,31 @@ namespace InitialProject.Model
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public Location Location { get; set; }
+        public int LocationId { get; set; }
         public AccommodationType Type { get; set; }
         public int MaxGuests { get; set; }
         public int MinReservationDays { get; set; }
         public int CancellationPeriod { get; set; }
-        public List<Image> Images { get; set; }
+        //public List<Image> Images { get; set; }
 
-        public Accommodation(int id, string name, Location location, AccommodationType type, int maxGuests, int minReservationDays, int cancellationPeriod, List<Image> images)
+        public Accommodation() { }
+
+        public Accommodation(int id, string name, int locationId, AccommodationType type, int maxGuests, int minReservationDays, int cancellationPeriod)
         {
             Id = id;
             Name = name;
-            Location = location;
+            LocationId = locationId;
             Type = type;
             MaxGuests = maxGuests;
             MinReservationDays = minReservationDays;
             CancellationPeriod = cancellationPeriod;
-            Images = images;
         }
 
         public string[] ToCSV()
         {
             //  how to save locations???
             //  how to save image list???
-            string[] csvValues = { Id.ToString(), Name, Location.City, Location.Country, Type.ToString(), MaxGuests.ToString(), MinReservationDays.ToString(), CancellationPeriod.ToString() };
+            string[] csvValues = { Id.ToString(), Name, LocationId.ToString(), Type.ToString(), MaxGuests.ToString(), MinReservationDays.ToString(), CancellationPeriod.ToString() };
             return csvValues;
         }
 
@@ -43,12 +44,11 @@ namespace InitialProject.Model
         {
             Id = Convert.ToInt32(values[0]);
             Name = values[1];
-            Location.City = values[2];
-            Location.Country = values[3];
-            Type = Enum.Parse<AccommodationType>(values[4]);
-            MaxGuests = Convert.ToInt32(values[5]);
-            MinReservationDays = Convert.ToInt32(values[6]);
-            CancellationPeriod = Convert.ToInt32(values[7]);
+            LocationId = Convert.ToInt32(values[2]);
+            Type = Enum.Parse<AccommodationType>(values[3]);
+            MaxGuests = Convert.ToInt32(values[4]);
+            MinReservationDays = Convert.ToInt32(values[5]);
+            CancellationPeriod = Convert.ToInt32(values[6]);
         }
     }
 }

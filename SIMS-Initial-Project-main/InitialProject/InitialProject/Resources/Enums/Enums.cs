@@ -17,8 +17,8 @@ namespace InitialProject.Resources.Enums
 
     public enum AccommodationType
     {
-        apartment,
-        house,
-        hut
+        Apartment,
+        House,
+        Hut
     }
 }
