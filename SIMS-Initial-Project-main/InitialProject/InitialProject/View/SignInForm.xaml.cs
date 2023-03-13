@@ -3,10 +3,10 @@ using InitialProject.Model;
 using InitialProject.Repository;
 using InitialProject.View.Owner;
 using InitialProject.View.Guide;
-using InitialProject.View.Guest2;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using InitialProject.View.Guest2;
 
 namespace InitialProject
 {
@@ -74,12 +74,14 @@ namespace InitialProject
                         GuideWindow guideWindow = new GuideWindow(user);
                         guideWindow.Show();
                         Close();
+                     
                     }
                     else if (user.Type == InitialProject.Resources.Enums.UserType.guest2)
                     {
                         Guest2Window guest2Window = new Guest2Window(user);
                         guest2Window.Show();
                         Close();
+                       
                     }
                 } 
                 else

@@ -1,0 +1,79 @@
+﻿<Window x:Class="InitialProject.View.Guest2.Guest2Window"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:InitialProject.View.Guest2"
+        mc:Ignorable="d"
+        Title="Guest2Window" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- User information section -->
+        <StackPanel Grid.Row="0" Margin="10" Orientation="Horizontal">
+            <Image Source="/Resources/Images/guest2.png" Width="100" Height="75" Margin="0 0 10 0" />
+            <StackPanel>
+                <TextBlock FontSize="18" FontWeight="Bold" Text="Guest 2" Margin="0 0 0 10"/>
+                <TextBlock FontSize="14" Text="{Binding LoggedInUser.Username, FallbackValue=BidningNotWorking}"/>
+            </StackPanel>
+        </StackPanel>
+        <!-- Tabs section -->
+        <TabControl Grid.Row="1">
+            <!-- Overview tab -->
+            <TabItem Header="Overview">
+                <StackPanel Margin="10">
+                    <!-- Tour list section -->
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="Reserve tour" Width="80" Margin="0 0 10 0" Click="CreateButton_Click"/>
+                    </StackPanel>
+                    <!-- Tour overview section -->
+                    <StackPanel Margin="0 10 0 0">
+                        <TextBlock Text="Explore tours" FontSize="14" FontWeight="Bold"/>
+                        <ListBox>
+                            <ListBoxItem>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock FontWeight="Bold" Text="Tour 1"/>
+                                    <TextBlock Text="Location: Paris, France"/>
+                                    <TextBlock Text="Date: 2023-03-15"/>
+                                </StackPanel>
+                            </ListBoxItem>
+                            <ListBoxItem>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock FontWeight="Bold" Text="Tour 2"/>
+                                    <TextBlock Text="Location: Tokyo, Japan"/>
+                                    <TextBlock Text="Date: 2023-04-01"/>
+                                </StackPanel>
+                            </ListBoxItem>
+                            <ListBoxItem>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock FontWeight="Bold" Text="Tour 3"/>
+                                    <TextBlock Text="Location: Sydney, Australia"/>
+                                    <TextBlock Text="Date: 2023-05-10"/>
+                                </StackPanel>
+                            </ListBoxItem>
+                        </ListBox>
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+            <!-- Statistics tab -->
+            <TabItem Header="Statistics">
+                <StackPanel Margin="10">
+                    <!-- Statistic section -->
+                    <TextBlock FontSize="18" FontWeight="Bold" Text="Statistics" Margin="0 0 10 0"/>
+                    <!-- Add statistic elements here -->
+                </StackPanel>
+            </TabItem>
+            <!-- Ratings tab -->
+            <TabItem Header="Ratings">
+                <StackPanel Margin="10">
+                    <!-- Rating section -->
+                    <TextBlock FontSize="18" FontWeight="Bold" Text="Ratings" Margin="0 0 10 0"/>
+                    <!-- Add rating elements here -->
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

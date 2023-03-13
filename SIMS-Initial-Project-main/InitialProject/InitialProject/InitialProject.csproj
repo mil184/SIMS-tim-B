@@ -48,7 +48,6 @@
 
   <ItemGroup>
     <Folder Include="View\Guest1\" />
-    <Folder Include="View\Guest2\" />
     <Folder Include="View\Owner\" />
   </ItemGroup>
 

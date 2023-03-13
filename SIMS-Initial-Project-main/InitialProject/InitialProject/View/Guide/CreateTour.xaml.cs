@@ -201,7 +201,7 @@ namespace InitialProject.View.Guide
 
             Location TourLocation = new Location(Country, City);
             _locationRepository.Save(TourLocation);
-            Tour tour = new Tour(TourName, TourLocation.Id, Description, TourLanguage, int.Parse(MaxGuests), new DateTime(selectedDate.Year,selectedDate.Month,selectedDate.Day,int.Parse(Hours),int.Parse(Minutes),0),int.Parse(Duration), LoggedInUser.Id);
+            Tour tour = new Tour(TourName, TourLocation.Id, Description, TourLanguage, int.Parse(MaxGuests),0, new DateTime(selectedDate.Year,selectedDate.Month,selectedDate.Day,int.Parse(Hours),int.Parse(Minutes),0),int.Parse(Duration), LoggedInUser.Id);
             _repository.Save(tour);
             Close();
 
