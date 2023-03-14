@@ -5,62 +5,78 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InitialProject.View.Owner"
         mc:Ignorable="d"
-        Title="RegisterAccommodation" Height="450" Width="800">
+        Title="Register Accommodation" Height="800" Width="500" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+        <GroupBox Header="Accommodation Details" Margin="10" Grid.Row="0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
 
-        <TextBlock Text="Accommodation Name:" Grid.Row="0" Grid.Column="0"/>
-        <TextBox Name="txtAccommodationName" Margin="5" Grid.Row="0" Grid.Column="1" Text="{Binding Path=AccommodationName, UpdateSourceTrigger=PropertyChanged}"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-        <!-- Country/City/Language row -->
-        <StackPanel Orientation="Horizontal" Margin="5" Grid.Row="2" Grid.ColumnSpan="2">
-            <TextBlock Text="Country:"/>
-            <TextBox Name="txtCountry" Margin="5" Width="100" Text="{Binding Path=Country, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Text="City:" Margin="10,0,0,0"/>
-            <TextBox Name="txtCity" Margin="5" Width="100" Text="{Binding Path=City, UpdateSourceTrigger=PropertyChanged}"/>
-        </StackPanel>
+                <TextBlock Text="Accommodation Name:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" />
+                <TextBox Name="txtAccommodationName" Margin="5" Text="{Binding Path=AccommodationName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1" />
 
-        <!-- Maximum Guests/Duration row -->
-        <StackPanel Orientation="Horizontal" Margin="5" Grid.Row="3" Grid.ColumnSpan="2">
-            <TextBlock Text="Accommodation Type:"/>
-            <ComboBox Name="AccommodationType_cb" Margin="5" Width="150" SelectionChanged="AccommodationType_cb_SelectionChanged"/>
-        </StackPanel>
+                <TextBlock Text="Country:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" />
+                <TextBox Name="txtCountry" Margin="5" Text="{Binding Path=Country, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1" />
 
-        <!-- Date/Time row -->
-        <StackPanel Orientation="Horizontal" Margin="5" Grid.Row="4" Grid.ColumnSpan="2">
-            <TextBlock Text="Max Number of Guests:"/>
-            <TextBox Name="txtMaxGuests" Margin="5" Width="150" Text="{Binding Path=MaxGuests, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Text="Minimum Days Before Reservation:" Margin="10,0,0,0"/>
-            <TextBox Name="txtMinReservationDays" Width="75" Margin="5" Text="{Binding Path=MinReservationDays, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Text="Cancelation Period:" Margin="10,0,0,0"/>
-            <TextBox Name="txtCancellationPeriod" Width="75" Margin="5" Text="{Binding Path=CancellationPeriod, UpdateSourceTrigger=PropertyChanged}"/>
-        </StackPanel>
+                <TextBlock Text="City:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" />
+                <TextBox Name="txtCity" Margin="5" Text="{Binding Path=City, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1" />
 
-        <!-- Photo upload row -->
-        <StackPanel Orientation="Horizontal" Margin="5" Grid.Row="5" Grid.ColumnSpan="2">
-            <TextBlock Text="Upload Photo:"/>
-            <Button Name="btnBrowse" Content="Browse" Margin="5"/>
-            <TextBlock Name="txtPhotoFilename" Margin="5"/>
-        </StackPanel>
+                <TextBlock Text="Accommodation Type:" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" />
+                <ComboBox Name="AccommodationType_cb" Grid.Row="4" Grid.Column="1" Margin="5" Width="150" SelectionChanged="AccommodationType_cb_SelectionChanged"/>
 
+                <TextBlock Text="Maximum Guests:" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" />
+                <TextBox Name="txtMaxGuests" Margin="5" Text="{Binding Path=MaxGuests, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="1" />
+
+                <TextBlock Text="Minimum Days Before Reservation:" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" />
+                <TextBox Name="txtMinReservationDays" Margin="5" Text="{Binding Path=MinReservationDays, UpdateSourceTrigger=PropertyChanged}" Grid.Row="6" Grid.Column="1" />
+
+                <TextBlock Text="Cancellation Period:" Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" />
+                <TextBox Name="txtCancellationPeriod" Margin="5" Text="{Binding Path=CancellationPeriod, UpdateSourceTrigger=PropertyChanged}" Grid.Row="7" Grid.Column="1" />
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Header="Image URLs" Grid.Row="1">
+            <StackPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="UrlTextBox" Width="200" Margin="5" Grid.Row="0" Grid.Column="0" />
+                    <Button Name="AddImageButton" Content="Add" Margin="5" Grid.Row="0" Grid.Column="1" Click="AddImageButton_Click"/>
+                </Grid>
+                <ListBox x:Name="UrlListBox" Width="Auto" Height="Auto" Margin="5" ItemsSource="{Binding ImageUrls}" />
+            </StackPanel>
+        </GroupBox>
+        
         <!-- Create Tour/Cancel buttons row -->
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="6" Grid.ColumnSpan="2">
             <Button Name="btnRegisterAccommodation" Content="Register Accommodation" Margin="5" Click="btnRegisterAccommodation_Click"/>
-            <Button Name="btnCancel" Content="Cancel" Margin="5"/>
+            <Button Name="btnCancel" Content="Cancel" Margin="5" Click="btnCancel_Click"/>
         </StackPanel>
     </Grid>
 </Window>

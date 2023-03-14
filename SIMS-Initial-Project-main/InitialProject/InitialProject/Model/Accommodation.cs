@@ -21,9 +21,8 @@ namespace InitialProject.Model
 
         public Accommodation() { }
 
-        public Accommodation(int id, string name, int locationId, AccommodationType type, int maxGuests, int minReservationDays, int cancellationPeriod)
+        public Accommodation(string name, int locationId, AccommodationType type, int maxGuests, int minReservationDays, int cancellationPeriod)
         {
-            Id = id;
             Name = name;
             LocationId = locationId;
             Type = type;

@@ -1,33 +1,23 @@
-﻿using InitialProject.Resources.Enums;
+﻿using InitialProject.Model;
+using InitialProject.Repository;
+using InitialProject.Resources.Enums;
 using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using InitialProject.Model;
-using InitialProject.Repository;
-using Microsoft.VisualBasic;
+using Image = InitialProject.Model.Image;
 
 namespace InitialProject.View.Owner
 {
-    /// <summary>
-    /// Interaction logic for RegisterAccommodation.xaml
-    /// </summary>
     public partial class RegisterAccommodation : Window
     {
         private readonly AccommodationRepository _repository;
 
         private readonly LocationRepository _locationRepository;
+
+        private readonly ImageRepository _imageRepository;
 
         public User LoggedInUser { get; set; }
 
@@ -129,6 +119,20 @@ namespace InitialProject.View.Owner
             }
         }
 
+        private ObservableCollection<string> _imageUrls = new ObservableCollection<string>();
+        public ObservableCollection<string> ImageUrls
+        {
+            get => _imageUrls;
+            set
+            {
+                if (_imageUrls != value)
+                {
+                    _imageUrls = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
@@ -142,6 +146,7 @@ namespace InitialProject.View.Owner
 
             _repository = new AccommodationRepository();
             _locationRepository = new LocationRepository();
+            _imageRepository = new ImageRepository();
 
             LoggedInUser = user;
 
@@ -154,7 +159,7 @@ namespace InitialProject.View.Owner
         {
             Location AccommodationLocation = new Location(Country, City);
             _locationRepository.Save(AccommodationLocation);
-            Accommodation Accommodation = new Accommodation(0, AccommodationName, AccommodationLocation.Id, Enum.Parse<AccommodationType>(Type), int.Parse(MaxGuests), int.Parse(MinReservationDays), int.Parse(CancellationPeriod));
+            Accommodation Accommodation = new Accommodation(AccommodationName, AccommodationLocation.Id, Enum.Parse<AccommodationType>(Type), int.Parse(MaxGuests), int.Parse(MinReservationDays), int.Parse(CancellationPeriod));
             _repository.Save(Accommodation);
             Close();
         }
@@ -162,6 +167,22 @@ namespace InitialProject.View.Owner
         public void AccommodationType_cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Type = ((ComboBox)sender).SelectedItem.ToString();
+        }
+
+        private void btnCancel_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void AddImageButton_Click(object sender, RoutedEventArgs e)
+        {
+            string imageUrl = UrlTextBox.Text;
+            if (!string.IsNullOrEmpty(imageUrl))
+            {
+                ImageUrls.Add(imageUrl);
+                _imageRepository.Save(new Image(imageUrl));
+            }
+            UrlTextBox.Text = string.Empty;
         }
     }
 }

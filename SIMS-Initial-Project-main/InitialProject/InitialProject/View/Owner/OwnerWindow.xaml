@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InitialProject.View.Owner"
         mc:Ignorable="d"
-        Title="OwnerWindow" Height="450" Width="800">
+        Title="Owner" Height="450" Width="800" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -47,24 +47,16 @@
                     </StackPanel>
                     <!-- Incoming tours section -->
                     <StackPanel Margin="0 10 0 0">
-                        <TextBlock FontSize="14" FontWeight="Bold" Text="Incoming Tours"/>
-                        <ListBox>
-                            <ListBoxItem>
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock FontWeight="Bold" Text="Tour 2"/>
-                                    <TextBlock Text="Location: Tokyo, Japan"/>
-                                    <TextBlock Text="Date: 2023-04-01"/>
-                                </StackPanel>
-                            </ListBoxItem>
-                            <ListBoxItem>
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock FontWeight="Bold" Text="Tour 3"/>
-                                    <TextBlock Text="Location: Sydney, Australia"/>
-                                    <TextBlock Text="Date: 2023-05-10"/>
-                                </StackPanel>
-                            </ListBoxItem>
-                            
-                        </ListBox>
+                        <DataGrid DockPanel.Dock="Bottom" 
+                                  ItemsSource="{Binding Path=Accommodations, UpdateSourceTrigger=PropertyChanged}"
+                                  SelectedItem="{Binding Path=SelectedAccommodation, UpdateSourceTrigger=PropertyChanged}"
+                                  AutoGenerateColumns="False" IsReadOnly="True"
+                                  Width="700" Height="150">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="100"></DataGridTextColumn>
+                                <DataGridTextColumn Header="City" Binding="{Binding LocationId}" Width="300"></DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
                     </StackPanel>
                 </StackPanel>
             </TabItem>
