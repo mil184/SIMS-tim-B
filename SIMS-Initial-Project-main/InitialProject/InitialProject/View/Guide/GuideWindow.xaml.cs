@@ -1,28 +1,21 @@
 ﻿using InitialProject.Model;
 using InitialProject.Repository;
-using System.Collections.Generic;
+using InitialProject.Resources.Observer;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media.Animation;
-using System.Windows.Media;
-using System;
-using System.Globalization;
 using System.Windows.Data;
-using InitialProject.Resources.Observer;
 
 namespace InitialProject.View.Guide
 {
     public partial class GuideWindow : Window, INotifyPropertyChanged, IObserver
     {
-        public User LoggedInUser { get; set; }
+        public User CurrentUser { get; set; }
         public ObservableCollection<Tour> CurrentTours { get; set; }
         public ObservableCollection<Tour> UpcomingTours { get; set; }
 
-        private readonly TourRepository _repository;
+        private readonly TourRepository _tourRepository;
         private readonly LocationRepository _locationRepository;
         private readonly ImageRepository _imageRepository;
         private readonly CheckpointRepository _checkpointRepository;
@@ -30,28 +23,30 @@ namespace InitialProject.View.Guide
         public GuideWindow(User user)
         {
             InitializeComponent();
-
             DataContext = this;
-            LoggedInUser = user;
+            CurrentUser = user;
 
-            _repository = new TourRepository();
-            _repository.Subscribe(this);
+            _tourRepository = new TourRepository();
+            _tourRepository.Subscribe(this);
+
             _imageRepository = new ImageRepository();
             _imageRepository.Subscribe(this);
+
             _locationRepository = new LocationRepository();
             _locationRepository.Subscribe(this);
+
             _checkpointRepository = new CheckpointRepository();
             _checkpointRepository.Subscribe(this);
 
-            CurrentTours = new ObservableCollection<Tour>(_repository.GetTodaysTours());
-            UpcomingTours = new ObservableCollection<Tour>(_repository.GetUpcomingTours());
+            CurrentTours = new ObservableCollection<Tour>(_tourRepository.GetTodaysTours());
+            UpcomingTours = new ObservableCollection<Tour>(_tourRepository.GetUpcomingTours());
             var view = CollectionViewSource.GetDefaultView(UpcomingTours);
             view.SortDescriptions.Add(new SortDescription("StartTime", ListSortDirection.Ascending));
         }
 
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
-            CreateTour createTour = new CreateTour(LoggedInUser, _repository, _locationRepository, _imageRepository, _checkpointRepository);
+            CreateTour createTour = new CreateTour(CurrentUser, _tourRepository, _locationRepository, _imageRepository, _checkpointRepository);
             createTour.Show();
         }
 
@@ -61,20 +56,21 @@ namespace InitialProject.View.Guide
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        void IObserver.Update()
+        public void Update()
         {
             UpcomingTours.Clear();
-            foreach (Tour tour in _repository.GetUpcomingTours())
+            foreach (Tour tour in _tourRepository.GetUpcomingTours())
             {
                 UpcomingTours.Add(tour);
             }
 
             CurrentTours.Clear();
-            foreach (Tour tour in _repository.GetTodaysTours())
+            foreach (Tour tour in _tourRepository.GetTodaysTours())
             {
                 CurrentTours.Add(tour);
             }
         }
     }
+
 
 }

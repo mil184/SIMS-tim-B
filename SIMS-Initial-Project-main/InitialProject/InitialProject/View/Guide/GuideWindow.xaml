@@ -22,7 +22,7 @@
             <Image Source="/Resources/Images/tour-guide.png" Width="100" Height="75" Margin="0 0 10 0" />
             <StackPanel>
                 <TextBlock FontSize="18" FontWeight="Bold" Text="Tour Guide" Margin="0 0 0 10"/>
-                <TextBlock FontSize="14" Text="{Binding LoggedInUser.Username, FallbackValue=BidningNotWorking}"/>
+                <TextBlock FontSize="14" Text="{Binding CurrentUser.Username, FallbackValue=BidningNotWorking}"/>
             </StackPanel>
         </StackPanel>
         <!-- Tabs section -->

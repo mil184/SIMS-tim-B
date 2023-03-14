@@ -9,27 +9,27 @@ using System.Linq;
 
 namespace InitialProject.Repository
 {
-    public class TourRepository: ISubject
+    public class TourRepository : ISubject
     {
-        private const string FilePath = "../../../Resources/Data/tours.csv";
+        private const string _filePath = "../../../Resources/Data/tours.csv";
 
         private readonly Serializer<Tour> _serializer;
-
+        private readonly LocationRepository _locationRepository;
         private readonly List<IObserver> _observers;
-        private readonly LocationRepository _locationRepository; 
 
         private List<Tour> _tours;
+
         public TourRepository()
         {
             _serializer = new Serializer<Tour>();
-            _tours = _serializer.FromCSV(FilePath);
+            _tours = _serializer.FromCSV(_filePath);
             _locationRepository = new LocationRepository();
             _observers = new List<IObserver>();
         }
 
         public int NextId()
         {
-            _tours = _serializer.FromCSV(FilePath);
+            _tours = _serializer.FromCSV(_filePath);
             if (_tours.Count < 1)
             {
                 return 1;
@@ -40,37 +40,40 @@ namespace InitialProject.Repository
         public Tour Save(Tour tour)
         {
             tour.Id = NextId();
-            _tours = _serializer.FromCSV(FilePath);
+            _tours = _serializer.FromCSV(_filePath);
             _tours.Add(tour);
-            _serializer.ToCSV(FilePath, _tours);
+            _serializer.ToCSV(_filePath, _tours);
             NotifyObservers();
 
             return tour;
         }
+
         public List<Tour> GetTodaysTours()
         {
-            DateTime currentDate = DateTime.Now.Date; // get current date only
-            List<Tour> currentTours = new List<Tour>();
+            var currentDate = DateTime.Now.Date; // get current date only
+            var currentTours = new List<Tour>();
 
-            foreach (Tour tour in _tours)
+            foreach (var tour in _tours)
             {
-                DateTime tourStartDate = tour.StartTime.Date; // get tour start date only
+                var tourStartDate = tour.StartTime.Date; // get tour start date only
 
                 if (currentDate == tourStartDate)
                 {
                     currentTours.Add(tour);
                 }
             }
+
             return currentTours;
         }
 
         public List<Tour> GetUpcomingTours()
         {
-            List<Tour> upcomingTours = new List<Tour>();
-            DateTime currentDate = DateTime.Now.Date;
-            foreach (Tour tour in _tours)
+            var upcomingTours = new List<Tour>();
+            var currentDate = DateTime.Now.Date;
+
+            foreach (var tour in _tours)
             {
-                DateTime tourStartDate = tour.StartTime.Date;
+                var tourStartDate = tour.StartTime.Date;
                 if (tourStartDate > currentDate)
                 {
                     upcomingTours.Add(tour);
@@ -79,34 +82,38 @@ namespace InitialProject.Repository
 
             return upcomingTours;
         }
+
         public List<Tour> GetByCity(Location location)
         {
-            List<Tour> toursByCity = new List<Tour>();
+            var toursByCity = new List<Tour>();
 
-            foreach (Tour tour in _tours) 
+            foreach (var tour in _tours)
             {
-                if (_locationRepository.GetById(tour.LocationId).City == location.City) 
+                if (_locationRepository.GetById(tour.LocationId).City == location.City)
                 {
                     toursByCity.Add(tour);
                 }
             }
+
             return toursByCity;
         }
+
         public List<Tour> GetByCountry(Location location)
         {
-            List<Tour> toursByCountry = new List<Tour>();
+            var toursByCountry = new List<Tour>();
 
-            foreach (Tour tour in _tours)
+            foreach (var tour in _tours)
             {
                 if (_locationRepository.GetById(tour.LocationId).Country == location.Country)
                 {
                     toursByCountry.Add(tour);
                 }
             }
+
             return toursByCountry;
         }
 
-        public bool HasAvailableSpace(Tour tour, int guestsToAdd) 
+        public bool HasAvailableSpace(Tour tour, int guestsToAdd)
         {
             return (tour.CurrentGuestCount + guestsToAdd < tour.MaxGuests);
         }
@@ -128,5 +135,6 @@ namespace InitialProject.Repository
                 observer.Update();
             }
         }
+
     }
 }
