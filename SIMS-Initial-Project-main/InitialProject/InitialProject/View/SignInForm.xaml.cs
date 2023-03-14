@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using InitialProject.View.Guest2;
+using InitialProject.View.Guest1;
 
 namespace InitialProject
 {
@@ -67,7 +68,9 @@ namespace InitialProject
                     }
                     else if (user.Type == InitialProject.Resources.Enums.UserType.guest1)
                     {
-
+                        Guest1Window guest1Window = new Guest1Window(user);
+                        guest1Window.Show();
+                        Close();
                     }
                     else if (user.Type == InitialProject.Resources.Enums.UserType.guide)
                     {

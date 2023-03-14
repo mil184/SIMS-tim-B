@@ -12,20 +12,20 @@ namespace InitialProject.Model
         public int Id { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public Accommodation Accommodation { get; set; }
+        public int AccommodationId { get; set; }
 
         public AccommodationReservation() { }
 
-        public AccommodationReservation(int id, DateTime startDate, DateTime endDate, Accommodation accommodation)
+        public AccommodationReservation(int id, DateTime startDate, DateTime endDate, int accommodationId)
         {
             Id = id;
             StartDate = startDate;
             EndDate = endDate;
-            Accommodation = accommodation;
+            AccommodationId = accommodationId;
         }
         public string[] ToCSV()
         {
-            string[] csvValues = { Id.ToString(), StartDate.ToString(), EndDate.ToString() };
+            string[] csvValues = { Id.ToString(), StartDate.ToString(), EndDate.ToString(), AccommodationId.ToString() };
             return csvValues;
         }
 
@@ -34,6 +34,7 @@ namespace InitialProject.Model
             Id = Convert.ToInt32(values[0]);
             StartDate = Convert.ToDateTime(values[1]);
             EndDate = Convert.ToDateTime(values[2]);
+            AccommodationId = Convert.ToInt32(values[3]);
         }
     }
 }
