@@ -11,21 +11,53 @@ using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Media;
 using Image = InitialProject.Model.Image;
+using System.Linq;
+using InitialProject.Resources.Observer;
+using System.Configuration;
 
 namespace InitialProject.View.Guide
 {
-    /// <summary>
-    /// Interaction logic for Window1.xaml
-    /// </summary>
     public partial class CreateTour : Window,INotifyPropertyChanged
     {
         private readonly TourRepository _repository;
-
         private readonly LocationRepository _locationRepository;
-
         private readonly ImageRepository _imageRepository;
+        private readonly CheckpointRepository _checkpointRepository;
 
+        public ObservableCollection<Checkpoint> MiddleCheckpoints { get; set; }
+        private ObservableCollection<int> ImageIds;
+        private ObservableCollection<int> CheckpointIds;
+
+        private int OrderCounter;
         private readonly User LoggedInUser;
+
+        private Checkpoint _startCheckpoint;
+        public Checkpoint StartCheckpoint
+        {
+            get { return _startCheckpoint; }
+            set
+            {
+                if (_startCheckpoint != value)
+                {
+                    _startCheckpoint = value;
+                    OnPropertyChanged(nameof(StartCheckpoint));
+                }
+            }
+        }
+
+        private Checkpoint _endCheckpoint;
+        public Checkpoint EndCheckpoint
+        {
+            get { return _endCheckpoint; }
+            set
+            {
+                if (_endCheckpoint != value)
+                {
+                    _endCheckpoint = value;
+                    OnPropertyChanged(nameof(EndCheckpoint));
+                }
+            }
+        }
 
         private string _name;
         public string TourName
@@ -164,7 +196,6 @@ namespace InitialProject.View.Guide
             }
         }
 
-        private ObservableCollection<int> _imageIds = new ObservableCollection<int>();
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -172,7 +203,7 @@ namespace InitialProject.View.Guide
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public CreateTour(User user, TourRepository _tourRepository, LocationRepository locationRepository, ImageRepository imageRepository)
+        public CreateTour(User user, TourRepository _tourRepository, LocationRepository locationRepository, ImageRepository imageRepository, CheckpointRepository checkpointRepository)
         {
             InitializeComponent();
             DataContext = this;
@@ -180,8 +211,13 @@ namespace InitialProject.View.Guide
             _repository = _tourRepository;
             _locationRepository = locationRepository;
             _imageRepository =  imageRepository;
+            _checkpointRepository = checkpointRepository;
 
-            LoggedInUser = user;
+             ImageIds = new ObservableCollection<int>();
+             CheckpointIds = new ObservableCollection<int>();
+             MiddleCheckpoints = new ObservableCollection<Checkpoint>();
+
+             LoggedInUser = user;
 
             for (int i = 0; i < 24; i++)
             {
@@ -194,18 +230,29 @@ namespace InitialProject.View.Guide
                 Minutes_cb.Items.Add(minute);
             }
 
-        }
+            OrderCounter = 0;
+            AddFinalCheckpointButton.IsEnabled = false;
 
+            AddMiddleCheckpointButton.IsEnabled = false;
+        }
         private void btnCreateTour_Click(object sender, RoutedEventArgs e)
         {
             DateTime selectedDate = dpDate.SelectedDate.GetValueOrDefault();
-
             Location TourLocation = new Location(Country, City);
             _locationRepository.Save(TourLocation);
-            Tour tour = new Tour(TourName, TourLocation.Id, Description, TourLanguage, int.Parse(MaxGuests),0, new DateTime(selectedDate.Year,selectedDate.Month,selectedDate.Day,int.Parse(Hours),int.Parse(Minutes),0),int.Parse(Duration), LoggedInUser.Id, _imageIds);
-            _repository.Save(tour);
-            Close();
+            Tour tour = new Tour(TourName, TourLocation.Id, Description, TourLanguage, int.Parse(MaxGuests),0, new DateTime(selectedDate.Year,selectedDate.Month,selectedDate.Day,int.Parse(Hours),int.Parse(Minutes),0),int.Parse(Duration), LoggedInUser.Id, ImageIds, CheckpointIds);
+            tour = _repository.Save(tour);
 
+            EndCheckpoint.Order = MiddleCheckpoints.Count() + 1;
+            _checkpointRepository.Update(EndCheckpoint);
+
+            foreach (int checkpointId in CheckpointIds)
+            {
+                Checkpoint checkpoint = _checkpointRepository.GetById(checkpointId);
+                checkpoint.TourId = tour.Id;
+                _checkpointRepository.Update(checkpoint); 
+            }
+            Close();
         }
         private void Hours_cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -224,7 +271,7 @@ namespace InitialProject.View.Guide
                 ImageUrls.Add(imageUrl);
                 Image image = new Image(imageUrl);
                 _imageRepository.Save(image);
-                _imageIds.Add(image.Id);
+                ImageIds.Add(image.Id);
             }
             UrlTextBox.Text = string.Empty;
         }
@@ -232,6 +279,63 @@ namespace InitialProject.View.Guide
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void AddStartingCheckpoint_Click(object sender, RoutedEventArgs e)
+        {
+            Checkpoint checkpoint = _checkpointRepository.Save(new Checkpoint(StartingCheckpointName.Text, 0, false, -5));
+            CheckpointIds.Add(checkpoint.Id);
+            StartCheckpoint = checkpoint;
+
+            AddStartingCheckpointButton.IsEnabled = false;
+            AddFinalCheckpointButton.IsEnabled = true;
+            AddMiddleCheckpointButton.IsEnabled = false;
+
+            StartingCheckpointName.IsEnabled = false;
+            FinalCheckpointName.IsEnabled = true;
+
+            StartingCheckpointName.Text = string.Empty;
+        }
+
+        private void AddFinalCheckpoint_Click(object sender, RoutedEventArgs e)
+        {
+            // Add code to handle adding the final checkpoint here
+            Checkpoint checkpoint = _checkpointRepository.Save(new Checkpoint(FinalCheckpointName.Text,1, false, -5));
+            CheckpointIds.Add(checkpoint.Id);
+
+            EndCheckpoint = checkpoint;
+            EndCheckpoint.Order = 1;
+        
+            AddStartingCheckpointButton.IsEnabled = false;
+            AddFinalCheckpointButton.IsEnabled = false;
+            AddMiddleCheckpointButton.IsEnabled = true;
+
+            FinalCheckpointName.IsEnabled = true;
+            MiddleCheckpointName.IsEnabled = true;
+
+            FinalCheckpointName.Text = string.Empty;
+        }
+
+        private void AddMiddleCheckpoint_Click(object sender, RoutedEventArgs e)
+        {
+            // Add code to handle adding a middle checkpoint here
+
+            string middleCheckpointName = MiddleCheckpointName.Text;
+            if (!string.IsNullOrEmpty(middleCheckpointName))
+            {
+                Checkpoint checkpoint = _checkpointRepository.Save(new Checkpoint(MiddleCheckpointName.Text, ++OrderCounter, false, -5));
+                CheckpointIds.Add(checkpoint.Id);
+                MiddleCheckpoints.Add(checkpoint);
+            }
+            MiddleCheckpointName.Text = string.Empty;
+
+            Checkpoint finalcheckpoint = _checkpointRepository.GetById(EndCheckpoint.Id);
+            finalcheckpoint.Order = MiddleCheckpoints.Count() + 1;
+            EndCheckpoint = finalcheckpoint;
+            _checkpointRepository.Update(finalcheckpoint);
+
+            AddStartingCheckpointButton.IsEnabled = false;
+            AddFinalCheckpointButton.IsEnabled = false;
         }
     }
 }

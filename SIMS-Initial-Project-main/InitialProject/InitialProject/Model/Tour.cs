@@ -29,10 +29,10 @@ namespace InitialProject.Model
 
         public ObservableCollection<int> ImageIds;
 
-        // public ObservableCollection<TourPoint> TourPoints;
+        public ObservableCollection<int> CheckpointIds;
 
-        public Tour() { ImageIds = new ObservableCollection<int>(); }
-        public Tour(string name, int locationId, string description, string language, int maxGuests, int currentGuestCount, DateTime startTime, int duration, int guideId, ObservableCollection<int> imageIds)
+        public Tour() { ImageIds = new ObservableCollection<int>(); CheckpointIds = new ObservableCollection<int>(); }
+        public Tour(string name, int locationId, string description, string language, int maxGuests, int currentGuestCount, DateTime startTime, int duration, int guideId, ObservableCollection<int> imageIds, ObservableCollection<int> checkpointIds)
         {
             Name = name;
             LocationId = locationId;
@@ -43,7 +43,8 @@ namespace InitialProject.Model
             StartTime = startTime;
             Duration = duration;
             GuideId = guideId;
-            ImageIds = imageIds;    
+            ImageIds = imageIds;
+            CheckpointIds = checkpointIds;
  
         }
         public string[] ToCSV()
@@ -59,7 +60,8 @@ namespace InitialProject.Model
             StartTime.ToString(),
             Duration.ToString(),
             GuideId.ToString(),
-            string.Join(",", ImageIds)
+            string.Join(",", ImageIds),
+            string.Join(",", CheckpointIds)
         };
             return csvValues;
         }
@@ -80,7 +82,11 @@ namespace InitialProject.Model
             foreach(string id in values[10].Split(',')) 
             {
                 ImageIds.Add(int.Parse(id));
-            } 
+            }
+            foreach (string id in values[11].Split(','))
+            {
+                CheckpointIds.Add(int.Parse(id));
+            }
 
         }
 

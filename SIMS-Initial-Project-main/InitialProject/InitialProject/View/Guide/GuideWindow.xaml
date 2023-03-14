@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InitialProject.View.Guide"
         mc:Ignorable="d"
+        WindowState="Maximized"
         Title="GuideWindow" Height="600" Width="800">
     <Window.Resources>
         <local:LocationIdToCountryConverter x:Key="LocationIdToCountryConverter"/>
