@@ -1,32 +1,34 @@
-﻿using InitialProject.View.Guide;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using InitialProject.Model;
+using InitialProject.Repository;
+using InitialProject.Resources.Observer;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using InitialProject.Model;
 
 namespace InitialProject.View.Owner
 {
     /// <summary>
     /// Interaction logic for OwnerWindow.xaml
     /// </summary>
-    public partial class OwnerWindow : Window
+    public partial class OwnerWindow : Window, INotifyPropertyChanged, IObserver
     {
         public User LoggedInUser { get; set; }
+        public ObservableCollection<Accommodation> Accommodations { get; set; }
+        public Accommodation SelectedAccommodation { get; set; }
+
+        private AccommodationRepository _repository;
+
         public OwnerWindow(User user)
         {
             InitializeComponent();
             DataContext = this;
             LoggedInUser = user;
+
+            _repository = new AccommodationRepository();
+            _repository.Subscribe(this);
+
+            Accommodations = new ObservableCollection<Accommodation>(_repository.GetAll());
         }
 
         private void RegisterButton_Click(object sender, RoutedEventArgs e)
@@ -35,9 +37,19 @@ namespace InitialProject.View.Owner
             registerAccommodation.Show();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
+        void IObserver.Update()
+        {
+            Accommodations.Clear();
+            foreach (Accommodation accommodation in _repository.GetAll())
+            {
+                Accommodations.Add(accommodation);
+            }
         }
     }
 }

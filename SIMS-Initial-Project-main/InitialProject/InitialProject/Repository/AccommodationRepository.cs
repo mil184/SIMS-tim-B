@@ -1,11 +1,13 @@
 ﻿using InitialProject.Model;
+using InitialProject.Resources.Observer;
 using InitialProject.Serializer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace InitialProject.Repository
 {
-    class AccommodationRepository
+    class AccommodationRepository : ISubject
     {
         private const string FilePath = "../../../Resources/Data/accommodations.csv";
 
@@ -13,10 +15,13 @@ namespace InitialProject.Repository
 
         private List<Accommodation> _accommodations;
 
+        private readonly List<IObserver> _observers;
+
         public AccommodationRepository()
         {
             _serializer = new Serializer<Accommodation>();
             _accommodations = _serializer.FromCSV(FilePath);
+            _observers = new List<IObserver>();
         }
 
         public int NextId()
@@ -36,8 +41,32 @@ namespace InitialProject.Repository
             _accommodations = _serializer.FromCSV(FilePath);
             _accommodations.Add(accommodation);
             _serializer.ToCSV(FilePath, _accommodations);
+            NotifyObservers();
 
             return accommodation;
+        }
+
+        public List<Accommodation> GetAll()
+        {
+            return _accommodations;
+        }
+
+        public void Subscribe(IObserver observer)
+        {
+            _observers.Add(observer);
+        }
+
+        public void Unsubscribe(IObserver observer)
+        {
+            _observers.Remove(observer);
+        }
+
+        public void NotifyObservers()
+        {
+            foreach (var observer in _observers)
+            {
+                observer.Update();
+            }
         }
     }
 }
