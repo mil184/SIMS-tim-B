@@ -68,12 +68,11 @@ namespace InitialProject.Repository
         public List<Tour> GetUpcomingTours()
         {
             List<Tour> upcomingTours = new List<Tour>();
-
             DateTime currentDate = DateTime.Now.Date;
             foreach (Tour tour in _tours)
             {
                 DateTime tourStartDate = tour.StartTime.Date;
-                if (tourStartDate >= currentDate)
+                if (tourStartDate > currentDate)
                 {
                     upcomingTours.Add(tour);
                 }

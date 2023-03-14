@@ -48,20 +48,19 @@ namespace InitialProject.Model
         }
         public string[] ToCSV()
         {
-            string imageIds = "";
-            const char ListDelimiter = ',';
-            StringBuilder stringBuilder = new StringBuilder();
-
-            foreach(int id in ImageIds) 
-            {
-                stringBuilder.Append(id);
-                stringBuilder.Append(ListDelimiter);
-            }
-
-            stringBuilder.Length--;
-            imageIds = stringBuilder.ToString();
-
-            string[] csvValues = { Id.ToString(),Name, LocationId.ToString(), Description, Language, MaxGuests.ToString(), CurrentGuestCount.ToString(), StartTime.ToString(), Duration.ToString(), GuideId.ToString(), imageIds };
+            string[] csvValues = {
+            Id.ToString(),
+            Name,
+            LocationId.ToString(),
+            Description,
+            Language,
+            MaxGuests.ToString(),
+            CurrentGuestCount.ToString(),
+            StartTime.ToString(),
+            Duration.ToString(),
+            GuideId.ToString(),
+            string.Join(",", ImageIds)
+        };
             return csvValues;
         }
 
@@ -78,10 +77,7 @@ namespace InitialProject.Model
             Duration = int.Parse(values[8]);
             GuideId = int.Parse(values[9]);
 
-            string imageIds = values[10];
-            string[] intSubstrings = imageIds.Split(',');
-
-            foreach(string id in intSubstrings) 
+            foreach(string id in values[10].Split(',')) 
             {
                 ImageIds.Add(int.Parse(id));
             } 
