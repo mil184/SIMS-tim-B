@@ -25,6 +25,7 @@ namespace InitialProject.View.Guide
         private readonly TourRepository _repository;
         private readonly LocationRepository _locationRepository;
         private readonly ImageRepository _imageRepository;
+        private readonly CheckpointRepository _checkpointRepository;
 
         public GuideWindow(User user)
         {
@@ -39,6 +40,8 @@ namespace InitialProject.View.Guide
             _imageRepository.Subscribe(this);
             _locationRepository = new LocationRepository();
             _locationRepository.Subscribe(this);
+            _checkpointRepository = new CheckpointRepository();
+            _checkpointRepository.Subscribe(this);
 
             CurrentTours = new ObservableCollection<Tour>(_repository.GetTodaysTours());
             UpcomingTours = new ObservableCollection<Tour>(_repository.GetUpcomingTours());
@@ -48,7 +51,7 @@ namespace InitialProject.View.Guide
 
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
-            CreateTour createTour = new CreateTour(LoggedInUser, _repository, _locationRepository, _imageRepository);
+            CreateTour createTour = new CreateTour(LoggedInUser, _repository, _locationRepository, _imageRepository, _checkpointRepository);
             createTour.Show();
         }
 
@@ -56,11 +59,6 @@ namespace InitialProject.View.Guide
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        private void StackPanel_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            MessageBox.Show("Clicked");
         }
 
         void IObserver.Update()

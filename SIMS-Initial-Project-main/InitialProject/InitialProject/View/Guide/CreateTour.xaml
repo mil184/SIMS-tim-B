@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InitialProject.View.Guide"
         mc:Ignorable="d"
+        WindowState="Maximized"
         Title="Create Tour" Height="800" Width="500">
     <Grid Margin="0,0,0,-187">
         <Grid.RowDefinitions>
@@ -87,9 +88,74 @@
                 <ListBox x:Name="UrlListBox" Width="Auto" Height="Auto" Margin="5" ItemsSource="{Binding ImageUrls}" />
             </StackPanel>
         </GroupBox>
-        <GroupBox Header="Checkpoints" Grid.Row="2">
-            
-        </GroupBox>
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <GroupBox Header="Checkpoints" Grid.Row="2" Grid.ColumnSpan="2">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Row="0" Grid.Column="0" Margin="5">
+                        <TextBlock Text="Starting Checkpoint"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox x:Name="StartingCheckpointName" Width="200" Margin="0,0,10,0"/>
+                            <Button Name="AddStartingCheckpointButton" Content="Add" Click="AddStartingCheckpoint_Click"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Grid.Row="0" Grid.Column="1" Margin="5">
+                        <TextBlock FontWeight="Bold" Text="{Binding Path=StartCheckpoint.Order}"/>
+                        <TextBlock Text="{Binding Path=StartCheckpoint.Name}"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="1" Grid.Column="0" Margin="5">
+                        <TextBlock Text="Middle Checkpoints"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox x:Name="MiddleCheckpointName" Width="200" Margin="0,0,10,0" IsEnabled="False"/>
+                            <Button Name="AddMiddleCheckpointButton" Content="Add" Click="AddMiddleCheckpoint_Click" IsEnabled="False"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <ListBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding MiddleCheckpoints}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock FontWeight="Bold" Text="{Binding Order}"/>
+                                    <TextBlock Text="{Binding Name}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <StackPanel Grid.Row="2" Grid.Column="0" Margin="5">
+                        <TextBlock Text="Final Checkpoint"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox x:Name="FinalCheckpointName" Width="200" Margin="0,0,10,0" IsEnabled="False"/>
+                            <Button Name="AddFinalCheckpointButton" Content="Add" Click="AddFinalCheckpoint_Click" IsEnabled="False"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Grid.Row="2" Grid.Column="1" Margin="5">
+                        <TextBlock FontWeight="Bold" Text="{Binding Path=EndCheckpoint.Order}"/>
+                        <TextBlock Text="{Binding Path=EndCheckpoint.Name}"/>
+                    </StackPanel>
+                </Grid>
+            </GroupBox>
+        </Grid>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="3">
             <Button Content="Save" Margin="10" Click="btnCreateTour_Click"/>
             <Button Content="Cancel" Margin="10" Click ="CancelButton_Click"/>
