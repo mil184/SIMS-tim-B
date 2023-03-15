@@ -16,9 +16,8 @@ namespace InitialProject.Model
         public int PersonCount { get; set; }
         public TourReservation() { }
 
-        public TourReservation(int id, int userId, int tourId, int personCount)
+        public TourReservation(int userId, int tourId, int personCount)
         {
-            Id = id;
             UserId = userId;
             TourId = tourId;
             PersonCount = personCount;

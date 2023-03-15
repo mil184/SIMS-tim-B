@@ -13,7 +13,8 @@ namespace InitialProject.View.Guest2
 {
     public partial class Guest2Window : Window, INotifyPropertyChanged, IObserver
     {
-        public User CurrentUser { get; set; }
+        public User LoggedInUser { get; set; }
+        public Guest2TourDTO SelectedGuest2TourDTO { get; set; }
         public ObservableCollection<Guest2TourDTO> Tours { get; set; }
 
         private readonly TourRepository _tourRepository;
@@ -26,7 +27,8 @@ namespace InitialProject.View.Guest2
         {
             InitializeComponent();
             DataContext = this;
-            CurrentUser = user;
+
+            LoggedInUser = user;
 
             _tourRepository = new TourRepository();
             _tourRepository.Subscribe(this);
@@ -63,7 +65,11 @@ namespace InitialProject.View.Guest2
 
         private void ReserveButton_Click(object sender, RoutedEventArgs e)
         {
-            //
+            if (SelectedGuest2TourDTO != null)
+            { 
+                ReserveTour reserveTourForm = new ReserveTour(SelectedGuest2TourDTO, LoggedInUser);
+                reserveTourForm.ShowDialog();
+            }
         }
 
         public List<Guest2TourDTO> ConvertToDTOList(List<Tour> tours)
@@ -73,6 +79,7 @@ namespace InitialProject.View.Guest2
             foreach (Tour tour in tours)
             {
                 dtoList.Add(new Guest2TourDTO(
+                    tour.Id,
                     tour.Name,
                 _locationRepository.GetById(tour.LocationId).Country,
                 _locationRepository.GetById(tour.LocationId).City,
@@ -90,6 +97,7 @@ namespace InitialProject.View.Guest2
         public Guest2TourDTO ConvertToDTO(Tour tour)
         {
             return new Guest2TourDTO(
+                tour.Id,
                 tour.Name,
                 _locationRepository.GetById(tour.LocationId).Country,
                 _locationRepository.GetById(tour.LocationId).City,
@@ -99,7 +107,7 @@ namespace InitialProject.View.Guest2
                 tour.CurrentGuestCount,
                 tour.StartTime,
                 tour.Duration,
-                _userRepository.GetById(tour.GuideId).Username);
+                _userRepository.GetById(tour.GuideId).Username) ;
         }
     }
 }

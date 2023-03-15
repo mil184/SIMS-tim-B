@@ -65,10 +65,10 @@ namespace InitialProject.Forms
         {
             InitializeComponent();
             DataContext = this;
-            Title = "Update comment";
-            LoggedInUser = user;
-            SelectedComment = selectedComment;
-            Text = selectedComment.Text;
+                Title = "Update comment";
+                LoggedInUser = user;
+                SelectedComment = selectedComment;
+                Text = selectedComment.Text;
             _repository = new CommentRepository();
         }
 

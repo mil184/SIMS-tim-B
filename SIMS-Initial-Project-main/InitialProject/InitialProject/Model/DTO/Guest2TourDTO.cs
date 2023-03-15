@@ -6,6 +6,7 @@ namespace InitialProject.Model.DTO
 {
     public class Guest2TourDTO 
     {
+        public int TourId { get; set; }
         public string Name { get; set; }
         public string Country { get; set; }
         public string City { get; set; }
@@ -25,8 +26,9 @@ namespace InitialProject.Model.DTO
         {
         }
 
-        public Guest2TourDTO(string name, string country, string city, string description, string language, int maxGuests, int currentGuestCount, DateTime startTime, int duration, string guide)
-        {   
+        public Guest2TourDTO(int tourId, string name, string country, string city, string description, string language, int maxGuests, int currentGuestCount, DateTime startTime, int duration, string guide)
+        {
+            TourId = tourId;
             Name = name;
             Country = country;
             City = city;
