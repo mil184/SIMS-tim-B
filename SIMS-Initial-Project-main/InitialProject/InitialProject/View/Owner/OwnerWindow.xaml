@@ -14,7 +14,7 @@
 
         <!-- User information section -->
         <StackPanel Grid.Row="0" Margin="10" Orientation="Horizontal">
-            <Image Source="/Resources/Images/tour-guide.png" Width="100" Height="75" Margin="0 0 10 0" />
+            <Image Source="/Resources/Images/owner.png" Width="100" Height="75" Margin="0 0 10 0" />
             <StackPanel>
                 <TextBlock FontSize="18" FontWeight="Bold" Text="Accommodation Owner" Margin="0 0 0 10"/>
                 <TextBlock FontSize="14" Text="{Binding LoggedInUser.Username, FallbackValue=BidningNotWorking}"/>
@@ -29,7 +29,7 @@
                     <StackPanel Orientation="Horizontal">
                         <TextBlock FontSize="18" FontWeight="Bold" Text="Accommodations" Margin="0 0 10 0"/>
                         <Button Content="Register" Width="80" Margin="0 0 10 0" Click="RegisterButton_Click"/>
-                        <Button Content="Delete" Width="80" Margin="0 0 10 0"/>
+                        <Button Content="Delete" Width="80" Margin="0 0 10 0" Click="DeleteButton_Click"/>
                         <Button Content="Edit" Width="80"/>
                     </StackPanel>
                     <!-- Current tour section -->

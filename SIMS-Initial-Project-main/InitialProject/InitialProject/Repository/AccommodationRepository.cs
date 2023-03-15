@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace InitialProject.Repository
 {
-    class AccommodationRepository : ISubject
+    public class AccommodationRepository : ISubject
     {
         private const string FilePath = "../../../Resources/Data/accommodations.csv";
 

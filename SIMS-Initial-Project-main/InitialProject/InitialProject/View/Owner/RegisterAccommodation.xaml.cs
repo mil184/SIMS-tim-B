@@ -5,13 +5,15 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Runtime.Intrinsics.X86;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using Image = InitialProject.Model.Image;
 
 namespace InitialProject.View.Owner
 {
-    public partial class RegisterAccommodation : Window
+    public partial class RegisterAccommodation : Window, INotifyPropertyChanged, IDataErrorInfo
     {
         private readonly AccommodationRepository _repository;
 
@@ -20,6 +22,8 @@ namespace InitialProject.View.Owner
         private readonly ImageRepository _imageRepository;
 
         public User LoggedInUser { get; set; }
+
+        public int LastImageId { get; set; }
 
         private string _accommodationName;
         public string AccommodationName
@@ -133,22 +137,29 @@ namespace InitialProject.View.Owner
             }
         }
 
+        private ObservableCollection<int> _imageIds = new ObservableCollection<int>();
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public RegisterAccommodation(User user)
+        public RegisterAccommodation(User user, AccommodationRepository repository, LocationRepository locationRepository, ImageRepository imageRepository)
         {
             InitializeComponent();
             DataContext = this;
 
-            _repository = new AccommodationRepository();
-            _locationRepository = new LocationRepository();
-            _imageRepository = new ImageRepository();
+            _repository = repository;
+            _locationRepository = locationRepository;
+            _imageRepository = imageRepository;
 
             LoggedInUser = user;
+
+            foreach (var country in _locationRepository.GetCountries())
+            {
+                cbCountry.Items.Add(country);
+            }
 
             AccommodationType_cb.Items.Add("Apartment");
             AccommodationType_cb.Items.Add("House");
@@ -157,11 +168,17 @@ namespace InitialProject.View.Owner
 
         private void btnRegisterAccommodation_Click(object sender, RoutedEventArgs e)
         {
-            Location AccommodationLocation = new Location(Country, City);
-            _locationRepository.Save(AccommodationLocation);
-            Accommodation Accommodation = new Accommodation(AccommodationName, AccommodationLocation.Id, Enum.Parse<AccommodationType>(Type), int.Parse(MaxGuests), int.Parse(MinReservationDays), int.Parse(CancellationPeriod));
-            _repository.Save(Accommodation);
-            Close();
+            if (IsValid)
+            {
+                Location AccommodationLocation = _locationRepository.GetLocation(Country, City);
+                Accommodation Accommodation = new Accommodation(AccommodationName, AccommodationLocation.Id, Enum.Parse<AccommodationType>(Type), int.Parse(MaxGuests), int.Parse(CancellationPeriod), int.Parse(CancellationPeriod), _imageIds);
+                _repository.Save(Accommodation);
+                Close();
+            }
+            else
+            {
+                MessageBox.Show("Cannot create accommodation");
+            }
         }
 
         public void AccommodationType_cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -180,9 +197,89 @@ namespace InitialProject.View.Owner
             if (!string.IsNullOrEmpty(imageUrl))
             {
                 ImageUrls.Add(imageUrl);
-                _imageRepository.Save(new Image(imageUrl));
+                Image image = new Image(imageUrl);
+                _imageRepository.Save(image);
+                _imageIds.Add(image.Id);
             }
             UrlTextBox.Text = string.Empty;
+        }
+
+        private void CbCountry_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cbCountry.SelectedItem != null && _locationRepository != null)
+            {
+                if (cbCity.Items != null)
+                {
+                    cbCity.Items.Clear();
+                }
+
+                cbCity.IsEnabled = true;
+                foreach (String city in _locationRepository.GetCities(cbCountry.SelectedItem.ToString()))
+                {
+                    cbCity.Items.Add(city);
+                }
+            }
+        }
+
+        private void CbCity_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cbCountry.SelectedItem != null && cbCity.SelectedItem != null)
+            {
+                Country = cbCountry.SelectedItem.ToString();
+                City = cbCity.SelectedItem.ToString();
+            }
+        }
+
+        public string Error => null;
+
+        public string this[string columnName]
+        {
+            get
+            {
+                int TryParseNumber;
+                if (columnName == "MaxGuests")
+                {
+                    if (string.IsNullOrEmpty(MaxGuests))
+                        return "This field is required";
+
+                    if (!int.TryParse(MaxGuests, out TryParseNumber))
+                        return "This field should be a number";
+                }
+                else if (columnName == "MinReservationDays")
+                {
+                    if (string.IsNullOrEmpty(MinReservationDays))
+                        return "This field is required";
+
+                    if (!int.TryParse(MinReservationDays, out TryParseNumber))
+                        return "This field should be a number";
+                }
+                else if (columnName == "CancellationPeriod")
+                {
+                    if (string.IsNullOrEmpty(CancellationPeriod))
+                        return "This field is required";
+
+                    if (!int.TryParse(CancellationPeriod, out TryParseNumber))
+                        return "This field should be a number";
+                }
+
+                return null;
+            }
+        }
+
+        private readonly string[] _validatedProperties = { "MaxGuests", "MinReservationDays", "CancellationPeriod" };
+
+        public bool IsValid
+        {
+            get
+            {
+                foreach (var property in _validatedProperties)
+                {
+                    if (this[property] != null)
+                        return false;
+                }
+
+                return true;
+            }
         }
     }
 }
