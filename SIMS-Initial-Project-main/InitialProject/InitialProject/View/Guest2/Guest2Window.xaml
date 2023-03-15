@@ -17,7 +17,7 @@
             <Image Source="/Resources/Images/guest2.png" Width="100" Height="75" Margin="0 0 10 0" />
             <StackPanel>
                 <TextBlock FontSize="18" FontWeight="Bold" Text="Guest 2" Margin="0 0 0 10"/>
-                <TextBlock FontSize="14" Text="{Binding LoggedInUser.Username, FallbackValue=BidningNotWorking}"/>
+                <TextBlock FontSize="14" Text="{Binding CurrentUser.Username, FallbackValue=BindingNotWorking}"/>
             </StackPanel>
         </StackPanel>
         <!-- Tabs section -->
@@ -31,30 +31,28 @@
                     </StackPanel>
                     <!-- Tour overview section -->
                     <StackPanel Margin="0 10 0 0">
-                        <TextBlock Text="Explore tours" FontSize="14" FontWeight="Bold"/>
-                        <ListBox>
-                            <ListBoxItem>
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock FontWeight="Bold" Text="Tour 1"/>
-                                    <TextBlock Text="Location: Paris, France"/>
-                                    <TextBlock Text="Date: 2023-03-15"/>
-                                </StackPanel>
-                            </ListBoxItem>
-                            <ListBoxItem>
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock FontWeight="Bold" Text="Tour 2"/>
-                                    <TextBlock Text="Location: Tokyo, Japan"/>
-                                    <TextBlock Text="Date: 2023-04-01"/>
-                                </StackPanel>
-                            </ListBoxItem>
-                            <ListBoxItem>
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock FontWeight="Bold" Text="Tour 3"/>
-                                    <TextBlock Text="Location: Sydney, Australia"/>
-                                    <TextBlock Text="Date: 2023-05-10"/>
-                                </StackPanel>
-                            </ListBoxItem>
-                        </ListBox>
+                        
+                        <!--<TextBlock Text="Explore tours" FontSize="14" FontWeight="Bold"/>-->
+
+                        <ScrollViewer Height="150" VerticalScrollBarVisibility="Auto">
+                            <DataGrid ItemsSource="{Binding Tours}" AutoGenerateColumns="False">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+                                    <DataGridTextColumn Header="Country" Binding="{Binding Country}" Width="*"/>
+                                    <DataGridTextColumn Header="City" Binding="{Binding City}" Width="*"/>
+                                    <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
+                                    <DataGridTextColumn Header="Language" Binding="{Binding Language}" Width="*"/>
+                                    <DataGridTextColumn Header="Max Guests" Binding="{Binding MaxGuests}" Width="*"/>
+                                    <DataGridTextColumn Header="Current Guest Count" Binding="{Binding CurrentGuestCount}" Width="*"/>
+                                    <DataGridTextColumn Header="Start Time" Binding="{Binding StartTime}" Width="*"/>
+                                    <DataGridTextColumn Header="Start Time" Binding="{Binding StartTime}" Width="*"/>
+                                    <DataGridTextColumn Header="Duration" Binding="{Binding Duration}" Width="*"/>
+                                    <DataGridTextColumn Header="Guide" Binding="{Binding Guide}" Width="*"/>
+                                    
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ScrollViewer>
+
                     </StackPanel>
                 </StackPanel>
             </TabItem>

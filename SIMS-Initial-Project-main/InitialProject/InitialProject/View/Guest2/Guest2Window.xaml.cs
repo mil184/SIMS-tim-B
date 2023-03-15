@@ -43,7 +43,7 @@ namespace InitialProject.View.Guest2
             _userRepository = new UserRepository();
             _userRepository.Subscribe(this);
 
-            Tours = new ObservableCollection<Guest2TourDTO>();
+            Tours = new ObservableCollection<Guest2TourDTO>(ConvertToDTOList(_tourRepository.GetAll()));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
