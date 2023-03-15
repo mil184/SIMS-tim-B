@@ -48,6 +48,18 @@ namespace InitialProject.Repository
             return tour;
         }
 
+        public List<Tour> GetAll()
+        {
+            var tours = new List<Tour>();
+
+            foreach (var tour in _tours)
+            {
+                tours.Add(tour);
+            }
+
+            return tours;
+        }
+
         public List<Tour> GetTodaysTours()
         {
             var currentDateTime = DateTime.Now;

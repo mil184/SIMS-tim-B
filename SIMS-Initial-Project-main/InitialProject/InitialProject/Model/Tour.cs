@@ -20,9 +20,7 @@ namespace InitialProject.Model
         public int MaxGuests { get; set; }
         public int CurrentGuestCount { get; set; }
         public DateTime StartTime { get; set; }
-
         public int Duration { get; set; }
-
         public int GuideId { get; set; }
 
         public ObservableCollection<int> ImageIds;
