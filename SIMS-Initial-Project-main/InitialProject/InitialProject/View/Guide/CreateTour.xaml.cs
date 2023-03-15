@@ -14,6 +14,7 @@ using Image = InitialProject.Model.Image;
 using System.Linq;
 using InitialProject.Resources.Observer;
 using System.Configuration;
+using System.Diagnostics.Metrics;
 
 namespace InitialProject.View.Guide
 {
@@ -229,6 +230,10 @@ namespace InitialProject.View.Guide
                 string minute = i.ToString("D2");
                 Minutes_cb.Items.Add(minute);
             }
+            foreach (var country in _locationRepository.GetCountries())
+            {
+                cbCountry.Items.Add(country);
+            }
 
             OrderCounter = 0;
             AddFinalCheckpointButton.IsEnabled = false;
@@ -238,8 +243,7 @@ namespace InitialProject.View.Guide
         private void btnCreateTour_Click(object sender, RoutedEventArgs e)
         {
             DateTime selectedDate = dpDate.SelectedDate.GetValueOrDefault();
-            Location TourLocation = new Location(Country, City);
-            _locationRepository.Save(TourLocation);
+            Location TourLocation = _locationRepository.GetLocation(Country, City);
             Tour tour = new Tour(TourName, TourLocation.Id, Description, TourLanguage, int.Parse(MaxGuests),0, new DateTime(selectedDate.Year,selectedDate.Month,selectedDate.Day,int.Parse(Hours),int.Parse(Minutes),0),int.Parse(Duration), LoggedInUser.Id, ImageIds, CheckpointIds);
             tour = _repository.Save(tour);
 
@@ -336,6 +340,32 @@ namespace InitialProject.View.Guide
 
             AddStartingCheckpointButton.IsEnabled = false;
             AddFinalCheckpointButton.IsEnabled = false;
+        }
+
+        private void CbCountry_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cbCountry.SelectedItem != null && _locationRepository != null)
+            {
+                if(cbCity.Items != null) 
+                {
+                    cbCity.Items.Clear();
+                }
+
+                cbCity.IsEnabled = true;
+                foreach (String city in _locationRepository.GetCities(cbCountry.SelectedItem.ToString()))
+                {
+                    cbCity.Items.Add(city);
+                }
+            }
+        }
+
+        private void CbCity_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cbCountry.SelectedItem != null && cbCity.SelectedItem != null)
+            {
+                Country = cbCountry.SelectedItem.ToString();
+                City = cbCity.SelectedItem.ToString();
+            }
         }
     }
 }

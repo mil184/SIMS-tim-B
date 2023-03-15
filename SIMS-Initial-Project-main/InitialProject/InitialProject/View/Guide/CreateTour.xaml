@@ -41,10 +41,15 @@
                 <TextBox Name="txtTourDescription" Margin="5" Height="100" Text="{Binding Path=Description, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" />
 
                 <TextBlock Text="Country:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" />
-                <TextBox Name="txtCountry" Margin="5" Text="{Binding Path=Country, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1" />
+                <ComboBox Name="cbCountry" Margin="5" SelectionChanged="CbCountry_SelectionChanged" Grid.Row="2" Grid.Column="1">
+                    <ComboBoxItem IsSelected="True"/>
+                </ComboBox>
 
                 <TextBlock Text="City:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" />
-                <TextBox Name="txtCity" Margin="5" Text="{Binding Path=City, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1" />
+                <ComboBox Name="cbCity" Margin="5" SelectionChanged="CbCity_SelectionChanged" IsEnabled="False" Grid.Row="3" Grid.Column="1">
+                    <ComboBoxItem IsSelected="True"/>
+                </ComboBox>
+
 
                 <TextBlock Text="Language:" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" />
                 <TextBox Name="txtLanguage" Margin="5" Text="{Binding Path=TourLanguage, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" Grid.Column="1" />
