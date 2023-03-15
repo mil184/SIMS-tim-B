@@ -2,6 +2,7 @@
 using InitialProject.Serializer;
 using System.Collections.Generic;
 using System.Linq;
+using InitialProject.Resources.Observer;
 
 namespace InitialProject.Repository
 {
@@ -10,6 +11,7 @@ namespace InitialProject.Repository
         private const string FilePath = "../../../Resources/Data/users.csv";
 
         private readonly Serializer<User> _serializer;
+        private readonly List<IObserver> _observers;
 
         private List<User> _users;
 
@@ -17,12 +19,24 @@ namespace InitialProject.Repository
         {
             _serializer = new Serializer<User>();
             _users = _serializer.FromCSV(FilePath);
+            _observers = new List<IObserver>();
         }
 
         public User GetByUsername(string username)
         {
             _users = _serializer.FromCSV(FilePath);
             return _users.FirstOrDefault(u => u.Username == username);
+        }
+
+        public User GetById(int id)
+        {
+            _users = _serializer.FromCSV(FilePath);
+            return _users.FirstOrDefault(u => u.Id == id);
+        }
+
+        public void Subscribe(IObserver observer)
+        {
+            _observers.Add(observer);
         }
     }
 }

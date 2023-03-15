@@ -27,7 +27,7 @@
                 <StackPanel Margin="10">
                     <!-- Tour list section -->
                     <StackPanel Orientation="Horizontal">
-                        <Button Content="Reserve tour" Width="80" Margin="0 0 10 0" Click="CreateButton_Click"/>
+                        <Button Content="Reserve tour" Width="80" Margin="0 0 10 0" Click="ReserveButton_Click"/>
                     </StackPanel>
                     <!-- Tour overview section -->
                     <StackPanel Margin="0 10 0 0">

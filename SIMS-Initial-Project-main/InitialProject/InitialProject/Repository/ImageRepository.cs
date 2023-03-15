@@ -51,6 +51,19 @@ namespace InitialProject.Repository
             _images = _serializer.FromCSV(FilePath);
             return _images.Find(c => c.Id == id);
         }
+
+        public List<Image> GetAll()
+        {
+            var images = new List<Image>();
+
+            foreach (var image in _images)
+            {
+                images.Add(image);
+            }
+
+            return images;
+        }
+
         public void Subscribe(IObserver observer)
         {
             _observers.Add(observer);
