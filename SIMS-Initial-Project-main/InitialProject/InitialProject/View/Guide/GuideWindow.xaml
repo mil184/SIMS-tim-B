@@ -40,21 +40,15 @@
                     <GroupBox Header="Today's tours">
                         <StackPanel Margin="0 10 0 0">
                             <ScrollViewer Height="150" VerticalScrollBarVisibility="Auto">
-                                <ListBox ItemsSource="{Binding CurrentTours}">
-                                    <ListBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Vertical">
-                                                <TextBlock FontWeight="Bold" Text="{Binding Name}"/>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Text="{Binding LocationId, Converter={StaticResource LocationIdToCountryConverter}}"/>
-                                                    <TextBlock Text=", "/>
-                                                    <TextBlock Text="{Binding LocationId, Converter={StaticResource LocationIdToCityConverter}}"/>
-                                                </StackPanel>
-                                                <TextBlock Text="{Binding StartTime}"/>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </ListBox.ItemTemplate>
-                                </ListBox>
+                                <DataGrid ItemsSource="{Binding CurrentTours}" AutoGenerateColumns="False">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+                                        <DataGridTextColumn Header="Country" Binding="{Binding LocationId, Converter={StaticResource LocationIdToCountryConverter}}" Width="*"/>
+                                        <DataGridTextColumn Header="City" Binding="{Binding LocationId, Converter={StaticResource LocationIdToCityConverter}}" Width="*"/>
+                                        <DataGridTextColumn Header="Start Time" Binding="{Binding StartTime}" Width="*"/>
+                                        <DataGridTextColumn Header="" Width="Auto"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
                             </ScrollViewer>
                         </StackPanel>
                     </GroupBox>
@@ -62,24 +56,19 @@
                     <GroupBox Header="Upcoming Tours">
                         <StackPanel Margin="0 10 0 0">
                             <ScrollViewer Height="150" VerticalScrollBarVisibility="Auto">
-                                <ListBox ItemsSource="{Binding UpcomingTours}">
-                                    <ListBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Vertical">
-                                                <TextBlock FontWeight="Bold" Text="{Binding Name}"/>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Text="{Binding LocationId, Converter={StaticResource LocationIdToCountryConverter}}"/>
-                                                    <TextBlock Text=", "/>
-                                                    <TextBlock Text="{Binding LocationId, Converter={StaticResource LocationIdToCityConverter}}"/>
-                                                </StackPanel>
-                                                <TextBlock Text="{Binding StartTime}"/>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </ListBox.ItemTemplate>
-                                </ListBox>
+                                <DataGrid ItemsSource="{Binding UpcomingTours}" AutoGenerateColumns="False">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+                                        <DataGridTextColumn Header="Country" Binding="{Binding LocationId, Converter={StaticResource LocationIdToCountryConverter}}" Width="*"/>
+                                        <DataGridTextColumn Header="City" Binding="{Binding LocationId, Converter={StaticResource LocationIdToCityConverter}}" Width="*"/>
+                                        <DataGridTextColumn Header="Start Time" Binding="{Binding StartTime}" Width="*"/>
+                                        <DataGridTextColumn Header="" Width="Auto"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
                             </ScrollViewer>
                         </StackPanel>
                     </GroupBox>
+
                 </StackPanel>
             </TabItem>
 

@@ -79,7 +79,6 @@ namespace InitialProject.Repository
                     upcomingTours.Add(tour);
                 }
             }
-
             return upcomingTours;
         }
 

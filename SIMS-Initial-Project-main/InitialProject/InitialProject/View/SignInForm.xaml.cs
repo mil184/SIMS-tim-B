@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using InitialProject.View.Guest2;
 using InitialProject.View.Guest1;
+using System.Windows.Input;
 
 namespace InitialProject
 {
@@ -46,7 +47,14 @@ namespace InitialProject
             DataContext = this;
             _repository = new UserRepository();
         }
-
+        private void PasswordBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                SignIn(sender, e);
+                e.Handled = true;
+            }
+        }
         private void SignIn(object sender, RoutedEventArgs e)
         {
             User user = _repository.GetByUsername(Username);
