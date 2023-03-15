@@ -18,6 +18,8 @@ namespace InitialProject.View.Owner
         public Accommodation SelectedAccommodation { get; set; }
 
         private AccommodationRepository _repository;
+        private readonly LocationRepository _locationRepository;
+        private readonly ImageRepository _imageRepository;
 
         public OwnerWindow(User user)
         {
@@ -27,14 +29,36 @@ namespace InitialProject.View.Owner
 
             _repository = new AccommodationRepository();
             _repository.Subscribe(this);
+            _locationRepository = new LocationRepository();
+            _locationRepository.Subscribe(this);
+            _imageRepository = new ImageRepository();
+            _imageRepository.Subscribe(this);
 
             Accommodations = new ObservableCollection<Accommodation>(_repository.GetAll());
         }
 
         private void RegisterButton_Click(object sender, RoutedEventArgs e)
         {
-            RegisterAccommodation registerAccommodation = new RegisterAccommodation(LoggedInUser);
+            RegisterAccommodation registerAccommodation = new RegisterAccommodation(LoggedInUser, _repository, _locationRepository, _imageRepository);
             registerAccommodation.Show();
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedAccommodation != null)
+            {
+                string MessageBoxText = "Are You Sure You Want To Delete Accommodation?";
+                string Caption = "brisanje profesora";
+                MessageBoxButton Button = MessageBoxButton.YesNo;
+                MessageBoxImage Icon = MessageBoxImage.Warning;
+                MessageBoxResult Result;
+
+                Result = MessageBox.Show(MessageBoxText, Caption, Button, Icon, MessageBoxResult.Yes);
+                if (Result == MessageBoxResult.Yes)
+                {
+
+                }
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

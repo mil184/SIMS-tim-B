@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,11 +18,11 @@ namespace InitialProject.Model
         public int MaxGuests { get; set; }
         public int MinReservationDays { get; set; }
         public int CancellationPeriod { get; set; }
-        //public List<Image> Images { get; set; }
+        public ObservableCollection<int> ImageIds = new ObservableCollection<int>();
 
         public Accommodation() { }
 
-        public Accommodation(string name, int locationId, AccommodationType type, int maxGuests, int minReservationDays, int cancellationPeriod)
+        public Accommodation(string name, int locationId, AccommodationType type, int maxGuests, int minReservationDays, int cancellationPeriod, ObservableCollection<int> imageIds)
         {
             Name = name;
             LocationId = locationId;
@@ -29,13 +30,12 @@ namespace InitialProject.Model
             MaxGuests = maxGuests;
             MinReservationDays = minReservationDays;
             CancellationPeriod = cancellationPeriod;
+            ImageIds = imageIds;
         }
 
         public string[] ToCSV()
         {
-            //  how to save locations???
-            //  how to save image list???
-            string[] csvValues = { Id.ToString(), Name, LocationId.ToString(), Type.ToString(), MaxGuests.ToString(), MinReservationDays.ToString(), CancellationPeriod.ToString() };
+            string[] csvValues = { Id.ToString(), Name, LocationId.ToString(), Type.ToString(), MaxGuests.ToString(), MinReservationDays.ToString(), CancellationPeriod.ToString(), string.Join(",", ImageIds) };
             return csvValues;
         }
 
@@ -48,6 +48,10 @@ namespace InitialProject.Model
             MaxGuests = Convert.ToInt32(values[4]);
             MinReservationDays = Convert.ToInt32(values[5]);
             CancellationPeriod = Convert.ToInt32(values[6]);
+            foreach (string id in values[7].Split(','))
+            {
+                ImageIds.Add(int.Parse(id));
+            }
         }
     }
 }

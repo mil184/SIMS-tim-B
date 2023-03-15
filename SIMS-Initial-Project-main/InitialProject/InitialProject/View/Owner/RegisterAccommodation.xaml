@@ -6,6 +6,17 @@
         xmlns:local="clr-namespace:InitialProject.View.Owner"
         mc:Ignorable="d"
         Title="Register Accommodation" Height="800" Width="500" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <ControlTemplate x:Key="ValidationTemplate">
+            <StackPanel>
+                <!-- Placeholder for the TextBox itself -->
+                <AdornedElementPlaceholder x:Name="textBox" />
+                <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red" />
+            </StackPanel>
+
+        </ControlTemplate>
+    </Window.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -36,22 +47,26 @@
                 <TextBox Name="txtAccommodationName" Margin="5" Text="{Binding Path=AccommodationName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1" />
 
                 <TextBlock Text="Country:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" />
-                <TextBox Name="txtCountry" Margin="5" Text="{Binding Path=Country, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1" />
+                <ComboBox Name="cbCountry" Margin="5" SelectionChanged="CbCountry_SelectionChanged" Grid.Row="2" Grid.Column="1">
+                    <ComboBoxItem IsSelected="True"/>
+                </ComboBox>
 
                 <TextBlock Text="City:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" />
-                <TextBox Name="txtCity" Margin="5" Text="{Binding Path=City, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1" />
+                <ComboBox Name="cbCity" Margin="5" SelectionChanged="CbCity_SelectionChanged" IsEnabled="False" Grid.Row="3" Grid.Column="1">
+                    <ComboBoxItem IsSelected="True"/>
+                </ComboBox>
 
                 <TextBlock Text="Accommodation Type:" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" />
-                <ComboBox Name="AccommodationType_cb" Grid.Row="4" Grid.Column="1" Margin="5" Width="150" SelectionChanged="AccommodationType_cb_SelectionChanged"/>
+                <ComboBox Name="AccommodationType_cb" Grid.Row="4" Grid.Column="1" Margin="5" SelectionChanged="AccommodationType_cb_SelectionChanged"/>
 
                 <TextBlock Text="Maximum Guests:" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" />
-                <TextBox Name="txtMaxGuests" Margin="5" Text="{Binding Path=MaxGuests, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="1" />
+                <TextBox Name="txtMaxGuests" Margin="5" Text="{Binding Path=MaxGuests, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Grid.Row="5" Grid.Column="1" />
 
                 <TextBlock Text="Minimum Days Before Reservation:" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" />
-                <TextBox Name="txtMinReservationDays" Margin="5" Text="{Binding Path=MinReservationDays, UpdateSourceTrigger=PropertyChanged}" Grid.Row="6" Grid.Column="1" />
+                <TextBox Name="txtMinReservationDays" Margin="5" Text="{Binding Path=MinReservationDays, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Grid.Row="6" Grid.Column="1" />
 
                 <TextBlock Text="Cancellation Period:" Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" />
-                <TextBox Name="txtCancellationPeriod" Margin="5" Text="{Binding Path=CancellationPeriod, UpdateSourceTrigger=PropertyChanged}" Grid.Row="7" Grid.Column="1" />
+                <TextBox Name="txtCancellationPeriod" Margin="5" Text="{Binding Path=CancellationPeriod, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Grid.Row="7" Grid.Column="1" />
             </Grid>
         </GroupBox>
 
@@ -72,7 +87,7 @@
                 <ListBox x:Name="UrlListBox" Width="Auto" Height="Auto" Margin="5" ItemsSource="{Binding ImageUrls}" />
             </StackPanel>
         </GroupBox>
-        
+
         <!-- Create Tour/Cancel buttons row -->
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="6" Grid.ColumnSpan="2">
             <Button Name="btnRegisterAccommodation" Content="Register Accommodation" Margin="5" Click="btnRegisterAccommodation_Click"/>
