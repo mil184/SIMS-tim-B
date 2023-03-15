@@ -219,7 +219,7 @@ namespace InitialProject.View.Guide
                 string minute = i.ToString("D2");
                 Minutes_cb.Items.Add(minute);
             }
-            foreach (var country in _locationRepository.GetCountries())
+            foreach (var country in _locationRepository.GetCountries().OrderBy(c => c))
             {
                 cbCountry.Items.Add(country);
             }
@@ -346,10 +346,11 @@ namespace InitialProject.View.Guide
                 }
 
                 cbCity.IsEnabled = true;
-                foreach (String city in _locationRepository.GetCities(cbCountry.SelectedItem.ToString()))
+                foreach (string city in _locationRepository.GetCities(cbCountry.SelectedItem.ToString()).OrderBy(c => c))
                 {
                     cbCity.Items.Add(city);
                 }
+
             }
         }
 
