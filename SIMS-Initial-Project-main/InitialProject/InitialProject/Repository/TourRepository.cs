@@ -50,14 +50,12 @@ namespace InitialProject.Repository
 
         public List<Tour> GetTodaysTours()
         {
-            var currentDate = DateTime.Now.Date; // get current date only
+            var currentDateTime = DateTime.Now;
             var currentTours = new List<Tour>();
 
             foreach (var tour in _tours)
             {
-                var tourStartDate = tour.StartTime.Date; // get tour start date only
-
-                if (currentDate == tourStartDate)
+                if (tour.StartTime.Date == currentDateTime.Date && tour.StartTime > currentDateTime)
                 {
                     currentTours.Add(tour);
                 }
@@ -65,7 +63,6 @@ namespace InitialProject.Repository
 
             return currentTours;
         }
-
         public List<Tour> GetUpcomingTours()
         {
             var upcomingTours = new List<Tour>();

@@ -10,27 +10,27 @@ namespace InitialProject.Model
     public class Location : ISerializable
     {
         public int Id { get; set; }
-        public string City { get; set; }
         public string Country { get; set; }
+        public string City { get; set; }
 
         public Location() { }
-        public Location(string city, string country)
+        public Location(string country, string city)
         {
-            City = city;
             Country = country;
+            City = city;
         }
 
         public string[] ToCSV()
         {
-            string[] csvValues = { Id.ToString(), City, Country };
+            string[] csvValues = { Id.ToString(), Country, City };
             return csvValues;
         }
 
         public void FromCSV(string[] values)
         {
             Id = Convert.ToInt32(values[0]);
-            City = values[1];
-            Country = values[2];
+            Country = values[1];
+            City = values[2];
         }
     }
 }

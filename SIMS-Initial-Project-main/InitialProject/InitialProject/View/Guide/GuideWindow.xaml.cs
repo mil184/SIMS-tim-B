@@ -1,6 +1,8 @@
 ﻿using InitialProject.Model;
+using InitialProject.Model.DTO;
 using InitialProject.Repository;
 using InitialProject.Resources.Observer;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -12,8 +14,8 @@ namespace InitialProject.View.Guide
     public partial class GuideWindow : Window, INotifyPropertyChanged, IObserver
     {
         public User CurrentUser { get; set; }
-        public ObservableCollection<Tour> CurrentTours { get; set; }
-        public ObservableCollection<Tour> UpcomingTours { get; set; }
+        public ObservableCollection<GuideTourDTO> CurrentTours { get; set; }
+        public ObservableCollection<GuideTourDTO> UpcomingTours { get; set; }
 
         private readonly TourRepository _tourRepository;
         private readonly LocationRepository _locationRepository;
@@ -38,8 +40,8 @@ namespace InitialProject.View.Guide
             _checkpointRepository = new CheckpointRepository();
             _checkpointRepository.Subscribe(this);
 
-            CurrentTours = new ObservableCollection<Tour>(_tourRepository.GetTodaysTours());
-            UpcomingTours = new ObservableCollection<Tour>(_tourRepository.GetUpcomingTours());
+            CurrentTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourRepository.GetTodaysTours()));
+            UpcomingTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourRepository.GetUpcomingTours()));
             var view = CollectionViewSource.GetDefaultView(UpcomingTours);
             view.SortDescriptions.Add(new SortDescription("StartTime", ListSortDirection.Ascending));
         }
@@ -61,16 +63,33 @@ namespace InitialProject.View.Guide
             UpcomingTours.Clear();
             foreach (Tour tour in _tourRepository.GetUpcomingTours())
             {
-                UpcomingTours.Add(tour);
+                UpcomingTours.Add(ConvertToDTO(tour));
             }
 
             CurrentTours.Clear();
             foreach (Tour tour in _tourRepository.GetTodaysTours())
             {
-                CurrentTours.Add(tour);
+                CurrentTours.Add(ConvertToDTO(tour));
             }
         }
+        public List<GuideTourDTO> ConvertToDTO(List<Tour> tours)
+        {
+            List<GuideTourDTO> dto = new List<GuideTourDTO>();
+            foreach (Tour tour in tours) 
+            {
+                dto.Add(new GuideTourDTO(tour.Name,
+                    _locationRepository.GetById(tour.LocationId).Country,
+                     _locationRepository.GetById(tour.LocationId).City,
+                     tour.StartTime));
+            }
+            return dto;
+        }
+        public GuideTourDTO ConvertToDTO(Tour tour)
+        {
+            return new GuideTourDTO(tour.Name,
+                    _locationRepository.GetById(tour.LocationId).Country,
+                     _locationRepository.GetById(tour.LocationId).City,
+                     tour.StartTime); 
+        }
     }
-
-
 }
