@@ -21,4 +21,5 @@ namespace InitialProject.Resources.Enums
         House,
         Hut
     }
+
 }

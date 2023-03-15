@@ -20,12 +20,13 @@ namespace InitialProject.View.Guide
 {
     public partial class CreateTour : Window,INotifyPropertyChanged
     {
+        const int NO_TOUR_ASSIGNED = -1;
+
         private readonly TourRepository _repository;
         private readonly LocationRepository _locationRepository;
         private readonly ImageRepository _imageRepository;
         private readonly CheckpointRepository _checkpointRepository;
 
-        public ObservableCollection<Checkpoint> MiddleCheckpoints { get; set; }
         private ObservableCollection<int> ImageIds;
         private ObservableCollection<int> CheckpointIds;
 
@@ -59,6 +60,8 @@ namespace InitialProject.View.Guide
                 }
             }
         }
+        public ObservableCollection<Checkpoint> MiddleCheckpoints { get; set; }
+        public ObservableCollection<string> ImageUrls { get; set; } 
 
         private string _name;
         public string TourName
@@ -183,21 +186,6 @@ namespace InitialProject.View.Guide
             }
         }
 
-        private ObservableCollection<string> _imageUrls = new ObservableCollection<string>();
-        public ObservableCollection<string> ImageUrls
-        {
-            get => _imageUrls;
-            set
-            {
-                if (_imageUrls != value)
-                {
-                    _imageUrls = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
@@ -217,8 +205,9 @@ namespace InitialProject.View.Guide
              ImageIds = new ObservableCollection<int>();
              CheckpointIds = new ObservableCollection<int>();
              MiddleCheckpoints = new ObservableCollection<Checkpoint>();
+             ImageUrls = new ObservableCollection<string>();
 
-             LoggedInUser = user;
+        LoggedInUser = user;
 
             for (int i = 0; i < 24; i++)
             {
@@ -235,7 +224,7 @@ namespace InitialProject.View.Guide
                 cbCountry.Items.Add(country);
             }
 
-            OrderCounter = 0;
+            OrderCounter = 1;
             AddFinalCheckpointButton.IsEnabled = false;
 
             AddMiddleCheckpointButton.IsEnabled = false;
@@ -244,18 +233,35 @@ namespace InitialProject.View.Guide
         {
             DateTime selectedDate = dpDate.SelectedDate.GetValueOrDefault();
             Location TourLocation = _locationRepository.GetLocation(Country, City);
+
+            foreach (string images in ImageUrls)
+            {
+                ImageIds.Add(_imageRepository.Save(new Image(images)).Id);
+            }
+
+            CheckpointIds.Add(_checkpointRepository.Save(StartCheckpoint).Id);
+
+            foreach (Checkpoint checkpoint in MiddleCheckpoints)
+            {
+                CheckpointIds.Add(_checkpointRepository.Save(checkpoint).Id);
+            }
+            CheckpointIds.Add(_checkpointRepository.Save(EndCheckpoint).Id);
+
             Tour tour = new Tour(TourName, TourLocation.Id, Description, TourLanguage, int.Parse(MaxGuests),0, new DateTime(selectedDate.Year,selectedDate.Month,selectedDate.Day,int.Parse(Hours),int.Parse(Minutes),0),int.Parse(Duration), LoggedInUser.Id, ImageIds, CheckpointIds);
             tour = _repository.Save(tour);
 
-            EndCheckpoint.Order = MiddleCheckpoints.Count() + 1;
+            StartCheckpoint.TourId = tour.Id;
+            _checkpointRepository.Update(StartCheckpoint);
+
+            foreach (Checkpoint checkpoint in MiddleCheckpoints)
+            {
+                checkpoint.TourId = tour.Id;
+                _checkpointRepository.Update(checkpoint);
+            }
+
+            EndCheckpoint.TourId = tour.Id;
             _checkpointRepository.Update(EndCheckpoint);
 
-            foreach (int checkpointId in CheckpointIds)
-            {
-                Checkpoint checkpoint = _checkpointRepository.GetById(checkpointId);
-                checkpoint.TourId = tour.Id;
-                _checkpointRepository.Update(checkpoint); 
-            }
             Close();
         }
         private void Hours_cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -273,9 +279,6 @@ namespace InitialProject.View.Guide
             if (!string.IsNullOrEmpty(imageUrl))
             {
                 ImageUrls.Add(imageUrl);
-                Image image = new Image(imageUrl);
-                _imageRepository.Save(image);
-                ImageIds.Add(image.Id);
             }
             UrlTextBox.Text = string.Empty;
         }
@@ -287,9 +290,7 @@ namespace InitialProject.View.Guide
 
         private void AddStartingCheckpoint_Click(object sender, RoutedEventArgs e)
         {
-            Checkpoint checkpoint = _checkpointRepository.Save(new Checkpoint(StartingCheckpointName.Text, 0, false, -5));
-            CheckpointIds.Add(checkpoint.Id);
-            StartCheckpoint = checkpoint;
+            StartCheckpoint = new Checkpoint(StartingCheckpointName.Text, 1, false, NO_TOUR_ASSIGNED);
 
             AddStartingCheckpointButton.IsEnabled = false;
             AddFinalCheckpointButton.IsEnabled = true;
@@ -304,11 +305,7 @@ namespace InitialProject.View.Guide
         private void AddFinalCheckpoint_Click(object sender, RoutedEventArgs e)
         {
             // Add code to handle adding the final checkpoint here
-            Checkpoint checkpoint = _checkpointRepository.Save(new Checkpoint(FinalCheckpointName.Text,1, false, -5));
-            CheckpointIds.Add(checkpoint.Id);
-
-            EndCheckpoint = checkpoint;
-            EndCheckpoint.Order = 1;
+            EndCheckpoint = new Checkpoint(FinalCheckpointName.Text,2, false, NO_TOUR_ASSIGNED);
         
             AddStartingCheckpointButton.IsEnabled = false;
             AddFinalCheckpointButton.IsEnabled = false;
@@ -327,16 +324,13 @@ namespace InitialProject.View.Guide
             string middleCheckpointName = MiddleCheckpointName.Text;
             if (!string.IsNullOrEmpty(middleCheckpointName))
             {
-                Checkpoint checkpoint = _checkpointRepository.Save(new Checkpoint(MiddleCheckpointName.Text, ++OrderCounter, false, -5));
-                CheckpointIds.Add(checkpoint.Id);
+                Checkpoint checkpoint = new Checkpoint(MiddleCheckpointName.Text, ++OrderCounter, false, NO_TOUR_ASSIGNED);
                 MiddleCheckpoints.Add(checkpoint);
             }
-            MiddleCheckpointName.Text = string.Empty;
+            EndCheckpoint.Order = MiddleCheckpoints.Count() + 2;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EndCheckpoint)));
 
-            Checkpoint finalcheckpoint = _checkpointRepository.GetById(EndCheckpoint.Id);
-            finalcheckpoint.Order = MiddleCheckpoints.Count() + 1;
-            EndCheckpoint = finalcheckpoint;
-            _checkpointRepository.Update(finalcheckpoint);
+            MiddleCheckpointName.Text = string.Empty;
 
             AddStartingCheckpointButton.IsEnabled = false;
             AddFinalCheckpointButton.IsEnabled = false;

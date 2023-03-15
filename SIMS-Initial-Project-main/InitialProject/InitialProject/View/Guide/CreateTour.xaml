@@ -136,11 +136,11 @@
                         </StackPanel>
                     </StackPanel>
                     <ScrollViewer Grid.Row="1" Grid.Column="1" Height="60" VerticalScrollBarVisibility="Auto">
-                        <ListBox ItemsSource="{Binding MiddleCheckpoints}">
+                        <ListBox ItemsSource="{Binding MiddleCheckpoints , UpdateSourceTrigger=PropertyChanged}">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Vertical">
-                                        <TextBlock FontWeight="Bold" Text="{Binding Order}"/>
+                                        <TextBlock FontWeight="Bold" Text="{Binding Order, UpdateSourceTrigger=PropertyChanged}"/>
                                         <TextBlock Text="{Binding Name}"/>
                                     </StackPanel>
                                 </DataTemplate>
@@ -156,7 +156,7 @@
                         </StackPanel>
                     </StackPanel>
                     <StackPanel Grid.Row="2" Grid.Column="1" Margin="5">
-                        <TextBlock FontWeight="Bold" Text="{Binding Path=EndCheckpoint.Order}"/>
+                        <TextBlock FontWeight="Bold" Text="{Binding Path=EndCheckpoint.Order,UpdateSourceTrigger=PropertyChanged }"/>
                         <TextBlock Text="{Binding Path=EndCheckpoint.Name}"/>
                     </StackPanel>
                 </Grid>
