@@ -1,6 +1,7 @@
 ﻿using InitialProject.Model;
 using InitialProject.Model.DTO;
 using InitialProject.Repository;
+using InitialProject.Resources.Observer;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -30,8 +31,10 @@ namespace InitialProject.View.Guest2
         private string _personCount;
 
         private readonly TourReservationRepository _tourReservationRepository;
+        private readonly TourRepository _tourRepository;
 
-     
+        
+
         public string PersonCount
         {
             get => _personCount;
@@ -52,7 +55,7 @@ namespace InitialProject.View.Guest2
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public ReserveTour(Guest2TourDTO selectedTour, User user)
+        public ReserveTour(Guest2TourDTO selectedTour, User user, TourRepository tourRepository)
         {
             InitializeComponent();
             DataContext = this;
@@ -61,17 +64,37 @@ namespace InitialProject.View.Guest2
             LoggedInUser = user;
 
             _tourReservationRepository = new TourReservationRepository();
+            _tourRepository = tourRepository;
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            TourReservation tourReservation = new TourReservation(
+            Tour selectedTour = new Tour();
+            selectedTour = _tourRepository.GetById(SelectedTour.TourId);
+
+            if (int.Parse(PersonCount)>selectedTour.MaxGuests)
+            {
+                NotEnoughSpacesForReservation notEnoughSpacesForReservation =
+                    new NotEnoughSpacesForReservation(SelectedTour, LoggedInUser);
+                notEnoughSpacesForReservation.Show();
+            }
+            else
+            {
+                TourReservation tourReservation = new TourReservation(
                                                     LoggedInUser.Id,
                                                     SelectedTour.TourId,
                                                     int.Parse(PersonCount));
 
-            _tourReservationRepository.Save(tourReservation);
-            Close();
+                _tourReservationRepository.Save(tourReservation);
+
+                //Tour selectedTour = new Tour();
+                //selectedTour = _tourRepository.GetById(SelectedTour.TourId);
+                selectedTour.CurrentGuestCount += int.Parse(PersonCount);
+                _tourRepository.Update(selectedTour);
+
+                Close();
+            }
+            
         }
     }
 }

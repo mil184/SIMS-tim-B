@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 1|nayiv|25|House|13|14|2
 2|nayiv2|26|Apartment|14|15|3
 3|nayiv3|5|House|13|14|15
@@ -5,3 +6,11 @@
 5|zxc|13|Hut|5|6|7
 6|uio|14|Hut|5|6|7
 7|rty|15|House|7|8|9
+=======
+1|acc|15|Apartment|13|14|15|19,20
+2|yui|1|Apartment|1|2|3|1,2
+3|apatura|7|Hut|13|14|15|13
+4|fdas|16|House|42|25|43|14,15
+5|nayiv|10|House|13|4|4|16
+6|Rezidencija Diklic|7|Apartment|5|10|10|2
+>>>>>>> Stashed changes
