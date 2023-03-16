@@ -7,7 +7,11 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace InitialProject.View.Guide
 {
@@ -16,6 +20,8 @@ namespace InitialProject.View.Guide
         public User CurrentUser { get; set; }
         public ObservableCollection<GuideTourDTO> CurrentTours { get; set; }
         public ObservableCollection<GuideTourDTO> UpcomingTours { get; set; }
+
+        public GuideTourDTO SelectedDTO { get; set; }
 
         private readonly TourRepository _tourRepository;
         private readonly LocationRepository _locationRepository;
@@ -77,19 +83,43 @@ namespace InitialProject.View.Guide
             List<GuideTourDTO> dto = new List<GuideTourDTO>();
             foreach (Tour tour in tours) 
             {
-                dto.Add(new GuideTourDTO(tour.Name,
+                dto.Add(new GuideTourDTO(
+                    tour.Id,
+                    tour.Name,
                     _locationRepository.GetById(tour.LocationId).Country,
-                     _locationRepository.GetById(tour.LocationId).City,
-                     tour.StartTime));
+                    _locationRepository.GetById(tour.LocationId).City,
+                    tour.StartTime)); 
             }
             return dto;
         }
         public GuideTourDTO ConvertToDTO(Tour tour)
         {
-            return new GuideTourDTO(tour.Name,
+            return new GuideTourDTO(
+                    tour.Id,
+                    tour.Name,
                     _locationRepository.GetById(tour.LocationId).Country,
-                     _locationRepository.GetById(tour.LocationId).City,
-                     tour.StartTime); 
+                    _locationRepository.GetById(tour.LocationId).City,
+                    tour.StartTime); 
         }
+        public Tour ConvertToTour(GuideTourDTO dto)
+        {
+            if(dto!=null)
+            return _tourRepository.GetById(dto.Id);
+            return null;
+        }
+        private void CurrentToursDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            Tour selectedTour = ConvertToTour(SelectedDTO);
+            if (selectedTour != null)
+            {
+                var messageBoxResult = MessageBox.Show($"Are you sure you want to start the {selectedTour.Name} tour?", "Start Tour Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (messageBoxResult == MessageBoxResult.Yes)
+                {
+                    ShowCheckpoints showCheckpoints = new ShowCheckpoints(selectedTour,_checkpointRepository);
+                    showCheckpoints.Show();
+                }
+            }
+        }
+
     }
 }

@@ -47,6 +47,11 @@ namespace InitialProject.Repository
 
             return tour;
         }
+        public Tour GetById(int id)
+        {
+            _tours = _serializer.FromCSV(_filePath);
+            return _tours.Find(c => c.Id == id);
+        }
 
         public List<Tour> GetTodaysTours()
         {
@@ -55,7 +60,7 @@ namespace InitialProject.Repository
 
             foreach (var tour in _tours)
             {
-                if (tour.StartTime.Date == currentDateTime.Date && tour.StartTime > currentDateTime)
+                if (tour.StartTime.Date == currentDateTime.Date && tour.StartTime >= currentDateTime)
                 {
                     currentTours.Add(tour);
                 }

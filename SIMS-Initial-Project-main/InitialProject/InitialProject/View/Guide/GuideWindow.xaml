@@ -36,7 +36,7 @@
                     <GroupBox Header="Today's tours">
                         <StackPanel Margin="0 10 0 0">
                             <ScrollViewer Height="150" VerticalScrollBarVisibility="Auto">
-                                <DataGrid ItemsSource="{Binding CurrentTours}" AutoGenerateColumns="False">
+                                <DataGrid ItemsSource="{Binding CurrentTours}" SelectedItem="{Binding Path= SelectedDTO}" AutoGenerateColumns="False" Name="CurrentToursDataGrid" IsReadOnly="true" MouseDoubleClick="CurrentToursDataGrid_MouseDoubleClick">
                                     <DataGrid.Columns>
                                         <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
                                         <DataGridTextColumn Header="Country" Binding="{Binding Country}" Width="*"/>
@@ -52,7 +52,7 @@
                     <GroupBox Header="Upcoming Tours">
                         <StackPanel Margin="0 10 0 0">
                             <ScrollViewer Height="150" VerticalScrollBarVisibility="Auto">
-                                <DataGrid ItemsSource="{Binding UpcomingTours}" AutoGenerateColumns="False">
+                                <DataGrid ItemsSource="{Binding UpcomingTours}" AutoGenerateColumns="False" IsReadOnly="true">
                                     <DataGrid.Columns>
                                         <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
                                         <DataGridTextColumn Header="Country" Binding="{Binding Country}" Width="*"/>
