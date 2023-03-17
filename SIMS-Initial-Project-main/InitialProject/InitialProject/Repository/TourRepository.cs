@@ -107,7 +107,7 @@ namespace InitialProject.Repository
             }
             return upcomingTours;
         }
-
+        
         public List<Tour> GetByCity(Location location)
         {
             var toursByCity = new List<Tour>();

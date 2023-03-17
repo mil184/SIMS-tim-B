@@ -23,6 +23,8 @@ namespace InitialProject.View.Guide
 
         private readonly CheckpointRepository _repository;
         private readonly TourRepository _tourRepository;
+        private readonly TourReservationRepository _tourReservationRepository;
+        private readonly UserRepository _userRepository;
         public ObservableCollection<Checkpoint> Checkpoints { get; set; }
         public ObservableCollection<User> UnmarkedGuests { get; set; }
 
@@ -32,22 +34,26 @@ namespace InitialProject.View.Guide
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public ShowCheckpoints(Tour tour, CheckpointRepository checkpointRepository,TourRepository tourRepository)
+        public ShowCheckpoints(Tour tour, CheckpointRepository checkpointRepository, TourRepository tourRepository, TourReservationRepository tourReservationRepository, UserRepository userRepository)
         {
             InitializeComponent();
             this.DataContext = this;
 
             SelectedTour = tour;
             _repository = checkpointRepository;
-            _tourRepository = tourRepository;   
+            _tourRepository = tourRepository;
+            _tourReservationRepository = tourReservationRepository;
+            _userRepository = userRepository;
 
             Checkpoints = new ObservableCollection<Checkpoint>();
             UnmarkedGuests = new ObservableCollection<User>();
 
-            UnmarkedGuests.Add(new User("DEJAN", "dejo", InitialProject.Resources.Enums.UserType.example));
-            UnmarkedGuests.Add(new User("MILICA", "dejo", InitialProject.Resources.Enums.UserType.example));
-            UnmarkedGuests.Add(new User("JELENA", "dejo", InitialProject.Resources.Enums.UserType.example));
-            UnmarkedGuests.Add(new User("MILOS", "dejo", InitialProject.Resources.Enums.UserType.example));
+            List<int> UnmarkedGuestsId = _tourReservationRepository.GetUserIdsByTour(SelectedTour);
+
+            foreach(int id in UnmarkedGuestsId) 
+            {
+                UnmarkedGuests.Add(_userRepository.GetById(id));
+            }
 
             foreach (int id in SelectedTour.CheckpointIds)
             {

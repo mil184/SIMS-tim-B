@@ -26,9 +26,11 @@ namespace InitialProject.View.Guide
         public GuideTourDTO SelectedDTO { get; set; }
 
         private readonly TourRepository _tourRepository;
+        private readonly TourReservationRepository _tourReservationRepository;
         private readonly LocationRepository _locationRepository;
         private readonly ImageRepository _imageRepository;
         private readonly CheckpointRepository _checkpointRepository;
+        private readonly UserRepository _userRepository;
 
         public GuideWindow(User user)
         {
@@ -47,6 +49,12 @@ namespace InitialProject.View.Guide
 
             _checkpointRepository = new CheckpointRepository();
             _checkpointRepository.Subscribe(this);
+
+            _tourReservationRepository = new TourReservationRepository();
+            _tourReservationRepository.Subscribe(this);
+
+            _userRepository = new UserRepository();
+            _userRepository.Subscribe(this);
 
             CurrentTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourRepository.GetTodaysTours()));
             UpcomingTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourRepository.GetUpcomingTours()));
@@ -126,7 +134,7 @@ namespace InitialProject.View.Guide
             {
                 if (selectedTour.IsActive)
                 {
-                    ShowCheckpoints showCheckpoints = new ShowCheckpoints(selectedTour, _checkpointRepository,_tourRepository);
+                    ShowCheckpoints showCheckpoints = new ShowCheckpoints(selectedTour, _checkpointRepository,_tourRepository,_tourReservationRepository,_userRepository);
                     showCheckpoints.ShowDialog();
                 }
                 else if (TourActive)
@@ -142,7 +150,7 @@ namespace InitialProject.View.Guide
                         TourActive = true;
                         selectedTour.CurrentCheckpointId = selectedTour.CheckpointIds.First();
                         _tourRepository.Update(selectedTour);
-                        ShowCheckpoints showCheckpoints = new ShowCheckpoints(selectedTour, _checkpointRepository,_tourRepository);
+                        ShowCheckpoints showCheckpoints = new ShowCheckpoints(selectedTour, _checkpointRepository,_tourRepository,_tourReservationRepository,_userRepository);
                         showCheckpoints.ShowDialog();
                     }
                 }
