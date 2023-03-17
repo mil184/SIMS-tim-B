@@ -17,7 +17,7 @@
         <!-- Tour info -->
         <TextBlock Grid.Row="0" Margin="10" FontWeight="Bold" Text="{Binding SelectedTour.Name}" />
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
-            <TextBlock Text="Location: " />
+            <!--<TextBlock Text="Location: " />-->
             
         </StackPanel>
         <TextBlock Grid.Row="0" Margin="10" Text="{Binding SelectedTour.DateTime}" />
@@ -31,7 +31,7 @@
         <!-- Buttons -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="10">
             <Button Content="Save" Margin="0 0 10 0" Command="{Binding SaveCommand}" Click="SaveButton_Click" />
-            <Button Content="Cancel" Command="{Binding CancelCommand}" />
+            <Button Content="Cancel" Command="{Binding CancelCommand}" Click="Button_Click" />
         </StackPanel>
     </Grid>
 </Window>

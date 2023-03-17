@@ -12,7 +12,7 @@ namespace InitialProject.Repository
 {
     public class LocationRepository : ISubject
     {
-        private const string FilePath = "../../../Resources/Data/locations.csv";
+        private const string _filepath = "../../../Resources/Data/locations.csv";
         
         private readonly Serializer<Location> _serializer;
         private readonly List<IObserver> _observers;
@@ -22,13 +22,13 @@ namespace InitialProject.Repository
         public LocationRepository()
         {
             _serializer = new Serializer<Location>();
-            _locations = _serializer.FromCSV(FilePath);
+            _locations = _serializer.FromCSV(_filepath);
             _observers = new List<IObserver>();
         }
 
         public int NextId()
         {
-            _locations = _serializer.FromCSV(FilePath);
+            _locations = _serializer.FromCSV(_filepath);
             if (_locations.Count < 1)
             {
                 return 1;
@@ -40,16 +40,16 @@ namespace InitialProject.Repository
         {
             location.Id = NextId();
 
-            _locations = _serializer.FromCSV(FilePath);
+            _locations = _serializer.FromCSV(_filepath);
             _locations.Add(location);
-            _serializer.ToCSV(FilePath, _locations);
+            _serializer.ToCSV(_filepath, _locations);
             NotifyObservers();
 
             return location;
         }
         public Location GetById(int id)
         {
-            _locations = _serializer.FromCSV(FilePath);
+            _locations = _serializer.FromCSV(_filepath);
             return _locations.Find(c => c.Id == id);
         }
         public void Subscribe(IObserver observer)

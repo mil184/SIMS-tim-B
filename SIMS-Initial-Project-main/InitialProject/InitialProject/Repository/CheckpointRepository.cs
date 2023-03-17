@@ -12,7 +12,7 @@ namespace InitialProject.Repository
 {
     public class CheckpointRepository: ISubject
     {
-        private const string FilePath = "../../../Resources/Data/checkpoints.csv";
+        private const string _filepath = "../../../Resources/Data/checkpoints.csv";
 
         private readonly Serializer<Checkpoint> _serializer;
 
@@ -23,14 +23,14 @@ namespace InitialProject.Repository
         public CheckpointRepository()
         {
             _serializer = new Serializer<Checkpoint>();
-            _checkpoints = _serializer.FromCSV(FilePath);
+            _checkpoints = _serializer.FromCSV(_filepath);
             _tourRepository = new TourRepository();
             _observers = new List<IObserver>();
         }
 
         public int NextId()
         {
-            _checkpoints = _serializer.FromCSV(FilePath);
+            _checkpoints = _serializer.FromCSV(_filepath);
             if (_checkpoints.Count < 1)
             {
                 return 1;
@@ -41,27 +41,28 @@ namespace InitialProject.Repository
         public Checkpoint Save(Checkpoint checkpoint)
         {
             checkpoint.Id = NextId();
-            _checkpoints = _serializer.FromCSV(FilePath);
+            _checkpoints = _serializer.FromCSV(_filepath);
             _checkpoints.Add(checkpoint);
-            _serializer.ToCSV(FilePath, _checkpoints);
+            _serializer.ToCSV(_filepath, _checkpoints);
             NotifyObservers();
 
             return checkpoint;
         }
         public Checkpoint Update(Checkpoint checkpoint)
         {
-            _checkpoints = _serializer.FromCSV(FilePath);
+            _checkpoints = _serializer.FromCSV(_filepath);
             Checkpoint current = _checkpoints.Find(c => c.Id == checkpoint.Id);
             int index = _checkpoints.IndexOf(current);
             _checkpoints.Remove(current);
             _checkpoints.Insert(index, checkpoint);       // keep ascending order of ids in file 
-            _serializer.ToCSV(FilePath, _checkpoints);
+            _serializer.ToCSV(_filepath, _checkpoints);
             NotifyObservers();
             return checkpoint;
         }
+
         public Checkpoint GetById(int id)
         {
-            _checkpoints = _serializer.FromCSV(FilePath);
+            _checkpoints = _serializer.FromCSV(_filepath);
             return _checkpoints.Find(c => c.Id == id);
         }
         public void Subscribe(IObserver observer)

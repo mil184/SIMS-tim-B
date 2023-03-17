@@ -2,36 +2,53 @@
 using InitialProject.Model.DTO;
 using InitialProject.Repository;
 using InitialProject.Resources.Observer;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 
 namespace InitialProject.View.Guest2
 {
-    public partial class Guest2Window : Window, INotifyPropertyChanged, IObserver
+    /// <summary>
+    /// Interaction logic for ZeroSpacesForReservation.xaml
+    /// </summary>
+    public partial class ZeroSpacesForReservation : Window, INotifyPropertyChanged, IObserver
     {
         public User LoggedInUser { get; set; }
-        public Guest2TourDTO SelectedGuest2TourDTO { get; set; }
+        public Guest2TourDTO SelectedTour { get; set; }
+        public Guest2TourDTO NewSelectedTour { get; set; }
+
         public ObservableCollection<Guest2TourDTO> Tours { get; set; }
 
         private readonly TourRepository _tourRepository;
         private readonly LocationRepository _locationRepository;
         private readonly ImageRepository _imageRepository;
         private readonly CheckpointRepository _checkpointRepository;
-        private readonly UserRepository _userRepository;
+        private readonly UserRepository _userRepository; 
+        private readonly TourReservationRepository _tourReservationRepository; 
 
-        public Guest2Window(User user)
+        public ZeroSpacesForReservation(Guest2TourDTO selectedTour, User user, TourRepository tourRepository)
         {
             InitializeComponent();
             DataContext = this;
 
+            SelectedTour = selectedTour;
             LoggedInUser = user;
 
-            _tourRepository = new TourRepository();
-            _tourRepository.Subscribe(this);
+            _tourReservationRepository = new TourReservationRepository();
+            _tourRepository = tourRepository;
 
             _imageRepository = new ImageRepository();
             _imageRepository.Subscribe(this);
@@ -45,7 +62,9 @@ namespace InitialProject.View.Guest2
             _userRepository = new UserRepository();
             _userRepository.Subscribe(this);
 
-            Tours = new ObservableCollection<Guest2TourDTO>(ConvertToDTOList(_tourRepository.GetAll()));
+            Tours = new ObservableCollection<Guest2TourDTO>(ConvertToDTOList(_tourRepository.GetByCityName(selectedTour.City)));
+            Tours.Remove(selectedTour);
+
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -65,11 +84,17 @@ namespace InitialProject.View.Guest2
 
         private void ReserveButton_Click(object sender, RoutedEventArgs e)
         {
-            if (SelectedGuest2TourDTO != null)
-            { 
-                ReserveTour reserveTourForm = new ReserveTour(SelectedGuest2TourDTO, LoggedInUser, _tourRepository);
+            if (NewSelectedTour != null)
+            {
+                ReserveTour reserveTourForm = new ReserveTour(NewSelectedTour, LoggedInUser, _tourRepository);
                 reserveTourForm.ShowDialog();
             }
+            Close();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
 
         public List<Guest2TourDTO> ConvertToDTOList(List<Tour> tours)
@@ -107,7 +132,7 @@ namespace InitialProject.View.Guest2
                 tour.CurrentGuestCount,
                 tour.StartTime,
                 tour.Duration,
-                _userRepository.GetById(tour.GuideId).Username) ;
+                _userRepository.GetById(tour.GuideId).Username);
         }
     }
 }
