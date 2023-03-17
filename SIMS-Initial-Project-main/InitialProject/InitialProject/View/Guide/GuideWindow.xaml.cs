@@ -111,6 +111,7 @@ namespace InitialProject.View.Guide
         }
         private void CurrentToursDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            TourActive = false;
             foreach (Tour tour in _tourRepository.GetTodaysTours()) 
             {
                 if (tour.IsActive) 
