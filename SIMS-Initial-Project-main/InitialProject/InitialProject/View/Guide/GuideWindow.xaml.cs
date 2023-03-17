@@ -19,6 +19,21 @@ namespace InitialProject.View.Guide
     public partial class GuideWindow : Window, INotifyPropertyChanged, IObserver
     {
         public User CurrentUser { get; set; }
+
+        private GuideTourDTO _activeTour;
+
+        public GuideTourDTO ActiveTour
+        {
+            get { return _activeTour; }
+            set
+            {
+                if (_activeTour != value)
+                {
+                    _activeTour = value;
+                    OnPropertyChanged(nameof(ActiveTour));
+                }
+            }
+        }
         public ObservableCollection<GuideTourDTO> CurrentTours { get; set; }
         public ObservableCollection<GuideTourDTO> UpcomingTours { get; set; }
 
@@ -56,8 +71,22 @@ namespace InitialProject.View.Guide
             _userRepository = new UserRepository();
             _userRepository.Subscribe(this);
 
+            ActiveTour = null;
+
             CurrentTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourRepository.GetTodaysTours()));
             UpcomingTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourRepository.GetUpcomingTours()));
+
+            foreach(GuideTourDTO tourdto in CurrentTours) 
+            {
+                Tour tour = ConvertToTour(tourdto);
+
+                if (tour.IsActive) 
+                {
+                    ActiveTour = ConvertToDTO(tour);
+                    break;
+                }
+            }
+
             var view = CollectionViewSource.GetDefaultView(UpcomingTours);
             view.SortDescriptions.Add(new SortDescription("StartTime", ListSortDirection.Ascending));
         }
@@ -120,11 +149,13 @@ namespace InitialProject.View.Guide
         private void CurrentToursDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             TourActive = false;
+            ActiveTour = null;
             foreach (Tour tour in _tourRepository.GetTodaysTours()) 
             {
                 if (tour.IsActive) 
                 {
                     TourActive = true;
+                    ActiveTour = ConvertToDTO(tour);
                     break;
                 }
             }
@@ -150,6 +181,7 @@ namespace InitialProject.View.Guide
                         TourActive = true;
                         selectedTour.CurrentCheckpointId = selectedTour.CheckpointIds.First();
                         _tourRepository.Update(selectedTour);
+                        ActiveTour = ConvertToDTO(selectedTour);
                         ShowCheckpoints showCheckpoints = new ShowCheckpoints(selectedTour, _checkpointRepository,_tourRepository,_tourReservationRepository,_userRepository);
                         showCheckpoints.ShowDialog();
                     }
@@ -157,6 +189,11 @@ namespace InitialProject.View.Guide
             }
         }
 
-
+        private void LogOut_Click(object sender, RoutedEventArgs e)
+        {         
+            SignInForm signInForm = new SignInForm();
+            signInForm.Show();
+            Close();
+        }
     }
 }
