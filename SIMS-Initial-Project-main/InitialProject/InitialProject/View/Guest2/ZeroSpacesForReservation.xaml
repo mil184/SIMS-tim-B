@@ -11,11 +11,12 @@
             <RowDefinition Height="85*"/>
             <RowDefinition Height="15*"/>
         </Grid.RowDefinitions>
-        <TextBlock FontSize="20" Margin="10">
-            <Run Text="There are no spaces available for chosen tour.Would you like to reserve another one in the same city?"/>
+
+        <TextBlock FontSize="20" Margin="10" HorizontalAlignment="Center" TextWrapping="Wrap">
+            <Run Text="There are no spaces available for chosen tour. Would you like to reserve another one in the same city?"/>
         </TextBlock>
 
-        <ScrollViewer Height="150" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Height="150" VerticalScrollBarVisibility="Auto" Margin="10">
             <DataGrid ItemsSource="{Binding Tours}" 
                                       SelectedItem="{Binding Path=NewSelectedTour}"
                                       AutoGenerateColumns="False"
