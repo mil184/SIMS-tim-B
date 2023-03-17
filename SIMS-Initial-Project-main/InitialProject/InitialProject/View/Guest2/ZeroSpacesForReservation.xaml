@@ -7,14 +7,37 @@
         mc:Ignorable="d"
         Title="ZeroSpacesForReservation" Height="450" Width="800">
     <Grid>
-        <StackPanel>
-            <TextBlock Text="There are no spaces available for chosen tour. Would you like to register another one in the same city?"
-                   Margin="10"
-                   FontSize="20"/>
-            
-        </StackPanel>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="85*"/>
+            <RowDefinition Height="15*"/>
+        </Grid.RowDefinitions>
+        <TextBlock FontSize="20" Margin="10">
+            <Run Text="There are no spaces available for chosen tour.Would you like to reserve another one in the same city?"/>
+        </TextBlock>
+
+        <ScrollViewer Height="150" VerticalScrollBarVisibility="Auto">
+            <DataGrid ItemsSource="{Binding Tours}" 
+                                      SelectedItem="{Binding Path=NewSelectedTour}"
+                                      AutoGenerateColumns="False"
+                                      IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+                    <DataGridTextColumn Header="Country" Binding="{Binding Country}" Width="*"/>
+                    <DataGridTextColumn Header="City" Binding="{Binding City}" Width="*"/>
+                    <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
+                    <DataGridTextColumn Header="Language" Binding="{Binding Language}" Width="*"/>
+                    <DataGridTextColumn Header="Max Guests" Binding="{Binding MaxGuests}" Width="*"/>
+                    <DataGridTextColumn Header="Current Guest Count" Binding="{Binding CurrentGuestCount}" Width="*"/>
+                    <DataGridTextColumn Header="Start Time" Binding="{Binding StartTime}" Width="*"/>
+                    <DataGridTextColumn Header="Start Time" Binding="{Binding StartTime}" Width="*"/>
+                    <DataGridTextColumn Header="Duration" Binding="{Binding Duration}" Width="*"/>
+                    <DataGridTextColumn Header="Guide" Binding="{Binding Guide}" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </ScrollViewer>
+
         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="10">
-            <Button Content="Save" Margin="0 0 10 0" Command="{Binding SaveCommand}" Click="SaveButton_Click" />
+            <Button Content="Reserve tour" Margin="0 0 10 0" Command="{Binding ReserveCommand}" Click="ReserveButton_Click" />
             <Button Content="Cancel" Command="{Binding CancelCommand}" Click="Button_Click" />
         </StackPanel>
     </Grid>

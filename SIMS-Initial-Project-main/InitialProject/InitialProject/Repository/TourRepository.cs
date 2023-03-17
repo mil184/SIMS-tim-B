@@ -113,6 +113,21 @@ namespace InitialProject.Repository
             return toursByCity;
         }
 
+        public List<Tour> GetByCityName(string city)
+        {
+            var toursByCityName = new List<Tour>();
+
+            foreach (var tour in _tours)
+            {
+                if (_locationRepository.GetById(tour.LocationId).City == city)
+                {
+                    toursByCityName.Add(tour);
+                }
+            }
+
+            return toursByCityName;
+        }
+
         public List<Tour> GetByCountry(Location location)
         {
             var toursByCountry = new List<Tour>();

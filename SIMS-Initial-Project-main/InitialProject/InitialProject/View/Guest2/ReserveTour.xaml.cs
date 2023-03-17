@@ -66,8 +66,9 @@ namespace InitialProject.View.Guest2
             else if (selectedTour.CurrentGuestCount == selectedTour.MaxGuests)
             {
                 ZeroSpacesForReservation zeroSpacesForReservation
-                    = new ZeroSpacesForReservation(SelectedTour, LoggedInUser);
-                zeroSpacesForReservation.Show();
+                    = new ZeroSpacesForReservation(SelectedTour, LoggedInUser, _tourRepository);
+                zeroSpacesForReservation.ShowDialog();
+                Close();
             }
             else
             {

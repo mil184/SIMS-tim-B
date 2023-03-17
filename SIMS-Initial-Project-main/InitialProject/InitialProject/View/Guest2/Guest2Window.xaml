@@ -23,7 +23,7 @@
         <!-- Tabs section -->
         <TabControl Grid.Row="1">
             <!-- Overview tab -->
-            <TabItem Header="Overview">
+            <TabItem Header="Tour reservation">
                 <StackPanel Margin="10">
                     <!-- Tour list section -->
                     <StackPanel Orientation="Horizontal">

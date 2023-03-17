@@ -1,8 +1,13 @@
 ﻿using InitialProject.Model;
 using InitialProject.Model.DTO;
+using InitialProject.Repository;
+using InitialProject.Resources.Observer;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -19,28 +24,115 @@ namespace InitialProject.View.Guest2
     /// <summary>
     /// Interaction logic for ZeroSpacesForReservation.xaml
     /// </summary>
-    public partial class ZeroSpacesForReservation : Window
+    public partial class ZeroSpacesForReservation : Window, INotifyPropertyChanged, IObserver
     {
         public User LoggedInUser { get; set; }
         public Guest2TourDTO SelectedTour { get; set; }
+        public Guest2TourDTO NewSelectedTour { get; set; }
 
-        public ZeroSpacesForReservation(Guest2TourDTO selectedTour, User user)
+        public ObservableCollection<Guest2TourDTO> Tours { get; set; }
+
+        private readonly TourRepository _tourRepository;
+        private readonly LocationRepository _locationRepository;
+        private readonly ImageRepository _imageRepository;
+        private readonly CheckpointRepository _checkpointRepository;
+        private readonly UserRepository _userRepository; 
+        private readonly TourReservationRepository _tourReservationRepository; 
+
+        public ZeroSpacesForReservation(Guest2TourDTO selectedTour, User user, TourRepository tourRepository)
         {
             InitializeComponent();
             DataContext = this;
 
             SelectedTour = selectedTour;
             LoggedInUser = user;
+
+            _tourReservationRepository = new TourReservationRepository();
+            _tourRepository = tourRepository;
+
+            _imageRepository = new ImageRepository();
+            _imageRepository.Subscribe(this);
+
+            _locationRepository = new LocationRepository();
+            _locationRepository.Subscribe(this);
+
+            _checkpointRepository = new CheckpointRepository();
+            _checkpointRepository.Subscribe(this);
+
+            _userRepository = new UserRepository();
+            _userRepository.Subscribe(this);
+
+            Tours = new ObservableCollection<Guest2TourDTO>(ConvertToDTOList(_tourRepository.GetByCityName(selectedTour.City)));
+            Tours.Remove(selectedTour);
+
         }
 
-        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            //
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void Update()
+        {
+            Tours.Clear();
+            foreach (Tour tour in _tourRepository.GetAll())
+            {
+                Tours.Add(ConvertToDTO(tour));
+            }
+        }
+
+        private void ReserveButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (NewSelectedTour != null)
+            {
+                ReserveTour reserveTourForm = new ReserveTour(NewSelectedTour, LoggedInUser, _tourRepository);
+                reserveTourForm.ShowDialog();
+            }
+            Close();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        public List<Guest2TourDTO> ConvertToDTOList(List<Tour> tours)
+        {
+            List<Guest2TourDTO> dtoList = new List<Guest2TourDTO>();
+
+            foreach (Tour tour in tours)
+            {
+                dtoList.Add(new Guest2TourDTO(
+                    tour.Id,
+                    tour.Name,
+                _locationRepository.GetById(tour.LocationId).Country,
+                _locationRepository.GetById(tour.LocationId).City,
+                tour.Description,
+                tour.Language,
+                tour.MaxGuests,
+                tour.CurrentGuestCount,
+                tour.StartTime,
+                tour.Duration,
+                _userRepository.GetById(tour.GuideId).Username));
+            }
+
+            return dtoList;
+        }
+        public Guest2TourDTO ConvertToDTO(Tour tour)
+        {
+            return new Guest2TourDTO(
+                tour.Id,
+                tour.Name,
+                _locationRepository.GetById(tour.LocationId).Country,
+                _locationRepository.GetById(tour.LocationId).City,
+                tour.Description,
+                tour.Language,
+                tour.MaxGuests,
+                tour.CurrentGuestCount,
+                tour.StartTime,
+                tour.Duration,
+                _userRepository.GetById(tour.GuideId).Username);
         }
     }
 }
