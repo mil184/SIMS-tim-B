@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using InitialProject.Model;
 using InitialProject.Resources.Observer;
 using InitialProject.Serializer;
+using InitialProject.View.Guest2;
 
 namespace InitialProject.Repository
 {
