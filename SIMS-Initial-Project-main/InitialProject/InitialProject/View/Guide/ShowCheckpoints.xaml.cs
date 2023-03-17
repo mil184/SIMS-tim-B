@@ -24,7 +24,7 @@ namespace InitialProject.View.Guide
         private readonly CheckpointRepository _repository;
         private readonly TourRepository _tourRepository;
         public ObservableCollection<Checkpoint> Checkpoints { get; set; }
-        public ObservableCollection<User> Guests { get; set; }
+        public ObservableCollection<User> UnmarkedGuests { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -42,12 +42,12 @@ namespace InitialProject.View.Guide
             _tourRepository = tourRepository;   
 
             Checkpoints = new ObservableCollection<Checkpoint>();
-            Guests = new ObservableCollection<User>();
+            UnmarkedGuests = new ObservableCollection<User>();
 
-            Guests.Add(new User("DEJAN", "dejo", InitialProject.Resources.Enums.UserType.example));
-            Guests.Add(new User("MILICA", "dejo", InitialProject.Resources.Enums.UserType.example));
-            Guests.Add(new User("JELENA", "dejo", InitialProject.Resources.Enums.UserType.example));
-            Guests.Add(new User("MILOS", "dejo", InitialProject.Resources.Enums.UserType.example));
+            UnmarkedGuests.Add(new User("DEJAN", "dejo", InitialProject.Resources.Enums.UserType.example));
+            UnmarkedGuests.Add(new User("MILICA", "dejo", InitialProject.Resources.Enums.UserType.example));
+            UnmarkedGuests.Add(new User("JELENA", "dejo", InitialProject.Resources.Enums.UserType.example));
+            UnmarkedGuests.Add(new User("MILOS", "dejo", InitialProject.Resources.Enums.UserType.example));
 
             foreach (int id in SelectedTour.CheckpointIds)
             {
@@ -230,6 +230,14 @@ namespace InitialProject.View.Guide
             SelectedTour.IsActive = false;
             _tourRepository.Update(SelectedTour);
             Close();
+        }
+        private void presentButton_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedGuest = guestsGrid.SelectedItem as User;
+            if (selectedGuest != null)
+            {
+                UnmarkedGuests.Remove(selectedGuest);
+            }
         }
     }
 }
