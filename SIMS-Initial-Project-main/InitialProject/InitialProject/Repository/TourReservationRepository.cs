@@ -9,12 +9,11 @@ using System.Threading.Tasks;
 
 namespace InitialProject.Repository
 {
-    internal class TourReservationRepository : ISubject
+    public class TourReservationRepository : ISubject
     {
         private const string _filePath = "../../../Resources/Data/tourReservations.csv";
 
         private readonly Serializer<TourReservation> _serializer;
-        private readonly LocationRepository _locationRepository;
         private readonly List<IObserver> _observers;
 
         private List<TourReservation> _tourReservations;
@@ -45,6 +44,20 @@ namespace InitialProject.Repository
             NotifyObservers();
 
             return tourReservation;
+        }
+
+        public List<int> GetUserIdsByTour(Tour tour) 
+        {
+            List<int> userIds = new List<int>();
+
+            foreach(TourReservation reservation in _tourReservations) 
+            {
+                if(reservation.TourId == tour.Id) 
+                {
+                    userIds.Add(reservation.UserId);
+                }   
+            }
+            return userIds;
         }
 
         public void Subscribe(IObserver observer)

@@ -8,7 +8,7 @@ using InitialProject.Serializer;
 
 namespace InitialProject.Model
 {
-    internal class TourReservation : ISerializable
+    public class TourReservation : ISerializable
     {
         public int Id { get; set; }
         public int UserId { get; set; }

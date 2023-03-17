@@ -108,11 +108,6 @@ namespace InitialProject.Repository
             return upcomingTours;
         }
 
-        public Tour GetById(int id)
-        {
-            _tours = _serializer.FromCSV(_filePath);
-            return _tours.Find(c => c.Id == id);
-        }
 
         public List<Tour> GetByCity(Location location)
         {
@@ -164,19 +159,6 @@ namespace InitialProject.Repository
             return (tour.CurrentGuestCount + guestsToAdd < tour.MaxGuests);
         }
 
-        public Tour Update(Tour tour)
-        {
-            _tours = _serializer.FromCSV(_filePath);
-
-            Tour current = _tours.Find(c => c.Id == tour.Id);
-            int index = _tours.IndexOf(current);
-            _tours.Remove(current);
-            _tours.Insert(index, tour);     // keep ascending order of ids in file 
-            
-            _serializer.ToCSV(_filePath, _tours);
-            NotifyObservers();
-            return tour;
-        }
 
         public void Subscribe(IObserver observer)
         {
