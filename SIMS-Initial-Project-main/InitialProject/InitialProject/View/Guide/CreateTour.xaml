@@ -28,7 +28,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
-
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -60,7 +60,7 @@
 
                 <TextBlock Text="Duration (hours):" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" />
                 <TextBox Name="txtDuration" Margin="5" Text="{Binding Path=Duration, UpdateSourceTrigger=PropertyChanged}" Grid.Row="6" Grid.Column="1" />
-
+                
                 <TextBlock Text="Date and Time:" Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" />
                 <StackPanel Orientation="Horizontal" Margin="5" Grid.Row="7" Grid.Column="1">
                     <DatePicker Name="dpDate" Width="150" VerticalAlignment="Center" />
@@ -74,7 +74,12 @@
                             <DropShadowEffect />
                         </ComboBox.Effect>
                     </ComboBox>
+                    <Button Name="AddButton" Content="Add" Margin="5" VerticalAlignment="Center" Click="addDateButton_Click"/>
                 </StackPanel>
+                <StackPanel Orientation="Vertical" Grid.Row="8" Grid.Column="1">
+                    <ListBox Name="SelectedTimesListBox" Grid.Row="8" ItemsSource="{Binding DateTimes}"/>
+                </StackPanel>
+
             </Grid>
         </GroupBox>
         <GroupBox Header="Image URLs" Grid.Row="1">

@@ -62,6 +62,7 @@ namespace InitialProject.View.Guide
         }
         public ObservableCollection<Checkpoint> MiddleCheckpoints { get; set; }
         public ObservableCollection<string> ImageUrls { get; set; } 
+        public ObservableCollection<DateTime> DateTimes { get; set; }   
 
         private string _name;
         public string TourName
@@ -206,8 +207,9 @@ namespace InitialProject.View.Guide
              CheckpointIds = new ObservableCollection<int>();
              MiddleCheckpoints = new ObservableCollection<Checkpoint>();
              ImageUrls = new ObservableCollection<string>();
+             DateTimes = new ObservableCollection<DateTime>();
 
-        LoggedInUser = user;
+            LoggedInUser = user;
 
             for (int i = 0; i < 24; i++)
             {
@@ -231,37 +233,40 @@ namespace InitialProject.View.Guide
         }
         private void btnCreateTour_Click(object sender, RoutedEventArgs e)
         {
-            DateTime selectedDate = dpDate.SelectedDate.GetValueOrDefault();
             Location TourLocation = _locationRepository.GetLocation(Country, City);
 
-            foreach (string images in ImageUrls)
-            {
-                ImageIds.Add(_imageRepository.Save(new Image(images)).Id);
+
+
+                foreach (string images in ImageUrls)
+                {
+                    ImageIds.Add(_imageRepository.Save(new Image(images)).Id);
+                }
+
+                CheckpointIds.Add(_checkpointRepository.Save(StartCheckpoint).Id);
+
+                foreach (Checkpoint checkpoint in MiddleCheckpoints)
+                {
+                    CheckpointIds.Add(_checkpointRepository.Save(checkpoint).Id);
+                }
+                CheckpointIds.Add(_checkpointRepository.Save(EndCheckpoint).Id);
+
+            foreach (DateTime dateTime in DateTimes) {
+
+                Tour tour = new Tour(TourName, TourLocation.Id, Description, TourLanguage, int.Parse(MaxGuests), 0, dateTime, int.Parse(Duration), LoggedInUser.Id, ImageIds, CheckpointIds);
+                tour = _repository.Save(tour);
+
+                StartCheckpoint.TourId = tour.Id;
+                _checkpointRepository.Update(StartCheckpoint);
+
+                foreach (Checkpoint checkpoint in MiddleCheckpoints)
+                {
+                    checkpoint.TourId = tour.Id;
+                    _checkpointRepository.Update(checkpoint);
+                }
+
+                EndCheckpoint.TourId = tour.Id;
+                _checkpointRepository.Update(EndCheckpoint);
             }
-
-            CheckpointIds.Add(_checkpointRepository.Save(StartCheckpoint).Id);
-
-            foreach (Checkpoint checkpoint in MiddleCheckpoints)
-            {
-                CheckpointIds.Add(_checkpointRepository.Save(checkpoint).Id);
-            }
-            CheckpointIds.Add(_checkpointRepository.Save(EndCheckpoint).Id);
-
-            Tour tour = new Tour(TourName, TourLocation.Id, Description, TourLanguage, int.Parse(MaxGuests),0, new DateTime(selectedDate.Year,selectedDate.Month,selectedDate.Day,int.Parse(Hours),int.Parse(Minutes),0),int.Parse(Duration), LoggedInUser.Id, ImageIds, CheckpointIds);
-            tour = _repository.Save(tour);
-
-            StartCheckpoint.TourId = tour.Id;
-            _checkpointRepository.Update(StartCheckpoint);
-
-            foreach (Checkpoint checkpoint in MiddleCheckpoints)
-            {
-                checkpoint.TourId = tour.Id;
-                _checkpointRepository.Update(checkpoint);
-            }
-
-            EndCheckpoint.TourId = tour.Id;
-            _checkpointRepository.Update(EndCheckpoint);
-
             Close();
         }
         private void Hours_cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -361,6 +366,12 @@ namespace InitialProject.View.Guide
                 Country = cbCountry.SelectedItem.ToString();
                 City = cbCity.SelectedItem.ToString();
             }
+        }
+
+        private void addDateButton_Click(object sender, RoutedEventArgs e)
+        {
+            DateTime selectedDate = dpDate.SelectedDate.GetValueOrDefault();
+            DateTimes.Add(new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, int.Parse(Hours), int.Parse(Minutes), 0));
         }
     }
 }
