@@ -35,6 +35,21 @@ namespace InitialProject.View.Guest1
 
         private LocationRepository _locationRepository;
 
+        public ObservableCollection<Location> Locations;
+
+
+        private string searchText;
+
+        public string SearchText
+        {
+            get { return searchText; }
+            set
+            {
+                searchText = value;
+
+                OnPropertyChanged();
+            }
+        }
         public Guest1Window(User user)
         {
             InitializeComponent();
@@ -57,9 +72,69 @@ namespace InitialProject.View.Guest1
         
         }
 
-        private void searchBox_TextChanged(object sender, RoutedEventArgs e)
+        private void Search_Click(object sender, RoutedEventArgs e)
         {
+            if(searchText != null && searchText != "")
+            {
+                string Text = searchText.ToLower();
+                Text = Text.Replace(" ", String.Empty);
+                string Query = Text;
 
+                ObservableCollection<Accommodation> FilteredAccommodations = new ObservableCollection<Accommodation>();
+                ObservableCollection<Location> FilteredLocations = SearchLocations(Accommodations.ToList(), Query);
+
+                foreach(Accommodation accommodation in Accommodations)
+                {
+                    if (accommodation.Name.ToLower().Contains(Query))
+                    {
+                        FilteredAccommodations.Add(accommodation);
+                    }
+                    else if(FilteredLocations.Any(loc => loc.Id == accommodation.LocationId))
+                    {
+                        FilteredAccommodations.Add(accommodation);
+                    }
+                    else if (accommodation.Type.ToString().ToLower().Contains(Query))
+                    {
+                        FilteredAccommodations.Add(accommodation);
+                    }
+                    else if (accommodation.MaxGuests.ToString().Contains(Query))
+                    {
+                        FilteredAccommodations.Add(accommodation);
+                    }
+                    else if (accommodation.MinReservationDays.ToString().Contains(Query))
+                    {
+                        FilteredAccommodations.Add(accommodation);
+                    }
+                    Accommodations = FilteredAccommodations;
+                    availableAccommodations.ItemsSource = Accommodations;
+                }
+            }
+            else
+            {
+                Accommodations.Clear();
+                foreach (var accomodation in _accommodationRepository.GetAll())
+                {
+                    Accommodations.Add(accomodation);
+                }
+
+                availableAccommodations.ItemsSource = Accommodations;
+            }
+
+        }
+        
+        private ObservableCollection<Location> SearchLocations(List<Accommodation> accommodations, string query)
+        {
+            ObservableCollection<Location> FilteredLocations = new ObservableCollection<Location>();
+            foreach (Accommodation accommodation in accommodations)
+            {
+                Location locations = _locationRepository.GetById(accommodation.LocationId);
+                if (locations.Country.ToLower().Contains(query) ||
+                    locations.City.ToLower().Contains(query))
+                {
+                    FilteredLocations.Add(locations);
+                }
+            }
+            return FilteredLocations;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
