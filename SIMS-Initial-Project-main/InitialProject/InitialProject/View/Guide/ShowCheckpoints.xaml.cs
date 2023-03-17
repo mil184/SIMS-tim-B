@@ -16,16 +16,17 @@ using System.Windows.Media.Animation;
 
 namespace InitialProject.View.Guide
 {
-    public partial class ShowCheckpoints : Window,INotifyPropertyChanged
+    public partial class ShowCheckpoints : Window, INotifyPropertyChanged
     {
 
-        private readonly Tour selectedTour;
+        private readonly Tour SelectedTour;
+
         private readonly CheckpointRepository _repository;
-
+        private readonly TourRepository _tourRepository;
         public ObservableCollection<Checkpoint> Checkpoints { get; set; }
-
-
-        private int currentCheckpointIndex = 0;
+        public ObservableCollection<User> Guests { get; set; }
+        public int NextCheckpointId { get; set; }
+        public int CheckpointCounter { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -33,101 +34,116 @@ namespace InitialProject.View.Guide
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public ShowCheckpoints(Tour tour, CheckpointRepository checkpointRepository)
+        public ShowCheckpoints(Tour tour, CheckpointRepository checkpointRepository,TourRepository tourRepository)
         {
             InitializeComponent();
             this.DataContext = this;
 
-            selectedTour = tour;
+            SelectedTour = tour;
             _repository = checkpointRepository;
+            _tourRepository = tourRepository;   
 
             Checkpoints = new ObservableCollection<Checkpoint>();
+            Guests = new ObservableCollection<User>();
 
-            foreach (int id in selectedTour.CheckpointIds)
+            Guests.Add(new User("DEJAN", "dejo", InitialProject.Resources.Enums.UserType.example));
+            Guests.Add(new User("MILICA", "dejo", InitialProject.Resources.Enums.UserType.example));
+            Guests.Add(new User("JELENA", "dejo", InitialProject.Resources.Enums.UserType.example));
+            Guests.Add(new User("MILOS", "dejo", InitialProject.Resources.Enums.UserType.example));
+
+            foreach (int id in SelectedTour.CheckpointIds)
             {
                 Checkpoints.Add(_repository.GetById(id));
             }
 
             Checkpoints.OrderBy(c => c.Order);
-
-            // Attach the Loaded event handler
-            Loaded += ShowCheckpoints_Loaded;
+  
+            // Attach the Loaded event handler to the ListBox
+            listBox.Loaded += ListBox_Loaded;
         }
 
-        private void ShowCheckpoints_Loaded(object sender, RoutedEventArgs e)
+        private void ListBox_Loaded(object sender, RoutedEventArgs e)
         {
-            // Disable buttons and checkboxes except for the first one
-            for (int i = 1; i < listBox.Items.Count; i++)
+            // Get the current checkpoint ID
+            int currentCheckpointId = SelectedTour.CurrentCheckpointId;
+
+            // Get the ID of the first checkpoint in the tour
+            int firstCheckpointId = Checkpoints.Min(c => c.Id);
+
+            // Check and disable all checkboxes based on the current checkpoint ID and the first checkpoint ID
+            for (int i = 0; i < listBox.Items.Count; i++)
             {
-                var listBoxItem = listBox.ItemContainerGenerator.ContainerFromIndex(i) as ListBoxItem;
-                var checkpointCheckbox = FindVisualChild<CheckBox>(listBoxItem);
-                var button = FindVisualChild<Button>(listBoxItem);
-                checkpointCheckbox.IsEnabled = false;
-                button.IsEnabled = false;
+                Checkpoint checkpoint = (Checkpoint)listBox.Items[i];
+                CheckBox checkbox = FindVisualChild<CheckBox>(listBox.ItemContainerGenerator.ContainerFromIndex(i));
+
+                if (checkpoint.Id <= currentCheckpointId)
+                {
+                    checkbox.IsChecked = true;
+                    checkbox.IsEnabled = false;
+                }
+                else if (checkpoint.Id == currentCheckpointId + 1)
+                {
+                    checkbox.IsChecked = false;
+                    checkbox.IsEnabled = true;
+                }
+                else
+                {
+                    checkbox.IsChecked = false;
+                    checkbox.IsEnabled = checkpoint.Id == firstCheckpointId + 1;
+                }
             }
 
-            // Check the first checkbox
-            var firstListBoxItem = listBox.ItemContainerGenerator.ContainerFromIndex(0) as ListBoxItem;
-            var firstCheckpointCheckbox = FindVisualChild<CheckBox>(firstListBoxItem);
-            firstCheckpointCheckbox.IsChecked = true;
-
-            // Remove the button from the last item
-            var lastListBoxItem = listBox.ItemContainerGenerator.ContainerFromIndex(listBox.Items.Count - 1) as ListBoxItem;
-            var lastButton = FindVisualChild<Button>(lastListBoxItem);
-            lastButton.Visibility = Visibility.Collapsed;
-        }
-
-
-
-
-        public CheckpointDTO ConvertToDTO(Checkpoint checkpoint) 
-        {
-            return new CheckpointDTO(checkpoint.Id, checkpoint.Name, checkpoint.Order);
-        }
-
-        public List<CheckpointDTO> ConvertToDTO(List<Checkpoint> checkpoints) 
-        {
-            List<CheckpointDTO> dtos = new List<CheckpointDTO>();
-
-            foreach (Checkpoint checkpoint in checkpoints) 
+            // If the current checkpoint is the first checkpoint, check the first checkbox
+            if (currentCheckpointId == firstCheckpointId)
             {
-                dtos.Add(ConvertToDTO(checkpoint));
+                CheckBox firstCheckbox = FindVisualChild<CheckBox>(listBox.ItemContainerGenerator.ContainerFromIndex(0));
+                firstCheckbox.IsChecked = true;
+            }
+        }
+
+
+
+
+
+
+        private void checkpointCheckbox_Checked(object sender, RoutedEventArgs e)
+        {
+            CheckBox currentCheckbox = (CheckBox)sender;
+            currentCheckbox.IsEnabled = false;
+            int currentIndex = listBox.ItemContainerGenerator.IndexFromContainer(listBox.ItemContainerGenerator.ContainerFromItem(currentCheckbox.DataContext));
+            int nextIndex = currentIndex + 1;
+
+            // If we're at the last checkpoint, don't do anything
+            if (nextIndex >= Checkpoints.Count)
+            {
+                return;
             }
 
-            return dtos;
-        }
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            var button = sender as Button;
-            var listBoxItem = FindVisualParent<ListBoxItem>(button);
+            // Enable the next checkbox and update the current checkpoint
+            CheckBox nextCheckbox = FindVisualChild<CheckBox>(listBox.ItemContainerGenerator.ContainerFromIndex(nextIndex));
+            nextCheckbox.IsEnabled = true;
+            SelectedTour.CurrentCheckpointId = Checkpoints[nextIndex].Id;
+            _tourRepository.Update(SelectedTour);
 
-            // Enable the next checkbox
-            currentCheckpointIndex++;
-            if (currentCheckpointIndex < listBox.Items.Count)
+            // Disable all checkboxes before the current checkpoint
+            for (int i = 0; i < currentIndex; i++)
             {
-                var nextListBoxItem = listBox.ItemContainerGenerator.ContainerFromIndex(currentCheckpointIndex) as ListBoxItem;
-                var nextCheckpointCheckbox = FindVisualChild<CheckBox>(nextListBoxItem);
-                nextCheckpointCheckbox.IsEnabled = true;
+                CheckBox checkbox = FindVisualChild<CheckBox>(listBox.ItemContainerGenerator.ContainerFromIndex(i));
+                checkbox.IsChecked = true;
+                checkbox.IsEnabled = false;
             }
 
-            // Disable the current button
-            button.IsEnabled = false;
+            // Enable all checkboxes after the current checkpoint
+            for (int i = nextIndex + 1; i < Checkpoints.Count; i++)
+            {
+                CheckBox checkbox = FindVisualChild<CheckBox>(listBox.ItemContainerGenerator.ContainerFromIndex(i));
+                checkbox.IsChecked = false;
+                checkbox.IsEnabled = false;
+            }
 
-            // Check the current checkpoint
-            var checkpointCheckbox = FindVisualChild<CheckBox>(listBoxItem);
-            checkpointCheckbox.IsChecked = true;
-        }
-        private void Checkbox_Checked(object sender, RoutedEventArgs e)
-        {
-            var checkbox = sender as CheckBox;
-            var listBoxItem = FindVisualParent<ListBoxItem>(checkbox);
-
-            // Disable the checkbox
-            checkbox.IsEnabled = false;
-
-            // Enable the button in the same row as the checkbox
-            var button = FindVisualChild<Button>(listBoxItem);
-            button.IsEnabled = true;
+            // Set the current checkpoint to the one that was just checked
+            SelectedTour.CurrentCheckpointId = Checkpoints[currentIndex].Id;
+            _tourRepository.Update(SelectedTour);
         }
 
         private T FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
@@ -139,36 +155,22 @@ namespace InitialProject.View.Guide
 
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
             {
-                var child = VisualTreeHelper.GetChild(parent, i);
-
-                if (child != null && child is T typedChild)
+                DependencyObject child = VisualTreeHelper.GetChild(parent, i);
+                if (child != null && child is T)
                 {
-                    return typedChild;
+                    return (T)child;
                 }
-
-                var childOfChild = FindVisualChild<T>(child);
-
-                if (childOfChild != null)
+                else
                 {
-                    return childOfChild;
+                    T foundChild = FindVisualChild<T>(child);
+                    if (foundChild != null)
+                    {
+                        return foundChild;
+                    }
                 }
-            }
-
-            return null;
-        }
-
-        private static T FindVisualParent<T>(DependencyObject child) where T : DependencyObject
-        {
-            DependencyObject parent = VisualTreeHelper.GetParent(child);
-            while (parent != null)
-            {
-                if (parent is T t)
-                {
-                    return t;
-                }
-                parent = VisualTreeHelper.GetParent(parent);
             }
             return null;
         }
+
     }
 }

@@ -26,9 +26,9 @@ namespace InitialProject.Model
         public ObservableCollection<int> ImageIds;
 
         public ObservableCollection<int> CheckpointIds;
+        public int CurrentCheckpointId { get; set; }
 
-        public bool Started { get; set; }
-
+        public bool IsActive { get; set; }  
         public Tour() { ImageIds = new ObservableCollection<int>(); CheckpointIds = new ObservableCollection<int>(); }
         public Tour(string name, int locationId, string description, string language, int maxGuests, int currentGuestCount, DateTime startTime, int duration, int guideId, ObservableCollection<int> imageIds, ObservableCollection<int> checkpointIds)
         {
@@ -43,8 +43,8 @@ namespace InitialProject.Model
             GuideId = guideId;
             ImageIds = imageIds;
             CheckpointIds = checkpointIds;
-            Started = false;
- 
+            CurrentCheckpointId = -1; 
+            IsActive = false;
         }
         public string[] ToCSV()
         {
@@ -59,9 +59,10 @@ namespace InitialProject.Model
             StartTime.ToString(),
             Duration.ToString(),
             GuideId.ToString(),
-            Started.ToString(),
             string.Join(",", ImageIds),
-            string.Join(",", CheckpointIds)
+            string.Join(",", CheckpointIds),
+            CurrentCheckpointId.ToString(),
+            IsActive.ToString()
         };
             return csvValues;
         }
@@ -78,16 +79,16 @@ namespace InitialProject.Model
             StartTime = DateTime.Parse(values[7]);
             Duration = int.Parse(values[8]);
             GuideId = int.Parse(values[9]);
-            Started = bool.Parse(values[10]);
-            foreach(string id in values[11].Split(',')) 
+            foreach(string id in values[10].Split(',')) 
             {
                 ImageIds.Add(int.Parse(id));
             }
-            foreach (string id in values[12].Split(','))
+            foreach (string id in values[11].Split(','))
             {
                 CheckpointIds.Add(int.Parse(id));
             }
-
+            CurrentCheckpointId = int.Parse(values[12]);
+            IsActive = bool.Parse(values[13]);
         }
 
     }
