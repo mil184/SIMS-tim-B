@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:InitialProject.View.Guide"
         mc:Ignorable="d"
         WindowState="Maximized"
-        Title="GuideWindow" Height="600" Width="800">
+        Title="DMJM-Tours" Height="600" Width="800"
+        Icon ="/Resources/Images/favicon.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -14,13 +15,24 @@
         </Grid.RowDefinitions>
 
         <!-- User information section -->
-        <StackPanel Grid.Row="0" Margin="10" Orientation="Horizontal">
+        <Grid Grid.Row="0" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="aUTO"/>
+            </Grid.ColumnDefinitions>
             <Image Source="/Resources/Images/tour-guide.png" Width="100" Height="75" Margin="0 0 10 0" />
-            <StackPanel>
+            <StackPanel Grid.Column="1">
                 <TextBlock FontSize="18" FontWeight="Bold" Text="Tour Guide" Margin="0 0 0 10"/>
                 <TextBlock FontSize="14" Text="{Binding CurrentUser.Username, FallbackValue=BidningNotWorking}"/>
             </StackPanel>
-        </StackPanel>
+            <StackPanel Grid.Column="2">
+                <StackPanel Orientation="Horizontal" Margin="10">
+                    <Image Source="/Resources/Images/info.png" Width="20" Height="20" Margin="0 0 5 0"/>
+                    <TextBlock Text="To start a tour, double click on one of today's tours" Margin="0" FontSize="14" FontWeight="Bold"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
         <!-- Tabs section -->
  <TabControl Grid.Row="1">
             <!-- Tours tab -->

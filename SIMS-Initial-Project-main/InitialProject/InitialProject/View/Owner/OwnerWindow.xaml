@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InitialProject.View.Owner"
         mc:Ignorable="d"
-        Title="Owner" Height="450" Width="800" WindowStartupLocation="CenterScreen">
+        Title="DMJM-Tours" Height="450" Width="800" WindowStartupLocation="CenterScreen"
+        Icon ="/Resources/Images/favicon.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

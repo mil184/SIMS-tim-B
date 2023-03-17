@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InitialProject.View.Owner"
         mc:Ignorable="d"
-        Title="Register Accommodation" Height="800" Width="500" WindowStartupLocation="CenterScreen">
+        Title="DMJM-Tours" Height="800" Width="500" WindowStartupLocation="CenterScreen"
+        Icon ="/Resources/Images/favicon.ico">
     <Window.Resources>
         <ControlTemplate x:Key="ValidationTemplate">
             <StackPanel>
