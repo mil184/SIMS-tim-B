@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace InitialProject.Repository
 {
@@ -47,6 +48,21 @@ namespace InitialProject.Repository
 
             return tour;
         }
+        public Tour Update(Tour tour)
+        {
+            _tours = _serializer.FromCSV(_filePath);
+            Tour current = _tours.Find(c => c.Id == tour.Id);
+            int index = _tours.IndexOf(current);
+            _tours.Remove(current);
+            _tours.Insert(index, tour);       // keep ascending order of ids in file 
+            _serializer.ToCSV(_filePath, _tours);
+            return tour;
+        }
+        public Tour GetById(int id)
+        {
+            _tours = _serializer.FromCSV(_filePath);
+            return _tours.Find(c => c.Id == id);
+        }
 
         public List<Tour> GetAll()
         {
@@ -67,7 +83,7 @@ namespace InitialProject.Repository
 
             foreach (var tour in _tours)
             {
-                if (tour.StartTime.Date == currentDateTime.Date && tour.StartTime > currentDateTime)
+                if (tour.StartTime.Date == currentDateTime.Date && tour.StartTime >= currentDateTime)
                 {
                     currentTours.Add(tour);
                 }

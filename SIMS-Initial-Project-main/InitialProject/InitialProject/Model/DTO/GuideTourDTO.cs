@@ -8,6 +8,7 @@ namespace InitialProject.Model.DTO
 {
     public class GuideTourDTO
     {
+        public int Id { get; set; }  
         public string Name { get; set; }
         public string Country { get; set; }
         public string City { get; set; }
@@ -17,8 +18,9 @@ namespace InitialProject.Model.DTO
         {
 
         }
-        public GuideTourDTO(string name, string country, string city, DateTime startTime)
+        public GuideTourDTO(int id, string name, string country, string city, DateTime startTime)
         {
+            Id = id;
             Name = name;
             Country = country;
             City = city;

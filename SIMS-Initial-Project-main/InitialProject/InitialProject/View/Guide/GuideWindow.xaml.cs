@@ -5,9 +5,14 @@ using InitialProject.Resources.Observer;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace InitialProject.View.Guide
 {
@@ -16,6 +21,9 @@ namespace InitialProject.View.Guide
         public User CurrentUser { get; set; }
         public ObservableCollection<GuideTourDTO> CurrentTours { get; set; }
         public ObservableCollection<GuideTourDTO> UpcomingTours { get; set; }
+
+        public bool TourActive { get; set; }
+        public GuideTourDTO SelectedDTO { get; set; }
 
         private readonly TourRepository _tourRepository;
         private readonly LocationRepository _locationRepository;
@@ -77,19 +85,70 @@ namespace InitialProject.View.Guide
             List<GuideTourDTO> dto = new List<GuideTourDTO>();
             foreach (Tour tour in tours) 
             {
-                dto.Add(new GuideTourDTO(tour.Name,
+                dto.Add(new GuideTourDTO(
+                    tour.Id,
+                    tour.Name,
                     _locationRepository.GetById(tour.LocationId).Country,
-                     _locationRepository.GetById(tour.LocationId).City,
-                     tour.StartTime));
+                    _locationRepository.GetById(tour.LocationId).City,
+                    tour.StartTime)); 
             }
             return dto;
         }
         public GuideTourDTO ConvertToDTO(Tour tour)
         {
-            return new GuideTourDTO(tour.Name,
+            return new GuideTourDTO(
+                    tour.Id,
+                    tour.Name,
                     _locationRepository.GetById(tour.LocationId).Country,
-                     _locationRepository.GetById(tour.LocationId).City,
-                     tour.StartTime); 
+                    _locationRepository.GetById(tour.LocationId).City,
+                    tour.StartTime); 
         }
+        public Tour ConvertToTour(GuideTourDTO dto)
+        {
+            if(dto!=null)
+            return _tourRepository.GetById(dto.Id);
+            return null;
+        }
+        private void CurrentToursDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            TourActive = false;
+            foreach (Tour tour in _tourRepository.GetTodaysTours()) 
+            {
+                if (tour.IsActive) 
+                {
+                    TourActive = true;
+                    break;
+                }
+            }
+
+            Tour selectedTour = ConvertToTour(SelectedDTO);
+            if (selectedTour != null)
+            {
+                if (selectedTour.IsActive)
+                {
+                    ShowCheckpoints showCheckpoints = new ShowCheckpoints(selectedTour, _checkpointRepository,_tourRepository);
+                    showCheckpoints.ShowDialog();
+                }
+                else if (TourActive)
+                {
+                    MessageBox.Show("An active tour is already in progress. Please finish the current tour before starting a new one.", "Active Tour Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+                else
+                {
+                    var messageBoxResult = MessageBox.Show($"Are you sure you want to start the {selectedTour.Name} tour?", "Start Tour Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    if (messageBoxResult == MessageBoxResult.Yes)
+                    {
+                        selectedTour.IsActive = true;
+                        TourActive = true;
+                        selectedTour.CurrentCheckpointId = selectedTour.CheckpointIds.First();
+                        _tourRepository.Update(selectedTour);
+                        ShowCheckpoints showCheckpoints = new ShowCheckpoints(selectedTour, _checkpointRepository,_tourRepository);
+                        showCheckpoints.ShowDialog();
+                    }
+                }
+            }
+        }
+
+
     }
 }
