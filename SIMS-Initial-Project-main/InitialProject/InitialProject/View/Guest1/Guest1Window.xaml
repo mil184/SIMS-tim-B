@@ -32,7 +32,12 @@
                         <Button Name="search" Click="Search_Click" >
                             <Image Source="/Resources/Images/search.jpg" />
                         </Button>
-                        <Button Content="Reserve accommodation" Width="150" Click="ReserveButton_Click" HorizontalAlignment="Right" Margin="300,0,0,0" FontWeight="Bold"/>
+                        <ComboBox x:Name="searchParamComboBox" Margin="2,0,0,0">
+                            <ComboBoxItem Content="MaxGuests" />
+                            <ComboBoxItem Content="MinReservationDays" />
+                        </ComboBox>
+                        <TextBlock Text="{Binding MessageText}" Foreground="Red" VerticalAlignment="Center" TextAlignment="Right"/>
+                        <Button Content="Reserve accommodation" Width="150" Click="ReserveButton_Click" HorizontalAlignment="Right" Margin="260,0,0,0" FontWeight="Bold"/>
                     </StackPanel>
                     <!-- Accommodation overview section -->
                     <StackPanel Margin="0 10 0 0">
@@ -44,12 +49,27 @@
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
                                                 <StackPanel Orientation="Vertical">
-                                                    <TextBlock  Text ="{Binding Name}"/>
-                                                    <TextBlock Text="{Binding Country}"/>
-                                                    <TextBlock Text="{Binding City}"/>
-                                                    <TextBlock Text="{Binding Type}"/>
-                                                    <TextBlock Text="{Binding MaxGuests}"/>
-                                                    <TextBlock Text="{Binding MinReservationDays}"/>
+                                                    <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="Country: " FontWeight="Bold"/>
+                                                        <TextBlock Text="{Binding Country}"/>
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="City: " FontWeight="Bold"/>
+                                                        <TextBlock Text="{Binding City}"/>
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="Type: " FontWeight="Bold"/>
+                                                        <TextBlock Text="{Binding Type}"/>
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="Max guests: " FontWeight="Bold"/>
+                                                        <TextBlock Text="{Binding MaxGuests}"/>
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="Minimum reservation days: " FontWeight="Bold"/>
+                                                        <TextBlock Text="{Binding MinReservationDays}"/>
+                                                    </StackPanel>
                                                 </StackPanel>
                                             </DataTemplate>
                                         </ListBox.ItemTemplate>

@@ -31,9 +31,13 @@ namespace InitialProject.View.Guest1
         public ObservableCollection<Accommodation> Accommodations { get; set; }
         public ObservableCollection<GuestAccommodationDTO> AvailableAccommodations { get; set; }
 
-        private AccommodationRepository _accommodationRepository;
+        private readonly AccommodationRepository _accommodationRepository;
 
-        private LocationRepository _locationRepository;
+        private readonly LocationRepository _locationRepository;
+
+        private readonly UserRepository _userRepository;
+
+        private readonly ImageRepository _imageRepository;
 
         public ObservableCollection<Location> Locations;
 
@@ -46,6 +50,18 @@ namespace InitialProject.View.Guest1
             set
             {
                 searchText = value;
+
+                OnPropertyChanged();
+            }
+        }
+
+        private string messageText;
+        public string MessageText
+        {
+            get { return messageText; }
+            set
+            {
+                messageText = value;
 
                 OnPropertyChanged();
             }
@@ -79,6 +95,7 @@ namespace InitialProject.View.Guest1
                 string Text = searchText.ToLower();
                 Text = Text.Replace(" ", String.Empty);
                 string Query = Text;
+                string selectedSearchParam = (searchParamComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
 
                 ObservableCollection<Accommodation> FilteredAccommodations = new ObservableCollection<Accommodation>();
                 ObservableCollection<Location> FilteredLocations = SearchLocations(Accommodations.ToList(), Query);
@@ -97,13 +114,27 @@ namespace InitialProject.View.Guest1
                     {
                         FilteredAccommodations.Add(accommodation);
                     }
-                    else if (accommodation.MaxGuests.ToString().Contains(Query))
+                    else if (selectedSearchParam == "MaxGuests" && accommodation.MaxGuests.ToString().Contains(Query))
                     {
-                        FilteredAccommodations.Add(accommodation);
+                        if (Int32.Parse(Query) > accommodation.MaxGuests)
+                        {
+                            MessageText = "The number of guests cannot be greater than max number of guests";
+                        }
+                        else
+                        {
+                            FilteredAccommodations.Add(accommodation);
+                        }
                     }
-                    else if (accommodation.MinReservationDays.ToString().Contains(Query))
+                    else if (selectedSearchParam == "MinReservationDays" && accommodation.MinReservationDays.ToString().Contains(Query))
                     {
-                        FilteredAccommodations.Add(accommodation);
+                        if (Int32.Parse(Query) < accommodation.MinReservationDays)
+                        {
+                            MessageText = "The number of reservation days cannot be less than min reservation days";
+                        }
+                        else
+                        {
+                            FilteredAccommodations.Add(accommodation);
+                        }
                     }
                     Accommodations = FilteredAccommodations;
                     availableAccommodations.ItemsSource = Accommodations;
