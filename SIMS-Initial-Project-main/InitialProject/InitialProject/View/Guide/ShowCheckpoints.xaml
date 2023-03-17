@@ -9,10 +9,23 @@
         Icon ="/Resources/Images/favicon.ico">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <ScrollViewer Grid.Row="0">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <Image Source="/Resources/Images/info.png" Width="20" Height="20" Margin="0 0 5 0"/>
+                <TextBlock Text="To select a checkpoint, simply click the checkbox" Margin="0" FontSize="14" FontWeight="Bold"/>
+            </StackPanel>
+        </Grid>
+
+        <ScrollViewer Grid.Row="1">
             <ListBox Name="listBox" Margin="10" BorderThickness="0" ItemsSource="{Binding Checkpoints, UpdateSourceTrigger=PropertyChanged}">
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
@@ -47,7 +60,8 @@
                 </ListBox.ItemTemplate>
             </ListBox>
         </ScrollViewer>
-        <DataGrid Grid.Row="1" 
+        <TextBlock Grid.Row="2" Text="List of guests who have not show up yet:" Margin="10,5" FontSize="14" FontWeight="Bold"/>
+        <DataGrid Grid.Row="3" 
           Name="guestsGrid" 
           Margin="10" 
           AutoGenerateColumns="False" 

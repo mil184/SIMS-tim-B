@@ -15,6 +15,7 @@
     <None Remove="Resources\Images\guest.png" />
     <None Remove="Resources\Images\guest2.png" />
     <None Remove="Resources\Images\home.png" />
+    <None Remove="Resources\Images\info.png" />
     <None Remove="Resources\Images\owner.png" />
     <None Remove="Resources\Images\search.jpg" />
     <None Remove="Resources\Images\tour-guide.png" />
@@ -36,6 +37,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\guest.png" />
+    <Resource Include="Resources\Images\info.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Images\owner.png" />
     <Resource Include="Resources\Images\search.jpg" />
     <Resource Include="Resources\Images\tour-guide.png">
