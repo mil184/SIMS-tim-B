@@ -13,6 +13,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid>
             <Grid.RowDefinitions>
@@ -81,5 +82,6 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
+        <Button Grid.Row="5" Content="End Tour" Margin="10" HorizontalAlignment="Right" Height="30" Width="100" Click="endTourButton_Click"/>
     </Grid>
 </Window>

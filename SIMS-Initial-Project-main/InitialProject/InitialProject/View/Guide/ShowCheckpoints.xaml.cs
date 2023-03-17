@@ -155,6 +155,7 @@ namespace InitialProject.View.Guide
                 SelectedTour.CurrentCheckpointId = -1;
                 SelectedTour.IsActive = false;
                 _tourRepository.Update(SelectedTour);
+                MessageBox.Show($"The {SelectedTour.Name} tour finished", "End Tour Information", MessageBoxButton.OK, MessageBoxImage.Information);
                 Close();
                 return;
             }
@@ -232,10 +233,17 @@ namespace InitialProject.View.Guide
 
         private void endTourButton_Click(object sender, RoutedEventArgs e)
         {
-            SelectedTour.CurrentCheckpointId = -1;
-            SelectedTour.IsActive = false;
-            _tourRepository.Update(SelectedTour);
-            Close();
+            var messageBoxResult = MessageBox.Show($"Are you sure you want to end the {SelectedTour.Name} tour?", "End Tour Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (messageBoxResult == MessageBoxResult.Yes)
+            {
+                SelectedTour.CurrentCheckpointId = -1;
+                SelectedTour.IsActive = false;
+                _tourRepository.Update(SelectedTour);
+                MessageBox.Show($"The {SelectedTour.Name} tour finished", "End Tour Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                Close();
+            }
+        
         }
         private void presentButton_Click(object sender, RoutedEventArgs e)
         {
