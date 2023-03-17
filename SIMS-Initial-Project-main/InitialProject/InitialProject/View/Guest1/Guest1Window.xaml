@@ -21,76 +21,70 @@
                     <TextBlock FontSize="14" Text="{Binding LoggedInUser.Username, FallbackValue=BidningNotWorking}"/>
                 </StackPanel>
             </StackPanel>
+        
             <!-- Tabs section -->
-            <TabControl Grid.Row="1">
-                <!-- Overview tab -->
+        <TabControl Grid.Row="1">
+            <!-- Overview tab -->
             <TabItem Header="Overview">
-                <StackPanel Margin="10">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
                     <!-- Accommodation list section -->
-                    <StackPanel Orientation="Horizontal" Height="30">
-                        <Label x:Name="label" HorizontalAlignment="Left" FontWeight="Bold"> Find accommodation </Label>
-                        <TextBox Name="searchBox" Text="{Binding Path=SearchText }" HorizontalAlignment="Left" Width="150" VerticalAlignment="Center" Height="25" Margin="10,0,5,0" />
-                        <Button Name="search" Click="Search_Click" >
-                            <Image Source="/Resources/Images/search.jpg" />
-                        </Button>
-                        <ComboBox x:Name="searchParamComboBox" Margin="2,0,0,0">
-                            <ComboBoxItem Content="MaxGuests" />
-                            <ComboBoxItem Content="MinReservationDays" />
-                        </ComboBox>
-                        <TextBlock Text="{Binding MessageText}" Foreground="Red" VerticalAlignment="Center" TextAlignment="Right"/>
-                        <Button Content="Reserve accommodation" Width="150" Click="ReserveButton_Click" HorizontalAlignment="Right" Margin="260,0,0,0" FontWeight="Bold"/>
-                    </StackPanel>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Name="reserve" Content="Reserve Accommodation" Click="ReserveButton_Click" Width="200" Margin="0 0 10 0" FontWeight="Bold"/>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBox Name="searchBox" Text="{Binding Path=SearchText}" Width="200" Height="25" Margin="0 0 5 0"/>
+                            <ComboBox x:Name="searchParamComboBox" Width="150" Margin="0 0 5 0">
+                                <ComboBoxItem Content="MaxGuests"/>
+                                <ComboBoxItem Content="MinReservationDays"/>
+                            </ComboBox>
+                            <Button Name="search" Width="25" Height="25" Click="Search_Click">
+                                <Image Source="/Resources/Images/search.jpg" />
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+
                     <!-- Accommodation overview section -->
-                    <StackPanel Margin="0 10 0 0">
-                        <TextBlock Text="Explore accommodation" FontSize="14" FontWeight="Bold"/>
-                         <GroupBox>
-                            <StackPanel Margin="0 10 0 0">
-                                <ScrollViewer Height="150" VerticalScrollBarVisibility="Auto">
-                                    <ListBox Name="availableAccommodations"  ItemsSource="{Binding Path=AvailableAccommodations, UpdateSourceTrigger=PropertyChanged}">
-                                        <ListBox.ItemTemplate>
+                    <GroupBox Grid.Row="1" Header="Explore Accommodation" Margin="0 0 0 10">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <DataGrid Name="presentableAccommodations" ItemsSource="{Binding Path=PresentableAccommodations}" AutoGenerateColumns="False" IsReadOnly="True">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+                                    <DataGridTextColumn Header="Country" Binding="{Binding Country}" Width="*"/>
+                                    <DataGridTextColumn Header="City" Binding="{Binding City}" Width="*"/>
+                                    <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="*"/>
+                                    <DataGridTextColumn Header="Max Guests" Binding="{Binding MaxGuests}" Width="*"/>
+                                    <DataGridTextColumn Header="Min Reservation Days" Binding="{Binding MinReservationDays}" Width="*"/>
+                                    <DataGridTextColumn Header="Cancellation Period" Binding="{Binding CancellationPeriod}" Width="*"/>
+                                    <DataGridTemplateColumn Header="Images">
+                                        <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
-                                                <StackPanel Orientation="Vertical">
-                                                    <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <TextBlock Text="Country: " FontWeight="Bold"/>
-                                                        <TextBlock Text="{Binding Country}"/>
-                                                    </StackPanel>
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <TextBlock Text="City: " FontWeight="Bold"/>
-                                                        <TextBlock Text="{Binding City}"/>
-                                                    </StackPanel>
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <TextBlock Text="Type: " FontWeight="Bold"/>
-                                                        <TextBlock Text="{Binding Type}"/>
-                                                    </StackPanel>
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <TextBlock Text="Max guests: " FontWeight="Bold"/>
-                                                        <TextBlock Text="{Binding MaxGuests}"/>
-                                                    </StackPanel>
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <TextBlock Text="Minimum reservation days: " FontWeight="Bold"/>
-                                                        <TextBlock Text="{Binding MinReservationDays}"/>
-                                                    </StackPanel>
-                                                </StackPanel>
+                                                <Button Content="Images" Click="ImagesButton_Click"/>
                                             </DataTemplate>
-                                        </ListBox.ItemTemplate>
-                                    </ListBox>
-                                </ScrollViewer>
-                            </StackPanel>
-                         </GroupBox>
-                        
-                    </StackPanel>
-                </StackPanel>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ScrollViewer>
+                    </GroupBox>
+                </Grid>
+
             </TabItem>
             <!-- Ratings tab -->
-                <TabItem Header="Ratings">
-                    <StackPanel Margin="10">
-                        <!-- Rating section -->
-                        <TextBlock FontSize="18" FontWeight="Bold" Text="Ratings" Margin="0 0 10 0"/>
-                        <!-- Add rating elements here -->
-                    </StackPanel>
-                </TabItem>
-            </TabControl>
-        
+            <TabItem Header="Ratings">
+                <StackPanel Margin="10">
+                    <!-- Rating section -->
+                    <TextBlock FontSize="18" FontWeight="Bold" Text="Ratings" Margin="0 0 10 0"/>
+                    <!-- Add rating elements here -->
+                </StackPanel>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>

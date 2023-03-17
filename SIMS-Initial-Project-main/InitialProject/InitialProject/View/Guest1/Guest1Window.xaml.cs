@@ -28,8 +28,8 @@ namespace InitialProject.View.Guest1
     public partial class Guest1Window : Window, INotifyPropertyChanged, IObserver
     {
         public User LoggedInUser { get; set; }
-        public ObservableCollection<Accommodation> Accommodations { get; set; }
-        public ObservableCollection<GuestAccommodationDTO> AvailableAccommodations { get; set; }
+        public ObservableCollection<Accommodation> AllAccommodations { get; set; }
+        public ObservableCollection<GuestAccommodationDTO> PresentableAccommodations { get; set; }
 
         private readonly AccommodationRepository _accommodationRepository;
 
@@ -75,22 +75,23 @@ namespace InitialProject.View.Guest1
             _accommodationRepository = new AccommodationRepository();
             _accommodationRepository.Subscribe(this);
 
-            Accommodations = new ObservableCollection<Accommodation>(_accommodationRepository.GetAll());
-
             _locationRepository = new LocationRepository();
             _locationRepository.Subscribe(this);
 
-            AvailableAccommodations = new ObservableCollection<GuestAccommodationDTO>(ConvertToDTO(_accommodationRepository.GetAll()));
+            AllAccommodations = new ObservableCollection<Accommodation>(_accommodationRepository.GetAll());
+            PresentableAccommodations = ConvertToDTO(AllAccommodations);
         }
 
         private void ReserveButton_Click(object sender, RoutedEventArgs e)
         {
-        
+
         }
 
         private void Search_Click(object sender, RoutedEventArgs e)
         {
-            if(searchText != null && searchText != "")
+            PresentableAccommodations.Clear();
+
+            if (searchText != null && searchText != "")
             {
                 string Text = searchText.ToLower();
                 Text = Text.Replace(" ", String.Empty);
@@ -98,15 +99,15 @@ namespace InitialProject.View.Guest1
                 string selectedSearchParam = (searchParamComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
 
                 ObservableCollection<Accommodation> FilteredAccommodations = new ObservableCollection<Accommodation>();
-                ObservableCollection<Location> FilteredLocations = SearchLocations(Accommodations.ToList(), Query);
+                ObservableCollection<Location> FilteredLocations = SearchLocations(AllAccommodations, Query);
 
-                foreach(Accommodation accommodation in Accommodations)
+                foreach (Accommodation accommodation in AllAccommodations)
                 {
                     if (accommodation.Name.ToLower().Contains(Query))
                     {
                         FilteredAccommodations.Add(accommodation);
                     }
-                    else if(FilteredLocations.Any(loc => loc.Id == accommodation.LocationId))
+                    else if (FilteredLocations.Any(loc => loc.Id == accommodation.LocationId))
                     {
                         FilteredAccommodations.Add(accommodation);
                     }
@@ -116,7 +117,7 @@ namespace InitialProject.View.Guest1
                     }
                     else if (selectedSearchParam == "MaxGuests" && accommodation.MaxGuests.ToString().Contains(Query))
                     {
-                        if (Int32.Parse(Query) > accommodation.MaxGuests)
+                        if (int.Parse(Query) > accommodation.MaxGuests)
                         {
                             MessageText = "The number of guests cannot be greater than max number of guests";
                         }
@@ -127,7 +128,7 @@ namespace InitialProject.View.Guest1
                     }
                     else if (selectedSearchParam == "MinReservationDays" && accommodation.MinReservationDays.ToString().Contains(Query))
                     {
-                        if (Int32.Parse(Query) < accommodation.MinReservationDays)
+                        if (int.Parse(Query) < accommodation.MinReservationDays)
                         {
                             MessageText = "The number of reservation days cannot be less than min reservation days";
                         }
@@ -136,24 +137,25 @@ namespace InitialProject.View.Guest1
                             FilteredAccommodations.Add(accommodation);
                         }
                     }
-                    Accommodations = FilteredAccommodations;
-                    availableAccommodations.ItemsSource = Accommodations;
                 }
+
+                foreach (Accommodation accomodation in FilteredAccommodations)
+                {
+                    PresentableAccommodations.Add(ConvertToDTO(accomodation));
+                }
+
             }
             else
             {
-                Accommodations.Clear();
-                foreach (var accomodation in _accommodationRepository.GetAll())
+                foreach (Accommodation accomodation in AllAccommodations)
                 {
-                    Accommodations.Add(accomodation);
+                    PresentableAccommodations.Add(ConvertToDTO(accomodation));
                 }
-
-                availableAccommodations.ItemsSource = Accommodations;
             }
 
         }
-        
-        private ObservableCollection<Location> SearchLocations(List<Accommodation> accommodations, string query)
+
+        private ObservableCollection<Location> SearchLocations(ObservableCollection<Accommodation> accommodations, string query)
         {
             ObservableCollection<Location> FilteredLocations = new ObservableCollection<Location>();
             foreach (Accommodation accommodation in accommodations)
@@ -173,33 +175,36 @@ namespace InitialProject.View.Guest1
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-      
-        public void Update()
+
+        public ObservableCollection<GuestAccommodationDTO> ConvertToDTO(ObservableCollection<Accommodation> accommodations)
         {
-            AvailableAccommodations.Clear();
-            foreach (Accommodation accommodation in _accommodationRepository.GetAll())
-            {
-                AvailableAccommodations.Add(ConvertToDTO(accommodation));
-            }
-        }
-        public List<GuestAccommodationDTO> ConvertToDTO(List<Accommodation> accommodations)
-        {
-            List<GuestAccommodationDTO> dto = new List<GuestAccommodationDTO>();
+            ObservableCollection<GuestAccommodationDTO> dto = new ObservableCollection<GuestAccommodationDTO>();
             foreach (Accommodation accommodation in accommodations)
             {
-                dto.Add(new GuestAccommodationDTO(accommodation.Name,
+                dto.Add(new GuestAccommodationDTO(accommodation.Id, accommodation.Name,
                     _locationRepository.GetById(accommodation.LocationId).Country,
                      _locationRepository.GetById(accommodation.LocationId).City,
-                     accommodation.Type, accommodation.MaxGuests, accommodation.MinReservationDays));
+                     accommodation.Type, accommodation.MaxGuests, accommodation.MinReservationDays, accommodation.CancellationPeriod));
             }
             return dto;
         }
         public GuestAccommodationDTO ConvertToDTO(Accommodation accommodation)
         {
-            return new GuestAccommodationDTO(accommodation.Name,
-                    _locationRepository.GetById(accommodation.LocationId).Country,
-                     _locationRepository.GetById(accommodation.LocationId).City,
-                       accommodation.Type, accommodation.MaxGuests, accommodation.MinReservationDays);
+            return new GuestAccommodationDTO(accommodation.Id, accommodation.Name,
+                  _locationRepository.GetById(accommodation.LocationId).Country,
+                   _locationRepository.GetById(accommodation.LocationId).City,
+                   accommodation.Type, accommodation.MaxGuests, accommodation.MinReservationDays, accommodation.CancellationPeriod);
+
+        }
+
+        public void Update()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void ImagesButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
