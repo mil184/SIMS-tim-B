@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:InitialProject.View.Guide"
         mc:Ignorable="d"
         WindowState="Maximized"
-        Title="GuideWindow" Height="600" Width="800">
+        Title="DMJM-Tours" Height="600" Width="800"
+        Icon ="/Resources/Images/favicon.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

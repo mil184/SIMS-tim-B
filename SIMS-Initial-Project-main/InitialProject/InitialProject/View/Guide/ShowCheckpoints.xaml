@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InitialProject.View.Guide"
         mc:Ignorable="d"
-        Title="Checkpoints" Width="500" Height="500">
+        Title="DMJM-Tours" Width="500" Height="500"
+        Icon ="/Resources/Images/favicon.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
