@@ -18,7 +18,7 @@ using System.Diagnostics.Metrics;
 
 namespace InitialProject.View.Guide
 {
-    public partial class CreateTour : Window,INotifyPropertyChanged
+    public partial class CreateTour : Window,INotifyPropertyChanged,IDataErrorInfo
     {
         const int NO_TOUR_ASSIGNED = -1;
 
@@ -209,6 +209,9 @@ namespace InitialProject.View.Guide
              ImageUrls = new ObservableCollection<string>();
              DateTimes = new ObservableCollection<DateTime>();
 
+            StartCheckpoint = null;
+            EndCheckpoint = null;
+
             LoggedInUser = user;
 
             for (int i = 0; i < 24; i++)
@@ -233,11 +236,44 @@ namespace InitialProject.View.Guide
         }
         private void btnCreateTour_Click(object sender, RoutedEventArgs e)
         {
+            if (!IsValid) 
+            {
+                MessageBox.Show("Please enter valid information.", "Info warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (ImageUrls.Count() < 1) 
+            {
+                MessageBox.Show("Please enter at least one image.", "Image warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (DateTimes.Count() < 1)
+            {
+                MessageBox.Show("Please enter at least one date and time.", "DateTime warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (StartCheckpoint == null) 
+            {
+                MessageBox.Show("Please enter the starting checkpoint.", "Start checkpoint warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            if (EndCheckpoint == null)
+            {
+                MessageBox.Show("Please enter the ending checkpoint.", "End checkpoint warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             Location TourLocation = _locationRepository.GetLocation(Country, City);
 
+            if (TourLocation == null)
+            {
+                MessageBox.Show("Please enter the location.", "Location warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
 
-
-                foreach (string images in ImageUrls)
+            foreach (string images in ImageUrls)
                 {
                     ImageIds.Add(_imageRepository.Save(new Image(images)).Id);
                 }
@@ -252,7 +288,7 @@ namespace InitialProject.View.Guide
 
             foreach (DateTime dateTime in DateTimes) {
 
-                Tour tour = new Tour(TourName, TourLocation.Id, Description, TourLanguage, int.Parse(MaxGuests), 0, dateTime, int.Parse(Duration), LoggedInUser.Id, ImageIds, CheckpointIds);
+                Tour tour = new Tour(TourName, TourLocation.Id, Description, TourLanguage, int.Parse(MaxGuests), 0, dateTime, double.Parse(Duration), LoggedInUser.Id, ImageIds, CheckpointIds);
                 tour = _repository.Save(tour);
 
                 StartCheckpoint.TourId = tour.Id;
@@ -295,6 +331,9 @@ namespace InitialProject.View.Guide
 
         private void AddStartingCheckpoint_Click(object sender, RoutedEventArgs e)
         {
+            if (string.IsNullOrEmpty(StartingCheckpointName.Text))
+                return;
+
             StartCheckpoint = new Checkpoint(StartingCheckpointName.Text, 1, false, NO_TOUR_ASSIGNED);
 
             AddStartingCheckpointButton.IsEnabled = false;
@@ -310,6 +349,10 @@ namespace InitialProject.View.Guide
         private void AddFinalCheckpoint_Click(object sender, RoutedEventArgs e)
         {
             // Add code to handle adding the final checkpoint here
+
+            if (string.IsNullOrEmpty(FinalCheckpointName.Text))
+                return;
+
             EndCheckpoint = new Checkpoint(FinalCheckpointName.Text,2, false, NO_TOUR_ASSIGNED);
         
             AddStartingCheckpointButton.IsEnabled = false;
@@ -371,7 +414,92 @@ namespace InitialProject.View.Guide
         private void addDateButton_Click(object sender, RoutedEventArgs e)
         {
             DateTime selectedDate = dpDate.SelectedDate.GetValueOrDefault();
-            DateTimes.Add(new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, int.Parse(Hours), int.Parse(Minutes), 0));
+
+            if (selectedDate == null || Hours == null || Minutes == null)
+            {
+                MessageBox.Show("Please choose a date and time.", "Date and time warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            selectedDate = new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, int.Parse(Hours), int.Parse(Minutes), 0);
+
+            if (selectedDate < DateTime.Now) 
+            {
+                MessageBox.Show("Please choose a valid date and time.", "Date and time warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            else 
+            {
+                DateTimes.Add(selectedDate);
+            }
+        }
+        public string Error => null;
+
+        public string this[string columnName]
+        {
+            get
+            {
+                int TryParseNumber;
+                double TryParseNumberD;
+                if (columnName == "TourName")
+                {
+                    if (string.IsNullOrEmpty(TourName))
+                        return "Name is required";
+                }
+                else if (columnName == "Description")
+                {
+                    if (string.IsNullOrEmpty(TourName))
+                        return "Description is required";
+                }
+                else if (columnName == "TourLanguage")
+                {
+                    if (string.IsNullOrEmpty(TourLanguage))
+                        return "Language is required";
+                }
+                else if (columnName == "MaxGuests")
+                {
+                    if (string.IsNullOrEmpty(MaxGuests))
+                        return "Maximum guest number is required";
+
+                    if (!int.TryParse(MaxGuests, out TryParseNumber))
+                        return "This field should be a number";
+                    else 
+                    {
+                        if (int.Parse(MaxGuests) <= 0)
+                            return "Invalid value of maximum guest number";
+                    }
+                }
+                else if (columnName == "Duration")
+                {
+                    if (string.IsNullOrEmpty(Duration))
+                        return "Duration is required";
+
+                    if (!double.TryParse(Duration, out TryParseNumberD))
+                        return "This field should be a number";
+                    else
+                    {
+                        if (double.Parse(Duration) <= 0)
+                            return "Invalid duration value";
+                    }
+                }
+
+                return null;
+            }
+        }
+        
+        private readonly string[] _validatedProperties = { "TourName", "Description", "TourLanguage", "MaxGuests", "Duration" };
+
+        public bool IsValid
+        {
+            get
+            {
+                foreach (var property in _validatedProperties)
+                {
+                    if (this[property] != null)
+                        return false;
+                }
+
+                return true;
+            }
         }
     }
 }

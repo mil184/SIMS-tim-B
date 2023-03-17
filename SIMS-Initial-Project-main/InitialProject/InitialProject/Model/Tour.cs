@@ -20,7 +20,7 @@ namespace InitialProject.Model
         public int MaxGuests { get; set; }
         public int CurrentGuestCount { get; set; }
         public DateTime StartTime { get; set; }
-        public int Duration { get; set; }
+        public double Duration { get; set; }
         public int GuideId { get; set; }
 
         public ObservableCollection<int> ImageIds;
@@ -30,7 +30,7 @@ namespace InitialProject.Model
 
         public bool IsActive { get; set; }  
         public Tour() { ImageIds = new ObservableCollection<int>(); CheckpointIds = new ObservableCollection<int>(); }
-        public Tour(string name, int locationId, string description, string language, int maxGuests, int currentGuestCount, DateTime startTime, int duration, int guideId, ObservableCollection<int> imageIds, ObservableCollection<int> checkpointIds)
+        public Tour(string name, int locationId, string description, string language, int maxGuests, int currentGuestCount, DateTime startTime, double duration, int guideId, ObservableCollection<int> imageIds, ObservableCollection<int> checkpointIds)
         {
             Name = name;
             LocationId = locationId;
@@ -77,7 +77,7 @@ namespace InitialProject.Model
             MaxGuests = int.Parse(values[5]);
             CurrentGuestCount = int.Parse(values[6]);
             StartTime = DateTime.Parse(values[7]);
-            Duration = int.Parse(values[8]);
+            Duration = double.Parse(values[8]);
             GuideId = int.Parse(values[9]);
             foreach(string id in values[10].Split(',')) 
             {

@@ -15,7 +15,7 @@ namespace InitialProject.Model.DTO
         public int MaxGuests { get; set; }
         public int CurrentGuestCount { get; set; }
         public DateTime StartTime { get; set; }
-        public int Duration { get; set; }
+        public double Duration { get; set; }
         public string Guide { get; set; }
 
         //public list<string> images;
@@ -26,7 +26,7 @@ namespace InitialProject.Model.DTO
         {
         }
 
-        public Guest2TourDTO(int tourId, string name, string country, string city, string description, string language, int maxGuests, int currentGuestCount, DateTime startTime, int duration, string guide)
+        public Guest2TourDTO(int tourId, string name, string country, string city, string description, string language, int maxGuests, int currentGuestCount, DateTime startTime, double duration, string guide)
         {
             TourId = tourId;
             Name = name;
