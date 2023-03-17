@@ -72,11 +72,17 @@ namespace InitialProject.View.Guest2
             Tour selectedTour = new Tour();
             selectedTour = _tourRepository.GetById(SelectedTour.TourId);
 
-            if (int.Parse(PersonCount)>selectedTour.MaxGuests)
+            if (int.Parse(PersonCount)+selectedTour.CurrentGuestCount>selectedTour.MaxGuests && selectedTour.CurrentGuestCount != selectedTour.MaxGuests)
             {
                 NotEnoughSpacesForReservation notEnoughSpacesForReservation =
                     new NotEnoughSpacesForReservation(SelectedTour, LoggedInUser);
                 notEnoughSpacesForReservation.Show();
+            }
+            else if (selectedTour.CurrentGuestCount == selectedTour.MaxGuests)
+            {
+                ZeroSpacesForReservation zeroSpacesForReservation
+                    = new ZeroSpacesForReservation(SelectedTour, LoggedInUser);
+                zeroSpacesForReservation.Show();
             }
             else
             {
@@ -87,14 +93,17 @@ namespace InitialProject.View.Guest2
 
                 _tourReservationRepository.Save(tourReservation);
 
-                //Tour selectedTour = new Tour();
-                //selectedTour = _tourRepository.GetById(SelectedTour.TourId);
                 selectedTour.CurrentGuestCount += int.Parse(PersonCount);
                 _tourRepository.Update(selectedTour);
 
                 Close();
             }
             
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }
