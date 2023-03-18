@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InitialProject.View.Guest1"
         mc:Ignorable="d"
-        Title="DMJM-Tours" Height="450" Width="800"
+        Title="DMJM-Tours" Height="450" Width="900"
         Icon ="/Resources/Images/favicon.ico">
     <Grid>
         <Grid.RowDefinitions>
@@ -54,7 +54,7 @@
                     <!-- Accommodation overview section -->
                     <GroupBox Grid.Row="1" Header="Explore Accommodation" Margin="0 0 0 10">
                         <ScrollViewer VerticalScrollBarVisibility="Auto">
-                            <DataGrid Name="presentableAccommodations" ItemsSource="{Binding Path=PresentableAccommodations}" AutoGenerateColumns="False" IsReadOnly="True">
+                            <DataGrid Name="presentableAccommodations" ItemsSource="{Binding Path=PresentableAccommodations}" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding Path=SelectedAccommodation}">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
                                     <DataGridTextColumn Header="Country" Binding="{Binding Country}" Width="*"/>
