@@ -51,6 +51,12 @@ namespace InitialProject.Repository
             return _accommodations;
         }
 
+        public Accommodation GetById(int id)
+        {
+            _accommodations = _serializer.FromCSV(FilePath);
+            return _accommodations.FirstOrDefault(u => u.Id == id);
+        }
+
         public void Subscribe(IObserver observer)
         {
             _observers.Add(observer);

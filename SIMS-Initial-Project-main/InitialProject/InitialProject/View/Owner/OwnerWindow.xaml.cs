@@ -1,9 +1,12 @@
 ﻿using InitialProject.Model;
+using InitialProject.Model.DTO;
 using InitialProject.Repository;
 using InitialProject.Resources.Observer;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 
@@ -17,11 +20,17 @@ namespace InitialProject.View.Owner
         public User LoggedInUser { get; set; }
         public ObservableCollection<Accommodation> Accommodations { get; set; }
         public Accommodation SelectedAccommodation { get; set; }
+        public ObservableCollection<GuestReview> GuestReviews { get; set; }
+        public GuestReview SelectedGuestReview { get; set; }
+        public ObservableCollection<GuestReviewDTO> UnreviewedGuests { get; set; }
+        public GuestReviewDTO SelectedUnreviewedGuest { get; set; }
 
         private AccommodationRepository _repository;
         private readonly LocationRepository _locationRepository;
         private readonly ImageRepository _imageRepository;
         private readonly AccommodationReservationRepository _reservationRepository;
+        private readonly GuestReviewRepository _guestReviewRepository;
+        private readonly UserRepository _userRepository;
 
         public OwnerWindow(User user)
         {
@@ -37,32 +46,63 @@ namespace InitialProject.View.Owner
             _imageRepository.Subscribe(this);
             _reservationRepository = new AccommodationReservationRepository();
             _reservationRepository.Subscribe(this);
+            _guestReviewRepository = new GuestReviewRepository();
+            _guestReviewRepository.Subscribe(this);
+            _userRepository = new UserRepository();
+            _userRepository.Subscribe(this);
 
-            Accommodations = new ObservableCollection<Accommodation>(_repository.GetAll());
+            FormAccommodations();
 
             CheckForEligibleReviews();
         }
 
-        public void CheckForEligibleReviews()
+        public void FormAccommodations()
         {
-            foreach (AccommodationReservation reservation in _reservationRepository.GetAll())
+            Accommodations = new ObservableCollection<Accommodation>();
+            foreach (Accommodation accommodation in _repository.GetAll())
             {
-                if (LessThanFiveDaysPassed(reservation))
+                if (accommodation.OwnerId == LoggedInUser.Id)
                 {
-                    MessageBox.Show("You have unreviewed guests!", "Guest Review");
-                    break;
+                    Accommodations.Add(accommodation);
                 }
             }
+        }
+
+        public ObservableCollection<AccommodationReservation> UnreviewedReservations { get; set; }
+        public void CheckForEligibleReviews()
+        {
+            UnreviewedGuests = new ObservableCollection<GuestReviewDTO>();
+            UnreviewedReservations = new ObservableCollection<AccommodationReservation>();
+            bool UnreviewedGuestExists = false;
+
+            foreach (AccommodationReservation reservation in _reservationRepository.GetAll())
+            {
+                if (LessThanFiveDaysPassed(reservation) && !GuestReviewed(reservation))
+                {
+                    if (Accommodations.Any(item => item.Id == reservation.AccommodationId))
+                    {
+                        UnreviewedGuests.Add(new GuestReviewDTO(reservation.Id, _userRepository.GetById(reservation.GuestId).Username, _repository.GetById(reservation.AccommodationId).Name));
+                        UnreviewedReservations.Add(reservation);
+                        UnreviewedGuestExists = true;
+                    }
+                }
+            }
+
+            if (UnreviewedGuestExists)
+            {
+                MessageBox.Show("You have unreviewed guests!", "Guest Review");
+            }
+        }
+
+        public bool GuestReviewed(AccommodationReservation reservation)
+        {
+            return _guestReviewRepository.GetAll().Any(item => item.ReservationId == reservation.Id);
         }
 
         public bool LessThanFiveDaysPassed(AccommodationReservation reservation)
         {
             TimeSpan timeSpan = DateTime.Now.Subtract(reservation.EndDate);
-            if (timeSpan.Days >= 0 && timeSpan.Days < 5)
-            {
-                return true;
-            }
-            return false;
+            return timeSpan.Days >= 0 && timeSpan.Days < 5;
         }
 
         private void RegisterButton_Click(object sender, RoutedEventArgs e)
@@ -82,10 +122,22 @@ namespace InitialProject.View.Owner
                 MessageBoxResult Result;
 
                 Result = MessageBox.Show(MessageBoxText, Caption, Button, Icon, MessageBoxResult.Yes);
-                if (Result == MessageBoxResult.Yes)
-                {
+            }
+        }
 
-                }
+        private void LogOut_Click(object sender, RoutedEventArgs e)
+        {
+            SignInForm signInForm = new SignInForm();
+            signInForm.Show();
+            Close();
+        }
+        
+        private void ReviewGuestButton_Guest(object sender, RoutedEventArgs e)
+        {
+            if(SelectedUnreviewedGuest != null)
+            {
+                ReviewGuest reviewGuest = new ReviewGuest(_guestReviewRepository, SelectedUnreviewedGuest, _reservationRepository);
+                reviewGuest.Show();
             }
         }
 
@@ -100,7 +152,23 @@ namespace InitialProject.View.Owner
             Accommodations.Clear();
             foreach (Accommodation accommodation in _repository.GetAll())
             {
-                Accommodations.Add(accommodation);
+                if (accommodation.OwnerId == LoggedInUser.Id)
+                {
+                    Accommodations.Add(accommodation);
+                }
+            }
+
+            UnreviewedGuests.Clear();
+            foreach (AccommodationReservation reservation in _reservationRepository.GetAll())
+            {
+                if (LessThanFiveDaysPassed(reservation) && !GuestReviewed(reservation))
+                {
+                    if (Accommodations.Any(item => item.Id == reservation.AccommodationId))
+                    {
+                        UnreviewedGuests.Add(new GuestReviewDTO(reservation.Id, _userRepository.GetById(reservation.GuestId).Username, _repository.GetById(reservation.AccommodationId).Name));
+                        UnreviewedReservations.Add(reservation);
+                    }
+                }
             }
         }
     }

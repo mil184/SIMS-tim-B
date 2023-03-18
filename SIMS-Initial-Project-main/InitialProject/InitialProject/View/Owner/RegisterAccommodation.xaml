@@ -10,7 +10,6 @@
     <Window.Resources>
         <ControlTemplate x:Key="ValidationTemplate">
             <StackPanel>
-                <!-- Placeholder for the TextBox itself -->
                 <AdornedElementPlaceholder x:Name="textBox" />
                 <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red" />
             </StackPanel>
@@ -20,7 +19,6 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -45,7 +43,7 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Text="Accommodation Name:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" />
-                <TextBox Name="txtAccommodationName" Margin="5" Text="{Binding Path=AccommodationName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1" />
+                <TextBox Name="txtAccommodationName" Margin="5" Text="{Binding Path=AccommodationName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Grid.Row="0" Grid.Column="1" />
 
                 <TextBlock Text="Country:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" />
                 <ComboBox Name="cbCountry" Margin="5" SelectionChanged="CbCountry_SelectionChanged" Grid.Row="2" Grid.Column="1">
@@ -89,7 +87,6 @@
             </StackPanel>
         </GroupBox>
 
-        <!-- Create Tour/Cancel buttons row -->
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="6" Grid.ColumnSpan="2">
             <Button Name="btnRegisterAccommodation" Content="Register Accommodation" Margin="5" Click="btnRegisterAccommodation_Click"/>
             <Button Name="btnCancel" Content="Cancel" Margin="5" Click="btnCancel_Click"/>

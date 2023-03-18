@@ -5,8 +5,6 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Runtime.Intrinsics.X86;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using Image = InitialProject.Model.Image;
@@ -237,7 +235,12 @@ namespace InitialProject.View.Owner
             get
             {
                 int TryParseNumber;
-                if (columnName == "MaxGuests")
+                if (columnName == "AccommodationName")
+                {
+                    if (string.IsNullOrEmpty(AccommodationName))
+                        return "This field is required";
+                }
+                else if (columnName == "MaxGuests")
                 {
                     if (string.IsNullOrEmpty(MaxGuests))
                         return "This field is required";
@@ -266,7 +269,7 @@ namespace InitialProject.View.Owner
             }
         }
 
-        private readonly string[] _validatedProperties = { "MaxGuests", "MinReservationDays", "CancellationPeriod" };
+        private readonly string[] _validatedProperties = { "AccommodationName", "MaxGuests", "MinReservationDays", "CancellationPeriod" };
 
         public bool IsValid
         {

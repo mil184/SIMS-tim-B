@@ -101,6 +101,11 @@ namespace InitialProject.Forms
         private void Cancel(object sender, RoutedEventArgs e) 
         { 
             Close();
-        } 
+        }
+
+        private void txtCommentText_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+
+        }
     }
 }

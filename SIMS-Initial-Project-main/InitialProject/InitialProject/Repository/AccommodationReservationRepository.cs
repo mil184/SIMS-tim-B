@@ -50,6 +50,12 @@ namespace InitialProject.Repository
             return _accommodationReservations;
         }
 
+        public AccommodationReservation GetById(int id)
+        {
+            _accommodationReservations = _serializer.FromCSV(FilePath);
+            return _accommodationReservations.FirstOrDefault(u => u.Id == id);
+        }
+
         public void Subscribe(IObserver observer)
         {
             _observers.Add(observer);
