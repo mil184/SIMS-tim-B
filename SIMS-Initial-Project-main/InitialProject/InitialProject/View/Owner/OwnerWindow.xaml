@@ -21,60 +21,37 @@
                 <TextBlock FontSize="14" Text="{Binding LoggedInUser.Username, FallbackValue=BidningNotWorking}"/>
             </StackPanel>
         </StackPanel>
-        <!-- Tabs section -->
         <TabControl Grid.Row="1">
-            <!-- Tours tab -->
             <TabItem Header="Accommodations">
                 <StackPanel Margin="10">
-                    <!-- Tour list section -->
                     <StackPanel Orientation="Horizontal">
                         <TextBlock FontSize="18" FontWeight="Bold" Text="Accommodations" Margin="0 0 10 0"/>
                         <Button Content="Register" Width="80" Margin="0 0 10 0" Click="RegisterButton_Click"/>
                         <Button Content="Delete" Width="80" Margin="0 0 10 0" Click="DeleteButton_Click"/>
                         <Button Content="Edit" Width="80"/>
                     </StackPanel>
-                    <!-- Current tour section -->
-                    <StackPanel Margin="0 10 0 0">
-                        <TextBlock FontSize="14" FontWeight="Bold" Text="Current Tour"/>
-                        <ListBox>
-                            <ListBoxItem>
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock FontWeight="Bold" Text="Tour 1"/>
-                                    <TextBlock Text="Location: Paris, France"/>
-                                    <TextBlock Text="Date: 2023-03-15"/>
-                                </StackPanel>
-                            </ListBoxItem>
-                        </ListBox>
-                    </StackPanel>
-                    <!-- Incoming tours section -->
                     <StackPanel Margin="0 10 0 0">
                         <DataGrid DockPanel.Dock="Bottom" 
                                   ItemsSource="{Binding Path=Accommodations, UpdateSourceTrigger=PropertyChanged}"
                                   SelectedItem="{Binding Path=SelectedAccommodation, UpdateSourceTrigger=PropertyChanged}"
                                   AutoGenerateColumns="False" IsReadOnly="True"
-                                  Width="700" Height="150">
+                                  Width="700" Height="200">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="100"></DataGridTextColumn>
-                                <DataGridTextColumn Header="City" Binding="{Binding LocationId}" Width="300"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="City" Binding="{Binding LocationId}" Width="*"></DataGridTextColumn>
                             </DataGrid.Columns>
                         </DataGrid>
                     </StackPanel>
                 </StackPanel>
             </TabItem>
-            <!-- Statistics tab -->
             <TabItem Header="Statistics">
                 <StackPanel Margin="10">
-                    <!-- Statistic section -->
                     <TextBlock FontSize="18" FontWeight="Bold" Text="Statistics" Margin="0 0 10 0"/>
-                    <!-- Add statistic elements here -->
                 </StackPanel>
             </TabItem>
-            <!-- Ratings tab -->
             <TabItem Header="Ratings">
                 <StackPanel Margin="10">
-                    <!-- Rating section -->
                     <TextBlock FontSize="18" FontWeight="Bold" Text="Ratings" Margin="0 0 10 0"/>
-                    <!-- Add rating elements here -->
                 </StackPanel>
             </TabItem>
         </TabControl>

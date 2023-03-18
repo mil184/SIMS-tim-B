@@ -10,31 +10,34 @@ namespace InitialProject.Model
     public class AccommodationReservation : ISerializable
     {
         public int Id { get; set; }
+        public int GuestId { get; set; }
+        public int AccommodationId { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public int AccommodationId { get; set; }
 
         public AccommodationReservation() { }
 
-        public AccommodationReservation(int id, DateTime startDate, DateTime endDate, int accommodationId)
+        public AccommodationReservation(int id, int guestId, int accommodationId, DateTime startDate, DateTime endDate)
         {
             Id = id;
+            GuestId = guestId;
+            AccommodationId = accommodationId;
             StartDate = startDate;
             EndDate = endDate;
-            AccommodationId = accommodationId;
         }
         public string[] ToCSV()
         {
-            string[] csvValues = { Id.ToString(), StartDate.ToString(), EndDate.ToString(), AccommodationId.ToString() };
+            string[] csvValues = { Id.ToString(), GuestId.ToString(), AccommodationId.ToString(), StartDate.ToString(), EndDate.ToString() };
             return csvValues;
         }
 
         public void FromCSV(string[] values)
         {
             Id = Convert.ToInt32(values[0]);
-            StartDate = Convert.ToDateTime(values[1]);
-            EndDate = Convert.ToDateTime(values[2]);
-            AccommodationId = Convert.ToInt32(values[3]);
+            GuestId = Convert.ToInt32(values[1]);
+            AccommodationId = Convert.ToInt32(values[2]);
+            StartDate = Convert.ToDateTime(values[3]);
+            EndDate = Convert.ToDateTime(values[4]);
         }
     }
 }

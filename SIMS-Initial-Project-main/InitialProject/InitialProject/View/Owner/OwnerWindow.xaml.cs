@@ -1,6 +1,7 @@
 ﻿using InitialProject.Model;
 using InitialProject.Repository;
 using InitialProject.Resources.Observer;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -20,6 +21,7 @@ namespace InitialProject.View.Owner
         private AccommodationRepository _repository;
         private readonly LocationRepository _locationRepository;
         private readonly ImageRepository _imageRepository;
+        private readonly AccommodationReservationRepository _reservationRepository;
 
         public OwnerWindow(User user)
         {
@@ -33,8 +35,34 @@ namespace InitialProject.View.Owner
             _locationRepository.Subscribe(this);
             _imageRepository = new ImageRepository();
             _imageRepository.Subscribe(this);
+            _reservationRepository = new AccommodationReservationRepository();
+            _reservationRepository.Subscribe(this);
 
             Accommodations = new ObservableCollection<Accommodation>(_repository.GetAll());
+
+            CheckForEligibleReviews();
+        }
+
+        public void CheckForEligibleReviews()
+        {
+            foreach (AccommodationReservation reservation in _reservationRepository.GetAll())
+            {
+                if (LessThanFiveDaysPassed(reservation))
+                {
+                    MessageBox.Show("You have unreviewed guests!", "Guest Review");
+                    break;
+                }
+            }
+        }
+
+        public bool LessThanFiveDaysPassed(AccommodationReservation reservation)
+        {
+            TimeSpan timeSpan = DateTime.Now.Subtract(reservation.EndDate);
+            if (timeSpan.Days >= 0 && timeSpan.Days < 5)
+            {
+                return true;
+            }
+            return false;
         }
 
         private void RegisterButton_Click(object sender, RoutedEventArgs e)
@@ -48,7 +76,7 @@ namespace InitialProject.View.Owner
             if (SelectedAccommodation != null)
             {
                 string MessageBoxText = "Are You Sure You Want To Delete Accommodation?";
-                string Caption = "brisanje profesora";
+                string Caption = "Delete Accommodation";
                 MessageBoxButton Button = MessageBoxButton.YesNo;
                 MessageBoxImage Icon = MessageBoxImage.Warning;
                 MessageBoxResult Result;

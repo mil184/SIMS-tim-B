@@ -171,13 +171,13 @@ namespace InitialProject.View.Owner
             if (IsValid)
             {
                 Location AccommodationLocation = _locationRepository.GetLocation(Country, City);
-                Accommodation Accommodation = new Accommodation(AccommodationName, AccommodationLocation.Id, Enum.Parse<AccommodationType>(Type), int.Parse(MaxGuests), int.Parse(CancellationPeriod), int.Parse(CancellationPeriod), _imageIds);
+                Accommodation Accommodation = new Accommodation(AccommodationName, LoggedInUser.Id, AccommodationLocation.Id, Enum.Parse<AccommodationType>(Type), int.Parse(MaxGuests), int.Parse(CancellationPeriod), int.Parse(CancellationPeriod), _imageIds);
                 _repository.Save(Accommodation);
                 Close();
             }
             else
             {
-                MessageBox.Show("Cannot create accommodation");
+                MessageBox.Show("Cannot Register Accommodation", "Invalid Data");
             }
         }
 
