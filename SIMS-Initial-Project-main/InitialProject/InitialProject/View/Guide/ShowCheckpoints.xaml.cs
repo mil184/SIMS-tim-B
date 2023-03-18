@@ -233,14 +233,14 @@ namespace InitialProject.View.Guide
 
         private void endTourButton_Click(object sender, RoutedEventArgs e)
         {
-            var messageBoxResult = MessageBox.Show($"Are you sure you want to end the {SelectedTour.Name} tour?", "End Tour Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            var messageBoxResult = MessageBox.Show($"Are you sure you want to finish the {SelectedTour.Name} tour?", "Finish Tour Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
             if (messageBoxResult == MessageBoxResult.Yes)
             {
                 SelectedTour.CurrentCheckpointId = -1;
                 SelectedTour.IsActive = false;
                 _tourRepository.Update(SelectedTour);
-                MessageBox.Show($"The {SelectedTour.Name} tour finished", "End Tour Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show($"The {SelectedTour.Name} tour finished", "Finish Tour Information", MessageBoxButton.OK, MessageBoxImage.Information);
                 Close();
             }
         

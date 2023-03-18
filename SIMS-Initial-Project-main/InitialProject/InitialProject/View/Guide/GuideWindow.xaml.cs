@@ -71,12 +71,12 @@ namespace InitialProject.View.Guide
             _userRepository = new UserRepository();
             _userRepository.Subscribe(this);
 
-            ActiveTour = null;
 
             CurrentTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourRepository.GetTodaysTours()));
             UpcomingTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourRepository.GetUpcomingTours()));
 
-            foreach(GuideTourDTO tourdto in CurrentTours) 
+            ActiveTour = null;
+            foreach (GuideTourDTO tourdto in CurrentTours) 
             {
                 Tour tour = ConvertToTour(tourdto);
 
@@ -115,6 +115,18 @@ namespace InitialProject.View.Guide
             foreach (Tour tour in _tourRepository.GetTodaysTours())
             {
                 CurrentTours.Add(ConvertToDTO(tour));
+            }
+
+            ActiveTour = null;
+            foreach (GuideTourDTO tourdto in CurrentTours)
+            {
+                Tour tour = ConvertToTour(tourdto);
+
+                if (tour.IsActive)
+                {
+                    ActiveTour = ConvertToDTO(tour);
+                    break;
+                }
             }
         }
         public List<GuideTourDTO> ConvertToDTO(List<Tour> tours)
@@ -165,6 +177,7 @@ namespace InitialProject.View.Guide
             {
                 if (selectedTour.IsActive)
                 {
+                    ActiveTour = ConvertToDTO(selectedTour);
                     ShowCheckpoints showCheckpoints = new ShowCheckpoints(selectedTour, _checkpointRepository,_tourRepository,_tourReservationRepository,_userRepository);
                     showCheckpoints.ShowDialog();
                 }
@@ -187,6 +200,7 @@ namespace InitialProject.View.Guide
                     }
                 }
             }
+            Update();
         }
 
         private void LogOut_Click(object sender, RoutedEventArgs e)

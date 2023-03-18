@@ -38,10 +38,10 @@
                             <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <TextBlock FontSize="14" Text="{Binding ActiveTour.Name}" Margin="10 10"/>
+                        <TextBlock FontSize="14" Text="{Binding ActiveTour.Name,UpdateSourceTrigger=PropertyChanged}" Margin="10 10"/>
                         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10">
-                            <TextBlock FontSize="14" Text="{Binding ActiveTour.City}" Margin="0 0 5 0"/>
-                            <TextBlock FontSize="14" Text="{Binding ActiveTour.Country}" Margin="0"/>
+                            <TextBlock FontSize="14" Text="{Binding ActiveTour.City,UpdateSourceTrigger=PropertyChanged}" Margin="0 0 5 0"/>
+                            <TextBlock FontSize="14" Text="{Binding ActiveTour.Country,UpdateSourceTrigger=PropertyChanged}" Margin="0"/>
                         </StackPanel>
                     </Grid>
                 </GroupBox>
