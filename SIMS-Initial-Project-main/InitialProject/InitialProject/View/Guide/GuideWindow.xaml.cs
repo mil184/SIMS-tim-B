@@ -154,55 +154,80 @@ namespace InitialProject.View.Guide
         }
         public Tour ConvertToTour(GuideTourDTO dto)
         {
-            if(dto!=null)
+            if(dto != null)
             return _tourRepository.GetById(dto.Id);
             return null;
         }
         private void CurrentToursDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            CheckIfTourIsActive();
+            Tour selectedTour = ConvertToTour(SelectedDTO);
+
+            if (selectedTour != null)
+            {
+                HandleSelectedTour(selectedTour);
+            }
+
+            Update();
+        }
+
+        private void CheckIfTourIsActive()
+        {
             TourActive = false;
             ActiveTour = null;
-            foreach (Tour tour in _tourRepository.GetTodaysTours()) 
+
+            foreach (Tour tour in _tourRepository.GetTodaysTours())
             {
-                if (tour.IsActive) 
+                if (tour.IsActive)
                 {
                     TourActive = true;
                     ActiveTour = ConvertToDTO(tour);
                     break;
                 }
             }
-
-            Tour selectedTour = ConvertToTour(SelectedDTO);
-            if (selectedTour != null)
+        }
+        private void HandleSelectedTour(Tour selectedTour)
+        {
+            if (selectedTour.IsActive)
             {
-                if (selectedTour.IsActive)
-                {
-                    ActiveTour = ConvertToDTO(selectedTour);
-                    ShowCheckpoints showCheckpoints = new ShowCheckpoints(selectedTour, _checkpointRepository,_tourRepository,_tourReservationRepository,_userRepository);
-                    showCheckpoints.ShowDialog();
-                }
-                else if (TourActive)
-                {
-                    MessageBox.Show("An active tour is already in progress. Please finish the current tour before starting a new one.", "Active Tour Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-                }
-                else
-                {
-                    var messageBoxResult = MessageBox.Show($"Are you sure you want to start the {selectedTour.Name} tour?", "Start Tour Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                    if (messageBoxResult == MessageBoxResult.Yes)
-                    {
-                        selectedTour.IsActive = true;
-                        TourActive = true;
-                        selectedTour.CurrentCheckpointId = selectedTour.CheckpointIds.First();
-                        _tourRepository.Update(selectedTour);
-                        ActiveTour = ConvertToDTO(selectedTour);
-                        ShowCheckpoints showCheckpoints = new ShowCheckpoints(selectedTour, _checkpointRepository,_tourRepository,_tourReservationRepository,_userRepository);
-                        showCheckpoints.ShowDialog();
-                    }
-                }
+                ActiveTour = ConvertToDTO(selectedTour);
+                ShowCheckpoints showCheckpoints = new ShowCheckpoints(selectedTour, _checkpointRepository, _tourRepository, _tourReservationRepository, _userRepository);
+                showCheckpoints.ShowDialog();
             }
-            Update();
+            else if (TourActive)
+            {
+                ShowActiveTourWarning();
+            }
+            else
+            {
+                StartTourConfirmation(selectedTour);
+            }
+        }
+        private void ShowActiveTourWarning()
+        {
+            MessageBox.Show("An active tour is already in progress. Please finish the current tour before starting a new one.", "Active Tour Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
 
+        private void StartTourConfirmation(Tour selectedTour)
+        {
+            var messageBoxResult = MessageBox.Show($"Are you sure you want to start the {selectedTour.Name} tour?", "Start Tour Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (messageBoxResult == MessageBoxResult.Yes)
+            {
+                StartSelectedTour(selectedTour);
+            }
+        }
+
+        private void StartSelectedTour(Tour selectedTour)
+        {
+            selectedTour.IsActive = true;
+            TourActive = true;
+            selectedTour.CurrentCheckpointId = selectedTour.CheckpointIds.First();
+            _tourRepository.Update(selectedTour);
+            ActiveTour = ConvertToDTO(selectedTour);
+            ShowCheckpoints showCheckpoints = new ShowCheckpoints(selectedTour, _checkpointRepository, _tourRepository, _tourReservationRepository, _userRepository);
+            showCheckpoints.ShowDialog();
+        }
         private void LogOut_Click(object sender, RoutedEventArgs e)
         {         
             SignInForm signInForm = new SignInForm();
