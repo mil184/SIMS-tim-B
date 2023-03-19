@@ -478,7 +478,7 @@ namespace InitialProject.View.Guide
                 }
                 else if (columnName == "Description")
                 {
-                    if (string.IsNullOrEmpty(TourName))
+                    if (string.IsNullOrEmpty(Description))
                         return "Description is required";
                 }
                 else if (columnName == "TourLanguage")
