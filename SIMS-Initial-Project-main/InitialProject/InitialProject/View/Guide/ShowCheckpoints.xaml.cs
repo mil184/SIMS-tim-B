@@ -52,6 +52,7 @@ namespace InitialProject.View.Guide
 
             foreach(int id in UnmarkedGuestsId) 
             {
+                if(!UnmarkedGuests.Contains(_userRepository.GetById(id)))
                 UnmarkedGuests.Add(_userRepository.GetById(id));
             }
 
