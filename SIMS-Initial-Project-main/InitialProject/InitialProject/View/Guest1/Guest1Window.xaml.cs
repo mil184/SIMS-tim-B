@@ -40,6 +40,7 @@ namespace InitialProject.View.Guest1
         private readonly ImageRepository _imageRepository;
 
         public ObservableCollection<Location> Locations;
+        public GuestAccommodationDTO SelectedAccommodation { get; set; }
 
 
         private string searchText;
@@ -84,7 +85,11 @@ namespace InitialProject.View.Guest1
 
         private void ReserveButton_Click(object sender, RoutedEventArgs e)
         {
-
+            if(SelectedAccommodation != null)
+            {
+                ReserveAccommodation reservationForm = new ReserveAccommodation(SelectedAccommodation, _accommodationRepository);
+                reservationForm.Show();
+            }
         }
 
         private void Search_Click(object sender, RoutedEventArgs e)

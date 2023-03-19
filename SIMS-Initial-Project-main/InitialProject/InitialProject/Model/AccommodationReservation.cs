@@ -9,25 +9,29 @@ namespace InitialProject.Model
 {
     public class AccommodationReservation : ISerializable
     {
+
         public int Id { get; set; }
         public int GuestId { get; set; }
         public int AccommodationId { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        public int NumberDays { get; set; }
+        public bool IsAvailable { get; set; }
 
         public AccommodationReservation() { }
-
-        public AccommodationReservation(int id, int guestId, int accommodationId, DateTime startDate, DateTime endDate)
+        public AccommodationReservation(int id, int guestId, int accommodationId, DateTime startDate, DateTime endDate, int numberDays, bool isAvailable)
         {
             Id = id;
             GuestId = guestId;
             AccommodationId = accommodationId;
             StartDate = startDate;
             EndDate = endDate;
+            NumberDays = numberDays;
+            this.IsAvailable = isAvailable;
         }
         public string[] ToCSV()
         {
-            string[] csvValues = { Id.ToString(), GuestId.ToString(), AccommodationId.ToString(), StartDate.ToString(), EndDate.ToString() };
+            string[] csvValues = { Id.ToString(), GuestId.ToString(), AccommodationId.ToString(), StartDate.ToString(), EndDate.ToString(), NumberDays.ToString(), IsAvailable.ToString() };
             return csvValues;
         }
 
@@ -38,6 +42,8 @@ namespace InitialProject.Model
             AccommodationId = Convert.ToInt32(values[2]);
             StartDate = Convert.ToDateTime(values[3]);
             EndDate = Convert.ToDateTime(values[4]);
+            NumberDays = Convert.ToInt32(values[5]);
+            IsAvailable = Convert.ToBoolean(values[6]);
         }
     }
 }

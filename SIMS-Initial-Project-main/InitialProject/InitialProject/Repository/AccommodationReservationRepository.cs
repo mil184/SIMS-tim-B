@@ -1,6 +1,7 @@
 ﻿using InitialProject.Model;
 using InitialProject.Resources.Observer;
 using InitialProject.Serializer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -54,6 +55,64 @@ namespace InitialProject.Repository
         {
             _accommodationReservations = _serializer.FromCSV(FilePath);
             return _accommodationReservations.FirstOrDefault(u => u.Id == id);
+        }
+
+        public bool Create(int accommodationId, DateTime startDate, DateTime endDate)
+        {
+            var availableDates = GetAvailableDates(accommodationId, startDate, endDate);
+
+            if (availableDates.Count == (endDate - startDate).Days + 1)
+            {
+                var reservation = new AccommodationReservation()
+                {
+                    AccommodationId = accommodationId,
+                    StartDate = startDate,
+                    EndDate = endDate,
+                };
+
+                Save(reservation);
+
+                return true;
+            }
+
+            return false;
+        }
+
+
+        public List<DateTime> GetAvailableDates(int accommodationId, DateTime startDate, DateTime endDate)
+        {
+            List<DateTime> reservedDates = new List<DateTime>();
+            foreach (AccommodationReservation reservation in _accommodationReservations)
+            {
+                if (reservation.AccommodationId == accommodationId && reservation.StartDate >= startDate && reservation.StartDate <= endDate)
+                {
+                    for (DateTime date = reservation.StartDate; date <= reservation.EndDate; date = date.AddDays(1))
+                    {
+                        reservedDates.Add(date);
+                    }
+                }
+            }
+            List<DateTime> availableDates = new List<DateTime>();
+            for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
+            {
+                if (!reservedDates.Contains(date))
+                {
+                    availableDates.Add(date);
+                }
+            }
+            return availableDates;
+        }
+        public void MarkUnavailable(int accommodationId, DateTime startDate, DateTime endDate)
+        {
+            foreach (AccommodationReservation reservation in _accommodationReservations)
+            {
+                if (reservation.AccommodationId == accommodationId && reservation.StartDate >= startDate && reservation.EndDate <= endDate)
+                {
+                    reservation.IsAvailable = false;
+                }
+            }
+            _serializer.ToCSV(FilePath, _accommodationReservations);
+            NotifyObservers();
         }
 
         public void Subscribe(IObserver observer)
