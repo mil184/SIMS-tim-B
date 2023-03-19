@@ -69,128 +69,169 @@ namespace InitialProject.View.Guide
 
         private void ListBox_Loaded(object sender, RoutedEventArgs e)
         {
-            // Get the current checkpoint ID
             int currentCheckpointId = SelectedTour.CurrentCheckpointId;
-
-            // Get the ID of the first checkpoint in the tour
             int firstCheckpointId = Checkpoints.Min(c => c.Id);
-
-            // Check and disable all checkboxes based on the current checkpoint ID and the first checkpoint ID
-            // Keep track of the previously selected item
             ListBoxItem previousListBoxItem = null;
 
             for (int i = 0; i < listBox.Items.Count; i++)
             {
                 Checkpoint checkpoint = (Checkpoint)listBox.Items[i];
                 CheckBox checkbox = FindVisualChild<CheckBox>(listBox.ItemContainerGenerator.ContainerFromIndex(i));
+                ListBoxItem listBoxItem = listBox.ItemContainerGenerator.ContainerFromIndex(i) as ListBoxItem;
 
                 if (checkpoint.Id <= currentCheckpointId)
                 {
-                    checkbox.IsChecked = true;
-                    checkbox.IsEnabled = false;
-
-                    ListBoxItem listBoxItem = listBox.ItemContainerGenerator.ContainerFromIndex(i) as ListBoxItem;
-                    if (listBoxItem != null)
-                    {
-                        listBoxItem.Background = Brushes.LightGray;
-                    }
+                    DisableCheckbox(checkbox, listBoxItem);
+                    SetBackground(listBoxItem, Brushes.LightGray);
                 }
                 else if (checkpoint.Id == currentCheckpointId + 1)
                 {
-                    checkbox.IsChecked = false;
-                    checkbox.IsEnabled = true;
-
-                    ListBoxItem listBoxItem = listBox.ItemContainerGenerator.ContainerFromIndex(i) as ListBoxItem;
-                    if (listBoxItem != null)
-                    {
-                        listBoxItem.Background = Brushes.White;
-                    }
+                    EnableCheckbox(checkbox, listBoxItem);
+                    SetBackground(listBoxItem, Brushes.White);
                 }
                 else
                 {
-                    checkbox.IsChecked = false;
-                    checkbox.IsEnabled = checkpoint.Id == firstCheckpointId + 1;
-
-                    ListBoxItem listBoxItem = listBox.ItemContainerGenerator.ContainerFromIndex(i) as ListBoxItem;
-                    if (listBoxItem != null)
-                    {
-                        listBoxItem.Background = Brushes.White;
-                    }
+                    bool isEnabled = checkpoint.Id == firstCheckpointId + 1;
+                    SetCheckbox(checkbox, isEnabled, listBoxItem);
+                    SetBackground(listBoxItem, Brushes.White);
                 }
 
                 if (checkpoint.Id == SelectedTour.CurrentCheckpointId)
                 {
-                    ListBoxItem listBoxItem = listBox.ItemContainerGenerator.ContainerFromIndex(i) as ListBoxItem;
-                    if (listBoxItem != null)
-                    {
-                        // Remove border from the previous item, if any
-                        if (previousListBoxItem != null)
-                        {
-                            previousListBoxItem.BorderThickness = new Thickness(0);
-                            previousListBoxItem.BorderBrush = null;
-                        }
-
-                        // Apply border to the current item
-                        listBoxItem.BorderThickness = new Thickness(3);
-                        listBoxItem.BorderBrush = Brushes.Blue;
-
-                        // Update the previous item
-                        previousListBoxItem = listBoxItem;
-                    }
+                    SetListBoxItemBorder(listBoxItem, previousListBoxItem);
+                    previousListBoxItem = listBoxItem;
                 }
             }
         }
 
+        private void DisableCheckbox(CheckBox checkbox, ListBoxItem listBoxItem)
+        {
+            checkbox.IsChecked = true;
+            checkbox.IsEnabled = false;
+            SetBackground(listBoxItem, Brushes.LightGray);
+        }
 
+        private void EnableCheckbox(CheckBox checkbox, ListBoxItem listBoxItem)
+        {
+            checkbox.IsChecked = false;
+            checkbox.IsEnabled = true;
+            SetBackground(listBoxItem, Brushes.White);
+        }
+
+        private void SetCheckbox(CheckBox checkbox, bool isEnabled, ListBoxItem listBoxItem)
+        {
+            checkbox.IsChecked = false;
+            checkbox.IsEnabled = isEnabled;
+            SetBackground(listBoxItem, Brushes.White);
+        }
+
+        private void SetBackground(ListBoxItem listBoxItem, Brush brush)
+        {
+            if (listBoxItem != null)
+            {
+                listBoxItem.Background = brush;
+            }
+        }
+
+        private void SetListBoxItemBorder(ListBoxItem listBoxItem, ListBoxItem previousListBoxItem)
+        {
+            if (listBoxItem != null)
+            {
+                listBoxItem.BorderThickness = new Thickness(3);
+                listBoxItem.BorderBrush = Brushes.Blue;
+
+                if (previousListBoxItem != null)
+                {
+                    previousListBoxItem.BorderThickness = new Thickness(0);
+                    previousListBoxItem.BorderBrush = null;
+                }
+            }
+        }
 
         private void checkpointCheckbox_Checked(object sender, RoutedEventArgs e)
         {
             CheckBox currentCheckbox = (CheckBox)sender;
             currentCheckbox.IsEnabled = false;
-            int currentIndex = listBox.ItemContainerGenerator.IndexFromContainer(listBox.ItemContainerGenerator.ContainerFromItem(currentCheckbox.DataContext));
+
+            int currentIndex = GetCurrentIndex(currentCheckbox);
             int nextIndex = currentIndex + 1;
 
-            // If we're at the last checkpoint, don't do anything
             if (nextIndex >= Checkpoints.Count)
             {
-                SelectedTour.CurrentCheckpointId = -1;
-                SelectedTour.IsActive = false;
-                _tourRepository.Update(SelectedTour);
-                MessageBox.Show($"The {SelectedTour.Name} tour finished", "End Tour Information", MessageBoxButton.OK, MessageBoxImage.Information);
-                Close();
+                EndTour();
                 return;
             }
 
-            // Enable the next checkbox and update the current checkpoint
-            CheckBox nextCheckbox = FindVisualChild<CheckBox>(listBox.ItemContainerGenerator.ContainerFromIndex(nextIndex));
-            nextCheckbox.IsEnabled = true;
-            SelectedTour.CurrentCheckpointId = Checkpoints[nextIndex].Id;
+            UpdateNextCheckpoint(nextIndex);
+
+            DisablePreviousCheckpoints(currentIndex);
+            DisableFollowingCheckpoints(nextIndex);
+
+            UpdateCurrentCheckpoint(currentIndex);
+
+            UpdateListBoxItemBackgrounds(currentIndex);
+            RemovePreviousListBoxItemBorder(currentIndex);
+        }
+
+        private int GetCurrentIndex(CheckBox currentCheckbox)
+        {
+            return listBox.ItemContainerGenerator.IndexFromContainer(
+                listBox.ItemContainerGenerator.ContainerFromItem(currentCheckbox.DataContext));
+        }
+
+        private void EndTour()
+        {
+            SelectedTour.CurrentCheckpointId = -1;
+            SelectedTour.IsActive = false;
             _tourRepository.Update(SelectedTour);
 
-            // Disable all checkboxes before the current checkpoint
+            MessageBox.Show($"The {SelectedTour.Name} tour finished", "End Tour Information", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            Close();
+        }
+
+        private void UpdateNextCheckpoint(int nextIndex)
+        {
+            CheckBox nextCheckbox = FindVisualChild<CheckBox>(listBox.ItemContainerGenerator.ContainerFromIndex(nextIndex));
+            nextCheckbox.IsEnabled = true;
+
+            SelectedTour.CurrentCheckpointId = Checkpoints[nextIndex].Id;
+            _tourRepository.Update(SelectedTour);
+        }
+
+        private void DisablePreviousCheckpoints(int currentIndex)
+        {
             for (int i = 0; i < currentIndex; i++)
             {
                 CheckBox checkbox = FindVisualChild<CheckBox>(listBox.ItemContainerGenerator.ContainerFromIndex(i));
                 checkbox.IsChecked = true;
                 checkbox.IsEnabled = false;
             }
+        }
 
-            // Enable all checkboxes after the current checkpoint
+        private void DisableFollowingCheckpoints(int nextIndex)
+        {
             for (int i = nextIndex + 1; i < Checkpoints.Count; i++)
             {
                 CheckBox checkbox = FindVisualChild<CheckBox>(listBox.ItemContainerGenerator.ContainerFromIndex(i));
                 checkbox.IsChecked = false;
                 checkbox.IsEnabled = false;
             }
+        }
 
-            // Set the current checkpoint to the one that was just checked
+        private void UpdateCurrentCheckpoint(int currentIndex)
+        {
             SelectedTour.CurrentCheckpointId = Checkpoints[currentIndex].Id;
             _tourRepository.Update(SelectedTour);
+        }
 
-            // Update the ListBoxItem backgrounds and borders
+        private void UpdateListBoxItemBackgrounds(int currentIndex)
+        {
             ListBox_Loaded(listBox, null);
+        }
 
-            // Remove border from the previous item, if any
+        private void RemovePreviousListBoxItemBorder(int currentIndex)
+        {
             if (currentIndex > 0)
             {
                 ListBoxItem previousListBoxItem = listBox.ItemContainerGenerator.ContainerFromIndex(currentIndex - 1) as ListBoxItem;
@@ -203,8 +244,6 @@ namespace InitialProject.View.Guide
                 }
             }
         }
-
-
 
         private T FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
         {
@@ -252,6 +291,7 @@ namespace InitialProject.View.Guide
             if (selectedGuest != null)
             {
                 UnmarkedGuests.Remove(selectedGuest);
+                //guest 2 needs to check
             }
         }
     }

@@ -177,6 +177,11 @@
 177|Poland|Gdansk
 178|Poland|Poznan
 179|Poland|Wroclaw
+180|Nepal|Kathmandu
+181|Nepal|Pokhara
+182|Nepal|Patan
+183|Nepal|Biratnagar
+184|Nepal|Bharatpur
 185|Japan|Tokyo
 186|Japan|Osaka
 187|Japan|Kyoto
@@ -207,3 +212,238 @@
 212|Ethiopia|Bahir Dar
 213|Ethiopia|Gonder
 214|Ethiopia|Harar
+215|Mexico|Mexico City
+216|Mexico|Guadalajara
+217|Mexico|Monterrey
+218|Mexico|Puebla
+219|Mexico|Tijuana
+220|Ukraine|Kyiv
+221|Ukraine|Kharkiv
+222|Ukraine|Odesa
+223|Ukraine|Dnipro
+224|Ukraine|Donetsk
+225|Estonia|Tallinn
+226|Estonia|Tartu
+227|Estonia|Narva
+228|Estonia|Pärnu
+229|Estonia|Viljandi
+230|Latvia|Riga
+231|Latvia|Daugavpils
+232|Latvia|Liepaja
+233|Latvia|Jelgava
+234|Latvia|Jurmala
+235|Lithuania|Vilnius
+236|Lithuania|Kaunas
+237|Lithuania|Klaipeda
+238|Lithuania|Siauliai
+239|Lithuania|Panevezys
+240|Norway|Oslo
+241|Norway|Bergen
+242|Norway|Trondheim
+243|Norway|Stavanger
+244|Norway|Drammen
+245|Sweden|Stockholm
+246|Sweden|Gothenburg
+247|Sweden|Malmo
+248|Sweden|Uppsala
+249|Sweden|Vasteras
+250|Iceland|Reykjavik
+251|Iceland|Kopavogur
+252|Iceland|Hafnarfjordur
+253|Iceland|Akureyri
+254|Iceland|Selfoss
+255|Albania|Tirana
+256|Albania|Durres
+257|Albania|Vlore
+258|Albania|Shkoder
+259|Albania|Elbasan
+260|Slovakia|Bratislava
+261|Slovakia|Kosice
+262|Slovakia|Presov
+263|Slovakia|Nitra
+264|Slovakia|Zilina
+265|Austria|Vienna
+266|Austria|Graz
+267|Austria|Linz
+268|Austria|Salzburg
+269|Austria|Innsbruck
+270|New Zealand|Auckland
+271|New Zealand|Wellington
+272|New Zealand|Christchurch
+273|New Zealand|Hamilton
+274|New Zealand|Napier
+275|Switzerland|Zurich
+276|Switzerland|Geneva
+277|Switzerland|Basel
+278|Switzerland|Lausanne
+279|Switzerland|Bern
+280|Brazil|São Paulo
+281|Brazil|Rio de Janeiro
+282|Brazil|Salvador
+283|Brazil|Brasília
+284|Brazil|Fortaleza
+285|Azerbaijan|Baku
+286|Azerbaijan|Ganja
+287|Azerbaijan|Sumgayit
+288|Azerbaijan|Mingachevir
+289|Azerbaijan|Lankaran
+290|Benin|Cotonou
+291|Benin|Porto-Novo
+292|Benin|Parakou
+293|Benin|Djougou
+294|Benin|Bohicon
+295|Oman|Muscat
+296|Oman|Salalah
+297|Oman|Sohar
+298|Oman|Sur
+299|Oman|Nizwa
+300|Uruguay|Montevideo
+301|Uruguay|Salto
+302|Uruguay|Ciudad de la Costa
+303|Uruguay|Paysandú
+304|Uruguay|Las Piedras
+305|Venezuela|Caracas
+306|Venezuela|Maracaibo
+307|Venezuela|Valencia
+308|Venezuela|Barquisimeto
+309|Venezuela|Ciudad Guayana
+310|Tanzania|Dar es Salaam
+311|Tanzania|Dodoma
+312|Tanzania|Mwanza
+313|Tanzania|Zanzibar City
+314|Tanzania|Arusha
+315|Madagascar|Antananarivo
+316|Madagascar|Toamasina
+317|Madagascar|Antsirabe
+318|Madagascar|Fianarantsoa
+319|Madagascar|Mahajanga
+320|Tunisia|Tunis
+321|Tunisia|Sfax
+322|Tunisia|Sousse
+323|Tunisia|Gabes
+324|Tunisia|Bizerte
+325|Algeria|Algiers
+326|Algeria|Oran
+327|Algeria|Constantine
+328|Algeria|Annaba
+329|Algeria|Blida
+330|Niger|Niamey
+331|Niger|Zinder
+332|Niger|Maradi
+333|Niger|Agadez
+334|Niger|Tahoua
+335|Nigeria|Lagos
+336|Nigeria|Kano
+337|Nigeria|Ibadan
+338|Nigeria|Abuja
+339|Nigeria|Port Harcourt
+340|Chad|N'Djamena
+341|Chad|Moundou
+342|Chad|Sarh
+343|Chad|Abéché
+344|Chad|Kelo
+345|Angola|Luanda
+346|Angola|Huambo
+347|Angola|Lobito
+348|Angola|Benguela
+349|Angola|Kuito
+350|South Africa|Johannesburg
+351|South Africa|Cape Town
+352|South Africa|Durban
+353|South Africa|Pretoria
+354|South Africa|Port Elizabeth
+355|Turkey|Istanbul
+356|Turkey|Ankara
+357|Turkey|Izmir
+358|Turkey|Bursa
+359|Turkey|Adana
+360|Uzbekistan|Tashkent
+361|Uzbekistan|Samarkand
+362|Uzbekistan|Bukhara
+363|Uzbekistan|Namangan
+364|Uzbekistan|Andijan
+365|Kyrgyzstan|Bishkek
+366|Kyrgyzstan|Osh
+367|Kyrgyzstan|Jalal-Abad
+368|Kyrgyzstan|Karakol
+369|Kyrgyzstan|Tokmok
+370|Kazakhstan|Almaty
+371|Kazakhstan|Nur-Sultan
+372|Kazakhstan|Shymkent
+373|Kazakhstan|Karaganda
+374|Kazakhstan|Aktobe
+375|Turkmenistan|Ashgabat
+376|Turkmenistan|Turkmenabat
+377|Turkmenistan|Dasoguz
+378|Turkmenistan|Mary
+379|Turkmenistan|Balkanabat
+380|Pakistan|Karachi
+381|Pakistan|Lahore
+382|Pakistan|Islamabad
+383|Pakistan|Faisalabad
+384|Pakistan|Rawalpindi
+385|Thailand|Bangkok
+386|Thailand|Chiang Mai
+387|Thailand|Phuket
+388|Thailand|Pattaya
+389|Thailand|Krabi
+390|Cambodia|Phnom Penh
+391|Cambodia|Siem Reap
+392|Cambodia|Sihanoukville
+393|Cambodia|Battambang
+394|Cambodia|Kampot
+395|Vietnam|Ho Chi Minh City
+396|Vietnam|Hanoi
+397|Vietnam|Da Nang
+398|Vietnam|Nha Trang
+399|Vietnam|Hoi An
+400|North Korea|Pyongyang
+401|North Korea|Hamhung
+402|North Korea|Chongjin
+403|North Korea|Nampo
+404|North Korea|Sinuiju
+405|South Korea|Seoul
+406|South Korea|Busan
+407|South Korea|Incheon
+408|South Korea|Daegu
+409|South Korea|Daejeon
+410|Lebanon|Beirut
+411|Lebanon|Tripoli
+412|Lebanon|Sidon
+413|Lebanon|Tyre
+414|Lebanon|Jounieh
+415|Fiji|Suva
+416|Fiji|Lautoka
+417|Fiji|Labasa
+418|Fiji|Ba
+419|Fiji|Levuka
+420|Maldives|Malé
+421|Maldives|Addu City
+422|Maldives|Fuvahmulah
+423|Maldives|Hithadhoo
+424|Maldives|Kulhudhuffushi
+425|Portugal|Lisbon
+426|Portugal|Porto
+427|Portugal|Amadora
+428|Portugal|Braga
+429|Portugal|Setúbal
+430|Czech Republic|Prague
+431|Czech Republic|Brno
+432|Czech Republic|Ostrava
+433|Czech Republic|Plze?
+434|Czech Republic|Liberec
+435|Romania|Bucharest
+436|Romania|Cluj-Napoca
+437|Romania|Timi?oara
+438|Romania|Ia?i
+439|Romania|Constan?a
+440|Moldova|Chi?in?u
+441|Moldova|B?l?i
+442|Moldova|Tiraspol
+443|Moldova|Cahul
+444|Moldova|Soroca
+445|Georgia|Tbilisi
+446|Georgia|Kutaisi
+447|Georgia|Batumi
+448|Georgia|Gori
+449|Georgia|Rustavi
