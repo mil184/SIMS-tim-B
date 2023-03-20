@@ -231,9 +231,10 @@ namespace InitialProject.View.Guest2
             return FilteredLocations;
         }
 
-        private void ImagesButton_Click(object sender, RoutedEventArgs e)
+        private void ShowMoreButton_Click(object sender, RoutedEventArgs e)
         {
-            //
+            ShowTour showTour = new ShowTour(SelectedGuest2TourDTO);
+            showTour.Show();
         }
     }
 }

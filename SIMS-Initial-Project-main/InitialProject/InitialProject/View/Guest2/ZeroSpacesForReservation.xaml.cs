@@ -92,11 +92,6 @@ namespace InitialProject.View.Guest2
             Close();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-
         public List<Guest2TourDTO> ConvertToDTOList(List<Tour> tours)
         {
             List<Guest2TourDTO> dtoList = new List<Guest2TourDTO>();
@@ -133,6 +128,11 @@ namespace InitialProject.View.Guest2
                 tour.StartTime,
                 tour.Duration,
                 _userRepository.GetById(tour.GuideId).Username);
+        }
+
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }
