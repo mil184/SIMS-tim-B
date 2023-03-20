@@ -14,6 +14,7 @@ namespace InitialProject.Model
         public int UserId { get; set; }
         public int TourId { get; set; }
         public int PersonCount { get; set; }
+        public int CheckpointArrivalId { get; set; }
         public TourReservation() { }
 
         public TourReservation(int userId, int tourId, int personCount)
@@ -21,12 +22,12 @@ namespace InitialProject.Model
             UserId = userId;
             TourId = tourId;
             PersonCount = personCount;
-            
+            CheckpointArrivalId = -1;
         }
 
         public string[] ToCSV()
         {
-            string[] csvValues = { Id.ToString(), UserId.ToString(), TourId.ToString(), PersonCount.ToString() };
+            string[] csvValues = { Id.ToString(), UserId.ToString(), TourId.ToString(), PersonCount.ToString(), CheckpointArrivalId.ToString() };
             return csvValues;
         }
 
@@ -36,7 +37,7 @@ namespace InitialProject.Model
             UserId = Convert.ToInt32(values[1]);
             TourId = Convert.ToInt32(values[2]);
             PersonCount = Convert.ToInt32(values[3]);
-  
+            CheckpointArrivalId = Convert.ToInt32(values[4]);  
         }
     }
 }

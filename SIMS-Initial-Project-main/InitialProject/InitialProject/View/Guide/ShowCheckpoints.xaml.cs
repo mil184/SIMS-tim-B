@@ -1,6 +1,8 @@
-﻿using InitialProject.Model;
+﻿using Accessibility;
+using InitialProject.Model;
 using InitialProject.Model.DTO;
 using InitialProject.Repository;
+using InitialProject.Resources.Observer;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,9 +18,8 @@ using System.Windows.Media.Animation;
 
 namespace InitialProject.View.Guide
 {
-    public partial class ShowCheckpoints : Window, INotifyPropertyChanged
+    public partial class ShowCheckpoints : Window, INotifyPropertyChanged, IObserver
     {
-
         private readonly Tour SelectedTour;
 
         private readonly CheckpointRepository _repository;
@@ -26,7 +27,20 @@ namespace InitialProject.View.Guide
         private readonly TourReservationRepository _tourReservationRepository;
         private readonly UserRepository _userRepository;
         public ObservableCollection<Checkpoint> Checkpoints { get; set; }
-        public ObservableCollection<User> UnmarkedGuests { get; set; }
+
+        private ObservableCollection<UserDTO> unmarkedGuests;
+        public ObservableCollection<UserDTO> UnmarkedGuests
+        {
+            get { return unmarkedGuests; }
+            set
+            {
+                if (unmarkedGuests != value)
+                {
+                    unmarkedGuests = value;
+                    OnPropertyChanged(nameof(UnmarkedGuests));
+                }
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -46,14 +60,14 @@ namespace InitialProject.View.Guide
             _userRepository = userRepository;
 
             Checkpoints = new ObservableCollection<Checkpoint>();
-            UnmarkedGuests = new ObservableCollection<User>();
+            UnmarkedGuests = new ObservableCollection<UserDTO>();
 
             List<int> UnmarkedGuestsId = _tourReservationRepository.GetUserIdsByTour(SelectedTour);
 
             foreach(int id in UnmarkedGuestsId) 
             {
-                if(!UnmarkedGuests.Contains(_userRepository.GetById(id)))
-                UnmarkedGuests.Add(_userRepository.GetById(id));
+                if(!UnmarkedGuests.Contains(ConvertToDTO(_userRepository.GetById(id))))
+                UnmarkedGuests.Add(ConvertToDTO(_userRepository.GetById(id)));
             }
 
             foreach (int id in SelectedTour.CheckpointIds)
@@ -67,6 +81,14 @@ namespace InitialProject.View.Guide
             listBox.Loaded += ListBox_Loaded;
         }
 
+        public UserDTO ConvertToDTO(User user) 
+        {
+            return new UserDTO(
+                user.Id,
+                user.Username,
+                _repository.GetById(_tourReservationRepository.GetReservationByGuestIdAndTourId(user.Id, SelectedTour.Id).CheckpointArrivalId).Name
+                );
+        }
         private void ListBox_Loaded(object sender, RoutedEventArgs e)
         {
             int currentCheckpointId = SelectedTour.CurrentCheckpointId;
@@ -287,11 +309,33 @@ namespace InitialProject.View.Guide
         }
         private void presentButton_Click(object sender, RoutedEventArgs e)
         {
-            var selectedGuest = guestsGrid.SelectedItem as User;
+            var selectedGuest = guestsGrid.SelectedItem as UserDTO;
             if (selectedGuest != null)
             {
-                UnmarkedGuests.Remove(selectedGuest);
-                //guest 2 needs to check
+                TourReservation reservation = _tourReservationRepository.GetReservationByGuestIdAndTourId(selectedGuest.UserId, SelectedTour.Id);
+                reservation.CheckpointArrivalId = _tourRepository.GetById(SelectedTour.Id).CurrentCheckpointId;
+                _tourReservationRepository.Update(reservation);
+                foreach (UserDTO guest in UnmarkedGuests) 
+                {
+                    if(guest.UserId == selectedGuest.UserId) 
+                    {
+                        guest.CheckpointArrivalName = _repository.GetById(SelectedTour.CurrentCheckpointId).Name;
+                      
+                    }
+                }
+                Update();
+                
+            }
+        }
+
+        public void Update()
+        {
+            UnmarkedGuests.Clear();
+
+            foreach (int id in _tourReservationRepository.GetUserIdsByTour(SelectedTour))
+            {
+                if (!UnmarkedGuests.Contains(ConvertToDTO(_userRepository.GetById(id))))
+                    UnmarkedGuests.Add(ConvertToDTO(_userRepository.GetById(id)));
             }
         }
     }

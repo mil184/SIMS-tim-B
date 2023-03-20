@@ -73,10 +73,11 @@
           CanUserAddRows="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Username" Binding="{Binding Username}" Width="*" />
+                <DataGridTextColumn Header="Status" Binding="{Binding CheckpointArrivalName}" Width="*" />
                 <DataGridTemplateColumn Width="100">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="Present" HorizontalAlignment="Stretch" Padding="5" Click="presentButton_Click"/>
+                            <Button Name ="PresentButton" Content="Present" HorizontalAlignment="Stretch" Padding="5" Click="presentButton_Click"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

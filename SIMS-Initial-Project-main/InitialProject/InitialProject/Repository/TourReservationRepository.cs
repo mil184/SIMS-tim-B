@@ -45,7 +45,16 @@ namespace InitialProject.Repository
 
             return tourReservation;
         }
-
+        public TourReservation Update(TourReservation reservation)
+        {
+            _tourReservations = _serializer.FromCSV(_filePath);
+            TourReservation current = _tourReservations.Find(c => c.Id == reservation.Id);
+            int index = _tourReservations.IndexOf(current);
+            _tourReservations.Remove(current);
+            _tourReservations.Insert(index, reservation);       // keep ascending order of ids in file 
+            _serializer.ToCSV(_filePath, _tourReservations);
+            return reservation;
+        }
         public List<int> GetUserIdsByTour(Tour tour) 
         {
             List<int> userIds = new List<int>();
@@ -58,6 +67,17 @@ namespace InitialProject.Repository
                 }   
             }
             return userIds;
+        }
+        public TourReservation GetReservationByGuestIdAndTourId(int guestId, int tourId)
+        {
+            foreach(TourReservation tourReservation in _tourReservations) 
+            {
+                if(guestId == tourReservation.UserId && tourId == tourReservation.TourId) 
+                {
+                    return tourReservation;
+                }
+            }
+            return null;
         }
 
         public void Subscribe(IObserver observer)
