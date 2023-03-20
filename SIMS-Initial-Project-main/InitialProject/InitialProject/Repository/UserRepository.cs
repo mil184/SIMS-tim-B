@@ -6,7 +6,7 @@ using InitialProject.Resources.Observer;
 
 namespace InitialProject.Repository
 {
-    public class UserRepository
+    public class UserRepository : ISubject
     {
         private const string FilePath = "../../../Resources/Data/users.csv";
 
@@ -37,6 +37,19 @@ namespace InitialProject.Repository
         public void Subscribe(IObserver observer)
         {
             _observers.Add(observer);
+        }
+
+        public void Unsubscribe(IObserver observer)
+        {
+            _observers.Remove(observer);
+        }
+
+        public void NotifyObservers()
+        {
+            foreach (var observer in _observers)
+            {
+                observer.Update();
+            }
         }
     }
 }
