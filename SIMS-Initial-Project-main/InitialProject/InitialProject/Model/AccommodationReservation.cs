@@ -17,9 +17,10 @@ namespace InitialProject.Model
         public DateTime EndDate { get; set; }
         public int NumberDays { get; set; }
         public bool IsAvailable { get; set; }
+        public int MaxGuests { get; set; }
 
         public AccommodationReservation() { }
-        public AccommodationReservation( int guestId, int accommodationId, DateTime startDate, DateTime endDate, int numberDays)
+        public AccommodationReservation( int guestId, int accommodationId, DateTime startDate, DateTime endDate, int numberDays, int maxGuests)
         {
             GuestId = guestId;
             AccommodationId = accommodationId;
@@ -27,10 +28,11 @@ namespace InitialProject.Model
             EndDate = endDate;
             NumberDays = numberDays;
             IsAvailable = false;
+            MaxGuests = maxGuests;
         }
         public string[] ToCSV()
         {
-            string[] csvValues = { Id.ToString(), GuestId.ToString(), AccommodationId.ToString(), StartDate.ToString(), EndDate.ToString(), NumberDays.ToString(), IsAvailable.ToString() };
+            string[] csvValues = { Id.ToString(), GuestId.ToString(), AccommodationId.ToString(), StartDate.ToString(), EndDate.ToString(), NumberDays.ToString(), MaxGuests.ToString(), IsAvailable.ToString() };
             return csvValues;
         }
 
@@ -42,7 +44,8 @@ namespace InitialProject.Model
             StartDate = Convert.ToDateTime(values[3]);
             EndDate = Convert.ToDateTime(values[4]);
             NumberDays = Convert.ToInt32(values[5]);
-            IsAvailable = Convert.ToBoolean(values[6]);
+            MaxGuests = Convert.ToInt32(values[6]);
+            IsAvailable = Convert.ToBoolean(values[7]);
         }
     }
 }

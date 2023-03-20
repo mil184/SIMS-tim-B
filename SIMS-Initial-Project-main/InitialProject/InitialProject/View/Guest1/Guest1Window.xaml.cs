@@ -213,7 +213,7 @@ namespace InitialProject.View.Guest1
 
         public void Update()
         {
-            throw new NotImplementedException();
+            
         }
 
         private void ImagesButton_Click(object sender, RoutedEventArgs e)

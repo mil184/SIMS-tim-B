@@ -17,7 +17,6 @@ using System.Windows.Shapes;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using InitialProject.View.Guest2;
 
 namespace InitialProject.View.Guest1
 {
@@ -29,6 +28,7 @@ namespace InitialProject.View.Guest1
         private readonly AccommodationReservationRepository _accommodationReservationRepository;
 
         private readonly AccommodationRepository _accommodationRepository;
+
         private AccommodationReservation _reservation;
         public AccommodationReservation Reservation
         {
@@ -96,7 +96,7 @@ namespace InitialProject.View.Guest1
             }
         }
 
-        public int _numberOfDays;
+        private int _numberOfDays;
         public int NumberOfDays
         {
             get => _numberOfDays;
@@ -124,6 +124,20 @@ namespace InitialProject.View.Guest1
                 }
             }
         }
+
+        private int _maxGuests;
+        public int MaxGuests
+        {
+            get => _maxGuests;
+            set
+            {
+                if (value != _maxGuests)
+                {
+                    _maxGuests = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         public ReserveAccommodation(GuestAccommodationDTO selectedAccommodation, User user, AccommodationRepository accommodationRepository, AccommodationReservationRepository accommodationReservationRepository)
         {
             InitializeComponent();
@@ -146,10 +160,44 @@ namespace InitialProject.View.Guest1
 
             if (!ValidateDates()) return;
             if (!ValidateNumberOfDays()) return;
+            if (!ValidateNumberOfGuests()) return;
 
             ObservableCollection<DateTime> allFreeDates = GetAllFreeDates();
 
             AddDateRanges(FindDateRanges(allFreeDates));
+
+            if (DateIntervals.Count == 0)
+            {
+                var messageBoxResult = MessageBox.Show($"There are no available dates to reserve right now, would you like to see suggested dates?", "Suggested Accomodation Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                if (messageBoxResult == MessageBoxResult.Yes)
+                {
+
+                    int DaysToAdd = 25;
+
+                    if (DaysToAdd > 0)
+                    {
+                        DateTime newStartDate = StartDate.AddDays(-DaysToAdd);
+                        if (newStartDate >= DateTime.Today)
+                        {
+                            StartDate = newStartDate.Date;
+                        }
+                        else
+                        {
+                            StartDate = DateTime.Today.Date;
+                        }
+                    }
+
+                    EndDate = EndDate.Date.AddDays(DaysToAdd);
+
+                    allFreeDates = GetAllFreeDates();
+
+                    AddDateRanges(FindDateRanges(allFreeDates));
+                }
+
+                return;
+
+            }
 
         }
         private ObservableCollection<DateTime> GetAllFreeDates()
@@ -213,6 +261,30 @@ namespace InitialProject.View.Guest1
             return true;
         }
 
+        private bool ValidateNumberOfGuests()
+        {
+            if (!int.TryParse(maxGuestsTextBox.Text, out int numberGuests))
+            {
+                ShowInvalidInputWarning();
+                return false;
+            }
+
+            if (numberGuests <= 0)
+            {
+                ShowNoInputWarning();
+                return false;
+            }
+
+            if (numberGuests > SelectedAccommodation.MaxGuests)
+            {
+                ShowMaxGuestsWarning();
+                return false;
+            }
+
+            MaxGuests = numberGuests;
+            return true;
+        }
+
         private List<DatesDTO> FindDateRanges(ObservableCollection<DateTime> dates)
         {
             var dateRanges = new List<DatesDTO>();
@@ -248,6 +320,7 @@ namespace InitialProject.View.Guest1
         {
             return dates[index].Subtract(dates[index - 1]).Days == 1; 
         }
+
         private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var selectedItem = (sender as DataGrid)?.SelectedItem as DatesDTO;
@@ -258,17 +331,13 @@ namespace InitialProject.View.Guest1
 
                 if (messageBoxResult == MessageBoxResult.Yes)
                 {
-                    var reservation = new AccommodationReservation(LoggedInUser.Id, SelectedAccommodation.Id, selectedItem.StartDate, selectedItem.EndDate, NumberOfDays);
+                    var reservation = new AccommodationReservation(LoggedInUser.Id, SelectedAccommodation.Id, selectedItem.StartDate, selectedItem.EndDate, NumberOfDays, MaxGuests);
                     _accommodationReservationRepository.Save(reservation);
 
                     MessageBox.Show("Reservation created successfully.");
                     Close();
                 }
                 return;
-            }
-            else if(DateIntervals == null)
-            {
-                SuggestedDates suggestedDates = new SuggestedDates();
             }
         }
 
@@ -293,9 +362,17 @@ namespace InitialProject.View.Guest1
             MessageBox.Show($"The number of days needs to be at least {SelectedAccommodation.MinReservationDays}, the selected accommodation's minimum reservation days.", "Number of days warning", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
 
-        private void ShowDateReservationConfirmation()
+        private void ShowNoInputWarning()
         {
-            MessageBox.Show($"Are you sure you want to reserve the date: {SelectedAccommodation.MinReservationDays}", "Start Tour Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            MessageBox.Show("Please choose a max number of guests.", "Max number of guests warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+        private void ShowInvalidInputWarning()
+        {
+            MessageBox.Show("Please choose a valid number.", "Max number of guests warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+        private void ShowMaxGuestsWarning()
+        {
+            MessageBox.Show($"The max number of guests needs to be at least {SelectedAccommodation.MaxGuests}, the selected accommodation's max guests.", "Max number of guests warning", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InitialProject.View.Guest1"
         mc:Ignorable="d"
-        Title="ReserveAccommodation" Height="450" Width="600">
+        Title="ReserveAccommodation" Height="450" Width="700">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -23,15 +23,20 @@
             <TextBlock Text="Number of Days:" VerticalAlignment="Center" Margin="0,0,10,0"/>
             <TextBox x:Name="numDaysTextBox" Width="50" Margin="0,0,10,0"/>
 
+            <TextBlock Text="Max guests:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <TextBox x:Name="maxGuestsTextBox" Width="50" Margin="0,0,10,0"/>
+            
             <Button Content="Search" Click="SearchButton_Click"/>
+
         </StackPanel>
         <!-- Results grid -->
-        <DataGrid Grid.Row="1" ItemsSource="{Binding DateIntervals}" AutoGenerateColumns="False" IsReadOnly="true" MouseDoubleClick="DataGrid_MouseDoubleClick">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="StartDate" Binding="{Binding Path=StartDate, StringFormat={}{0:d}}" Width="*" />
-                <DataGridTextColumn Header="EndDate" Binding="{Binding Path=EndDate, StringFormat={}{0:d}}" Width="*" />
-
-            </DataGrid.Columns>
-        </DataGrid>
+        <ScrollViewer Grid.Row="1">
+            <DataGrid Height="300" ItemsSource="{Binding DateIntervals}" AutoGenerateColumns="False" IsReadOnly="true" MouseDoubleClick="DataGrid_MouseDoubleClick">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="StartDate" Binding="{Binding Path=StartDate, StringFormat={}{0:dd.MM.yyyy}}" Width="*" />
+                    <DataGridTextColumn Header="EndDate" Binding="{Binding Path=EndDate, StringFormat={}{0:dd.MM.yyyy}}" Width="*" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </ScrollViewer>
     </Grid>
 </Window>
