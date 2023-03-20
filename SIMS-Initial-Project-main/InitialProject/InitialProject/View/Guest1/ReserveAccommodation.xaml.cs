@@ -257,15 +257,18 @@ namespace InitialProject.View.Guest1
                 var messageBoxResult = MessageBox.Show($"Are you sure you want to reserve the date: {selectedItem.StartDate:d} - {selectedItem.EndDate:d}", "Reserve Accomodation Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
                 if (messageBoxResult == MessageBoxResult.Yes)
-                { 
-                    var repository = new AccommodationReservationRepository();
+                {
                     var reservation = new AccommodationReservation(LoggedInUser.Id, SelectedAccommodation.Id, selectedItem.StartDate, selectedItem.EndDate, NumberOfDays);
-                    repository.Save(reservation);
+                    _accommodationReservationRepository.Save(reservation);
 
                     MessageBox.Show("Reservation created successfully.");
                     Close();
                 }
                 return;
+            }
+            else if(DateIntervals == null)
+            {
+                SuggestedDates suggestedDates = new SuggestedDates();
             }
         }
 

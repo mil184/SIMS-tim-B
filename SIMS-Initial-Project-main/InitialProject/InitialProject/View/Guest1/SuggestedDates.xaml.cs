@@ -20,34 +20,19 @@ namespace InitialProject.View.Guest1
     /// </summary>
     public partial class SuggestedDates : Window
     {
-        public DateTime SelectedDate { get; set; }
-        public AccommodationReservation Reservation { get; set; }
-
-        public SuggestedDates(List<DateTime> dates, DateTime startDate, DateTime endDate)
+       
+        public SuggestedDates()
         {
             InitializeComponent();
-            Reservation = new AccommodationReservation();
-            Reservation.StartDate = startDate;
-            Reservation.EndDate = endDate;
-
-            dateComboBox.ItemsSource = dates;
+            
         }
         private void dateComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (dateComboBox.SelectedItem != null)
-            {
-                SelectedDate = (DateTime)dateComboBox.SelectedItem;
-            }
+            
         }
 
         private void AcceptButton_Click(object sender, RoutedEventArgs e)
         {
-            if (SelectedDate != null)
-            {
-                Reservation.StartDate = SelectedDate;
-                Reservation.EndDate = SelectedDate.AddDays(Reservation.NumberDays);
-                Close();
-            }
         }
 
         private void DeclineButton_Click(object sender, RoutedEventArgs e)

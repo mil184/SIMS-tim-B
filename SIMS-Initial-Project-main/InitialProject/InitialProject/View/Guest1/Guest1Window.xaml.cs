@@ -85,6 +85,9 @@ namespace InitialProject.View.Guest1
             _locationRepository = new LocationRepository();
             _locationRepository.Subscribe(this);
 
+            _imageRepository = new ImageRepository();
+            _imageRepository.Subscribe(this);
+
             AllAccommodations = new ObservableCollection<Accommodation>(_accommodationRepository.GetAll());
             PresentableAccommodations = ConvertToDTO(AllAccommodations);
         }
@@ -215,7 +218,29 @@ namespace InitialProject.View.Guest1
 
         private void ImagesButton_Click(object sender, RoutedEventArgs e)
         {
+            Accommodation selectedAccomodation = ConvertToAccomodation(SelectedAccommodation);
 
+            List<string> imageUrls = new List<string>();
+
+            foreach (int imageId in selectedAccomodation.ImageIds)
+            {
+                if (_imageRepository.GetById(imageId) != null)
+                    imageUrls.Add(_imageRepository.GetById(imageId).Url);
+            }
+
+            AccommodationImages accommodationImages = new AccommodationImages(imageUrls);
+            accommodationImages.ShowDialog();
+        }
+        public Accommodation ConvertToAccomodation(GuestAccommodationDTO dto)
+        {
+            return _accommodationRepository.GetById(dto.Id);
+        }
+
+        private void LogOut_Click(object sender, RoutedEventArgs e)
+        {
+            SignInForm signInForm = new SignInForm();
+            signInForm.Show();
+            Close();
         }
     }
 }
