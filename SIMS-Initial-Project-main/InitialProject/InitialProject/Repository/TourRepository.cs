@@ -56,6 +56,7 @@ namespace InitialProject.Repository
             _tours.Remove(current);
             _tours.Insert(index, tour);       // keep ascending order of ids in file 
             _serializer.ToCSV(_filePath, _tours);
+            NotifyObservers();
             return tour;
         }
         public Tour GetById(int id)
@@ -64,16 +65,11 @@ namespace InitialProject.Repository
             return _tours.Find(c => c.Id == id);
         }
 
+        
+
         public List<Tour> GetAll()
         {
-            var tours = new List<Tour>();
-
-            foreach (var tour in _tours)
-            {
-                tours.Add(tour);
-            }
-
-            return tours;
+            return _tours;
         }
 
         public List<Tour> GetTodaysTours()
