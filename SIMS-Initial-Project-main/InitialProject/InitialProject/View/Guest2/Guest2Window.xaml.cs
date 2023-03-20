@@ -84,8 +84,6 @@ namespace InitialProject.View.Guest2
             TourDTOs = ConvertToDTO(Tours);
         }
 
-        #region INotifyPropertyChanged, Observer stuff
-
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
@@ -99,10 +97,6 @@ namespace InitialProject.View.Guest2
                 TourDTOs.Add(ConvertToDTO(tour));
             }
         }
-
-        #endregion
-
-        #region Converters to DTO
 
         public ObservableCollection<Guest2TourDTO> ConvertToDTO(ObservableCollection<Tour> tours)
         {
@@ -142,8 +136,6 @@ namespace InitialProject.View.Guest2
                 _userRepository.GetById(tour.GuideId).Username);
         }
 
-        #endregion
-
         private void ReserveButton_Click(object sender, RoutedEventArgs e)
         {
             if (SelectedGuest2TourDTO != null)
@@ -173,7 +165,7 @@ namespace InitialProject.View.Guest2
                     {
                         FilteredTours.Add(tour);
                     }
-                    else if (FilteredTours.Any(loc => loc.Id == tour.LocationId))
+                    else if (FilteredLocations.Any(loc => loc.Id == tour.LocationId))
                     {
                         FilteredTours.Add(tour);
                     }
