@@ -14,6 +14,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using InitialProject.View.Guest2;
 
 namespace InitialProject.View.Guest1
 {
@@ -22,104 +26,279 @@ namespace InitialProject.View.Guest1
     /// </summary>
     public partial class ReserveAccommodation : Window
     {
-        public AccommodationReservation Reservation { get; set; }
-        public GuestAccommodationDTO SelectedAccommodation { get; set; }
-
         private readonly AccommodationReservationRepository _accommodationReservationRepository;
 
         private readonly AccommodationRepository _accommodationRepository;
+        private AccommodationReservation _reservation;
+        public AccommodationReservation Reservation
+        {
+            get { return _reservation; }
+            set
+            {
+                if (_reservation != value)
+                {
+                    _reservation = value;
+                    OnPropertyChanged(nameof(Reservation));
+                }
+            }
+        }
 
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        private GuestAccommodationDTO _selectedAccommodation;
+        public GuestAccommodationDTO SelectedAccommodation
+        {
+            get { return _selectedAccommodation; }
+            set
+            {
+                if (_selectedAccommodation != value)
+                {
+                    _selectedAccommodation = value;
+                    OnPropertyChanged(nameof(SelectedAccommodation));
+                }
+            }
+        }
 
-        public ReserveAccommodation(GuestAccommodationDTO selectedAccommodation, AccommodationRepository accommodationRepository)
+        private ObservableCollection<DatesDTO> _dateIntervals;
+        public ObservableCollection<DatesDTO> DateIntervals
+        {
+            get { return _dateIntervals; }
+            set
+            {
+                _dateIntervals = value;
+                OnPropertyChanged("DateIntervals");
+            }
+        }
+
+        private DateTime _startDate;
+        public DateTime StartDate
+        {
+            get { return _startDate; }
+            set
+            {
+                if (_startDate != value)
+                {
+                    _startDate = value;
+                    OnPropertyChanged(nameof(StartDate));
+                }
+            }
+        }
+
+        private DateTime _endDate;
+        public DateTime EndDate
+        {
+            get { return _endDate; }
+            set
+            {
+                if (_endDate != value)
+                {
+                    _endDate = value;
+                    OnPropertyChanged(nameof(EndDate));
+                }
+            }
+        }
+
+        public int _numberOfDays;
+        public int NumberOfDays
+        {
+            get => _numberOfDays;
+            set
+            {
+                if (value != _numberOfDays)
+                {
+                    _numberOfDays = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        public User LoggedInUser { get; set; }
+
+        private bool _isAvailable;
+        public bool Available
+        {
+            get => _isAvailable;
+            set
+            {
+                if (value != _isAvailable)
+                {
+                    _isAvailable = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        public ReserveAccommodation(GuestAccommodationDTO selectedAccommodation, User user, AccommodationRepository accommodationRepository, AccommodationReservationRepository accommodationReservationRepository)
         {
             InitializeComponent();
-            this.DataContext = Reservation;
+            DataContext = this;
+
             SelectedAccommodation = selectedAccommodation;
+            LoggedInUser = user;
 
             Reservation = new AccommodationReservation();
             Reservation.AccommodationId = selectedAccommodation.Id;
 
-            _accommodationReservationRepository = new AccommodationReservationRepository();
             _accommodationRepository = accommodationRepository;
+            _accommodationReservationRepository = accommodationReservationRepository;
+
+            DateIntervals = new ObservableCollection<DatesDTO>();
+        }
+        private void SearchButton_Click(object sender, RoutedEventArgs e)
+        {
+            DateIntervals.Clear();
+
+            if (!ValidateDates()) return;
+            if (!ValidateNumberOfDays()) return;
+
+            ObservableCollection<DateTime> allFreeDates = GetAllFreeDates();
+
+            AddDateRanges(FindDateRanges(allFreeDates));
+
+        }
+        private ObservableCollection<DateTime> GetAllFreeDates()
+        {
+            int accommodationId = Reservation.AccommodationId;
+            DateTime startDate = StartDate;
+            DateTime endDate = EndDate;
+
+            return new ObservableCollection<DateTime>(_accommodationReservationRepository.GetAvailableDates(accommodationId, startDate, endDate)); //tvoja funckcija
         }
 
-        private void StartDatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        private void AddDateRanges(List<DatesDTO> dateRanges)
         {
-            StartDate = startDatePicker.SelectedDate.GetValueOrDefault();
-        }
-
-        private void EndDatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
-        {
-            EndDate = endDatePicker.SelectedDate.GetValueOrDefault();
-        }
-
-        private bool IsAvailable(DateTime startDate, DateTime endDate)
-        {
-            List<DateTime> availableDates = _accommodationReservationRepository.GetAvailableDates(SelectedAccommodation.Id,startDate, endDate);
-            foreach (DateTime date in availableDates)
+            foreach (var dateRange in dateRanges)
             {
-                if (date.Date >= startDate && date.Date < endDate)
+                DateIntervals.Add(dateRange);
+            }
+        }
+
+        private bool ValidateDates()
+        {
+            StartDate = startDatePicker.SelectedDate.GetValueOrDefault();  
+            EndDate = endDatePicker.SelectedDate.GetValueOrDefault();
+
+            if (StartDate == default || EndDate == default)
+            {
+                ShowNoDateTimeWarning();
+                return false;
+            }
+
+            if (StartDate.Date < DateTime.Today || EndDate.Date < DateTime.Today || StartDate.Date > EndDate.Date)
+            {
+                ShowInvalidDateTimeWarning();
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool ValidateNumberOfDays()
+        {
+            if (!int.TryParse(numDaysTextBox.Text, out int numberOfDays))
+            {
+                ShowInvalidNumberWarning();
+                return false;
+            }
+
+            if (numberOfDays <= 0)
+            {
+                ShowNoNumberWarning();
+                return false;
+            }
+
+            if (numberOfDays < SelectedAccommodation.MinReservationDays)
+            {
+                ShowMinimumReservationDaysWarning();
+                return false;
+            }
+
+            NumberOfDays = numberOfDays;
+            return true;
+        }
+
+        private List<DatesDTO> FindDateRanges(ObservableCollection<DateTime> dates)
+        {
+            var dateRanges = new List<DatesDTO>();
+
+            for (int i = 0; i < dates.Count - NumberOfDays + 1; i++)  
+            {
+                DateTime startDate = dates[i];
+                DateTime endDate = dates[i + NumberOfDays - 1];
+
+                if (IsValidDateRange(dates, i))
+                {
+                    dateRanges.Add(new DatesDTO { StartDate = startDate, EndDate = endDate });
+                }
+            }
+
+            return dateRanges;
+        }
+
+        private bool IsValidDateRange(ObservableCollection<DateTime> dates, int startIndex)
+        {
+            for (int i = startIndex + 1; i <= startIndex + NumberOfDays - 2; i++)  
+            {
+                if (!IsDateFollowsPreviousDate(dates, i))
                 {
                     return false;
                 }
             }
+
             return true;
         }
 
-        private bool MakeReservation()
+        private bool IsDateFollowsPreviousDate(ObservableCollection<DateTime> dates, int index)
         {
-            if (IsAvailable(Reservation.StartDate, Reservation.EndDate) &&
-                Reservation.NumberDays >= SelectedAccommodation.MinReservationDays)
-            {
-                bool success = _accommodationReservationRepository.Create(SelectedAccommodation.Id, Reservation.StartDate, Reservation.EndDate);
-                return success;
-            }
-            return false;
+            return dates[index].Subtract(dates[index - 1]).Days == 1; 
         }
-
-        private void ConfirmButton_Click(object sender, RoutedEventArgs e)
+        private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (StartDate <= DateTime.Now || EndDate < StartDate || StartDate == null || EndDate == null)
-            {
-                MessageBox.Show("Please enter a valid date", "Date warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
+            var selectedItem = (sender as DataGrid)?.SelectedItem as DatesDTO;
 
-            int numDays;
-            if(numDaysTextBox.Text == null || !int.TryParse(numDaysTextBox.Text, out numDays) || int.Parse(numDaysTextBox.Text) < SelectedAccommodation.MinReservationDays)
+            if (selectedItem != null)
             {
-                MessageBox.Show("Please enter a valid number of days", "Reservation days warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
+                var messageBoxResult = MessageBox.Show($"Are you sure you want to reserve the date: {selectedItem.StartDate:d} - {selectedItem.EndDate:d}", "Reserve Accomodation Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
-            Reservation.StartDate = startDatePicker.SelectedDate.GetValueOrDefault();
-            Reservation.EndDate = endDatePicker.SelectedDate.GetValueOrDefault();
-            Reservation.NumberDays = int.Parse(numDaysTextBox.Text);
+                if (messageBoxResult == MessageBoxResult.Yes)
+                { 
+                    var repository = new AccommodationReservationRepository();
+                    var reservation = new AccommodationReservation(LoggedInUser.Id, SelectedAccommodation.Id, selectedItem.StartDate, selectedItem.EndDate, NumberOfDays);
+                    repository.Save(reservation);
 
-            bool success = MakeReservation();
-            if (success)
-            {
-                _accommodationReservationRepository.MarkUnavailable(SelectedAccommodation.Id, Reservation.StartDate, Reservation.EndDate);
-
-                MessageBox.Show("Reservation successful!");
-                Close();
-            }
-            else
-            {
-                // Show a new window with available dates in the same range
-                if (!IsAvailable(Reservation.StartDate, Reservation.EndDate))
-                {
-                    List<DateTime> availableDates = _accommodationReservationRepository.GetAvailableDates(SelectedAccommodation.Id, Reservation.StartDate, Reservation.EndDate);
-                   // SuggestedDates suggestedDates = new SuggestedDates(availableDates, Reservation.StartDate, Reservation.EndDate);
-                    //suggestedDates.ShowDialog();
+                    MessageBox.Show("Reservation created successfully.");
+                    Close();
                 }
+                return;
             }
         }
-        private void CancelButton_Click(object sender, RoutedEventArgs e)
+
+        private void ShowNoDateTimeWarning()
         {
-            Close();
+            MessageBox.Show("Please enter at least one date and time.", "Date and time warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+        private void ShowInvalidDateTimeWarning()
+        {
+            MessageBox.Show("Please choose a valid date and time.", "Date and time warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+        private void ShowNoNumberWarning()
+        {
+            MessageBox.Show("Please choose a number of days.", "Number of days warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+        private void ShowInvalidNumberWarning()
+        {
+            MessageBox.Show("Please choose a valid number.", "Number of days warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+        private void ShowMinimumReservationDaysWarning()
+        {
+            MessageBox.Show($"The number of days needs to be at least {SelectedAccommodation.MinReservationDays}, the selected accommodation's minimum reservation days.", "Number of days warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+
+        private void ShowDateReservationConfirmation()
+        {
+            MessageBox.Show($"Are you sure you want to reserve the date: {SelectedAccommodation.MinReservationDays}", "Start Tour Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

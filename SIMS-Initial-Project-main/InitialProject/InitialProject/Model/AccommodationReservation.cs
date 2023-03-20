@@ -19,15 +19,14 @@ namespace InitialProject.Model
         public bool IsAvailable { get; set; }
 
         public AccommodationReservation() { }
-        public AccommodationReservation(int id, int guestId, int accommodationId, DateTime startDate, DateTime endDate, int numberDays, bool isAvailable)
+        public AccommodationReservation( int guestId, int accommodationId, DateTime startDate, DateTime endDate, int numberDays)
         {
-            Id = id;
             GuestId = guestId;
             AccommodationId = accommodationId;
             StartDate = startDate;
             EndDate = endDate;
             NumberDays = numberDays;
-            this.IsAvailable = isAvailable;
+            IsAvailable = false;
         }
         public string[] ToCSV()
         {

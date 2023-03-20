@@ -39,6 +39,8 @@ namespace InitialProject.View.Guest1
 
         private readonly ImageRepository _imageRepository;
 
+        private AccommodationReservationRepository _accommodationReservationRepository;
+
         public ObservableCollection<Location> Locations;
         public GuestAccommodationDTO SelectedAccommodation { get; set; }
 
@@ -57,6 +59,7 @@ namespace InitialProject.View.Guest1
         }
 
         private string messageText;
+
         public string MessageText
         {
             get { return messageText; }
@@ -76,6 +79,9 @@ namespace InitialProject.View.Guest1
             _accommodationRepository = new AccommodationRepository();
             _accommodationRepository.Subscribe(this);
 
+            _accommodationReservationRepository = new AccommodationReservationRepository();
+            _accommodationReservationRepository.Subscribe(this);
+
             _locationRepository = new LocationRepository();
             _locationRepository.Subscribe(this);
 
@@ -85,9 +91,9 @@ namespace InitialProject.View.Guest1
 
         private void ReserveButton_Click(object sender, RoutedEventArgs e)
         {
-            if(SelectedAccommodation != null)
+            if (SelectedAccommodation != null)
             {
-                ReserveAccommodation reservationForm = new ReserveAccommodation(SelectedAccommodation, _accommodationRepository);
+                ReserveAccommodation reservationForm = new ReserveAccommodation(SelectedAccommodation, LoggedInUser, _accommodationRepository, _accommodationReservationRepository);
                 reservationForm.Show();
             }
         }

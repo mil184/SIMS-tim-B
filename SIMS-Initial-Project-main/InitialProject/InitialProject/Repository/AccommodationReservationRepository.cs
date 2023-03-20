@@ -57,28 +57,6 @@ namespace InitialProject.Repository
             return _accommodationReservations.FirstOrDefault(u => u.Id == id);
         }
 
-        public bool Create(int accommodationId, DateTime startDate, DateTime endDate)
-        {
-            var availableDates = GetAvailableDates(accommodationId, startDate, endDate);
-
-            if (availableDates.Count == (endDate - startDate).Days + 1)
-            {
-                var reservation = new AccommodationReservation()
-                {
-                    AccommodationId = accommodationId,
-                    StartDate = startDate,
-                    EndDate = endDate,
-                };
-
-                Save(reservation);
-
-                return true;
-            }
-
-            return false;
-        }
-
-
         public List<DateTime> GetAvailableDates(int accommodationId, DateTime startDate, DateTime endDate)
         {
             List<DateTime> reservedDates = new List<DateTime>();
@@ -101,18 +79,6 @@ namespace InitialProject.Repository
                 }
             }
             return availableDates;
-        }
-        public void MarkUnavailable(int accommodationId, DateTime startDate, DateTime endDate)
-        {
-            foreach (AccommodationReservation reservation in _accommodationReservations)
-            {
-                if (reservation.AccommodationId == accommodationId && reservation.StartDate >= startDate && reservation.EndDate <= endDate)
-                {
-                    reservation.IsAvailable = false;
-                }
-            }
-            _serializer.ToCSV(FilePath, _accommodationReservations);
-            NotifyObservers();
         }
 
         public void Subscribe(IObserver observer)
