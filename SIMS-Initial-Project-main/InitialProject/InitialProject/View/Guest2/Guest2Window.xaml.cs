@@ -40,6 +40,8 @@ namespace InitialProject.View.Guest2
         private readonly UserRepository _userRepository;
         private readonly TourReservationRepository _tourReservationRepository;
 
+
+
         private string searchText;
         public string SearchText
         {
@@ -85,8 +87,6 @@ namespace InitialProject.View.Guest2
 
             _tourReservationRepository = new TourReservationRepository();
             _tourReservationRepository.Subscribe(this); 
-
-
 
             Tours = new ObservableCollection<Tour>(_tourRepository.GetAll());
             TourDTOs = ConvertToDTO(Tours);
@@ -171,6 +171,7 @@ namespace InitialProject.View.Guest2
                 ReserveTour reserveTourForm = new ReserveTour(SelectedGuest2TourDTO, LoggedInUser, _tourRepository);
                 reserveTourForm.ShowDialog();
             }
+            Update();
         }
 
         private void Search_Click(object sender, RoutedEventArgs e)
@@ -201,11 +202,11 @@ namespace InitialProject.View.Guest2
                     {
                         FilteredTours.Add(tour);
                     }
-                    else if (tour.Duration.ToString().ToLower().Contains(Query))
+                    else if (tour.Duration == int.Parse(Query))
                     {
                         FilteredTours.Add(tour);
                     }
-                    else if (selectedSearchParam == "Max Guests" && tour.MaxGuests.ToString().Contains(Query))
+                    else if (selectedSearchParam == "Max Guests" && tour.MaxGuests == int.Parse(Query))
                     {
                         if (int.Parse(Query) > tour.MaxGuests)
                         {
@@ -216,7 +217,7 @@ namespace InitialProject.View.Guest2
                             FilteredTours.Add(tour);
                         }
                     }
-                    else if (selectedSearchParam == "Current Guest Count" && tour.CurrentGuestCount.ToString().Contains(Query))
+                    else if (selectedSearchParam == "Current Guest Count" && tour.CurrentGuestCount == int.Parse(Query))
                     {
                         if (int.Parse(Query) < tour.CurrentGuestCount)
                         {

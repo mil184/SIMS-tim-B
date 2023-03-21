@@ -1,6 +1,7 @@
 ﻿using InitialProject.Model;
 using InitialProject.Resources.Observer;
 using InitialProject.Serializer;
+using InitialProject.View.Guest2;
 using InitialProject.View.Guide;
 using System;
 using System.Collections.Generic;
@@ -108,7 +109,7 @@ namespace InitialProject.Repository
             }
             return upcomingTours;
         }
-        
+
         public List<Tour> GetByCity(Location location)
         {
             var toursByCity = new List<Tour>();

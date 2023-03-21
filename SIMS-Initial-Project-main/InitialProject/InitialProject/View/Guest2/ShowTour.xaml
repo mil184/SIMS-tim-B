@@ -86,7 +86,7 @@
 
                 <TextBlock Text="Start date and time:" Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" />
                 <TextBox Name="txtStartDateTime" Margin="5" IsReadOnly="True"
-                         Text="{Binding Path=tourDTO.StartTime, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                         Text="{Binding Path=tourDTO.StartTime, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, StringFormat={}{0:dd.M.yyyy. HH:mm}}" 
                          Grid.Row="7" Grid.Column="1"
                          HorizontalAlignment="Left" Width="200"/>
 
@@ -104,8 +104,8 @@
             </Grid>
         </GroupBox>
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Grid.Row="3" Grid.Column="1" Margin="75,0,0,0">
-
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Grid.Row="3" Grid.Column="1" Margin="60,0,0,0">
+            <Button Content="Images" Margin="10" Click ="ImagesButton_Click" Width="100" Height="30"/>
             <Button Content="Exit" Margin="10" Click ="ExitButton_Click" Width="100" Height="30"/>
         </StackPanel>
     </Grid>

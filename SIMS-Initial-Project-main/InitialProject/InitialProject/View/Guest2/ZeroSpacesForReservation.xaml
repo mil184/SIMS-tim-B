@@ -32,7 +32,7 @@
                         <DataGridTextColumn Header="Language" Binding="{Binding Language}" Width="*"/>
                         <DataGridTextColumn Header="Max Guests" Binding="{Binding MaxGuests}" Width="*"/>
                         <DataGridTextColumn Header="Current Guest Count" Binding="{Binding CurrentGuestCount}" Width="*"/>
-                        <DataGridTextColumn Header="Start Time" Binding="{Binding StartTime}" Width="*"/>
+                        <DataGridTextColumn Header="Start Time" Binding="{Binding StartTime, StringFormat={}{0:dd.M.yyyy. HH:mm}}" Width="*"/>
                         <DataGridTextColumn Header="Duration" Binding="{Binding Duration}" Width="*"/>
                         <DataGridTextColumn Header="Guide" Binding="{Binding Guide}" Width="*"/>
                     </DataGrid.Columns>

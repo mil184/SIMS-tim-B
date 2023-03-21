@@ -81,7 +81,7 @@ namespace InitialProject.View.Guest2
 
                 selectedTour.CurrentGuestCount += personCount;
                 _tourRepository.Update(selectedTour);
-
+                
                 Close();
             }
         }
