@@ -100,88 +100,125 @@ namespace InitialProject.View.Guest1
                 reservationForm.Show();
             }
         }
-
         private void Search_Click(object sender, RoutedEventArgs e)
         {
             PresentableAccommodations.Clear();
 
-            if (searchText != null && searchText != "")
+            if (string.IsNullOrEmpty(searchText))
             {
-                string Text = searchText.ToLower();
-                Text = Text.Replace(" ", String.Empty);
-                string Query = Text;
-                string selectedSearchParam = (searchParamComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
-
-                ObservableCollection<Accommodation> FilteredAccommodations = new ObservableCollection<Accommodation>();
-                ObservableCollection<Location> FilteredLocations = SearchLocations(AllAccommodations, Query);
-
                 foreach (Accommodation accommodation in AllAccommodations)
                 {
-                    if (accommodation.Name.ToLower().Contains(Query))
-                    {
-                        FilteredAccommodations.Add(accommodation);
-                    }
-                    else if (FilteredLocations.Any(loc => loc.Id == accommodation.LocationId))
-                    {
-                        FilteredAccommodations.Add(accommodation);
-                    }
-                    else if (accommodation.Type.ToString().ToLower().Contains(Query))
-                    {
-                        FilteredAccommodations.Add(accommodation);
-                    }
-                    else if (selectedSearchParam == "MaxGuests" && accommodation.MaxGuests.ToString().Contains(Query))
-                    {
-                        if (int.Parse(Query) > accommodation.MaxGuests)
-                        {
-                            MessageText = "The number of guests cannot be greater than max number of guests";
-                        }
-                        else
-                        {
-                            FilteredAccommodations.Add(accommodation);
-                        }
-                    }
-                    else if (selectedSearchParam == "MinReservationDays" && accommodation.MinReservationDays.ToString().Contains(Query))
-                    {
-                        if (int.Parse(Query) < accommodation.MinReservationDays)
-                        {
-                            MessageText = "The number of reservation days cannot be less than min reservation days";
-                        }
-                        else
-                        {
-                            FilteredAccommodations.Add(accommodation);
-                        }
-                    }
+                    PresentableAccommodations.Add(ConvertToDTO(accommodation));
                 }
-
-                foreach (Accommodation accomodation in FilteredAccommodations)
-                {
-                    PresentableAccommodations.Add(ConvertToDTO(accomodation));
-                }
-
+                return;
             }
-            else
+
+            string Query = GetQueryText(searchText);
+            string[] QueryWords = GetQueryWords(searchText);
+            string selectedSearchParam = (searchParamComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
+            ObservableCollection<Accommodation> filteredAccommodations = FilterAccommodations(AllAccommodations, Query, selectedSearchParam, QueryWords);
+
+            foreach (Accommodation accommodation in filteredAccommodations)
             {
-                foreach (Accommodation accomodation in AllAccommodations)
-                {
-                    PresentableAccommodations.Add(ConvertToDTO(accomodation));
-                }
+                PresentableAccommodations.Add(ConvertToDTO(accommodation));
             }
-
         }
 
-        private ObservableCollection<Location> SearchLocations(ObservableCollection<Accommodation> accommodations, string query)
+        private string GetQueryText(string searchText)
         {
-            ObservableCollection<Location> FilteredLocations = new ObservableCollection<Location>();
+            string text = searchText.ToLower();
+            text = text.Replace(" ", string.Empty);
+            return text;
+        }
+
+        private string[] GetQueryWords(string searchText)
+        {
+          string[] words = searchText.ToLower().Split(new char[] {' '}, StringSplitOptions.RemoveEmptyEntries);
+          return words;
+        }
+        private ObservableCollection<Accommodation> FilterAccommodations(ObservableCollection<Accommodation> accommodations, string query, string selectedSearchParam, string[] queryWords)
+        {
+            ObservableCollection<Accommodation> filteredAccommodations = new ObservableCollection<Accommodation>();
+            ObservableCollection<Location> filteredLocations = SearchLocations(accommodations, queryWords);
+
             foreach (Accommodation accommodation in accommodations)
             {
-                Location locations = _locationRepository.GetById(accommodation.LocationId);
-                if (locations.Country.ToLower().Contains(query) ||
-                    locations.City.ToLower().Contains(query))
+                if (MatchesQuery(accommodation, query, selectedSearchParam, filteredLocations))
                 {
-                    FilteredLocations.Add(locations);
+                    filteredAccommodations.Add(accommodation);
                 }
             }
-            return FilteredLocations;
+
+            return filteredAccommodations;
+        }
+
+        private ObservableCollection<Location> SearchLocations(ObservableCollection<Accommodation> accommodations, string[] queryWords)
+        {
+            ObservableCollection<Location> filteredLocations = new ObservableCollection<Location>();
+            foreach (Accommodation accommodation in accommodations)
+            {
+                Location location = _locationRepository.GetById(accommodation.LocationId);
+                bool matchesQuery = true;
+                foreach (string word in queryWords)
+                {
+                    if (!location.Country.ToLower().Contains(word) && !location.City.ToLower().Contains(word))
+                    {
+                        matchesQuery = false;
+                        break;
+                    }
+                }
+                if (matchesQuery)
+                {
+                    filteredLocations.Add(location);
+                }
+            }
+            return filteredLocations;
+        }
+
+        private bool MatchesQuery(Accommodation accommodation, string query, string selectedSearchParam, ObservableCollection<Location> filteredLocations)
+        {
+            if (accommodation.Name.ToLower().Contains(query))
+            {
+                return true;
+            }
+
+            if (filteredLocations.Any(loc => loc.Id == accommodation.LocationId))
+            {
+                return true;
+            }
+
+            if (accommodation.Type.ToString().ToLower().Contains(query))
+            {
+                return true;
+            }
+
+            if (selectedSearchParam == "MaxGuests" && accommodation.MaxGuests.ToString().Contains(query))
+            {
+                if (int.Parse(query) > accommodation.MaxGuests)
+                {
+                    MessageText = "The number of guests cannot be greater than max number of guests";
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+
+            if (selectedSearchParam == "MinReservationDays" && accommodation.MinReservationDays.ToString().Contains(query))
+            {
+                if (int.Parse(query) < accommodation.MinReservationDays)
+                {
+                    MessageText = "The number of reservation days cannot be less than min reservation days";
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
