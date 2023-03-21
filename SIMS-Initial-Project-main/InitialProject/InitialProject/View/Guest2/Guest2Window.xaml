@@ -19,45 +19,69 @@
             <StackPanel>
                 <TextBlock FontSize="18" FontWeight="Bold" Text="Guest 2" Margin="0 0 0 10"/>
                 <TextBlock FontSize="14" Text="{Binding LoggedInUser.Username, FallbackValue=BindingNotWorking}"/>
+                <Button Content="Log Out" Margin="0 10 0 0" Width="50" Click="LogOut_Click" HorizontalAlignment="Left"/>
             </StackPanel>
         </StackPanel>
+
         <!-- Tabs section -->
         <TabControl Grid.Row="1">
             <!-- Overview tab -->
             <TabItem Header="Tour reservation">
-                <StackPanel Margin="10">
-                    <!-- Tour list section -->
-                    <StackPanel Orientation="Horizontal">
-                        <Button Content="Reserve tour" Width="80" Margin="0 0 10 0" Click="ReserveButton_Click"/>
-                    </StackPanel>
-                    <!-- Tour overview section -->
-                    <StackPanel Margin="0 10 0 0">
-                        
-                        <!--<TextBlock Text="Explore tours" FontSize="14" FontWeight="Bold"/>-->
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
-                        <ScrollViewer Height="150" VerticalScrollBarVisibility="Auto">
-                            <DataGrid ItemsSource="{Binding Tours}" 
+                    <!-- Tour list section -->
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Name="reserve" Content="Reserve Tour" Click="ReserveButton_Click" Width="200" Margin="0 0 10 0" FontWeight="Bold"/>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBox Name="searchBox" Text="{Binding Path=SearchText}" Width="200" Height="25" Margin="0 0 5 0"/>
+                            <ComboBox x:Name="searchParamComboBox" Width="150" Margin="0 0 5 0">
+                                <ComboBoxItem Content="Max Guests"/>
+                                <ComboBoxItem Content="Current Guest Count"/>
+                            </ComboBox>
+                            <Button Name="search" Width="25" Height="25" Click="Search_Click">
+                                <Image Source="/Resources/Images/inspection.png" />
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Tour overview section -->
+                    <GroupBox Grid.Row="1" Header="Explore Accommodation" Margin="0 0 0 10">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <DataGrid ItemsSource="{Binding TourDTOs}" 
                                       SelectedItem="{Binding Path=SelectedGuest2TourDTO}"
-                                      AutoGenerateColumns="False"
-                                      IsReadOnly="True">
+                                      AutoGenerateColumns="False" IsReadOnly="True">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
                                     <DataGridTextColumn Header="Country" Binding="{Binding Country}" Width="*"/>
                                     <DataGridTextColumn Header="City" Binding="{Binding City}" Width="*"/>
-                                    <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
                                     <DataGridTextColumn Header="Language" Binding="{Binding Language}" Width="*"/>
                                     <DataGridTextColumn Header="Max Guests" Binding="{Binding MaxGuests}" Width="*"/>
                                     <DataGridTextColumn Header="Current Guest Count" Binding="{Binding CurrentGuestCount}" Width="*"/>
-                                    <DataGridTextColumn Header="Start Time" Binding="{Binding StartTime}" Width="*"/>
-                                    <DataGridTextColumn Header="Start Time" Binding="{Binding StartTime}" Width="*"/>
-                                    <DataGridTextColumn Header="Duration" Binding="{Binding Duration}" Width="*"/>
-                                    <DataGridTextColumn Header="Guide" Binding="{Binding Guide}" Width="*"/>
+                                    <DataGridTextColumn Header="Duration (hours)" Binding="{Binding Duration}" Width="*"/>
+                                    <DataGridTemplateColumn Header="Show more">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Click="ShowMoreButton_Click">
+                                                    <Image Height="10px" Source="/Resources/Images/inspection.png" />
+                                                </Button>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
                                 </DataGrid.Columns>
                             </DataGrid>
                         </ScrollViewer>
-                    </StackPanel>
-                </StackPanel>
+                    </GroupBox>
+                </Grid>
             </TabItem>
+            
             <!-- Statistics tab -->
             <TabItem Header="Statistics">
                 <StackPanel Margin="10">

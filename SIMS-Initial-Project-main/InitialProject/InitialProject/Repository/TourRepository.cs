@@ -65,16 +65,16 @@ namespace InitialProject.Repository
             return _tours.Find(c => c.Id == id);
         }
 
+        public List<Tour> RemoveById(List<Tour> tours, int id)
+        {
+            List<Tour> toursRemoved = tours;
+            toursRemoved.RemoveAll(t => t.Id == id);
+            return toursRemoved;
+        }
+
         public List<Tour> GetAll()
         {
-            var tours = new List<Tour>();
-
-            foreach (var tour in _tours)
-            {
-                tours.Add(tour);
-            }
-
-            return tours;
+            return _tours;
         }
 
         public List<Tour> GetTodaysTours()

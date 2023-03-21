@@ -2,33 +2,22 @@
 using InitialProject.Model.DTO;
 using InitialProject.Repository;
 using InitialProject.Resources.Observer;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace InitialProject.View.Guest2
 {
-    /// <summary>
-    /// Interaction logic for ZeroSpacesForReservation.xaml
-    /// </summary>
     public partial class ZeroSpacesForReservation : Window, INotifyPropertyChanged, IObserver
     {
         public User LoggedInUser { get; set; }
         public Guest2TourDTO SelectedTour { get; set; }
         public Guest2TourDTO NewSelectedTour { get; set; }
+
+        public List<Tour> ToursByCity;
+        public List<Tour> ToursByCityWithoutSelected;
 
         public ObservableCollection<Guest2TourDTO> Tours { get; set; }
 
@@ -47,8 +36,10 @@ namespace InitialProject.View.Guest2
             SelectedTour = selectedTour;
             LoggedInUser = user;
 
-            _tourReservationRepository = new TourReservationRepository();
             _tourRepository = tourRepository;
+
+            _tourReservationRepository = new TourReservationRepository();
+            _tourReservationRepository.Subscribe(this);
 
             _imageRepository = new ImageRepository();
             _imageRepository.Subscribe(this);
@@ -62,9 +53,10 @@ namespace InitialProject.View.Guest2
             _userRepository = new UserRepository();
             _userRepository.Subscribe(this);
 
-            Tours = new ObservableCollection<Guest2TourDTO>(ConvertToDTOList(_tourRepository.GetByCityName(selectedTour.City)));
-            Tours.Remove(selectedTour);
-
+            ToursByCity = _tourRepository.GetByCityName(selectedTour.City);
+            ToursByCityWithoutSelected = _tourRepository.RemoveById(ToursByCity, selectedTour.TourId);
+            
+            Tours = ConvertToDTOList(ToursByCity);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -92,14 +84,9 @@ namespace InitialProject.View.Guest2
             Close();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        public ObservableCollection<Guest2TourDTO> ConvertToDTOList(List<Tour> tours)
         {
-            Close();
-        }
-
-        public List<Guest2TourDTO> ConvertToDTOList(List<Tour> tours)
-        {
-            List<Guest2TourDTO> dtoList = new List<Guest2TourDTO>();
+            ObservableCollection<Guest2TourDTO> dtoList = new ObservableCollection<Guest2TourDTO>();
 
             foreach (Tour tour in tours)
             {
@@ -133,6 +120,11 @@ namespace InitialProject.View.Guest2
                 tour.StartTime,
                 tour.Duration,
                 _userRepository.GetById(tour.GuideId).Username);
+        }
+
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }

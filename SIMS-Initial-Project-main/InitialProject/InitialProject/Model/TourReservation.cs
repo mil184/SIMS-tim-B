@@ -37,7 +37,7 @@ namespace InitialProject.Model
             UserId = Convert.ToInt32(values[1]);
             TourId = Convert.ToInt32(values[2]);
             PersonCount = Convert.ToInt32(values[3]);
-            CheckpointArrivalId = Convert.ToInt32(values[4]);  
+            CheckpointArrivalId = Convert.ToInt32(values[4]);
         }
     }
 }
