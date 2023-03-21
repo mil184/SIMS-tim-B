@@ -3,6 +3,7 @@ using InitialProject.Resources.Observer;
 using InitialProject.Serializer;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,13 @@ namespace InitialProject.Repository
             _serializer = new Serializer<TourReservation>();
             _tourReservations = _serializer.FromCSV(_filePath);
             _observers = new List<IObserver>();
+        }
+
+        public List<TourReservation> RemoveById(List<TourReservation> tourReservations, int id)
+        {
+            List<TourReservation> tourReservationsRemoved = tourReservations;
+            tourReservationsRemoved.RemoveAll(t => t.Id == id);
+            return tourReservationsRemoved;
         }
 
         public int NextId()
@@ -58,6 +66,25 @@ namespace InitialProject.Repository
                 }   
             }
             return userIds;
+        }
+
+        public List<TourReservation> GetAll()
+        {
+            return _tourReservations;
+        }
+
+        public List<int> GetTourIdsByUser(User user)
+        {
+            List<int> tourIds = new List<int>();
+
+            foreach (TourReservation reservation in _tourReservations)
+            {
+                if (reservation.UserId == user.Id)
+                {
+                    tourIds.Add(reservation.TourId);
+                }
+            }
+            return tourIds;
         }
 
         public void Subscribe(IObserver observer)

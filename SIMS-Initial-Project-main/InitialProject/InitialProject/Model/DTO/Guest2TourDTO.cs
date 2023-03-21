@@ -18,10 +18,6 @@ namespace InitialProject.Model.DTO
         public double Duration { get; set; }
         public string Guide { get; set; }
 
-        //public list<string> images;
-        //public list<int> checkpointids;
-        //public list<int> checkpointnames;
-
         public Guest2TourDTO()
         {
         }
@@ -39,9 +35,6 @@ namespace InitialProject.Model.DTO
             StartTime = startTime;
             Duration = duration;
             Guide = guide;
-            //this.images = images;
-            //this.checkpointIds = checkpointIds;
-            //this.checkpointNames = checkpointNames;
         }
     }
 }

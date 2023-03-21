@@ -31,11 +31,14 @@ namespace InitialProject.View.Guest2
 
         public ObservableCollection<Location> Locations;
 
+        public ObservableCollection<Guest2TourDTO> NonReservedTours { get; set; }
+
         private readonly TourRepository _tourRepository;
         private readonly LocationRepository _locationRepository;
         private readonly ImageRepository _imageRepository;
         private readonly CheckpointRepository _checkpointRepository;
         private readonly UserRepository _userRepository;
+        private readonly TourReservationRepository _tourReservationRepository;
 
         private string searchText;
         public string SearchText
@@ -80,8 +83,16 @@ namespace InitialProject.View.Guest2
             _userRepository = new UserRepository();
             _userRepository.Subscribe(this);
 
+            _tourReservationRepository = new TourReservationRepository();
+            _tourReservationRepository.Subscribe(this); 
+
+
+
             Tours = new ObservableCollection<Tour>(_tourRepository.GetAll());
             TourDTOs = ConvertToDTO(Tours);
+
+            RemoveReservedTours();
+
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -95,6 +106,23 @@ namespace InitialProject.View.Guest2
             foreach (Tour tour in _tourRepository.GetAll())
             {
                 TourDTOs.Add(ConvertToDTO(tour));
+            }
+        }
+
+        public void RemoveByTourId(int id)
+        {
+            Guest2TourDTO tourForRemoval = TourDTOs.FirstOrDefault(t => t.TourId == id);
+            TourDTOs.Remove(tourForRemoval);
+        }
+
+        public void RemoveReservedTours()
+        {
+            foreach(TourReservation tourReservation in _tourReservationRepository.GetAll())
+            {
+                if(tourReservation.UserId == LoggedInUser.Id)
+                {
+                    RemoveByTourId(tourReservation.TourId);
+                }
             }
         }
 
