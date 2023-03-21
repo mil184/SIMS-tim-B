@@ -8,20 +8,26 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace InitialProject.View.Guide
 {
     public partial class GuideWindow : Window, INotifyPropertyChanged, IObserver
     {
+        private readonly TourRepository _tourRepository;
+        private readonly TourReservationRepository _tourReservationRepository;
+        private readonly LocationRepository _locationRepository;
+        private readonly ImageRepository _imageRepository;
+        private readonly CheckpointRepository _checkpointRepository;
+        private readonly UserRepository _userRepository;
         public User CurrentUser { get; set; }
+        public ObservableCollection<GuideTourDTO> CurrentTours { get; set; }
+        public ObservableCollection<GuideTourDTO> UpcomingTours { get; set; }
+        public bool TourActive { get; set; }
+        public GuideTourDTO SelectedDTO { get; set; }
 
         private GuideTourDTO _activeTour;
-
         public GuideTourDTO ActiveTour
         {
             get { return _activeTour; }
@@ -34,19 +40,6 @@ namespace InitialProject.View.Guide
                 }
             }
         }
-        public ObservableCollection<GuideTourDTO> CurrentTours { get; set; }
-        public ObservableCollection<GuideTourDTO> UpcomingTours { get; set; }
-
-        public bool TourActive { get; set; }
-        public GuideTourDTO SelectedDTO { get; set; }
-
-        private readonly TourRepository _tourRepository;
-        private readonly TourReservationRepository _tourReservationRepository;
-        private readonly LocationRepository _locationRepository;
-        private readonly ImageRepository _imageRepository;
-        private readonly CheckpointRepository _checkpointRepository;
-        private readonly UserRepository _userRepository;
-
         public GuideWindow(User user)
         {
             InitializeComponent();
@@ -71,22 +64,32 @@ namespace InitialProject.View.Guide
             _userRepository = new UserRepository();
             _userRepository.Subscribe(this);
 
+            InitializeCollections();
+            FindActiveTour();
+            SortUpcomingTours();
 
+        }
+        private void InitializeCollections()
+        {
             CurrentTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourRepository.GetTodaysTours()));
             UpcomingTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourRepository.GetUpcomingTours()));
-
+        }
+        private void FindActiveTour()
+        {
             ActiveTour = null;
-            foreach (GuideTourDTO tourdto in CurrentTours) 
+            foreach (GuideTourDTO tourdto in CurrentTours)
             {
                 Tour tour = ConvertToTour(tourdto);
 
-                if (tour.IsActive) 
+                if (tour.IsActive)
                 {
                     ActiveTour = ConvertToDTO(tour);
                     break;
                 }
             }
-
+        }
+        private void SortUpcomingTours()
+        {
             var view = CollectionViewSource.GetDefaultView(UpcomingTours);
             view.SortDescriptions.Add(new SortDescription("StartTime", ListSortDirection.Ascending));
         }
@@ -102,21 +105,30 @@ namespace InitialProject.View.Guide
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
         public void Update()
+        {
+            UpdateUpcomingTours();
+            UpdateCurrentTours();
+            UpdateActiveTour();
+        }
+        private void UpdateUpcomingTours()
         {
             UpcomingTours.Clear();
             foreach (Tour tour in _tourRepository.GetUpcomingTours())
             {
                 UpcomingTours.Add(ConvertToDTO(tour));
             }
-
+        }
+        private void UpdateCurrentTours()
+        {
             CurrentTours.Clear();
             foreach (Tour tour in _tourRepository.GetTodaysTours())
             {
                 CurrentTours.Add(ConvertToDTO(tour));
             }
-
+        }
+        private void UpdateActiveTour()
+        {
             ActiveTour = null;
             foreach (GuideTourDTO tourdto in CurrentTours)
             {
@@ -170,7 +182,6 @@ namespace InitialProject.View.Guide
 
             Update();
         }
-
         private void CheckIfTourIsActive()
         {
             TourActive = false;
@@ -203,29 +214,37 @@ namespace InitialProject.View.Guide
                 StartTourConfirmation(selectedTour);
             }
         }
-        private void ShowActiveTourWarning()
-        {
-            MessageBox.Show("An active tour is already in progress. Please finish the current tour before starting a new one.", "Active Tour Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-        }
-
         private void StartTourConfirmation(Tour selectedTour)
         {
-            var messageBoxResult = MessageBox.Show($"Are you sure you want to start the {selectedTour.Name} tour?", "Start Tour Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
-
-            if (messageBoxResult == MessageBoxResult.Yes)
+            if (ConfirmStartTour(selectedTour))
             {
                 StartSelectedTour(selectedTour);
             }
         }
-
         private void StartSelectedTour(Tour selectedTour)
         {
-            selectedTour.IsActive = true;
+            SetTourActive(selectedTour);
+            SetCurrentCheckpoint(selectedTour);
+            UpdateTour(selectedTour);
+            ShowCheckpointsForTour(selectedTour);
+        }
+        private void SetTourActive(Tour tour)
+        {
+            tour.IsActive = true;
             TourActive = true;
-            selectedTour.CurrentCheckpointId = selectedTour.CheckpointIds.First();
-            _tourRepository.Update(selectedTour);
-            ActiveTour = ConvertToDTO(selectedTour);
-            ShowCheckpoints showCheckpoints = new ShowCheckpoints(selectedTour, _checkpointRepository, _tourRepository, _tourReservationRepository, _userRepository);
+        }
+        private void SetCurrentCheckpoint(Tour tour)
+        {
+            tour.CurrentCheckpointId = tour.CheckpointIds.First();
+        }
+        private void UpdateTour(Tour tour)
+        {
+            _tourRepository.Update(tour);
+            ActiveTour = ConvertToDTO(tour);
+        }
+        private void ShowCheckpointsForTour(Tour tour)
+        {
+            ShowCheckpoints showCheckpoints = new ShowCheckpoints(tour, _checkpointRepository, _tourRepository, _tourReservationRepository, _userRepository);
             showCheckpoints.ShowDialog();
         }
         private void LogOut_Click(object sender, RoutedEventArgs e)
@@ -233,6 +252,15 @@ namespace InitialProject.View.Guide
             SignInForm signInForm = new SignInForm();
             signInForm.Show();
             Close();
+        }
+        private void ShowActiveTourWarning()
+        {
+            MessageBox.Show("An active tour is already in progress. Please finish the current tour before starting a new one.", "Active Tour Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+        private bool ConfirmStartTour(Tour selectedTour)
+        {
+            var messageBoxResult = MessageBox.Show($"Are you sure you want to start the {selectedTour.Name} tour?", "Start Tour Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            return messageBoxResult == MessageBoxResult.Yes;
         }
     }
 }

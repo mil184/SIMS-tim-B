@@ -53,6 +53,7 @@ namespace InitialProject.Repository
             _tourReservations.Remove(current);
             _tourReservations.Insert(index, reservation);       // keep ascending order of ids in file 
             _serializer.ToCSV(_filePath, _tourReservations);
+            NotifyObservers();
             return reservation;
         }
         public List<int> GetUserIdsByTour(Tour tour) 
@@ -78,6 +79,19 @@ namespace InitialProject.Repository
                 }
             }
             return null;
+        }
+        public List<TourReservation> GetReservationsByTourId(int tourId)
+        {
+            List<TourReservation> reservations = new List<TourReservation>();
+
+            foreach (TourReservation tourReservation in _tourReservations)
+            {
+                if (tourId == tourReservation.TourId)
+                {
+                   reservations.Add(tourReservation);
+                }
+            }
+            return reservations;
         }
 
         public void Subscribe(IObserver observer)

@@ -3,6 +3,7 @@ using InitialProject.Model;
 using InitialProject.Model.DTO;
 using InitialProject.Repository;
 using InitialProject.Resources.Observer;
+using InitialProject.Resources.UIHelper;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -51,7 +52,7 @@ namespace InitialProject.View.Guide
         public ShowCheckpoints(Tour tour, CheckpointRepository checkpointRepository, TourRepository tourRepository, TourReservationRepository tourReservationRepository, UserRepository userRepository)
         {
             InitializeComponent();
-            this.DataContext = this;
+            DataContext = this;
 
             SelectedTour = tour;
             _repository = checkpointRepository;
@@ -59,29 +60,44 @@ namespace InitialProject.View.Guide
             _tourReservationRepository = tourReservationRepository;
             _userRepository = userRepository;
 
-            Checkpoints = new ObservableCollection<Checkpoint>();
-            UnmarkedGuests = new ObservableCollection<UserDTO>();
+            InitializeCollections();
+            LoadUnmarkedGuests();
+            LoadTourCheckpoints();
 
-            List<int> UnmarkedGuestsId = _tourReservationRepository.GetUserIdsByTour(SelectedTour);
-
-            foreach(int id in UnmarkedGuestsId) 
-            {
-                if(!UnmarkedGuests.Contains(ConvertToDTO(_userRepository.GetById(id))))
-                UnmarkedGuests.Add(ConvertToDTO(_userRepository.GetById(id)));
-            }
-
-            foreach (int id in SelectedTour.CheckpointIds)
-            {
-                Checkpoints.Add(_repository.GetById(id));
-            }
-
-            Checkpoints.OrderBy(c => c.Order);
-  
             // Attach the Loaded event handler to the ListBox
             listBox.Loaded += ListBox_Loaded;
         }
+        private void InitializeCollections()
+        {
+            Checkpoints = new ObservableCollection<Checkpoint>();
+            UnmarkedGuests = new ObservableCollection<UserDTO>();
+        }
+        private void LoadUnmarkedGuests()
+        {
+            List<int> unmarkedGuestsId = _tourReservationRepository.GetUserIdsByTour(SelectedTour);
 
-        public UserDTO ConvertToDTO(User user) 
+            foreach (int id in unmarkedGuestsId)
+            {
+                User user = _userRepository.GetById(id);
+                UserDTO userDto = ConvertUserToDTO(user);
+
+                if (!UnmarkedGuests.Contains(userDto))
+                {
+                    UnmarkedGuests.Add(userDto);
+                }
+            }
+        }
+        private void LoadTourCheckpoints()
+        {
+            foreach (int id in SelectedTour.CheckpointIds)
+            {
+                Checkpoint checkpoint = _repository.GetById(id);
+                Checkpoints.Add(checkpoint);
+            }
+
+            Checkpoints.OrderBy(c => c.Order);
+        }
+        public UserDTO ConvertUserToDTO(User user) 
         {
             return new UserDTO(
                 user.Id,
@@ -98,55 +114,65 @@ namespace InitialProject.View.Guide
             for (int i = 0; i < listBox.Items.Count; i++)
             {
                 Checkpoint checkpoint = (Checkpoint)listBox.Items[i];
-                CheckBox checkbox = FindVisualChild<CheckBox>(listBox.ItemContainerGenerator.ContainerFromIndex(i));
+                CheckBox checkbox = UIHelper.FindVisualChild<CheckBox>(listBox.ItemContainerGenerator.ContainerFromIndex(i));
                 ListBoxItem listBoxItem = listBox.ItemContainerGenerator.ContainerFromIndex(i) as ListBoxItem;
 
-                if (checkpoint.Id <= currentCheckpointId)
-                {
-                    DisableCheckbox(checkbox, listBoxItem);
-                    SetBackground(listBoxItem, Brushes.LightGray);
-                }
-                else if (checkpoint.Id == currentCheckpointId + 1)
-                {
-                    EnableCheckbox(checkbox, listBoxItem);
-                    SetBackground(listBoxItem, Brushes.White);
-                }
-                else
-                {
-                    bool isEnabled = checkpoint.Id == firstCheckpointId + 1;
-                    SetCheckbox(checkbox, isEnabled, listBoxItem);
-                    SetBackground(listBoxItem, Brushes.White);
-                }
-
-                if (checkpoint.Id == SelectedTour.CurrentCheckpointId)
-                {
-                    SetListBoxItemBorder(listBoxItem, previousListBoxItem);
-                    previousListBoxItem = listBoxItem;
-                }
+                SetCheckpointCheckboxAndBackground(checkpoint, checkbox, listBoxItem, currentCheckpointId, firstCheckpointId, ref previousListBoxItem);
             }
         }
-
+        private void SetCheckpointCheckboxAndBackground(Checkpoint checkpoint, CheckBox checkbox, ListBoxItem listBoxItem, int currentCheckpointId, int firstCheckpointId, ref ListBoxItem previousListBoxItem)
+        {
+            if (checkpoint.Id <= currentCheckpointId)
+            {
+                DisableCheckboxAndSetBackgroundGray(checkbox, listBoxItem);
+            }
+            else if (checkpoint.Id == currentCheckpointId + 1)
+            {
+                EnableCheckboxAndSetBackgroundWhite(checkbox, listBoxItem);
+            }
+            else
+            {
+                SetCheckboxAndSetBackgroundWhite(checkbox, listBoxItem, checkpoint.Id == firstCheckpointId + 1);
+            }
+            if (checkpoint.Id == SelectedTour.CurrentCheckpointId)
+            {
+                SetListBoxItemBorder(listBoxItem, previousListBoxItem);
+                previousListBoxItem = listBoxItem;
+            }
+        }
+        private void DisableCheckboxAndSetBackgroundGray(CheckBox checkbox, ListBoxItem listBoxItem)
+        {
+            DisableCheckbox(checkbox, listBoxItem);
+            SetBackground(listBoxItem, Brushes.LightGray);
+        }
+        private void EnableCheckboxAndSetBackgroundWhite(CheckBox checkbox, ListBoxItem listBoxItem)
+        {
+            EnableCheckbox(checkbox, listBoxItem);
+            SetBackground(listBoxItem, Brushes.White);
+        }
+        private void SetCheckboxAndSetBackgroundWhite(CheckBox checkbox, ListBoxItem listBoxItem, bool isEnabled)
+        {
+            SetCheckbox(checkbox, isEnabled, listBoxItem);
+            SetBackground(listBoxItem, Brushes.White);
+        }
         private void DisableCheckbox(CheckBox checkbox, ListBoxItem listBoxItem)
         {
             checkbox.IsChecked = true;
             checkbox.IsEnabled = false;
             SetBackground(listBoxItem, Brushes.LightGray);
         }
-
         private void EnableCheckbox(CheckBox checkbox, ListBoxItem listBoxItem)
         {
             checkbox.IsChecked = false;
             checkbox.IsEnabled = true;
             SetBackground(listBoxItem, Brushes.White);
         }
-
         private void SetCheckbox(CheckBox checkbox, bool isEnabled, ListBoxItem listBoxItem)
         {
             checkbox.IsChecked = false;
             checkbox.IsEnabled = isEnabled;
             SetBackground(listBoxItem, Brushes.White);
         }
-
         private void SetBackground(ListBoxItem listBoxItem, Brush brush)
         {
             if (listBoxItem != null)
@@ -154,7 +180,6 @@ namespace InitialProject.View.Guide
                 listBoxItem.Background = brush;
             }
         }
-
         private void SetListBoxItemBorder(ListBoxItem listBoxItem, ListBoxItem previousListBoxItem)
         {
             if (listBoxItem != null)
@@ -169,7 +194,6 @@ namespace InitialProject.View.Guide
                 }
             }
         }
-
         private void checkpointCheckbox_Checked(object sender, RoutedEventArgs e)
         {
             CheckBox currentCheckbox = (CheckBox)sender;
@@ -194,27 +218,35 @@ namespace InitialProject.View.Guide
             UpdateListBoxItemBackgrounds(currentIndex);
             RemovePreviousListBoxItemBorder(currentIndex);
         }
-
         private int GetCurrentIndex(CheckBox currentCheckbox)
         {
             return listBox.ItemContainerGenerator.IndexFromContainer(
                 listBox.ItemContainerGenerator.ContainerFromItem(currentCheckbox.DataContext));
         }
-
         private void EndTour()
+        {
+            UpdateTourStatus();
+            UpdateTourReservations();
+            DisplayEndTourMessage();
+            Close();
+        }
+        private void UpdateTourStatus()
         {
             SelectedTour.CurrentCheckpointId = -1;
             SelectedTour.IsActive = false;
             _tourRepository.Update(SelectedTour);
-
-            MessageBox.Show($"The {SelectedTour.Name} tour finished", "End Tour Information", MessageBoxButton.OK, MessageBoxImage.Information);
-
-            Close();
         }
-
+        private void UpdateTourReservations()
+        {
+            foreach (TourReservation reservation in _tourReservationRepository.GetReservationsByTourId(SelectedTour.Id))
+            {
+                reservation.CheckpointArrivalId = -1;
+                _tourReservationRepository.Update(reservation);
+            }
+        }
         private void UpdateNextCheckpoint(int nextIndex)
         {
-            CheckBox nextCheckbox = FindVisualChild<CheckBox>(listBox.ItemContainerGenerator.ContainerFromIndex(nextIndex));
+            CheckBox nextCheckbox = UIHelper.FindVisualChild<CheckBox>(listBox.ItemContainerGenerator.ContainerFromIndex(nextIndex));
             nextCheckbox.IsEnabled = true;
 
             SelectedTour.CurrentCheckpointId = Checkpoints[nextIndex].Id;
@@ -225,33 +257,29 @@ namespace InitialProject.View.Guide
         {
             for (int i = 0; i < currentIndex; i++)
             {
-                CheckBox checkbox = FindVisualChild<CheckBox>(listBox.ItemContainerGenerator.ContainerFromIndex(i));
+                CheckBox checkbox = UIHelper.FindVisualChild<CheckBox>(listBox.ItemContainerGenerator.ContainerFromIndex(i));
                 checkbox.IsChecked = true;
                 checkbox.IsEnabled = false;
             }
         }
-
         private void DisableFollowingCheckpoints(int nextIndex)
         {
             for (int i = nextIndex + 1; i < Checkpoints.Count; i++)
             {
-                CheckBox checkbox = FindVisualChild<CheckBox>(listBox.ItemContainerGenerator.ContainerFromIndex(i));
+                CheckBox checkbox = UIHelper.FindVisualChild<CheckBox>(listBox.ItemContainerGenerator.ContainerFromIndex(i));
                 checkbox.IsChecked = false;
                 checkbox.IsEnabled = false;
             }
         }
-
         private void UpdateCurrentCheckpoint(int currentIndex)
         {
             SelectedTour.CurrentCheckpointId = Checkpoints[currentIndex].Id;
             _tourRepository.Update(SelectedTour);
         }
-
         private void UpdateListBoxItemBackgrounds(int currentIndex)
         {
             ListBox_Loaded(listBox, null);
         }
-
         private void RemovePreviousListBoxItemBorder(int currentIndex)
         {
             if (currentIndex > 0)
@@ -266,77 +294,84 @@ namespace InitialProject.View.Guide
                 }
             }
         }
-
-        private T FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
-        {
-            if (parent == null)
-            {
-                return null;
-            }
-
-            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
-            {
-                DependencyObject child = VisualTreeHelper.GetChild(parent, i);
-                if (child != null && child is T)
-                {
-                    return (T)child;
-                }
-                else
-                {
-                    T foundChild = FindVisualChild<T>(child);
-                    if (foundChild != null)
-                    {
-                        return foundChild;
-                    }
-                }
-            }
-            return null;
-        }
-
         private void endTourButton_Click(object sender, RoutedEventArgs e)
         {
-            var messageBoxResult = MessageBox.Show($"Are you sure you want to finish the {SelectedTour.Name} tour?", "Finish Tour Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            var messageBoxResult = ShowEndTourConfirmationMessage();
 
             if (messageBoxResult == MessageBoxResult.Yes)
             {
-                SelectedTour.CurrentCheckpointId = -1;
-                SelectedTour.IsActive = false;
-                _tourRepository.Update(SelectedTour);
-                MessageBox.Show($"The {SelectedTour.Name} tour finished", "Finish Tour Information", MessageBoxButton.OK, MessageBoxImage.Information);
-                Close();
+                EndTour();
             }
-        
         }
         private void presentButton_Click(object sender, RoutedEventArgs e)
+        {
+            UpdateReservationCheckpointArrivalId();
+            UpdateGuestCheckpointArrivalNameInUnmarkedGuests();
+            UpdateGuestsGrid();
+        }
+        private void UpdateReservationCheckpointArrivalId()
         {
             var selectedGuest = guestsGrid.SelectedItem as UserDTO;
             if (selectedGuest != null)
             {
-                TourReservation reservation = _tourReservationRepository.GetReservationByGuestIdAndTourId(selectedGuest.UserId, SelectedTour.Id);
-                reservation.CheckpointArrivalId = _tourRepository.GetById(SelectedTour.Id).CurrentCheckpointId;
-                _tourReservationRepository.Update(reservation);
-                foreach (UserDTO guest in UnmarkedGuests) 
-                {
-                    if(guest.UserId == selectedGuest.UserId) 
-                    {
-                        guest.CheckpointArrivalName = _repository.GetById(SelectedTour.CurrentCheckpointId).Name;
-                      
-                    }
-                }
-                Update();
-                
+                int currentCheckpointId = SelectedTour.CurrentCheckpointId;
+                TourReservation reservation = GetReservationByGuestIdAndTourId(selectedGuest.UserId, SelectedTour.Id);
+                UpdateReservationCheckpointArrival(reservation, currentCheckpointId);
             }
         }
-
+        private TourReservation GetReservationByGuestIdAndTourId(int guestId, int tourId)
+        {
+            return _tourReservationRepository.GetReservationByGuestIdAndTourId(guestId, tourId);
+        }
+        private void UpdateReservationCheckpointArrival(TourReservation reservation, int checkpointId)
+        {
+            reservation.CheckpointArrivalId = checkpointId;
+            _tourReservationRepository.Update(reservation);
+        }
+        private void UpdateGuestCheckpointArrivalNameInUnmarkedGuests()
+        {
+            var selectedGuest = guestsGrid.SelectedItem as UserDTO;
+            if (selectedGuest != null)
+            {
+                string checkpointName = GetCheckpointNameById(SelectedTour.CurrentCheckpointId);
+                UpdateGuestCheckpointArrivalName(selectedGuest.UserId, checkpointName);
+            }
+        }
+        private string GetCheckpointNameById(int checkpointId)
+        {
+            return _repository.GetById(checkpointId).Name;
+        }
+        private void UpdateGuestCheckpointArrivalName(int guestId, string checkpointName)
+        {
+            foreach (UserDTO guest in UnmarkedGuests)
+            {
+                if (guest.UserId == guestId)
+                {
+                    guest.CheckpointArrivalName = checkpointName;
+                }
+            }
+        }
+        private void UpdateGuestsGrid()
+        {
+            Update();
+        }
         public void Update()
         {
             UnmarkedGuests.Clear();
 
             foreach (int id in _tourReservationRepository.GetUserIdsByTour(SelectedTour))
             {
-                if (!UnmarkedGuests.Contains(ConvertToDTO(_userRepository.GetById(id))))
-                    UnmarkedGuests.Add(ConvertToDTO(_userRepository.GetById(id)));
+                if (!UnmarkedGuests.Contains(ConvertUserToDTO(_userRepository.GetById(id))))
+                    UnmarkedGuests.Add(ConvertUserToDTO(_userRepository.GetById(id)));
             }
+        }
+        private void DisplayEndTourMessage()
+        {
+            MessageBox.Show($"The {SelectedTour.Name} tour finished", "End Tour Information", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        private MessageBoxResult ShowEndTourConfirmationMessage()
+        {
+            return MessageBox.Show($"Are you sure you want to finish the {SelectedTour.Name} tour?", "Finish Tour Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
         }
     }
 }

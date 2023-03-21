@@ -1,21 +1,14 @@
 ﻿using InitialProject.Model;
 using InitialProject.Repository;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media.Animation;
-using System.Windows.Media;
 using Image = InitialProject.Model.Image;
-using System.Linq;
-using InitialProject.Resources.Observer;
-using System.Configuration;
-using System.Diagnostics.Metrics;
-using System.Collections.Generic;
 
 namespace InitialProject.View.Guide
 {
@@ -30,8 +23,7 @@ namespace InitialProject.View.Guide
 
         private ObservableCollection<int> ImageIds;
         private ObservableCollection<int> CheckpointIds;
-        private readonly User LoggedInUser;
-
+        private User LoggedInUser;
         public ObservableCollection<Checkpoint> MiddleCheckpoints { get; set; }
         public ObservableCollection<string> ImageUrls { get; set; }
         public ObservableCollection<DateTime> DateTimes { get; set; }
@@ -199,28 +191,36 @@ namespace InitialProject.View.Guide
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-        public CreateTour(User user, TourRepository _tourRepository, LocationRepository locationRepository, ImageRepository imageRepository, CheckpointRepository checkpointRepository)
+        public CreateTour(User user, TourRepository tourRepository, LocationRepository locationRepository, ImageRepository imageRepository, CheckpointRepository checkpointRepository)
         {
             InitializeComponent();
             DataContext = this;
 
-            _repository = _tourRepository;
+            _repository = tourRepository;
             _locationRepository = locationRepository;
-            _imageRepository =  imageRepository;
+            _imageRepository = imageRepository;
             _checkpointRepository = checkpointRepository;
 
-             ImageIds = new ObservableCollection<int>();
-             CheckpointIds = new ObservableCollection<int>();
-             MiddleCheckpoints = new ObservableCollection<Checkpoint>();
-             ImageUrls = new ObservableCollection<string>();
-             DateTimes = new ObservableCollection<DateTime>();
+            LoggedInUser = user;
+            OrderCounter = 1;
 
+            InitializeCollections();
+            InitializeComboBoxes();
+            InitializeCountryDropdown();
+            DisableCheckpointButtons();
+        }
+        private void InitializeCollections()
+        {
+            ImageIds = new ObservableCollection<int>();
+            CheckpointIds = new ObservableCollection<int>();
+            MiddleCheckpoints = new ObservableCollection<Checkpoint>();
+            ImageUrls = new ObservableCollection<string>();
+            DateTimes = new ObservableCollection<DateTime>();
             StartCheckpoint = null;
             EndCheckpoint = null;
-
-            LoggedInUser = user;
-
+        }
+        private void InitializeComboBoxes()
+        {
             for (int i = 0; i < 24; i++)
             {
                 string hour = i.ToString("D2");
@@ -231,17 +231,20 @@ namespace InitialProject.View.Guide
                 string minute = i.ToString("D2");
                 Minutes_cb.Items.Add(minute);
             }
+        }
+
+        private void InitializeCountryDropdown()
+        {
             foreach (var country in _locationRepository.GetCountries().OrderBy(c => c))
             {
                 cbCountry.Items.Add(country);
             }
-
-            OrderCounter = 1;
+        }
+        private void DisableCheckpointButtons()
+        {
             AddFinalCheckpointButton.IsEnabled = false;
-
             AddMiddleCheckpointButton.IsEnabled = false;
         }
-
         private void btnCreateTour_Click(object sender, RoutedEventArgs e)
         {
             if (!IsValid)
@@ -286,7 +289,6 @@ namespace InitialProject.View.Guide
 
             Close();
         }
-
         private void SaveTour()
         {
             List<int> imageIds = SaveImages();
@@ -294,13 +296,23 @@ namespace InitialProject.View.Guide
 
             foreach (DateTime dateTime in DateTimes)
             {
-                Tour tour = new Tour(TourName, TourLocation.Id, Description, TourLanguage, int.Parse(MaxGuests), 0, dateTime, double.Parse(Duration), LoggedInUser.Id, new ObservableCollection<int>(imageIds), new ObservableCollection<int>(checkpointIds)); ;
+                Tour tour = new Tour(TourName,
+                    TourLocation.Id,
+                    Description, 
+                    TourLanguage, 
+                    int.Parse(MaxGuests), 
+                    0, 
+                    dateTime,
+                    double.Parse(Duration), 
+                    LoggedInUser.Id,
+                    new ObservableCollection<int>(imageIds),
+                    new ObservableCollection<int>(checkpointIds)); 
+
                 tour = _repository.Save(tour);
 
                 UpdateCheckpointsTourId(tour.Id);
             }
         }
-
         private List<int> SaveImages()
         {
             List<int> imageIds = new List<int>();
@@ -310,7 +322,6 @@ namespace InitialProject.View.Guide
             }
             return imageIds;
         }
-
         private List<int> SaveCheckpoints()
         {
             List<int> checkpointIds = new List<int>();
@@ -322,7 +333,6 @@ namespace InitialProject.View.Guide
             checkpointIds.Add(_checkpointRepository.Save(EndCheckpoint).Id);
             return checkpointIds;
         }
-
         private void UpdateCheckpointsTourId(int tourId)
         {
             StartCheckpoint.TourId = tourId;
@@ -337,17 +347,14 @@ namespace InitialProject.View.Guide
             EndCheckpoint.TourId = tourId;
             _checkpointRepository.Update(EndCheckpoint);
         }
-
         private void Hours_cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Hours = ((ComboBox)sender).SelectedItem.ToString();
         }
-
         private void Minutes_cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Minutes = ((ComboBox)sender).SelectedItem.ToString();
         }
-
         private void AddImageButton_Click(object sender, RoutedEventArgs e)
         {
             string imageUrl = UrlTextBox.Text;
@@ -357,7 +364,6 @@ namespace InitialProject.View.Guide
             }
             UrlTextBox.Text = string.Empty;
         }
-
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             Close();
@@ -367,14 +373,10 @@ namespace InitialProject.View.Guide
             if (string.IsNullOrEmpty(StartingCheckpointName.Text))
                 return;
 
-            StartCheckpoint = new Checkpoint(StartingCheckpointName.Text, 1, false, NO_TOUR_ASSIGNED);
+            StartCheckpoint = CreateCheckpoint(StartingCheckpointName.Text, 1);
 
-            AddStartingCheckpointButton.IsEnabled = false;
-            AddFinalCheckpointButton.IsEnabled = true;
-            AddMiddleCheckpointButton.IsEnabled = false;
-
-            StartingCheckpointName.IsEnabled = false;
-            FinalCheckpointName.IsEnabled = true;
+            SetCheckpointButtonsState(false, true, false);
+            SetCheckpointInputsState(false, true);
 
             StartingCheckpointName.Text = string.Empty;
         }
@@ -384,14 +386,10 @@ namespace InitialProject.View.Guide
             if (string.IsNullOrEmpty(FinalCheckpointName.Text))
                 return;
 
-            EndCheckpoint = new Checkpoint(FinalCheckpointName.Text, 2, false, NO_TOUR_ASSIGNED);
+            EndCheckpoint = CreateCheckpoint(FinalCheckpointName.Text, 2);
 
-            AddStartingCheckpointButton.IsEnabled = false;
-            AddFinalCheckpointButton.IsEnabled = false;
-            AddMiddleCheckpointButton.IsEnabled = true;
-
-            FinalCheckpointName.IsEnabled = true;
-            MiddleCheckpointName.IsEnabled = true;
+            SetCheckpointButtonsState(false, false, true);
+            SetCheckpointInputsState(true, true);
 
             FinalCheckpointName.Text = string.Empty;
         }
@@ -401,7 +399,7 @@ namespace InitialProject.View.Guide
             if (string.IsNullOrEmpty(MiddleCheckpointName.Text))
                 return;
 
-            Checkpoint checkpoint = new Checkpoint(MiddleCheckpointName.Text, ++OrderCounter, false, NO_TOUR_ASSIGNED);
+            Checkpoint checkpoint = CreateCheckpoint(MiddleCheckpointName.Text, ++OrderCounter);
             MiddleCheckpoints.Add(checkpoint);
 
             EndCheckpoint.Order = MiddleCheckpoints.Count() + 2;
@@ -409,62 +407,96 @@ namespace InitialProject.View.Guide
 
             MiddleCheckpointName.Text = string.Empty;
 
-            AddStartingCheckpointButton.IsEnabled = false;
-            AddFinalCheckpointButton.IsEnabled = false;
+            SetCheckpointButtonsState(false, false, false);
+        }
+
+        private Checkpoint CreateCheckpoint(string name, int order)
+        {
+            return new Checkpoint(name, order, false, NO_TOUR_ASSIGNED);
+        }
+        private void SetCheckpointButtonsState(bool starting, bool final, bool middle)
+        {
+            AddStartingCheckpointButton.IsEnabled = starting;
+            AddFinalCheckpointButton.IsEnabled = final;
+            AddMiddleCheckpointButton.IsEnabled = middle;
+        }
+        private void SetCheckpointInputsState(bool starting, bool middle)
+        {
+            StartingCheckpointName.IsEnabled = starting;
+            FinalCheckpointName.IsEnabled = true;
+            MiddleCheckpointName.IsEnabled = middle;
         }
 
         private void CbCountry_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (cbCountry.SelectedItem != null && _locationRepository != null)
             {
-                if(cbCity.Items != null) 
-                {
-                    cbCity.Items.Clear();
-                }
-
-                cbCity.IsEnabled = true;
-                foreach (string city in _locationRepository.GetCities(cbCountry.SelectedItem.ToString()).OrderBy(c => c))
-                {
-                    cbCity.Items.Add(city);
-                }
-
+                ClearCityItems();
+                EnableCitySelection();
+                LoadCitiesForSelectedCountry();
             }
         }
-
+        private void ClearCityItems()
+        {
+            if (cbCity.Items != null)
+            {
+                cbCity.Items.Clear();
+            }
+        }
+        private void EnableCitySelection()
+        {
+            cbCity.IsEnabled = true;
+        }
+        private void LoadCitiesForSelectedCountry()
+        {
+            foreach (string city in _locationRepository.GetCities(cbCountry.SelectedItem.ToString()).OrderBy(c => c))
+            {
+                cbCity.Items.Add(city);
+            }
+        }
         private void CbCity_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (cbCountry.SelectedItem != null && cbCity.SelectedItem != null)
             {
-                Country = cbCountry.SelectedItem.ToString();
-                City = cbCity.SelectedItem.ToString();
+                UpdateCountryAndCity();
             }
         }
-
+        private void UpdateCountryAndCity()
+        {
+            Country = cbCountry.SelectedItem.ToString();
+            City = cbCity.SelectedItem.ToString();
+        }
         private void addDateButton_Click(object sender, RoutedEventArgs e)
         {
-            DateTime selectedDate = dpDate.SelectedDate.GetValueOrDefault();
-
-            if (selectedDate == null || Hours == null || Minutes == null)
+            if (IsDateTimeInputValid())
             {
-                ShowInvalidDateTimeWarning();
+                DateTime selectedDateTime = GetSelectedDateTime();
+                DateTimes.Add(selectedDateTime);
                 return;
-            }
-
-            selectedDate = new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, int.Parse(Hours), int.Parse(Minutes), 0);
-
-            if (selectedDate < DateTime.Now)
-            {
-                ShowInvalidDateTimeWarning();
-                return;
-            }
-            else
-            {
-                DateTimes.Add(selectedDate);
-            }
+            }             
+            
+            ShowInvalidDateTimeWarning();
         }
+        private bool IsDateTimeInputValid()
+        {
+            if (dpDate.SelectedDate == null || Hours == null || Minutes == null)
+            {
+                return false;
+            }
 
+            DateTime selectedDate = dpDate.SelectedDate.GetValueOrDefault();
+            DateTime selectedDateTime = new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, int.Parse(Hours), int.Parse(Minutes), 0);
+
+            return selectedDateTime >= DateTime.Now;
+        }
+        private DateTime GetSelectedDateTime()
+        {
+            DateTime selectedDate = dpDate.SelectedDate.GetValueOrDefault();
+            DateTime selectedDateTime = new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, int.Parse(Hours), int.Parse(Minutes), 0);
+
+            return selectedDateTime;
+        }
         public string Error => null;
-
         public string this[string columnName]
         {
             get
@@ -516,9 +548,8 @@ namespace InitialProject.View.Guide
                 return null;
             }
         }
-        
+    
         private readonly string[] _validatedProperties = { "TourName", "Description", "TourLanguage", "MaxGuests", "Duration" };
-
         public bool IsValid
         {
             get
@@ -532,17 +563,14 @@ namespace InitialProject.View.Guide
                 return true;
             }
         }
-
         private void ShowInvalidInfoWarning()
         {
             MessageBox.Show("Please enter valid information.", "Info warning", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
-
         private void ShowImageWarning()
         {
             MessageBox.Show("Please enter at least one image.", "Image warning", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
-
         private void ShowNoDateTimeWarning()
         {
             MessageBox.Show("Please enter at least one date and time.", "Date and time warning", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -555,12 +583,10 @@ namespace InitialProject.View.Guide
         {
             MessageBox.Show("Please enter the starting checkpoint.", "Start checkpoint warning", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
-
         private void ShowEndCheckpointWarning()
         {
             MessageBox.Show("Please enter the ending checkpoint.", "End checkpoint warning", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
-
         private void ShowLocationWarning()
         {
             MessageBox.Show("Please enter the location.", "Location warning", MessageBoxButton.OK, MessageBoxImage.Warning);
