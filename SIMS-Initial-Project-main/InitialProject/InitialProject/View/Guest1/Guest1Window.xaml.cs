@@ -177,7 +177,7 @@ namespace InitialProject.View.Guest1
 
         private bool MatchesQuery(Accommodation accommodation, string query, string selectedSearchParam, ObservableCollection<Location> filteredLocations)
         {
-            if (accommodation.Name.ToLower().Contains(query))
+            if (accommodation.Name.ToLower().Replace(" ", "").Contains(query))
             {
                 return true;
             }
