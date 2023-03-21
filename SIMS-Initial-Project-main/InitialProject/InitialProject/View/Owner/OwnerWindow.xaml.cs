@@ -3,7 +3,6 @@ using InitialProject.Model.DTO;
 using InitialProject.Repository;
 using InitialProject.Resources.Observer;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -24,6 +23,7 @@ namespace InitialProject.View.Owner
         public GuestReview SelectedGuestReview { get; set; }
         public ObservableCollection<GuestReviewDTO> UnreviewedGuests { get; set; }
         public GuestReviewDTO SelectedUnreviewedGuest { get; set; }
+        public ObservableCollection<AccommodationReservation> UnreviewedReservations { get; set; }
 
         private AccommodationRepository _repository;
         private readonly LocationRepository _locationRepository;
@@ -51,14 +51,13 @@ namespace InitialProject.View.Owner
             _userRepository = new UserRepository();
             _userRepository.Subscribe(this);
 
-            FormAccommodations();
+            InitializeAccommodations();
 
             CheckForEligibleReviews();
         }
 
         public void FormAccommodations()
         {
-            Accommodations = new ObservableCollection<Accommodation>();
             foreach (Accommodation accommodation in _repository.GetAll())
             {
                 if (accommodation.OwnerId == LoggedInUser.Id)
@@ -68,13 +67,8 @@ namespace InitialProject.View.Owner
             }
         }
 
-        public ObservableCollection<AccommodationReservation> UnreviewedReservations { get; set; }
-        public void CheckForEligibleReviews()
+        public void FormUnreviewedGuests()
         {
-            UnreviewedGuests = new ObservableCollection<GuestReviewDTO>();
-            UnreviewedReservations = new ObservableCollection<AccommodationReservation>();
-            bool UnreviewedGuestExists = false;
-
             foreach (AccommodationReservation reservation in _reservationRepository.GetAll())
             {
                 if (LessThanFiveDaysPassed(reservation) && !GuestReviewed(reservation))
@@ -83,14 +77,27 @@ namespace InitialProject.View.Owner
                     {
                         UnreviewedGuests.Add(new GuestReviewDTO(reservation.Id, _userRepository.GetById(reservation.GuestId).Username, _repository.GetById(reservation.AccommodationId).Name));
                         UnreviewedReservations.Add(reservation);
-                        UnreviewedGuestExists = true;
                     }
                 }
             }
+        }
 
-            if (UnreviewedGuestExists)
+        public void InitializeAccommodations()
+        {
+            Accommodations = new ObservableCollection<Accommodation>();
+            FormAccommodations();
+        }
+
+        
+        public void CheckForEligibleReviews()
+        {
+            UnreviewedGuests = new ObservableCollection<GuestReviewDTO>();
+            UnreviewedReservations = new ObservableCollection<AccommodationReservation>();
+            FormUnreviewedGuests();
+
+            if (UnreviewedGuests.Count != 0)
             {
-                MessageBox.Show("You have unreviewed guests!", "Guest Review");
+                MessageBox.Show("You have unreviewed guests!", "Guest Review", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
@@ -119,9 +126,7 @@ namespace InitialProject.View.Owner
                 string Caption = "Delete Accommodation";
                 MessageBoxButton Button = MessageBoxButton.YesNo;
                 MessageBoxImage Icon = MessageBoxImage.Warning;
-                MessageBoxResult Result;
-
-                Result = MessageBox.Show(MessageBoxText, Caption, Button, Icon, MessageBoxResult.Yes);
+                MessageBox.Show(MessageBoxText, Caption, Button, Icon, MessageBoxResult.Yes);
             }
         }
 
@@ -150,26 +155,10 @@ namespace InitialProject.View.Owner
         void IObserver.Update()
         {
             Accommodations.Clear();
-            foreach (Accommodation accommodation in _repository.GetAll())
-            {
-                if (accommodation.OwnerId == LoggedInUser.Id)
-                {
-                    Accommodations.Add(accommodation);
-                }
-            }
+            FormAccommodations();
 
             UnreviewedGuests.Clear();
-            foreach (AccommodationReservation reservation in _reservationRepository.GetAll())
-            {
-                if (LessThanFiveDaysPassed(reservation) && !GuestReviewed(reservation))
-                {
-                    if (Accommodations.Any(item => item.Id == reservation.AccommodationId))
-                    {
-                        UnreviewedGuests.Add(new GuestReviewDTO(reservation.Id, _userRepository.GetById(reservation.GuestId).Username, _repository.GetById(reservation.AccommodationId).Name));
-                        UnreviewedReservations.Add(reservation);
-                    }
-                }
-            }
+            FormUnreviewedGuests();
         }
     }
 }

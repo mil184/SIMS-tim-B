@@ -1,11 +1,7 @@
 ﻿using InitialProject.Model;
 using InitialProject.Model.DTO;
 using InitialProject.Repository;
-using InitialProject.Resources.Enums;
-using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics.Metrics;
 using System.Runtime.CompilerServices;
 using System.Windows;
 
@@ -103,7 +99,7 @@ namespace InitialProject.View.Owner
             }
             else
             {
-                MessageBox.Show("Cannot Review Guest", "Invalid Data");
+                MessageBox.Show("Cannot Review Guest", "Invalid Data", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

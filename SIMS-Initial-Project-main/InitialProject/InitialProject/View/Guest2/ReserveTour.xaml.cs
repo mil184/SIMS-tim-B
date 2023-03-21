@@ -7,7 +7,7 @@ using System.Windows;
 
 namespace InitialProject.View.Guest2
 {
-    public partial class ReserveTour : Window
+    public partial class ReserveTour : Window, INotifyPropertyChanged
     {
         public User LoggedInUser { get; set; }
         public Guest2TourDTO SelectedTour { get; set; }

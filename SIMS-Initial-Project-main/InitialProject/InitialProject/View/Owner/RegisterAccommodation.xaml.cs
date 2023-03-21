@@ -154,14 +154,25 @@ namespace InitialProject.View.Owner
 
             LoggedInUser = user;
 
+            InitializeCountries();
+
+            InitializeAccommodationType_cb();
+        }
+
+        private void InitializeAccommodationType_cb()
+        {
+            AccommodationType_cb.Items.Add("Apartment");
+            AccommodationType_cb.Items.Add("House");
+            AccommodationType_cb.Items.Add("Hut");
+            AccommodationType_cb.SelectedIndex = 0;
+        }
+
+        private void InitializeCountries()
+        {
             foreach (var country in _locationRepository.GetCountries())
             {
                 cbCountry.Items.Add(country);
             }
-
-            AccommodationType_cb.Items.Add("Apartment");
-            AccommodationType_cb.Items.Add("House");
-            AccommodationType_cb.Items.Add("Hut");
         }
 
         private void btnRegisterAccommodation_Click(object sender, RoutedEventArgs e)
@@ -175,7 +186,7 @@ namespace InitialProject.View.Owner
             }
             else
             {
-                MessageBox.Show("Cannot Register Accommodation", "Invalid Data");
+                MessageBox.Show("Cannot Register Accommodation", "Invalid Data", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

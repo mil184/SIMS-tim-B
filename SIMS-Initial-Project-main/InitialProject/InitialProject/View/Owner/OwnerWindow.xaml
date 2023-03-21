@@ -18,7 +18,7 @@
             <Image Source="/Resources/Images/owner.png" Width="100" Height="75" Margin="0 0 10 0" />
             <StackPanel>
                 <TextBlock FontSize="18" FontWeight="Bold" Text="Accommodation Owner" Margin="0 0 0 10"/>
-                <TextBlock FontSize="14" Text="{Binding LoggedInUser.Username, FallbackValue=BidningNotWorking}"/>
+                <TextBlock FontSize="14" Text="{Binding LoggedInUser.Username, FallbackValue=BindingNotWorking}"/>
                 <Button Content="Log Out" Margin="0 10 0 0" Width="50" Click="LogOut_Click" HorizontalAlignment="Left"/>
             </StackPanel>
         </StackPanel>
@@ -39,7 +39,9 @@
                                   Width="700" Height="200">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"></DataGridTextColumn>
-                                <DataGridTextColumn Header="City" Binding="{Binding LocationId}" Width="*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Max Guests" Binding="{Binding MaxGuests}" Width="*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Min Reservation Days" Binding="{Binding MinReservationDays}" Width="*"></DataGridTextColumn>
                             </DataGrid.Columns>
                         </DataGrid>
                     </StackPanel>
