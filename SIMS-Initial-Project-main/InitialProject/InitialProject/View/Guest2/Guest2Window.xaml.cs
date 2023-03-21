@@ -189,7 +189,7 @@ namespace InitialProject.View.Guest2
 
                 foreach (Tour tour in Tours)
                 {
-                    if (tour.Name.ToLower().Contains(Query))
+                    if (tour.Name.ToLower().Replace(" ", "").Contains(Query))
                     {
                         FilteredTours.Add(tour);
                     }
@@ -197,7 +197,7 @@ namespace InitialProject.View.Guest2
                     {
                         FilteredTours.Add(tour);
                     }
-                    else if (tour.Language.ToString().ToLower().Contains(Query))
+                    else if (tour.Language.ToString().ToLower().Replace(" ", "").Contains(Query))
                     {
                         FilteredTours.Add(tour);
                     }
@@ -251,7 +251,7 @@ namespace InitialProject.View.Guest2
             foreach (Tour tour in tours)
             {
                 Location location = _locationRepository.GetById(tour.LocationId);
-                if (location.Country.ToLower().Contains(query) || location.City.ToLower().Contains(query))
+                if (location.Country.ToLower().Replace(" ", "").Contains(query) || location.City.ToLower().Replace(" ", "").Contains(query))
                 {
                     FilteredLocations.Add(location);
                 }
