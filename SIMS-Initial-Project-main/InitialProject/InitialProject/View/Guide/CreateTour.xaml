@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InitialProject.View.Guide"
         mc:Ignorable="d"
-        Title="DMJM-Tours" Height="800" Width="550"
+        Title="DMJM-Tours" Height="850" Width="520"
         Icon ="/Resources/Images/favicon.ico">
     <Window.Resources>
         <ControlTemplate x:Key="ValidationErrorTemplate">
@@ -20,7 +20,7 @@
             <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ValidationErrorTemplate}" />
         </Style>
     </Window.Resources>
-    <Grid Margin="0,0,0,-187">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -56,7 +56,7 @@
 
                 <TextBlock Text="Tour Description:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" />
                 <TextBox Name="txtTourDescription" Margin="5" Height="100" Text="{Binding Path=Description, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Grid.Row="1" Grid.Column="1" 
-                         HorizontalAlignment="Left" Width="200"/>
+                         HorizontalAlignment="Left" Width="200" TextWrapping="Wrap"/>
 
                 <TextBlock Text="Country:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" />
                 <ComboBox Name="cbCountry" Margin="5" SelectionChanged="CbCountry_SelectionChanged" Grid.Row="2" Grid.Column="1"
@@ -99,7 +99,15 @@
                     <Button Name="AddButton" Content="Add" Margin="5" VerticalAlignment="Center" Click="addDateButton_Click"/>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" Grid.Row="8" Grid.Column="1">
-                    <ListBox Name="SelectedTimesListBox" Grid.Row="8" ItemsSource="{Binding DateTimes}"/>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ListBox Name="SelectedTimesListBox" Grid.Row="8" ItemsSource="{Binding DateTimes}" Height="60">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding StringFormat={}{0:dd.MM.yyyy. HH:mm}}" />
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </ScrollViewer>
                 </StackPanel>
             </Grid>
         </GroupBox>
@@ -117,7 +125,7 @@
                     <TextBox x:Name="UrlTextBox" Width="200" Margin="5" Grid.Row="0" Grid.Column="0" />
                     <Button Name="AddImageButton" Content="Add" Margin="5" Grid.Row="0" Grid.Column="1" Click="AddImageButton_Click" />
                 </Grid>
-                <ListBox x:Name="UrlListBox" Width="Auto" Height="Auto" Margin="5" ItemsSource="{Binding ImageUrls}" />
+                <ListBox x:Name="UrlListBox" Width="Auto" Height="60" Margin="5" ItemsSource="{Binding ImageUrls}" ScrollViewer.VerticalScrollBarVisibility="Visible" />
             </StackPanel>
         </GroupBox>
         <Grid Grid.Row="2">
