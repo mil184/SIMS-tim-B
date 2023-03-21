@@ -236,5 +236,12 @@ namespace InitialProject.View.Guest2
             ShowTour showTour = new ShowTour(SelectedGuest2TourDTO);
             showTour.Show();
         }
+
+        private void LogOut_Click(object sender, RoutedEventArgs e)
+        {
+            SignInForm signInForm = new SignInForm();
+            signInForm.Show();
+            Close();
+        }
     }
 }

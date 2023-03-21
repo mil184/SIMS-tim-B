@@ -65,7 +65,12 @@ namespace InitialProject.Repository
             return _tours.Find(c => c.Id == id);
         }
 
-        
+        public List<Tour> RemoveById(List<Tour> tours, int id)
+        {
+            List<Tour> toursRemoved = tours;
+            toursRemoved.RemoveAll(t => t.Id == id);
+            return toursRemoved;
+        }
 
         public List<Tour> GetAll()
         {

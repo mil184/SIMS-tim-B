@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InitialProject.View.Guest2"
         mc:Ignorable="d"
-        Title="Guest2Window" Height="450" Width="800">
+        Title="DMJM-Tours" Height="450" Width="800"
+        Icon ="/Resources/Images/favicon.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -18,6 +19,7 @@
             <StackPanel>
                 <TextBlock FontSize="18" FontWeight="Bold" Text="Guest 2" Margin="0 0 0 10"/>
                 <TextBlock FontSize="14" Text="{Binding LoggedInUser.Username, FallbackValue=BindingNotWorking}"/>
+                <Button Content="Log Out" Margin="0 10 0 0" Width="50" Click="LogOut_Click" HorizontalAlignment="Left"/>
             </StackPanel>
         </StackPanel>
 
