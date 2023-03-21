@@ -56,6 +56,7 @@ namespace InitialProject.Repository
             _tours.Remove(current);
             _tours.Insert(index, tour);       // keep ascending order of ids in file 
             _serializer.ToCSV(_filePath, _tours);
+            NotifyObservers();
             return tour;
         }
         public Tour GetById(int id)
