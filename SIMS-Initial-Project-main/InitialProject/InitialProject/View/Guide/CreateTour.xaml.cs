@@ -407,7 +407,7 @@ namespace InitialProject.View.Guide
 
             MiddleCheckpointName.Text = string.Empty;
 
-            SetCheckpointButtonsState(false, false, false);
+            SetCheckpointButtonsState(false, false, true);
         }
 
         private Checkpoint CreateCheckpoint(string name, int order)

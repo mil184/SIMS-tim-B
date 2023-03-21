@@ -64,7 +64,7 @@ namespace InitialProject.View.Guide
             LoadUnmarkedGuests();
             LoadTourCheckpoints();
 
-            // Attach the Loaded event handler to the ListBox
+            // Attach the LOADED EVENT handler to the ListBox, this is becaue of the visuals bg color, border, checked
             listBox.Loaded += ListBox_Loaded;
         }
         private void InitializeCollections()
@@ -94,7 +94,6 @@ namespace InitialProject.View.Guide
                 Checkpoint checkpoint = _repository.GetById(id);
                 Checkpoints.Add(checkpoint);
             }
-
             Checkpoints.OrderBy(c => c.Order);
         }
         public UserDTO ConvertUserToDTO(User user) 
@@ -105,6 +104,10 @@ namespace InitialProject.View.Guide
                 _repository.GetById(_tourReservationRepository.GetReservationByGuestIdAndTourId(user.Id, SelectedTour.Id).CheckpointArrivalId).Name
                 );
         }
+        // This method is called when the ListBox is loaded into the user interface. It sets the VISUAL APPEARANCE of each ListBox item
+        // based on the current state of the application, including the currently selected checkpoint and the first checkpoint in the list.
+        // The method iterates through each ListBox item, gets the corresponding Checkpoint, CheckBox, and ListBoxItem controls, and calls 
+        // the SetCheckpointCheckboxAndBackground method to set the state of the CheckBox and the background color of the ListBoxItem.
         private void ListBox_Loaded(object sender, RoutedEventArgs e)
         {
             int currentCheckpointId = SelectedTour.CurrentCheckpointId;
