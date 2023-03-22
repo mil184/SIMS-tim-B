@@ -185,6 +185,12 @@ namespace InitialProject.View.Guest2
                 string Query = Text;
                 string selectedSearchParam = (searchParamComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
 
+                int integerNum;
+                double doubleNum;
+
+                bool isInt = int.TryParse(Query, out integerNum);
+                bool isDouble = double.TryParse(Query, out doubleNum);
+
                 ObservableCollection<Tour> FilteredTours = new ObservableCollection<Tour>();
                 ObservableCollection<Location> FilteredLocations = SearchLocations(Tours, Query);
 
@@ -202,11 +208,11 @@ namespace InitialProject.View.Guest2
                     {
                         FilteredTours.Add(tour);
                     }
-                    else if (tour.Duration == int.Parse(Query))
+                    else if (isDouble && tour.Duration == int.Parse(Query))
                     {
                         FilteredTours.Add(tour);
                     }
-                    else if (selectedSearchParam == "Max Guests" && tour.MaxGuests == int.Parse(Query))
+                    else if (isInt && selectedSearchParam == "Max Guests" && tour.MaxGuests == int.Parse(Query))
                     {
                         if (int.Parse(Query) > tour.MaxGuests)
                         {
@@ -217,7 +223,7 @@ namespace InitialProject.View.Guest2
                             FilteredTours.Add(tour);
                         }
                     }
-                    else if (selectedSearchParam == "Current Guest Count" && tour.CurrentGuestCount == int.Parse(Query))
+                    else if (isInt && selectedSearchParam == "Current Guest Count" && tour.CurrentGuestCount == int.Parse(Query))
                     {
                         if (int.Parse(Query) < tour.CurrentGuestCount)
                         {

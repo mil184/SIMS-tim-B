@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -177,6 +177,9 @@ namespace InitialProject.View.Guest1
 
         private bool MatchesQuery(Accommodation accommodation, string query, string selectedSearchParam, ObservableCollection<Location> filteredLocations)
         {
+            int intNum;
+            bool isInt = int.TryParse(query, out intNum);
+
             if (accommodation.Name.ToLower().Replace(" ", "").Contains(query))
             {
                 return true;
@@ -192,7 +195,7 @@ namespace InitialProject.View.Guest1
                 return true;
             }
 
-            if (selectedSearchParam == "MaxGuests" && accommodation.MaxGuests.ToString().Contains(query))
+            if (isInt && selectedSearchParam == "MaxGuests" && accommodation.MaxGuests == int.Parse(query))
             {
                 if (int.Parse(query) > accommodation.MaxGuests)
                 {
@@ -205,7 +208,7 @@ namespace InitialProject.View.Guest1
                 }
             }
 
-            if (selectedSearchParam == "MinReservationDays" && accommodation.MinReservationDays.ToString().Contains(query))
+            if (isInt && selectedSearchParam == "MinReservationDays" && accommodation.MinReservationDays == int.Parse(query))
             {
                 if (int.Parse(query) < accommodation.MinReservationDays)
                 {
