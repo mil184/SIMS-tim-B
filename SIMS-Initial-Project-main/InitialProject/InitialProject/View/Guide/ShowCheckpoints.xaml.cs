@@ -98,10 +98,20 @@ namespace InitialProject.View.Guide
         }
         public UserDTO ConvertUserToDTO(User user) 
         {
+            int checkpointId = _tourReservationRepository.GetReservationByGuestIdAndTourId(user.Id, SelectedTour.Id).CheckpointArrivalId;
+            String checkpointName;
+            if(checkpointId == -1) 
+            {
+                checkpointName = "Not Arrived Yet";
+            }
+            else 
+            {
+                checkpointName = _repository.GetById(_tourReservationRepository.GetReservationByGuestIdAndTourId(user.Id, SelectedTour.Id).CheckpointArrivalId).Name;
+            }
             return new UserDTO(
                 user.Id,
                 user.Username,
-                _repository.GetById(_tourReservationRepository.GetReservationByGuestIdAndTourId(user.Id, SelectedTour.Id).CheckpointArrivalId).Name
+                checkpointName
                 );
         }
         // This method is called when the ListBox is loaded into the user interface. It sets the VISUAL APPEARANCE of each ListBox item
