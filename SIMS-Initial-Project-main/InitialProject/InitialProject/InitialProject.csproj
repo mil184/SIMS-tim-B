@@ -15,10 +15,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Fonts\Pacifico-Regular.ttf" />
     <None Remove="Resources\Images\add.png" />
     <None Remove="Resources\Images\delete.png" />
     <None Remove="Resources\Images\edit.png" />
     <None Remove="Resources\Images\favicon.ico" />
+    <None Remove="Resources\Images\gorana.jpg" />
     <None Remove="Resources\Images\guest.png" />
     <None Remove="Resources\Images\guest2.png" />
     <None Remove="Resources\Images\home.png" />
@@ -41,7 +43,13 @@
     <Content Include="Resources\Images\home.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Fonts\Pacifico-Regular.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Images\favicon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\gorana.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\guest.png" />

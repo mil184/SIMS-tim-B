@@ -12,6 +12,8 @@ namespace InitialProject.Model.DTO
         public string Name { get; set; }
         public string Country { get; set; }
         public string City { get; set; }
+
+        public string Location { get; set; }
         public DateTime StartTime { get; set; }
 
         public GuideTourDTO()
@@ -25,6 +27,7 @@ namespace InitialProject.Model.DTO
             Country = country;
             City = city;
             StartTime = startTime;
+            Location = city + ", " + country;
         }
     }
 }

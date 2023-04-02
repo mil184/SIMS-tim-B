@@ -69,6 +69,8 @@ namespace InitialProject.View.Guide
             FindActiveTour();
             SortUpcomingTours();
 
+            CurrentUser.Username = "Gorana";
+
         }
         private void InitializeCollections()
         {
