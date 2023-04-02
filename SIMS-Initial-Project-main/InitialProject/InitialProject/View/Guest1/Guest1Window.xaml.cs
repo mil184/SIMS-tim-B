@@ -31,6 +31,10 @@ namespace InitialProject.View.Guest1
         public ObservableCollection<Accommodation> AllAccommodations { get; set; }
         public ObservableCollection<GuestAccommodationDTO> PresentableAccommodations { get; set; }
 
+        public ObservableCollection<Location> Locations;
+        public GuestAccommodationDTO SelectedAccommodation { get; set; }
+
+
         private readonly AccommodationRepository _accommodationRepository;
 
         private readonly LocationRepository _locationRepository;
@@ -39,10 +43,9 @@ namespace InitialProject.View.Guest1
 
         private readonly ImageRepository _imageRepository;
 
-        private AccommodationReservationRepository _accommodationReservationRepository;
+        private readonly AccommodationReservationRepository _accommodationReservationRepository;
 
-        public ObservableCollection<Location> Locations;
-        public GuestAccommodationDTO SelectedAccommodation { get; set; }
+        private readonly AccommodationRatingsRepository _accommodationRatingsRepository;
 
 
         private string searchText;
@@ -85,8 +88,14 @@ namespace InitialProject.View.Guest1
             _locationRepository = new LocationRepository();
             _locationRepository.Subscribe(this);
 
+            _userRepository = new UserRepository();
+            _userRepository.Subscribe(this);
+
             _imageRepository = new ImageRepository();
             _imageRepository.Subscribe(this);
+
+            _accommodationRatingsRepository = new AccommodationRatingsRepository();
+            _accommodationRatingsRepository.Subscribe(this);
 
             AllAccommodations = new ObservableCollection<Accommodation>(_accommodationRepository.GetAll());
             PresentableAccommodations = ConvertToDTO(AllAccommodations);
@@ -280,6 +289,16 @@ namespace InitialProject.View.Guest1
         {
             SignInForm signInForm = new SignInForm();
             signInForm.Show();
+            Close();
+        }
+
+        private void Evaluate_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void Cancel_Click(object sender, RoutedEventArgs e)
+        {
             Close();
         }
     }
