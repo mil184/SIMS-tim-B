@@ -5,8 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InitialProject.View.Guide"
         mc:Ignorable="d"
-        WindowState="Maximized"
-        Title="DMJM-Tours" Height="600" Width="800"
+        Title="DMJM-Tours" Height="768" Width="1024"
         Icon ="/Resources/Images/favicon.ico">
     <Grid>
         <Grid.RowDefinitions>
@@ -15,43 +14,70 @@
         </Grid.RowDefinitions>
 
         <!-- User information section -->
-        <Grid Grid.Row="0" Margin="10">
+        <Grid Grid.Row="0" Margin="10" Height="Auto">
+            
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Image Source="/Resources/Images/tour-guide.png" Width="100" Height="75" Margin="0 0 10 0" />
-            <StackPanel Grid.Column="1">
-                <TextBlock FontSize="18" FontWeight="Bold" Text="Tour Guide" Margin="0 0 0 10"/>
-                <TextBlock FontSize="14" Text="{Binding CurrentUser.Username, FallbackValue=BidningNotWorking}"/>
-                <Button Content="Log Out" Margin="0 10 0 0" Width="50" Click="LogOut_Click" HorizontalAlignment="Left"/>
+
+            <!-- App logo and title -->
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <Image Source="/Resources/Images/favicon.ico" Width="100" Height="100" Margin="0 0 10 0" />
+                <TextBlock FontSize="40" FontWeight="Bold" FontFamily="Roboto" Text="DMJM Tours" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </StackPanel>
-            <StackPanel Grid.Column="2">
-                <StackPanel Orientation="Horizontal" Margin="10 0">
+
+            <!-- Info texts -->
+            <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" Margin="10">
+                <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
                     <Image Source="/Resources/Images/info.png" Width="20" Height="20" Margin="0 0 5 0"/>
-                    <TextBlock Text="To start a tour, double click on one of today's tours" Margin="0" FontSize="14" FontWeight="Bold"/>
+                    <TextBlock FontSize="17" FontStyle="Italic" Text="Navigate Through Tabs With" VerticalAlignment="Center"/>
                 </StackPanel>
-                <GroupBox Margin="10" Header="Active Tour"  BorderBrush="Blue" BorderThickness="4">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <TextBlock FontSize="14" Text="{Binding ActiveTour.Name,UpdateSourceTrigger=PropertyChanged}" Margin="10 10"/>
-                        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10">
-                            <TextBlock FontSize="14" Text="{Binding ActiveTour.City,UpdateSourceTrigger=PropertyChanged}" Margin="0 0 5 0"/>
-                            <TextBlock FontSize="14" Text="{Binding ActiveTour.Country,UpdateSourceTrigger=PropertyChanged}" Margin="0"/>
-                        </StackPanel>
-                    </Grid>
-                </GroupBox>
+                <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
+                    <Image Source="/Resources/Images/info.png" Width="20" Height="20" Margin="0 0 5 0"/>
+                    <TextBlock FontSize="17" FontStyle="Italic" Text="Select The Grid With CTRL + L" VerticalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
+                    <Image Source="/Resources/Images/info.png" Width="20" Height="20" Margin="0 0 5 0"/>
+                    <TextBlock FontSize="17" FontStyle="Italic" Text="Navigate Through Data With " VerticalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Resources/Images/info.png" Width="20" Height="20" Margin="0 0 5 0"/>
+                    <TextBlock FontSize="17" FontStyle="Italic" Text="To Start The Demo, press CTRL + D" VerticalAlignment="Center"/>
+                </StackPanel>
             </StackPanel>
+
+            <!-- User info and buttons -->
+            <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                <Border BorderBrush="Black" BorderThickness="3,0,0,0" Margin="0,0,10,0">
+                    <Grid Width="120" Height="Auto" Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Ellipse Width="90" Height="90" Fill="Blue" VerticalAlignment="Center" Margin="0 0 10 0"/>
+                    <TextBlock Grid.Row="1" FontSize="14" Text="{Binding CurrentUser.Username, FallbackValue=BidningNotWorking}" HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Row="2" FontSize="14" Text="Guide" HorizontalAlignment="Center" Margin="0 5 0 0"/>
+                </Grid>
+                </Border>
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="20 0 10 0">
+                    <Button Content="Resign(ALT + Q)" Width="145" Height="55" Margin="0 0 0 10"/>
+                    <Button Content="Log Out(ALT + F4)" Width="145" Height="55"/>
+                </StackPanel>
+            </StackPanel>
+
         </Grid>
 
+
         <!-- Tabs section -->
- <TabControl Grid.Row="1">
+    <TabControl Grid.Row="1">
             <!-- Tours tab -->
-            <TabItem Header="Tours">
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Today's Tours" FontSize="20" FontWeight="Bold"/>
+                </TabItem.Header>
                 <StackPanel Margin="10">
                     <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
                         <TextBlock FontSize="18" FontWeight="Bold" Text="Tours"/>
@@ -95,20 +121,48 @@
                 </StackPanel>
             </TabItem>
 
-            <!-- Statistics tab -->
-            <TabItem Header="Statistics">
+            <!-- Upcoming Tours tab -->
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Upcoming Tours" FontSize="20" FontWeight="Bold"/>
+                </TabItem.Header>
+                <StackPanel Margin="10">
+
+                </StackPanel>
+            </TabItem>
+            <!-- Tour Statistics tab -->
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Tour Statistics" FontSize="20" FontWeight="Bold"/>
+                </TabItem.Header>
+                <StackPanel Margin="10">
+
+                </StackPanel>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Requests" FontSize="20" FontWeight="Bold"/>
+                </TabItem.Header>
+                <StackPanel Margin="10">
+
+                </StackPanel>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Request Statistics" FontSize="20" FontWeight="Bold"/>
+                </TabItem.Header>
+                <StackPanel Margin="10">
+
+                </StackPanel>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Upcoming Tours" FontSize="20" FontWeight="Bold"/>
+                </TabItem.Header>
                 <StackPanel Margin="10">
                     <!-- Statistic section -->
                     <TextBlock FontSize="18" FontWeight="Bold" Text="Statistics" Margin="0 0 10 0"/>
                     <!-- Add statistic elements here -->
-                </StackPanel>
-            </TabItem>
-            <!-- Ratings tab -->
-            <TabItem Header="Ratings">
-                <StackPanel Margin="10">
-                    <!-- Rating section -->
-                    <TextBlock FontSize="18" FontWeight="Bold" Text="Ratings" Margin="0 0 10 0"/>
-                    <!-- Add rating elements here -->
                 </StackPanel>
             </TabItem>
         </TabControl>
