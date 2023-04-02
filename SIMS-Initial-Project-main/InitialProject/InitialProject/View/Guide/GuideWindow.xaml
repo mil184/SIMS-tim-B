@@ -27,10 +27,14 @@
             </Grid.ColumnDefinitions>
 
             <!-- App logo and title -->
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                <Image Source="/Resources/Images/favicon.ico" Width="60" Height="60" Margin="10 0 10 0" />
-                <TextBlock FontSize="40" FontWeight="Bold" Text="DMJM Tours" Foreground="#007ACC" FontFamily="pack://application:,,,/Fonts/#Pacifico" />
-            </StackPanel>
+            <Border BorderThickness="3" BorderBrush="#007ACC" CornerRadius="5" Margin="5">
+                <Grid>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Image Source="/Resources/Images/favicon.ico" Width="60" Height="60" Margin="10 0 5 0" />
+                        <TextBlock FontSize="39" FontWeight="Bold" Text="DMJM Tours" Foreground="#007ACC" FontFamily="pack://application:,,,/Fonts/#Pacifico" Margin="0 0 10 0"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
 
             <!-- User info and buttons -->
             <Border Grid.Column="2" BorderThickness="3" BorderBrush="#007ACC" CornerRadius="5" Margin="5">
@@ -72,28 +76,30 @@
                 </StackPanel>
             </Border>
             <!-- Info texts -->
+            <Border Grid.Column="1" BorderThickness="3" BorderBrush="#007ACC" CornerRadius="5" Margin="5">
             <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" Margin="10">
                 <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
                     <Image Source="/Resources/Images/info.png" Width="20" Height="20" Margin="0 0 5 0"/>
-                    <TextBlock FontSize="13" FontStyle="Italic" Text="Navigate Through Tabs With" VerticalAlignment="Center" Foreground="#007ACC"/>
-                    <TextBlock FontSize="14" FontStyle="Italic" Text=" Arrow Keys" VerticalAlignment="Center" Foreground="#FFA500"/>
+                    <TextBlock FontSize="12" FontStyle="Italic" Text="Navigate Through Tabs With" VerticalAlignment="Center" Foreground="#007ACC"/>
+                    <TextBlock FontSize="13" FontStyle="Italic" Text=" Arrow Keys" VerticalAlignment="Center" Foreground="#FFA500"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
                     <Image Source="/Resources/Images/info.png" Width="20" Height="20" Margin="0 0 5 0"/>
-                    <TextBlock FontSize="13" FontStyle="Italic" Text="Select The Grid With" VerticalAlignment="Center" Foreground="#007ACC"/>
-                    <TextBlock FontSize="14" FontStyle="Italic" Text=" CTRL + L" VerticalAlignment="Center" Foreground="#FFA500"/>
+                    <TextBlock FontSize="12" FontStyle="Italic" Text="Select The Grid With" VerticalAlignment="Center" Foreground="#007ACC"/>
+                    <TextBlock FontSize="13" FontStyle="Italic" Text=" CTRL + L" VerticalAlignment="Center" Foreground="#FFA500"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
                     <Image Source="/Resources/Images/info.png" Width="20" Height="20" Margin="0 0 5 0"/>
-                    <TextBlock FontSize="13" FontStyle="Italic" Text="Navigate Through Data With" VerticalAlignment="Center" Foreground="#007ACC"/>
-                    <TextBlock FontSize="14" FontStyle="Italic" Text=" Arrow Keys" VerticalAlignment="Center" Foreground="#FFA500"/>
+                    <TextBlock FontSize="12" FontStyle="Italic" Text="Navigate Through Data With" VerticalAlignment="Center" Foreground="#007ACC"/>
+                    <TextBlock FontSize="13" FontStyle="Italic" Text=" Arrow Keys" VerticalAlignment="Center" Foreground="#FFA500"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
                     <Image Source="/Resources/Images/info.png" Width="20" Height="20" Margin="0 0 5 0"/>
-                    <TextBlock FontSize="13" FontStyle="Italic" Text="To Start The Demo, Press" VerticalAlignment="Center" Foreground="#007ACC"/>
-                    <TextBlock FontSize="14" FontStyle="Italic" Text=" CTRL + D" VerticalAlignment="Center" Foreground="#FFA500"/>
+                    <TextBlock FontSize="12" FontStyle="Italic" Text="To Start The Demo, Press" VerticalAlignment="Center" Foreground="#007ACC"/>
+                    <TextBlock FontSize="13" FontStyle="Italic" Text=" CTRL + D" VerticalAlignment="Center" Foreground="#FFA500"/>
                 </StackPanel>
             </StackPanel>
+                </Border>
         </Grid>
 
 
