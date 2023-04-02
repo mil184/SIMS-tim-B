@@ -1,6 +1,7 @@
 ﻿using InitialProject.Model;
 using InitialProject.Model.DTO;
 using InitialProject.Repository;
+using InitialProject.Service;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -27,7 +28,7 @@ namespace InitialProject.View.Guest2
         }
 
         private readonly TourReservationRepository _tourReservationRepository;
-        private readonly TourRepository _tourRepository;
+        private readonly TourService _tourService;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -36,7 +37,7 @@ namespace InitialProject.View.Guest2
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public ReserveTour(Guest2TourDTO selectedTour, User user, TourRepository tourRepository)
+        public ReserveTour(Guest2TourDTO selectedTour, User user, TourService tourService)
         {
             InitializeComponent();
             DataContext = this;
@@ -45,13 +46,13 @@ namespace InitialProject.View.Guest2
             LoggedInUser = user;
 
             _tourReservationRepository = new TourReservationRepository();
-            _tourRepository = tourRepository;
+            _tourService = tourService;
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             Tour selectedTour = new Tour();
-            selectedTour = _tourRepository.GetById(SelectedTour.TourId);
+            selectedTour = _tourService.GetById(SelectedTour.TourId);
 
             int personCount = int.Parse(PersonCount);
             int spacesLeft = selectedTour.MaxGuests - selectedTour.CurrentGuestCount;
@@ -66,7 +67,7 @@ namespace InitialProject.View.Guest2
             else if (selectedTour.CurrentGuestCount == selectedTour.MaxGuests)
             {
                 ZeroSpacesForReservation zeroSpacesForReservation
-                    = new ZeroSpacesForReservation(SelectedTour, LoggedInUser, _tourRepository);
+                    = new ZeroSpacesForReservation(SelectedTour, LoggedInUser, _tourService);
                 zeroSpacesForReservation.ShowDialog();
                 Close();
             }
@@ -80,7 +81,7 @@ namespace InitialProject.View.Guest2
                 _tourReservationRepository.Save(tourReservation);
 
                 selectedTour.CurrentGuestCount += personCount;
-                _tourRepository.Update(selectedTour);
+                _tourService.Update(selectedTour);
                 
                 Close();
             }

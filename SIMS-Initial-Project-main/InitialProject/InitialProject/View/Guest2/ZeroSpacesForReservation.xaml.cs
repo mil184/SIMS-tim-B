@@ -2,6 +2,7 @@
 using InitialProject.Model.DTO;
 using InitialProject.Repository;
 using InitialProject.Resources.Observer;
+using InitialProject.Service;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -21,14 +22,14 @@ namespace InitialProject.View.Guest2
 
         public ObservableCollection<Guest2TourDTO> Tours { get; set; }
 
-        private readonly TourRepository _tourRepository;
+        private readonly TourService _tourService;
         private readonly LocationRepository _locationRepository;
         private readonly ImageRepository _imageRepository;
         private readonly CheckpointRepository _checkpointRepository;
         private readonly UserRepository _userRepository; 
         private readonly TourReservationRepository _tourReservationRepository; 
 
-        public ZeroSpacesForReservation(Guest2TourDTO selectedTour, User user, TourRepository tourRepository)
+        public ZeroSpacesForReservation(Guest2TourDTO selectedTour, User user, TourService tourService)
         {
             InitializeComponent();
             DataContext = this;
@@ -36,7 +37,7 @@ namespace InitialProject.View.Guest2
             SelectedTour = selectedTour;
             LoggedInUser = user;
 
-            _tourRepository = tourRepository;
+            _tourService = tourService;
 
             _tourReservationRepository = new TourReservationRepository();
             _tourReservationRepository.Subscribe(this);
@@ -53,8 +54,8 @@ namespace InitialProject.View.Guest2
             _userRepository = new UserRepository();
             _userRepository.Subscribe(this);
 
-            ToursByCity = _tourRepository.GetByCityName(selectedTour.City);
-            ToursByCityWithoutSelected = _tourRepository.RemoveById(ToursByCity, selectedTour.TourId);
+            ToursByCity = _tourService.GetByCityName(selectedTour.City);
+            ToursByCityWithoutSelected = _tourService.RemoveFromListById(ToursByCity, selectedTour.TourId);
             
             Tours = ConvertToDTOList(ToursByCity);
         }
@@ -68,7 +69,7 @@ namespace InitialProject.View.Guest2
         public void Update()
         {
             Tours.Clear();
-            foreach (Tour tour in _tourRepository.GetAll())
+            foreach (Tour tour in _tourService.GetAll())
             {
                 Tours.Add(ConvertToDTO(tour));
             }
@@ -78,7 +79,7 @@ namespace InitialProject.View.Guest2
         {
             if (NewSelectedTour != null)
             {
-                ReserveTour reserveTourForm = new ReserveTour(NewSelectedTour, LoggedInUser, _tourRepository);
+                ReserveTour reserveTourForm = new ReserveTour(NewSelectedTour, LoggedInUser, _tourService);
                 reserveTourForm.ShowDialog();
             }
             Close();

@@ -1,6 +1,7 @@
 ﻿using InitialProject.Model;
 using InitialProject.Repository;
 using InitialProject.Resources.Enums;
+using InitialProject.Service;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -15,7 +16,7 @@ namespace InitialProject.View.Owner
     {
         private readonly AccommodationRepository _repository;
 
-        private readonly LocationRepository _locationRepository;
+        private readonly LocationService _locationService;
 
         private readonly ImageRepository _imageRepository;
 
@@ -143,13 +144,13 @@ namespace InitialProject.View.Owner
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public RegisterAccommodation(User user, AccommodationRepository repository, LocationRepository locationRepository, ImageRepository imageRepository)
+        public RegisterAccommodation(User user, AccommodationRepository repository, LocationService locationService, ImageRepository imageRepository)
         {
             InitializeComponent();
             DataContext = this;
 
             _repository = repository;
-            _locationRepository = locationRepository;
+            _locationService = locationService;
             _imageRepository = imageRepository;
 
             LoggedInUser = user;
@@ -169,7 +170,7 @@ namespace InitialProject.View.Owner
 
         private void InitializeCountries()
         {
-            foreach (var country in _locationRepository.GetCountries())
+            foreach (var country in _locationService.GetCountries())
             {
                 cbCountry.Items.Add(country);
             }
@@ -179,7 +180,7 @@ namespace InitialProject.View.Owner
         {
             if (IsValid)
             {
-                Location AccommodationLocation = _locationRepository.GetLocation(Country, City);
+                Location AccommodationLocation = _locationService.GetLocation(Country, City);
                 Accommodation Accommodation = new Accommodation(AccommodationName, LoggedInUser.Id, AccommodationLocation.Id, Enum.Parse<AccommodationType>(Type), int.Parse(MaxGuests), int.Parse(CancellationPeriod), int.Parse(CancellationPeriod), _imageIds);
                 _repository.Save(Accommodation);
                 Close();
@@ -215,7 +216,7 @@ namespace InitialProject.View.Owner
 
         private void CbCountry_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (cbCountry.SelectedItem != null && _locationRepository != null)
+            if (cbCountry.SelectedItem != null && _locationService != null)
             {
                 if (cbCity.Items != null)
                 {
@@ -223,7 +224,7 @@ namespace InitialProject.View.Owner
                 }
 
                 cbCity.IsEnabled = true;
-                foreach (String city in _locationRepository.GetCities(cbCountry.SelectedItem.ToString()))
+                foreach (String city in _locationService.GetCities(cbCountry.SelectedItem.ToString()))
                 {
                     cbCity.Items.Add(city);
                 }

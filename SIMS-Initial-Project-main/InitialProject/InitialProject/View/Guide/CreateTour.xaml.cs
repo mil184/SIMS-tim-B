@@ -1,5 +1,6 @@
 ﻿using InitialProject.Model;
 using InitialProject.Repository;
+using InitialProject.Service;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,8 +17,8 @@ namespace InitialProject.View.Guide
     {
         const int NO_TOUR_ASSIGNED = -1;
 
-        private readonly TourRepository _repository;
-        private readonly LocationRepository _locationRepository;
+        private readonly TourService _tourService;
+        private readonly LocationService _locationService;
         private readonly ImageRepository _imageRepository;
         private readonly CheckpointRepository _checkpointRepository;
 
@@ -191,13 +192,13 @@ namespace InitialProject.View.Guide
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        public CreateTour(User user, TourRepository tourRepository, LocationRepository locationRepository, ImageRepository imageRepository, CheckpointRepository checkpointRepository)
+        public CreateTour(User user, TourService tourService, LocationService locationService, ImageRepository imageRepository, CheckpointRepository checkpointRepository)
         {
             InitializeComponent();
             DataContext = this;
 
-            _repository = tourRepository;
-            _locationRepository = locationRepository;
+            _tourService = tourService;
+            _locationService = locationService;
             _imageRepository = imageRepository;
             _checkpointRepository = checkpointRepository;
 
@@ -235,7 +236,7 @@ namespace InitialProject.View.Guide
 
         private void InitializeCountryDropdown()
         {
-            foreach (var country in _locationRepository.GetCountries().OrderBy(c => c))
+            foreach (var country in _locationService.GetCountries().OrderBy(c => c))
             {
                 cbCountry.Items.Add(country);
             }
@@ -277,7 +278,7 @@ namespace InitialProject.View.Guide
                 return;
             }
 
-            TourLocation = _locationRepository.GetLocation(Country, City);
+            TourLocation = _locationService.GetLocation(Country, City);
 
             if (TourLocation == null)
             {
@@ -308,7 +309,7 @@ namespace InitialProject.View.Guide
                     new ObservableCollection<int>(imageIds),
                     new ObservableCollection<int>(checkpointIds)); 
 
-                tour = _repository.Save(tour);
+                tour = _tourService.Save(tour);
 
                 UpdateCheckpointsTourId(tour.Id);
             }
@@ -429,7 +430,7 @@ namespace InitialProject.View.Guide
 
         private void CbCountry_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (cbCountry.SelectedItem != null && _locationRepository != null)
+            if (cbCountry.SelectedItem != null && _locationService != null)
             {
                 ClearCityItems();
                 EnableCitySelection();
@@ -449,7 +450,7 @@ namespace InitialProject.View.Guide
         }
         private void LoadCitiesForSelectedCountry()
         {
-            foreach (string city in _locationRepository.GetCities(cbCountry.SelectedItem.ToString()).OrderBy(c => c))
+            foreach (string city in _locationService.GetCities(cbCountry.SelectedItem.ToString()).OrderBy(c => c))
             {
                 cbCity.Items.Add(city);
             }

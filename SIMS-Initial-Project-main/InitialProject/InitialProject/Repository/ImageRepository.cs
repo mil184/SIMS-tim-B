@@ -55,14 +55,7 @@ namespace InitialProject.Repository
 
         public List<Image> GetAll()
         {
-            var images = new List<Image>();
-
-            foreach (var image in _images)
-            {
-                images.Add(image);
-            }
-
-            return images;
+            return _images;
         }
 
         public void Subscribe(IObserver observer)
