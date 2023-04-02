@@ -47,6 +47,10 @@ namespace InitialProject.Repository
 
             return location;
         }
+        public List<Location> GetAll() 
+        {
+            return _locations;
+        }
         public Location GetById(int id)
         {
             _locations = _serializer.FromCSV(_filepath);
@@ -55,39 +59,6 @@ namespace InitialProject.Repository
         public void Subscribe(IObserver observer)
         {
             _observers.Add(observer);
-        }
-        public List<string> GetCountries()
-        {
-            List<string> countries = new List<string>();
-            foreach(Location location in _locations) 
-            {
-                if(!countries.Contains(location.Country))
-                countries.Add(location.Country);
-            }
-            return countries;
-        }
-        public List<string> GetCities(String country)
-        {
-            List<string> cities = new List<string>();
-            foreach (Location location in _locations)
-            {
-                if(location.Country == country) 
-                {
-                    cities.Add(location.City);   
-                }
-            }
-            return cities;
-        }
-        public Location GetLocation(String country,string city)
-        {        
-            foreach (Location location in _locations)
-            {
-                if (location.Country == country && location.City == city)
-                {
-                    return location;
-                }
-            }
-            return null;
         }
         public void Unsubscribe(IObserver observer)
         {

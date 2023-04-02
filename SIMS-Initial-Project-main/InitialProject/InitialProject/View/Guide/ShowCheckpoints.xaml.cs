@@ -4,6 +4,7 @@ using InitialProject.Model.DTO;
 using InitialProject.Repository;
 using InitialProject.Resources.Observer;
 using InitialProject.Resources.UIHelper;
+using InitialProject.Service;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -24,7 +25,7 @@ namespace InitialProject.View.Guide
         private readonly Tour SelectedTour;
 
         private readonly CheckpointRepository _repository;
-        private readonly TourRepository _tourRepository;
+        private readonly TourService _tourService;
         private readonly TourReservationRepository _tourReservationRepository;
         private readonly UserRepository _userRepository;
         public ObservableCollection<Checkpoint> Checkpoints { get; set; }
@@ -49,14 +50,14 @@ namespace InitialProject.View.Guide
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public ShowCheckpoints(Tour tour, CheckpointRepository checkpointRepository, TourRepository tourRepository, TourReservationRepository tourReservationRepository, UserRepository userRepository)
+        public ShowCheckpoints(Tour tour, CheckpointRepository checkpointRepository, TourService tourService, TourReservationRepository tourReservationRepository, UserRepository userRepository)
         {
             InitializeComponent();
             DataContext = this;
 
             SelectedTour = tour;
             _repository = checkpointRepository;
-            _tourRepository = tourRepository;
+            _tourService = tourService;
             _tourReservationRepository = tourReservationRepository;
             _userRepository = userRepository;
 
@@ -247,7 +248,7 @@ namespace InitialProject.View.Guide
         {
             SelectedTour.CurrentCheckpointId = -1;
             SelectedTour.IsActive = false;
-            _tourRepository.Update(SelectedTour);
+            _tourService.Update(SelectedTour);
         }
         private void UpdateTourReservations()
         {
@@ -263,7 +264,7 @@ namespace InitialProject.View.Guide
             nextCheckbox.IsEnabled = true;
 
             SelectedTour.CurrentCheckpointId = Checkpoints[nextIndex].Id;
-            _tourRepository.Update(SelectedTour);
+            _tourService.Update(SelectedTour);
         }
 
         private void DisablePreviousCheckpoints(int currentIndex)
@@ -287,7 +288,7 @@ namespace InitialProject.View.Guide
         private void UpdateCurrentCheckpoint(int currentIndex)
         {
             SelectedTour.CurrentCheckpointId = Checkpoints[currentIndex].Id;
-            _tourRepository.Update(SelectedTour);
+            _tourService.Update(SelectedTour);
         }
         private void UpdateListBoxItemBackgrounds(int currentIndex)
         {

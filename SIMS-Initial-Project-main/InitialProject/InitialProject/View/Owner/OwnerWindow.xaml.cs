@@ -2,6 +2,7 @@
 using InitialProject.Model.DTO;
 using InitialProject.Repository;
 using InitialProject.Resources.Observer;
+using InitialProject.Service;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -26,7 +27,7 @@ namespace InitialProject.View.Owner
         public ObservableCollection<AccommodationReservation> UnreviewedReservations { get; set; }
 
         private AccommodationRepository _repository;
-        private readonly LocationRepository _locationRepository;
+        private readonly LocationService _locationService;
         private readonly ImageRepository _imageRepository;
         private readonly AccommodationReservationRepository _reservationRepository;
         private readonly GuestReviewRepository _guestReviewRepository;
@@ -40,8 +41,8 @@ namespace InitialProject.View.Owner
 
             _repository = new AccommodationRepository();
             _repository.Subscribe(this);
-            _locationRepository = new LocationRepository();
-            _locationRepository.Subscribe(this);
+            _locationService= new LocationService();
+            _locationService.Subscribe(this);
             _imageRepository = new ImageRepository();
             _imageRepository.Subscribe(this);
             _reservationRepository = new AccommodationReservationRepository();
@@ -114,7 +115,7 @@ namespace InitialProject.View.Owner
 
         private void RegisterButton_Click(object sender, RoutedEventArgs e)
         {
-            RegisterAccommodation registerAccommodation = new RegisterAccommodation(LoggedInUser, _repository, _locationRepository, _imageRepository);
+            RegisterAccommodation registerAccommodation = new RegisterAccommodation(LoggedInUser, _repository, _locationService, _imageRepository);
             registerAccommodation.Show();
         }
 

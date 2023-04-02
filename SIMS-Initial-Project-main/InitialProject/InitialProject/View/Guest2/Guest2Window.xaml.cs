@@ -19,6 +19,7 @@ using InitialProject.Resources.Observer;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using InitialProject.Model.DTO;
+using InitialProject.Service;
 
 namespace InitialProject.View.Guest2
 {
@@ -33,7 +34,7 @@ namespace InitialProject.View.Guest2
 
         public ObservableCollection<Guest2TourDTO> NonReservedTours { get; set; }
 
-        private readonly TourRepository _tourRepository;
+        private readonly TourService _tourService;
         private readonly LocationRepository _locationRepository;
         private readonly ImageRepository _imageRepository;
         private readonly CheckpointRepository _checkpointRepository;
@@ -70,8 +71,8 @@ namespace InitialProject.View.Guest2
             DataContext = this;
             LoggedInUser = user;
 
-            _tourRepository = new TourRepository();
-            _tourRepository.Subscribe(this);
+            _tourService = new TourService();
+            _tourService.Subscribe(this);
 
             _imageRepository = new ImageRepository();
             _imageRepository.Subscribe(this);
@@ -88,7 +89,7 @@ namespace InitialProject.View.Guest2
             _tourReservationRepository = new TourReservationRepository();
             _tourReservationRepository.Subscribe(this); 
 
-            Tours = new ObservableCollection<Tour>(_tourRepository.GetAll());
+            Tours = new ObservableCollection<Tour>(_tourService.GetAll());
             TourDTOs = ConvertToDTO(Tours);
 
             RemoveReservedTours();
@@ -103,7 +104,7 @@ namespace InitialProject.View.Guest2
         public void Update()
         {
             TourDTOs.Clear();
-            foreach (Tour tour in _tourRepository.GetAll())
+            foreach (Tour tour in _tourService.GetAll())
             {
                 TourDTOs.Add(ConvertToDTO(tour));
             }
@@ -168,7 +169,7 @@ namespace InitialProject.View.Guest2
         {
             if (SelectedGuest2TourDTO != null)
             {
-                ReserveTour reserveTourForm = new ReserveTour(SelectedGuest2TourDTO, LoggedInUser, _tourRepository);
+                ReserveTour reserveTourForm = new ReserveTour(SelectedGuest2TourDTO, LoggedInUser, _tourService);
                 reserveTourForm.ShowDialog();
             }
             Update();

@@ -16,7 +16,6 @@ namespace InitialProject.Repository
         private const string _filePath = "../../../Resources/Data/tours.csv";
 
         private readonly Serializer<Tour> _serializer;
-        private readonly LocationRepository _locationRepository;
         private readonly List<IObserver> _observers;
 
         private List<Tour> _tours;
@@ -25,7 +24,6 @@ namespace InitialProject.Repository
         {
             _serializer = new Serializer<Tour>();
             _tours = _serializer.FromCSV(_filePath);
-            _locationRepository = new LocationRepository();
             _observers = new List<IObserver>();
         }
 
@@ -66,100 +64,10 @@ namespace InitialProject.Repository
             return _tours.Find(c => c.Id == id);
         }
 
-        public List<Tour> RemoveById(List<Tour> tours, int id)
-        {
-            List<Tour> toursRemoved = tours;
-            toursRemoved.RemoveAll(t => t.Id == id);
-            return toursRemoved;
-        }
-
         public List<Tour> GetAll()
         {
             return _tours;
         }
-
-        public List<Tour> GetTodaysTours()
-        {
-            var currentDateTime = DateTime.Now;
-            var currentTours = new List<Tour>();
-
-            foreach (var tour in _tours)
-            {
-                if (tour.StartTime.Date == currentDateTime.Date && tour.StartTime >= currentDateTime)
-                {
-                    currentTours.Add(tour);
-                }
-            }
-
-            return currentTours;
-        }
-
-        public List<Tour> GetUpcomingTours()
-        {
-            var upcomingTours = new List<Tour>();
-            var currentDate = DateTime.Now.Date;
-
-            foreach (var tour in _tours)
-            {
-                var tourStartDate = tour.StartTime.Date;
-                if (tourStartDate > currentDate)
-                {
-                    upcomingTours.Add(tour);
-                }
-            }
-            return upcomingTours;
-        }
-
-        public List<Tour> GetByCity(Location location)
-        {
-            var toursByCity = new List<Tour>();
-
-            foreach (var tour in _tours)
-            {
-                if (_locationRepository.GetById(tour.LocationId).City == location.City)
-                {
-                    toursByCity.Add(tour);
-                }
-            }
-
-            return toursByCity;
-        }
-
-        public List<Tour> GetByCityName(string city)
-        {
-            var toursByCityName = new List<Tour>();
-
-            foreach (var tour in _tours)
-            {
-                if (_locationRepository.GetById(tour.LocationId).City == city)
-                {
-                    toursByCityName.Add(tour);
-                }
-            }
-
-            return toursByCityName;
-        }
-
-        public List<Tour> GetByCountry(Location location)
-        {
-            var toursByCountry = new List<Tour>();
-
-            foreach (var tour in _tours)
-            {
-                if (_locationRepository.GetById(tour.LocationId).Country == location.Country)
-                {
-                    toursByCountry.Add(tour);
-                }
-            }
-
-            return toursByCountry;
-        }
-
-        public bool HasAvailableSpace(Tour tour, int guestsToAdd)
-        {
-            return (tour.CurrentGuestCount + guestsToAdd < tour.MaxGuests);
-        }
-
         public void Subscribe(IObserver observer)
         {
             _observers.Add(observer);
