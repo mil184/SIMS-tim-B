@@ -8,16 +8,14 @@ namespace InitialProject.Model.DTO
 {
     public class AccommodationRatingsDTO
     {
-        public int Id { get; set; }
         public int ReservationId { get; set; }
         public string UserName { get; set; }
         public string AccommodationName { get; set; }
 
         public AccommodationRatingsDTO() { }
 
-        public AccommodationRatingsDTO(int id, int reservationId, string userName, string accommodationName)
+        public AccommodationRatingsDTO(int reservationId, string userName, string accommodationName)
         {
-            Id = id;
             ReservationId = reservationId;
             UserName = userName;
             AccommodationName = accommodationName;

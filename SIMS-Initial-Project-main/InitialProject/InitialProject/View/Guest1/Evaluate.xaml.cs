@@ -1,4 +1,6 @@
-﻿using System;
+﻿using InitialProject.Model.DTO;
+using InitialProject.Repository;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,7 +21,9 @@ namespace InitialProject.View.Guest1
     /// </summary>
     public partial class Evaluate : Window
     {
-        public Evaluate()
+        private readonly AccommodationRatingsRepository _accommodationRatingsRepository;
+        private readonly AccommodationReservationRepository _accommodationReservationRepository;
+        public Evaluate(AccommodationRatingsDTO selectedUnratedAccommodation, AccommodationRatingsRepository accommodationRatingsRepository, AccommodationReservationRepository accommodationReservationRepository)
         {
             InitializeComponent();
         }

@@ -33,6 +33,10 @@ namespace InitialProject.View.Guest1
 
         public ObservableCollection<Location> Locations;
         public GuestAccommodationDTO SelectedAccommodation { get; set; }
+        public AccommodationRatingsDTO SelectedUnratedAccommodation { get; set; }
+        public ObservableCollection<AccommodationRatingsDTO> UnratedAccommodations { get; set; }
+        public AccommodationRatings SelectedAccommodationRatings { get; set; }
+        public ObservableCollection<AccommodationRatings> AccommodationRatings { get; set; }
 
 
         private readonly AccommodationRepository _accommodationRepository;
@@ -99,6 +103,9 @@ namespace InitialProject.View.Guest1
 
             AllAccommodations = new ObservableCollection<Accommodation>(_accommodationRepository.GetAll());
             PresentableAccommodations = ConvertToDTO(AllAccommodations);
+
+            UnratedAccommodations = new ObservableCollection<AccommodationRatingsDTO>();
+            ReviewRecentlyEndedReservation();
         }
 
         private void ReserveButton_Click(object sender, RoutedEventArgs e)
@@ -260,10 +267,7 @@ namespace InitialProject.View.Guest1
 
         }
 
-        public void Update()
-        {
-            
-        }
+        public void Update() {}
 
         private void ImagesButton_Click(object sender, RoutedEventArgs e)
         {
@@ -292,9 +296,33 @@ namespace InitialProject.View.Guest1
             Close();
         }
 
+        public bool RecentlyEnded(AccommodationReservation reservation)
+        {
+            TimeSpan daysPassed = DateTime.Today - reservation.EndDate;
+            return daysPassed.TotalDays >= 0 && daysPassed.TotalDays <= 5;
+        }
+
+        public void ReviewRecentlyEndedReservation()
+        {
+            foreach(AccommodationReservation reservation in _accommodationReservationRepository.GetAll())
+            {
+                if(RecentlyEnded(reservation))
+                {
+                    if(AllAccommodations.Any(a => a.Id == reservation.AccommodationId))
+                    {
+                        UnratedAccommodations.Add(new AccommodationRatingsDTO(reservation.Id, _userRepository.GetById(reservation.OwnerId).Username, _accommodationRepository.GetById(reservation.AccommodationId).Name));
+                    }
+                }
+            }
+        }
+
         private void Evaluate_Click(object sender, RoutedEventArgs e)
         {
-            
+            if (SelectedAccommodationRatings != null)
+            {
+                Evaluate evaluateAccommodation = new Evaluate(SelectedUnratedAccommodation, _accommodationRatingsRepository, _accommodationReservationRepository);
+                evaluateAccommodation.Show();
+            }
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)

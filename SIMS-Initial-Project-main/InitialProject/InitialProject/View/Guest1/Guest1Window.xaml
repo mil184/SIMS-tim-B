@@ -85,10 +85,10 @@
                     <TextBlock FontSize="18" FontWeight="Bold" Text="Ratings" Margin="0 0 10 0"/>
                     <!-- Add rating elements here -->
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <DataGrid Height="200">
+                        <DataGrid Height="200" ItemsSource="{Binding Path=UnratedAccommodations}" SelectedItem="{Binding Path=SelectedUnratedAccommodations}" AutoGenerateColumns="False" IsReadOnly="True">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Accommodation name" Width="*" />
-                                <DataGridTextColumn Header="Owner" Width="*" />
+                                <DataGridTextColumn Header="Accommodation name" Binding="{Binding AccommodationName}" Width="*" />
+                                <DataGridTextColumn Header="Owner" Binding="{Binding UserName}" Width="*" />
                             </DataGrid.Columns>
                         </DataGrid>
                     </ScrollViewer>
