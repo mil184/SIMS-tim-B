@@ -5,9 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InitialProject.View.Guide"
         mc:Ignorable="d"
-        WindowState="Maximized"
-        Title="DMJM-Tours" Height="600" Width="800"
+        Title="DMJM-Tours" Height="768" Width="1024"
         Icon ="/Resources/Images/favicon.ico">
+    <Window.Resources>
+        <Style x:Key="AppFont" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Fonts/Pacifico-Regular.ttf" />
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -15,100 +19,225 @@
         </Grid.RowDefinitions>
 
         <!-- User information section -->
-        <Grid Grid.Row="0" Margin="10">
+        <Grid Grid.Row="0" Margin="10" Height="Auto" Background="#F2F2F2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Image Source="/Resources/Images/tour-guide.png" Width="100" Height="75" Margin="0 0 10 0" />
-            <StackPanel Grid.Column="1">
-                <TextBlock FontSize="18" FontWeight="Bold" Text="Tour Guide" Margin="0 0 0 10"/>
-                <TextBlock FontSize="14" Text="{Binding CurrentUser.Username, FallbackValue=BidningNotWorking}"/>
-                <Button Content="Log Out" Margin="0 10 0 0" Width="50" Click="LogOut_Click" HorizontalAlignment="Left"/>
-            </StackPanel>
-            <StackPanel Grid.Column="2">
-                <StackPanel Orientation="Horizontal" Margin="10 0">
-                    <Image Source="/Resources/Images/info.png" Width="20" Height="20" Margin="0 0 5 0"/>
-                    <TextBlock Text="To start a tour, double click on one of today's tours" Margin="0" FontSize="14" FontWeight="Bold"/>
-                </StackPanel>
-                <GroupBox Margin="10" Header="Active Tour"  BorderBrush="Blue" BorderThickness="4">
-                    <Grid>
+
+            <!-- App logo and title -->
+            <Border BorderThickness="3" BorderBrush="#007ACC" CornerRadius="5" Margin="5">
+                <Grid>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Image Source="/Resources/Images/favicon.ico" Width="60" Height="60" Margin="10 0 5 0" />
+                        <TextBlock FontSize="39" FontWeight="Bold" Text="DMJM Tours" Foreground="#007ACC" FontFamily="pack://application:,,,/Fonts/#Pacifico" Margin="0 0 10 0"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- User info and buttons -->
+            <Border Grid.Column="2" BorderThickness="3" BorderBrush="#007ACC" CornerRadius="5" Margin="5">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Grid Width="Auto" Height="Auto" Margin="10">
                         <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <TextBlock FontSize="14" Text="{Binding ActiveTour.Name,UpdateSourceTrigger=PropertyChanged}" Margin="10 10"/>
-                        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10">
-                            <TextBlock FontSize="14" Text="{Binding ActiveTour.City,UpdateSourceTrigger=PropertyChanged}" Margin="0 0 5 0"/>
-                            <TextBlock FontSize="14" Text="{Binding ActiveTour.Country,UpdateSourceTrigger=PropertyChanged}" Margin="0"/>
-                        </StackPanel>
+                        <Ellipse Width="80" Height="80" VerticalAlignment="Center" Margin="0 0 10 0">
+                            <Ellipse.Fill>
+                                <ImageBrush ImageSource="/Resources/Images/gorana.jpg" Stretch="UniformToFill" />
+                            </Ellipse.Fill>
+                        </Ellipse>
+                        <TextBlock Grid.Row="1" FontSize="18" Text="{Binding CurrentUser.Username, FallbackValue=BidningNotWorking}" HorizontalAlignment="Center" Foreground="#007ACC"/>
+                        <TextBlock Grid.Row="2" FontSize="14" Text="Guide" HorizontalAlignment="Center" Margin="0 5 0 0" Foreground="#007ACC"/>
                     </Grid>
-                </GroupBox>
+                    <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="40 0 10 0">
+                        <Button Content="  Resign&#x0a;(ALT + Q)" Width="100" Height="60" Margin="0 0 0 10" Background="#007ACC" Foreground="White" FontSize="16" BorderThickness="0" Padding="5 0">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                        <Button Content=" Log Out&#x0a;(ALT + F4)" Width="100" Height="60" Background="#007ACC" Foreground="White" FontSize="16" BorderThickness="0" Padding="5 0">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            <!-- Info texts -->
+            <Border Grid.Column="1" BorderThickness="3" BorderBrush="#007ACC" CornerRadius="5" Margin="5">
+            <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" Margin="10">
+                <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
+                    <Image Source="/Resources/Images/info.png" Width="20" Height="20" Margin="0 0 5 0"/>
+                    <TextBlock FontSize="12" FontStyle="Italic" Text="Navigate Through Tabs With" VerticalAlignment="Center" Foreground="#007ACC"/>
+                    <TextBlock FontSize="13" FontStyle="Italic" Text=" Arrow Keys" VerticalAlignment="Center" Foreground="#FFA500"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
+                    <Image Source="/Resources/Images/info.png" Width="20" Height="20" Margin="0 0 5 0"/>
+                    <TextBlock FontSize="12" FontStyle="Italic" Text="Select The Grid With" VerticalAlignment="Center" Foreground="#007ACC"/>
+                    <TextBlock FontSize="13" FontStyle="Italic" Text=" CTRL + L" VerticalAlignment="Center" Foreground="#FFA500"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
+                    <Image Source="/Resources/Images/info.png" Width="20" Height="20" Margin="0 0 5 0"/>
+                    <TextBlock FontSize="12" FontStyle="Italic" Text="Navigate Through Data With" VerticalAlignment="Center" Foreground="#007ACC"/>
+                    <TextBlock FontSize="13" FontStyle="Italic" Text=" Arrow Keys" VerticalAlignment="Center" Foreground="#FFA500"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
+                    <Image Source="/Resources/Images/info.png" Width="20" Height="20" Margin="0 0 5 0"/>
+                    <TextBlock FontSize="12" FontStyle="Italic" Text="To Start The Demo, Press" VerticalAlignment="Center" Foreground="#007ACC"/>
+                    <TextBlock FontSize="13" FontStyle="Italic" Text=" CTRL + D" VerticalAlignment="Center" Foreground="#FFA500"/>
+                </StackPanel>
             </StackPanel>
+                </Border>
         </Grid>
 
-        <!-- Tabs section -->
- <TabControl Grid.Row="1">
-            <!-- Tours tab -->
-            <TabItem Header="Tours">
-                <StackPanel Margin="10">
-                    <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
-                        <TextBlock FontSize="18" FontWeight="Bold" Text="Tours"/>
-                        <Button Click="CreateButton_Click" Width="80" Content="Create" Margin="10 0 0 0"/>
-                        <Button Width="80" Content="Delete" Margin="10 0 0 0"/>
-                        <Button Width="80" Content="Edit" Margin="10 0 0 0"/>
-                    </StackPanel>
-                    <!-- Current tour section -->
-                    <GroupBox Header="Today's tours">
-                        <StackPanel Margin="0 10 0 0">
-                            <ScrollViewer Height="150" VerticalScrollBarVisibility="Auto">
-                                <DataGrid ItemsSource="{Binding CurrentTours}" SelectedItem="{Binding Path=SelectedDTO}" AutoGenerateColumns="False" Name="CurrentToursDataGrid" IsReadOnly="true" MouseDoubleClick="CurrentToursDataGrid_MouseDoubleClick">
-                                    <DataGrid.Columns>
-                                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
-                                        <DataGridTextColumn Header="Country" Binding="{Binding Country}" Width="*"/>
-                                        <DataGridTextColumn Header="City" Binding="{Binding City}" Width="*"/>
-                                        <DataGridTextColumn Header="Start Time" Binding="{Binding Path=StartTime,StringFormat={}{0:dd.M.yyyy. HH:mm}}" Width="*"/>
-                                        <DataGridTextColumn Header="" Width="Auto"/>
-                                    </DataGrid.Columns>
-                                </DataGrid>
-                            </ScrollViewer>
-                        </StackPanel>
-                    </GroupBox>
-                    <!-- Upcoming tours section -->
-                    <GroupBox Header="Upcoming Tours">
-                        <StackPanel Margin="0 10 0 0">
-                            <ScrollViewer Height="150" VerticalScrollBarVisibility="Auto">
-                                <DataGrid ItemsSource="{Binding UpcomingTours}" AutoGenerateColumns="False" IsReadOnly="true">
-                                    <DataGrid.Columns>
-                                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
-                                        <DataGridTextColumn Header="Country" Binding="{Binding Country}" Width="*"/>
-                                        <DataGridTextColumn Header="City" Binding="{Binding City}" Width="*"/>
-                                        <DataGridTextColumn Header="Start Time" Binding="{Binding Path=StartTime, StringFormat={}{0:dd.M.yyyy. HH:mm}}" Width="*"/>
-                                        <DataGridTextColumn Header="" Width="Auto"/>
-                                    </DataGrid.Columns>
-                                </DataGrid>
-                            </ScrollViewer>
-                        </StackPanel>
-                    </GroupBox>
 
+
+        <!-- Tabs section -->
+        <TabControl Grid.Row="1">
+            <!-- Tours tab -->
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Today's Tours" FontSize="24" FontWeight="Bold" Margin="5"/>
+                </TabItem.Header>
+                <TabItem.Style>
+                    <Style TargetType="{x:Type TabItem}">
+                        <Setter Property="Foreground" Value="Black"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Foreground" Value="#007ACC"/>
+                                <Setter Property="Background" Value="#F2F2F2"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TabItem.Style>
+                <StackPanel Margin="10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="261*" />
+                            <ColumnDefinition Width="602*"/>
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Content="Create Tour&#x0a;(CTRL + A)" Margin="5,0,0,0" Height="50" Width="130" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Left" Click="CreateButton_Click"/>
+                        <Button Grid.Column="2" Content="Start Tour&#x0a; (ENTER)" Height="50" Width="130" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Left"/>
+                    </Grid>
+                    <GroupBox Header="Today's Tours" FontSize="28" Foreground="#007ACC">
+                        <StackPanel Margin="0 20 0 0">
+                            <ScrollViewer Height="360" VerticalScrollBarVisibility="Auto">
+                                <DataGrid ItemsSource="{Binding CurrentTours}" SelectedItem="{Binding Path=SelectedDTO}" AutoGenerateColumns="False" Name="CurrentToursDataGrid" IsReadOnly="true" MouseDoubleClick="CurrentToursDataGrid_MouseDoubleClick" HorizontalAlignment="Stretch">
+                                    <DataGrid.CellStyle>
+                                        <Style TargetType="DataGridCell">
+                                            <Setter Property="FontSize" Value="18"/>
+                                            <Setter Property="Padding" Value="10"/>
+                                        </Style>
+                                    </DataGrid.CellStyle>
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" FontSize="18"/>
+                                        <DataGridTextColumn Header="Location" Binding="{Binding Location}" Width="*" FontSize="18"/>
+                                        <DataGridTextColumn Header="Start Time" Binding="{Binding Path=StartTime,StringFormat={}{0:dd.M.yyyy. HH:mm}}" Width="*" FontSize="18"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </ScrollViewer>
+                        </StackPanel>
+                    </GroupBox>
                 </StackPanel>
             </TabItem>
 
-            <!-- Statistics tab -->
-            <TabItem Header="Statistics">
+
+            <!-- Upcoming Tours tab -->
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Upcoming Tours" FontSize="24" FontWeight="Bold" Margin="5"/>
+                </TabItem.Header>
+                <TabItem.Style>
+                    <Style TargetType="{x:Type TabItem}">
+                        <Setter Property="Foreground" Value="Black"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Foreground" Value="#007ACC"/>
+                                <Setter Property="Background" Value="#F2F2F2"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TabItem.Style>
+                <StackPanel Margin="10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Content="Create Tour&#x0a;(CTRL + A)" Margin="5 0 0 0" Height="50" Width="130" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Left" Click="CreateButton_Click"/>
+                        <Button Grid.Column="1" Content="Create Tour&#x0a;(CTRL + A)" Margin="5 0 0 0" Height="50" Width="130" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Left" Click="CreateButton_Click"/>
+                        <Button Grid.Column="1" Content="Abort Selected Tour&#x0a;         (ENTER)" Margin="0 0 5 0" Height="50" Width="160" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Right"/>
+                    </Grid>
+                    <GroupBox Header="Upcoming Tours" FontSize="28" Foreground="#007ACC">
+                        <StackPanel Margin="0 20 0 0">
+                            <ScrollViewer Height="360" VerticalScrollBarVisibility="Auto">
+                                <DataGrid ItemsSource="{Binding UpcomingTours}" SelectedItem="{Binding Path=SelectedDTO}" AutoGenerateColumns="False" Name="UpcomingToursDataGrid" IsReadOnly="true"  HorizontalAlignment="Stretch">
+                                    <DataGrid.CellStyle>
+                                        <Style TargetType="DataGridCell">
+                                            <Setter Property="FontSize" Value="18"/>
+                                            <Setter Property="Padding" Value="10"/>
+                                        </Style>
+                                    </DataGrid.CellStyle>
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" FontSize="18"/>
+                                        <DataGridTextColumn Header="Location" Binding="{Binding Location}" Width="*" FontSize="18"/>
+                                        <DataGridTextColumn Header="Start Time" Binding="{Binding Path=StartTime,StringFormat={}{0:dd.M.yyyy. HH:mm}}" Width="*" FontSize="18"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </ScrollViewer>
+                        </StackPanel>
+                    </GroupBox>
+                </StackPanel>
+            </TabItem>
+            <!-- Tour Statistics tab -->
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Tour Statistics" FontSize="20" FontWeight="Bold"/>
+                </TabItem.Header>
+                <StackPanel Margin="10">
+
+                </StackPanel>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Requests" FontSize="20" FontWeight="Bold"/>
+                </TabItem.Header>
+                <StackPanel Margin="10">
+
+                </StackPanel>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Request Statistics" FontSize="20" FontWeight="Bold"/>
+                </TabItem.Header>
+                <StackPanel Margin="10">
+
+                </StackPanel>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Upcoming Tours" FontSize="20" FontWeight="Bold"/>
+                </TabItem.Header>
                 <StackPanel Margin="10">
                     <!-- Statistic section -->
                     <TextBlock FontSize="18" FontWeight="Bold" Text="Statistics" Margin="0 0 10 0"/>
                     <!-- Add statistic elements here -->
-                </StackPanel>
-            </TabItem>
-            <!-- Ratings tab -->
-            <TabItem Header="Ratings">
-                <StackPanel Margin="10">
-                    <!-- Rating section -->
-                    <TextBlock FontSize="18" FontWeight="Bold" Text="Ratings" Margin="0 0 10 0"/>
-                    <!-- Add rating elements here -->
                 </StackPanel>
             </TabItem>
         </TabControl>

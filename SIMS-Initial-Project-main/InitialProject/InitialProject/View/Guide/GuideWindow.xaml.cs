@@ -2,6 +2,7 @@
 using InitialProject.Model.DTO;
 using InitialProject.Repository;
 using InitialProject.Resources.Observer;
+using InitialProject.Service;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -15,9 +16,9 @@ namespace InitialProject.View.Guide
 {
     public partial class GuideWindow : Window, INotifyPropertyChanged, IObserver
     {
-        private readonly TourRepository _tourRepository;
+        private readonly TourService _tourService;
         private readonly TourReservationRepository _tourReservationRepository;
-        private readonly LocationRepository _locationRepository;
+        private readonly LocationService _locationService;
         private readonly ImageRepository _imageRepository;
         private readonly CheckpointRepository _checkpointRepository;
         private readonly UserRepository _userRepository;
@@ -46,14 +47,14 @@ namespace InitialProject.View.Guide
             DataContext = this;
             CurrentUser = user;
 
-            _tourRepository = new TourRepository();
-            _tourRepository.Subscribe(this);
+            _tourService = new TourService();
+            _tourService.Subscribe(this);
 
             _imageRepository = new ImageRepository();
             _imageRepository.Subscribe(this);
 
-            _locationRepository = new LocationRepository();
-            _locationRepository.Subscribe(this);
+            _locationService = new LocationService();
+            _locationService.Subscribe(this);
 
             _checkpointRepository = new CheckpointRepository();
             _checkpointRepository.Subscribe(this);
@@ -68,11 +69,13 @@ namespace InitialProject.View.Guide
             FindActiveTour();
             SortUpcomingTours();
 
+            CurrentUser.Username = "Gorana";
+
         }
         private void InitializeCollections()
         {
-            CurrentTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourRepository.GetTodaysTours()));
-            UpcomingTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourRepository.GetUpcomingTours()));
+            CurrentTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourService.GetTodaysTours()));
+            UpcomingTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourService.GetUpcomingTours()));
         }
         private void FindActiveTour()
         {
@@ -96,7 +99,7 @@ namespace InitialProject.View.Guide
 
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
-            CreateTour createTour = new CreateTour(CurrentUser, _tourRepository, _locationRepository, _imageRepository, _checkpointRepository);
+            CreateTour createTour = new CreateTour(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointRepository);
             createTour.Show();
         }
 
@@ -114,7 +117,7 @@ namespace InitialProject.View.Guide
         private void UpdateUpcomingTours()
         {
             UpcomingTours.Clear();
-            foreach (Tour tour in _tourRepository.GetUpcomingTours())
+            foreach (Tour tour in _tourService.GetUpcomingTours())
             {
                 UpcomingTours.Add(ConvertToDTO(tour));
             }
@@ -122,7 +125,7 @@ namespace InitialProject.View.Guide
         private void UpdateCurrentTours()
         {
             CurrentTours.Clear();
-            foreach (Tour tour in _tourRepository.GetTodaysTours())
+            foreach (Tour tour in _tourService.GetTodaysTours())
             {
                 CurrentTours.Add(ConvertToDTO(tour));
             }
@@ -149,8 +152,8 @@ namespace InitialProject.View.Guide
                 dto.Add(new GuideTourDTO(
                     tour.Id,
                     tour.Name,
-                    _locationRepository.GetById(tour.LocationId).Country,
-                    _locationRepository.GetById(tour.LocationId).City,
+                    _locationService.GetById(tour.LocationId).Country,
+                    _locationService.GetById(tour.LocationId).City,
                     tour.StartTime)); 
             }
             return dto;
@@ -160,14 +163,14 @@ namespace InitialProject.View.Guide
             return new GuideTourDTO(
                     tour.Id,
                     tour.Name,
-                    _locationRepository.GetById(tour.LocationId).Country,
-                    _locationRepository.GetById(tour.LocationId).City,
+                    _locationService.GetById(tour.LocationId).Country,
+                    _locationService.GetById(tour.LocationId).City,
                     tour.StartTime); 
         }
         public Tour ConvertToTour(GuideTourDTO dto)
         {
             if(dto != null)
-            return _tourRepository.GetById(dto.Id);
+            return _tourService.GetById(dto.Id);
             return null;
         }
         private void CurrentToursDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -179,15 +182,13 @@ namespace InitialProject.View.Guide
             {
                 HandleSelectedTour(selectedTour);
             }
-
-            Update();
         }
         private void CheckIfTourIsActive()
         {
             TourActive = false;
             ActiveTour = null;
 
-            foreach (Tour tour in _tourRepository.GetTodaysTours())
+            foreach (Tour tour in _tourService.GetTodaysTours())
             {
                 if (tour.IsActive)
                 {
@@ -202,7 +203,7 @@ namespace InitialProject.View.Guide
             if (selectedTour.IsActive)
             {
                 ActiveTour = ConvertToDTO(selectedTour);
-                ShowCheckpoints showCheckpoints = new ShowCheckpoints(selectedTour, _checkpointRepository, _tourRepository, _tourReservationRepository, _userRepository);
+                ShowCheckpoints showCheckpoints = new ShowCheckpoints(selectedTour, _checkpointRepository, _tourService, _tourReservationRepository, _userRepository);
                 showCheckpoints.ShowDialog();
             }
             else if (TourActive)
@@ -239,12 +240,12 @@ namespace InitialProject.View.Guide
         }
         private void UpdateTour(Tour tour)
         {
-            _tourRepository.Update(tour);
+            _tourService.Update(tour);
             ActiveTour = ConvertToDTO(tour);
         }
         private void ShowCheckpointsForTour(Tour tour)
         {
-            ShowCheckpoints showCheckpoints = new ShowCheckpoints(tour, _checkpointRepository, _tourRepository, _tourReservationRepository, _userRepository);
+            ShowCheckpoints showCheckpoints = new ShowCheckpoints(tour, _checkpointRepository, _tourService, _tourReservationRepository, _userRepository);
             showCheckpoints.ShowDialog();
         }
         private void LogOut_Click(object sender, RoutedEventArgs e)
