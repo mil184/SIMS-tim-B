@@ -1,6 +1,7 @@
 ﻿using InitialProject.Serializer;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,9 +18,11 @@ namespace InitialProject.Model
         public int Correctness { get; set; }
         public string Comment { get; set; }
 
-        public AccommodationRatings() { }
+        public ObservableCollection<int> ImageIds;
 
-        public AccommodationRatings(int id, int reservationId, int accommodationId, int ownerId, int cleanliness, int correctness, string comment) 
+        public AccommodationRatings() { ImageIds = new ObservableCollection<int>(); }
+
+        public AccommodationRatings(int id, int reservationId, int accommodationId, int ownerId, int cleanliness, int correctness, string comment, ObservableCollection<int> imageIds) 
         {
             Id = id;
             ReservationId = reservationId;
@@ -28,11 +31,12 @@ namespace InitialProject.Model
             Cleanliness = cleanliness;
             Correctness = correctness;
             Comment = comment;
+            ImageIds = imageIds;
         }
 
         public string[] ToCSV()
         {
-            string[] csvValues = { Id.ToString(), ReservationId.ToString(), AccommodationId.ToString(), OwnerId.ToString(), Cleanliness.ToString(), Correctness.ToString(), Comment };
+            string[] csvValues = { Id.ToString(), ReservationId.ToString(), AccommodationId.ToString(), OwnerId.ToString(), Cleanliness.ToString(), Correctness.ToString(), Comment, string.Join(",", ImageIds) };
             return csvValues;
         }
        
@@ -45,6 +49,10 @@ namespace InitialProject.Model
             Cleanliness = Convert.ToInt32(values[4]);
             Correctness = Convert.ToInt32(values[5]);
             Comment = values[6];
+            foreach (string id in values[7].Split(','))
+            {
+                ImageIds.Add(int.Parse(id));
+            }
         }
     }
 }

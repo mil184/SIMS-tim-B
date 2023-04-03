@@ -318,9 +318,9 @@ namespace InitialProject.View.Guest1
 
         private void Evaluate_Click(object sender, RoutedEventArgs e)
         {
-            if (SelectedAccommodationRatings != null)
+            if (SelectedUnratedAccommodation != null)
             {
-                Evaluate evaluateAccommodation = new Evaluate(SelectedUnratedAccommodation, _accommodationRatingsRepository, _accommodationReservationRepository);
+                Evaluate evaluateAccommodation = new Evaluate(SelectedUnratedAccommodation, _accommodationRatingsRepository, _accommodationReservationRepository, _imageRepository);
                 evaluateAccommodation.Show();
             }
         }
