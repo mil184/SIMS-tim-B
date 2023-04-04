@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InitialProject.View.Guest1"
         mc:Ignorable="d"
-        Title="Evaluate" Height="450" Width="800">
+        Title="Evaluate" Height="500" Width="850">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -16,20 +16,20 @@
 
         <Label Margin="0,10,0,0" Content ="Accommodation rating(cleanliness):" />
         <StackPanel Orientation="Horizontal" Margin="10,40,0,0">
-            <RadioButton Content="1" IsChecked="{Binding Cleanliness, UpdateSourceTrigger=PropertyChanged}"/>
-            <RadioButton Content="2" IsChecked="{Binding Cleanliness, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
-            <RadioButton Content="3" IsChecked="{Binding Cleanliness, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
-            <RadioButton Content="4" IsChecked="{Binding Cleanliness, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
-            <RadioButton Content="5" IsChecked="{Binding Cleanliness, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
+            <RadioButton Name="cleanliness1"  Content="1" IsChecked="{Binding Cleanliness, UpdateSourceTrigger=PropertyChanged}"/>
+            <RadioButton Name="cleanliness2" Content="2" IsChecked="{Binding Cleanliness, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
+            <RadioButton Name="cleanliness3" Content="3" IsChecked="{Binding Cleanliness, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
+            <RadioButton Name="cleanliness4" Content="4" IsChecked="{Binding Cleanliness, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
+            <RadioButton Name="cleanliness5" Content="5" IsChecked="{Binding Cleanliness, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
         </StackPanel>
 
         <Label Margin="0,70,0,0" Content="Owner rating(correctness):" />
         <StackPanel Orientation="Horizontal" Margin="10,100,0,0">
-            <RadioButton Content="1" IsChecked="{Binding Correctness, UpdateSourceTrigger=PropertyChanged}"/>
-            <RadioButton Content="2" IsChecked="{Binding Correctness, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
-            <RadioButton Content="3" IsChecked="{Binding Correctness, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
-            <RadioButton Content="4" IsChecked="{Binding Correctness, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
-            <RadioButton Content="5" IsChecked="{Binding Correctness, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
+            <RadioButton Name="correctness1" Content="1" IsChecked="{Binding Correctness, UpdateSourceTrigger=PropertyChanged}"/>
+            <RadioButton Name="correctness2" Content="2" IsChecked="{Binding Correctness, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
+            <RadioButton Name="correctness3" Content="3" IsChecked="{Binding Correctness, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
+            <RadioButton Name="correctness4" Content="4" IsChecked="{Binding Correctness, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
+            <RadioButton Name="correctness5" Content="5" IsChecked="{Binding Correctness, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
         </StackPanel>
 
         <Label Margin="0,150,0,0" Content="Additional comment:" />

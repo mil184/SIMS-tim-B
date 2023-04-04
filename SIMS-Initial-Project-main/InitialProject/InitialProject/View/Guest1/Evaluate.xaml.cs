@@ -104,17 +104,67 @@ namespace InitialProject.View.Guest1
             Reservation = _accommodationReservationRepository.GetById(SelectedUnratedAccommodation.ReservationId);
         }
 
+        private void SetRatingsForCleanlinees()
+        {
+            if (cleanliness1.IsChecked == true)
+            {
+                Cleanliness = 1;
+            }
+            else if (cleanliness2.IsChecked == true)
+            {
+                Cleanliness = 2;
+            }
+            else if (cleanliness3.IsChecked == true)
+            {
+                Cleanliness = 3;
+            }
+            else if (cleanliness4.IsChecked == true)
+            {
+                Cleanliness = 4;
+            }
+            else if (cleanliness5.IsChecked == true)
+            {
+                Cleanliness = 5;
+            }
+        }
+
+        private void SetRatingsForCorrectness()
+        {
+            if (correctness1.IsChecked == true)
+            {
+                Correctness = 1;
+            }
+            else if (correctness2.IsChecked == true)
+            {
+                Correctness = 2;
+            }
+            else if (correctness3.IsChecked == true)
+            {
+                Correctness = 3;
+            }
+            else if (correctness4.IsChecked == true)
+            {
+                Correctness = 4;
+            }
+            else if (correctness5.IsChecked == true)
+            {
+                Correctness = 5;
+            }
+        }
+
         private void Save_Click(object sender, RoutedEventArgs e)
         {
             if (!ValidateComment()) return;
             var messageBoxResult = MessageBox.Show($"Would you like to save your rating?", "Rating Accommodation Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
               if (messageBoxResult == MessageBoxResult.Yes)
               {
-                    AccommodationRatings accommodationRatings = new AccommodationRatings(Reservation.Id, Reservation.AccommodationId, Reservation.OwnerId, Reservation.GuestId, Cleanliness, Correctness, Comment, _imageIds);
+                    SetRatingsForCleanlinees();
+                    SetRatingsForCorrectness();
+                    AccommodationRatings accommodationRatings = new AccommodationRatings(Reservation.Id, Reservation.AccommodationId, Reservation.OwnerId, Reservation.GuestId, Cleanliness, Correctness, Comment, _imageIds, true);
                     _accommodationRatingsRepository.Save(accommodationRatings);
                     MessageBox.Show("Rating saved successfully.");
                     Close();
-              }
+            }
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)

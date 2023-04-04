@@ -12,31 +12,33 @@ namespace InitialProject.Model
     {
         public int Id { get; set; }
         public int ReservationId { get; set; }
-        public int AccommodationId { get; set; }
         public int OwnerId { get; set; }
+        public int AccommodationId { get; set; }
         public int Cleanliness { get; set; }
         public int Correctness { get; set; }
         public string Comment { get; set; }
+        public bool IsRated { get; set; }
 
         public ObservableCollection<int> ImageIds;
 
         public AccommodationRatings() { ImageIds = new ObservableCollection<int>(); }
 
-        public AccommodationRatings(int id, int reservationId, int accommodationId, int ownerId, int cleanliness, int correctness, string comment, ObservableCollection<int> imageIds) 
+        public AccommodationRatings(int id, int reservationId, int ownerId, int accommodationId, int cleanliness, int correctness, string comment, ObservableCollection<int> imageIds, bool isRated) 
         {
             Id = id;
             ReservationId = reservationId;
-            AccommodationId = accommodationId;
             OwnerId = ownerId;
+            AccommodationId = accommodationId;
             Cleanliness = cleanliness;
             Correctness = correctness;
             Comment = comment;
             ImageIds = imageIds;
+            IsRated = isRated;
         }
 
         public string[] ToCSV()
         {
-            string[] csvValues = { Id.ToString(), ReservationId.ToString(), AccommodationId.ToString(), OwnerId.ToString(), Cleanliness.ToString(), Correctness.ToString(), Comment, string.Join(",", ImageIds) };
+            string[] csvValues = { Id.ToString(), ReservationId.ToString(), OwnerId.ToString(), AccommodationId.ToString(), Cleanliness.ToString(), Correctness.ToString(), Comment, string.Join(",", ImageIds), IsRated.ToString() };
             return csvValues;
         }
        
@@ -44,8 +46,8 @@ namespace InitialProject.Model
         {
             Id = Convert.ToInt32(values[0]);
             ReservationId = Convert.ToInt32(values[1]);
-            AccommodationId = Convert.ToInt32(values[2]);
-            OwnerId = Convert.ToInt32(values[3]);
+            OwnerId = Convert.ToInt32(values[2]);
+            AccommodationId = Convert.ToInt32(values[3]);
             Cleanliness = Convert.ToInt32(values[4]);
             Correctness = Convert.ToInt32(values[5]);
             Comment = values[6];
@@ -53,6 +55,7 @@ namespace InitialProject.Model
             {
                 ImageIds.Add(int.Parse(id));
             }
+            IsRated = Convert.ToBoolean(values[8]);
         }
     }
 }

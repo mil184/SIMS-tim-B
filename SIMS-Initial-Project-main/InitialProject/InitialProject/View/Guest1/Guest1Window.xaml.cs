@@ -33,10 +33,12 @@ namespace InitialProject.View.Guest1
 
         public ObservableCollection<Location> Locations;
         public GuestAccommodationDTO SelectedAccommodation { get; set; }
+
+
         public AccommodationRatingsDTO SelectedUnratedAccommodation { get; set; }
-        public ObservableCollection<AccommodationRatingsDTO> UnratedAccommodations { get; set; }
-        public AccommodationRatings SelectedAccommodationRatings { get; set; }
         public ObservableCollection<AccommodationRatings> AccommodationRatings { get; set; }
+        public AccommodationRatings SelectedAccommodationRatings { get; set; }
+        public ObservableCollection<AccommodationReservation> UnreviewedReservations { get; set; }
 
 
         private readonly AccommodationRepository _accommodationRepository;
@@ -77,6 +79,22 @@ namespace InitialProject.View.Guest1
                 OnPropertyChanged();
             }
         }
+
+        private ObservableCollection<AccommodationRatingsDTO> _unratedAccommodations;
+        public ObservableCollection<AccommodationRatingsDTO> UnratedAccommodations
+        {
+            get => _unratedAccommodations;
+            set
+            {
+                if (_unratedAccommodations != value)
+                {
+                    _unratedAccommodations = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
         public Guest1Window(User user)
         {
             InitializeComponent();
@@ -104,8 +122,7 @@ namespace InitialProject.View.Guest1
             AllAccommodations = new ObservableCollection<Accommodation>(_accommodationRepository.GetAll());
             PresentableAccommodations = ConvertToDTO(AllAccommodations);
 
-            UnratedAccommodations = new ObservableCollection<AccommodationRatingsDTO>();
-            ReviewRecentlyEndedReservation();
+            CheckForAvailableRatings();
         }
 
         private void ReserveButton_Click(object sender, RoutedEventArgs e)
@@ -267,7 +284,10 @@ namespace InitialProject.View.Guest1
 
         }
 
-        public void Update() {}
+        public void Update() 
+        {
+            FormUnratedReservation();
+        }
 
         private void ImagesButton_Click(object sender, RoutedEventArgs e)
         {
@@ -302,18 +322,33 @@ namespace InitialProject.View.Guest1
             return daysPassed.TotalDays >= 0 && daysPassed.TotalDays <= 5;
         }
 
-        public void ReviewRecentlyEndedReservation()
+        public bool OwnerRated(AccommodationReservation reservation)
         {
-            foreach(AccommodationReservation reservation in _accommodationReservationRepository.GetAll())
+            return _accommodationRatingsRepository.GetAll().Any(item => item.ReservationId == reservation.Id);
+        }
+
+
+        public void FormUnratedReservation()
+        {
+            UnratedAccommodations.Clear();
+            foreach (AccommodationReservation reservation in _accommodationReservationRepository.GetAll())
             {
-                if(RecentlyEnded(reservation))
+                if(RecentlyEnded(reservation) && !OwnerRated(reservation))
                 {
                     if(AllAccommodations.Any(a => a.Id == reservation.AccommodationId))
                     {
                         UnratedAccommodations.Add(new AccommodationRatingsDTO(reservation.Id, _userRepository.GetById(reservation.OwnerId).Username, _accommodationRepository.GetById(reservation.AccommodationId).Name));
+                        UnreviewedReservations.Add(reservation);
                     }
                 }
             }
+        }
+
+        public void CheckForAvailableRatings()
+        {
+            UnratedAccommodations = new ObservableCollection<AccommodationRatingsDTO>();
+            UnreviewedReservations = new ObservableCollection<AccommodationReservation>();
+            FormUnratedReservation();
         }
 
         private void Evaluate_Click(object sender, RoutedEventArgs e)
@@ -321,7 +356,7 @@ namespace InitialProject.View.Guest1
             if (SelectedUnratedAccommodation != null)
             {
                 Evaluate evaluateAccommodation = new Evaluate(SelectedUnratedAccommodation, _accommodationRatingsRepository, _accommodationReservationRepository, _imageRepository);
-                evaluateAccommodation.Show();
+                evaluateAccommodation.ShowDialog();
             }
         }
 
@@ -329,5 +364,6 @@ namespace InitialProject.View.Guest1
         {
             Close();
         }
+
     }
 }

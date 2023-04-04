@@ -48,15 +48,21 @@ namespace InitialProject.Repository
             return accommodationRatings;
         }
 
+        public AccommodationRatings Update(AccommodationRatings accommodationRatings)
+        {
+            _accommodationRatings = _serializer.FromCSV(FilePath);
+            AccommodationRatings current = _accommodationRatings.Find(c => c.Id == accommodationRatings.Id);
+            int index = _accommodationRatings.IndexOf(current);
+            _accommodationRatings.Remove(current);
+            _accommodationRatings.Insert(index, accommodationRatings);      
+            _serializer.ToCSV(FilePath, _accommodationRatings);
+            NotifyObservers();
+            return accommodationRatings;
+        }
+
         public List<AccommodationRatings> GetAll()
         {
             return _accommodationRatings;
-        }
-
-        public AccommodationRatings GetById(int id)
-        {
-            _accommodationRatings = _serializer.FromCSV(FilePath);
-            return _accommodationRatings.FirstOrDefault(u => u.Id == id);
         }
 
         public void Subscribe(IObserver observer)
