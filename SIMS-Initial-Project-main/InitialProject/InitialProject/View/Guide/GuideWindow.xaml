@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:InitialProject.View.Guide"
         mc:Ignorable="d"
         Title="DMJM-Tours" Height="768" Width="1024"
-        Icon ="/Resources/Images/favicon.ico">
+        Icon ="/Resources/Images/favicon.ico"
+        Background="#F2F2F2">
     <Window.Resources>
         <Style x:Key="AppFont" TargetType="TextBlock">
             <Setter Property="FontFamily" Value="Fonts/Pacifico-Regular.ttf" />
@@ -19,7 +20,7 @@
         </Grid.RowDefinitions>
 
         <!-- User information section -->
-        <Grid Grid.Row="0" Margin="10" Height="Auto" Background="#F2F2F2">
+        <Grid Grid.Row="0" Margin="5" Height="Auto">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
@@ -27,17 +28,23 @@
             </Grid.ColumnDefinitions>
 
             <!-- App logo and title -->
-            <Border BorderThickness="3" BorderBrush="#007ACC" CornerRadius="5" Margin="5">
+
+            <Border Grid.Column="0" Background="#E9F1F7" BorderThickness="3" BorderBrush="#007ACC" CornerRadius="5" Margin="5">
                 <Grid>
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <Image Source="/Resources/Images/favicon.ico" Width="60" Height="60" Margin="10 0 5 0" />
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Image Source="/Resources/Images/favicon.ico" Width="60" Height="60" Margin="10 0 5 0" />
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock FontSize="39" FontWeight="Bold" Text="DMJM Tours" Foreground="#007ACC" FontFamily="pack://application:,,,/Fonts/#Pacifico" Margin="0 0 10 0"/>
                     </StackPanel>
                 </Grid>
             </Border>
 
+
             <!-- User info and buttons -->
-            <Border Grid.Column="2" BorderThickness="3" BorderBrush="#007ACC" CornerRadius="5" Margin="5">
+            <Border Grid.Column="2" Background="#E9F1F7" BorderThickness="3" BorderBrush="#007ACC" CornerRadius="5" Margin="5">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <Grid Width="Auto" Height="Auto" Margin="10">
                         <Grid.RowDefinitions>
@@ -45,98 +52,223 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <Ellipse Width="80" Height="80" VerticalAlignment="Center" Margin="0 0 10 0">
+                        <Ellipse Width="80" Height="80" VerticalAlignment="Center" Margin="0 0 10 0" StrokeThickness="3" Stroke="#FFA500">
                             <Ellipse.Fill>
                                 <ImageBrush ImageSource="/Resources/Images/gorana.jpg" Stretch="UniformToFill" />
                             </Ellipse.Fill>
                         </Ellipse>
-                        <TextBlock Grid.Row="1" FontSize="18" Text="{Binding CurrentUser.Username, FallbackValue=BidningNotWorking}" HorizontalAlignment="Center" Foreground="#007ACC"/>
-                        <TextBlock Grid.Row="2" FontSize="14" Text="Guide" HorizontalAlignment="Center" Margin="0 5 0 0" Foreground="#007ACC"/>
+                        <TextBlock Grid.Row="1" FontSize="18" Text="{Binding CurrentUser.Username, FallbackValue=BidningNotWorking}" HorizontalAlignment="Center" Foreground="#FFA500"/>
+                        <TextBlock Grid.Row="2" FontSize="14" Text="Guide" HorizontalAlignment="Center" Margin="0 5 0 0" Foreground="#FFA500" FontWeight="Bold"/>
                     </Grid>
-                    <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="40 0 10 0">
+                    <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="20 0">
                         <Button Content="  Resign&#x0a;(ALT + Q)" Width="100" Height="60" Margin="0 0 0 10" Background="#007ACC" Foreground="White" FontSize="16" BorderThickness="0" Padding="5 0">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
-                                    <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
+                                    <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
                                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                                     </Border>
+                                    <ControlTemplate.Triggers>
+                                        <EventTrigger RoutedEvent="Button.Click">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="#005F8B" />
+                                        </Trigger>
+                                        <Trigger Property="IsPressed" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="#00415E" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
                                 </ControlTemplate>
                             </Button.Template>
                         </Button>
-                        <Button Content=" Log Out&#x0a;(ALT + F4)" Width="100" Height="60" Background="#007ACC" Foreground="White" FontSize="16" BorderThickness="0" Padding="5 0">
+                        <Button Content=" Log Out&#x0a;(ALT + F4)" Width="100" Height="60" Background="#007ACC" Foreground="White" FontSize="16" BorderThickness="0" Padding="5 0" Click="LogOut_Click">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
-                                    <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
+                                    <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
                                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                                     </Border>
+                                    <ControlTemplate.Triggers>
+                                        <EventTrigger RoutedEvent="Button.Click">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="#005F8B" />
+                                        </Trigger>
+                                        <Trigger Property="IsPressed" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="#00415E" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
                                 </ControlTemplate>
                             </Button.Template>
                         </Button>
                     </StackPanel>
                 </StackPanel>
             </Border>
+
             <!-- Info texts -->
-            <Border Grid.Column="1" BorderThickness="3" BorderBrush="#007ACC" CornerRadius="5" Margin="5">
-            <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" Margin="10">
-                <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
-                    <Image Source="/Resources/Images/info.png" Width="20" Height="20" Margin="0 0 5 0"/>
-                    <TextBlock FontSize="12" FontStyle="Italic" Text="Navigate Through Tabs With" VerticalAlignment="Center" Foreground="#007ACC"/>
-                    <TextBlock FontSize="13" FontStyle="Italic" Text=" Arrow Keys" VerticalAlignment="Center" Foreground="#FFA500"/>
+            <Border Grid.Column="1" Background="#E9F1F7" BorderThickness="3" BorderBrush="#007ACC" CornerRadius="5" Margin="5">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="10">
+                    <StackPanel Orientation="Horizontal" Margin="0 0 0 20">
+                        <Image Source="/Resources/Images/info.png" Width="24" Height="24" Margin="0 0 10 0"/>
+                        <TextBlock FontSize="16" FontStyle="Italic" Text="Navigate through tabs with" VerticalAlignment="Center" Foreground="#007ACC"/>
+                        <TextBlock FontSize="18" FontStyle="Italic" Text=" arrow keys" VerticalAlignment="Center" Foreground="#FFA500"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0 0 0 20">
+                        <Image Source="/Resources/Images/info.png" Width="24" Height="24" Margin="0 0 10 0"/>
+                        <TextBlock FontSize="16" FontStyle="Italic" Text="Select the grid with" VerticalAlignment="Center" Foreground="#007ACC"/>
+                        <TextBlock FontSize="18" FontStyle="Italic" Text=" CTRL + L" VerticalAlignment="Center" Foreground="#FFA500"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0 0 0 20">
+                        <Image Source="/Resources/Images/info.png" Width="24" Height="24" Margin="0 0 10 0"/>
+                        <TextBlock FontSize="16" FontStyle="Italic" Text="Navigate through data with" VerticalAlignment="Center" Foreground="#007ACC"/>
+                        <TextBlock FontSize="18" FontStyle="Italic" Text=" arrow keys" VerticalAlignment="Center" Foreground="#FFA500"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0 0 0 20">
+                        <Image Source="/Resources/Images/info.png" Width="24" Height="24" Margin="0 0 10 0"/>
+                        <TextBlock FontSize="16" FontStyle="Italic" Text="To start the demo, press" VerticalAlignment="Center" Foreground="#007ACC"/>
+                        <TextBlock FontSize="18" FontStyle="Italic" Text=" CTRL + D" VerticalAlignment="Center" Foreground="#FFA500"/>
+                    </StackPanel>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
-                    <Image Source="/Resources/Images/info.png" Width="20" Height="20" Margin="0 0 5 0"/>
-                    <TextBlock FontSize="12" FontStyle="Italic" Text="Select The Grid With" VerticalAlignment="Center" Foreground="#007ACC"/>
-                    <TextBlock FontSize="13" FontStyle="Italic" Text=" CTRL + L" VerticalAlignment="Center" Foreground="#FFA500"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
-                    <Image Source="/Resources/Images/info.png" Width="20" Height="20" Margin="0 0 5 0"/>
-                    <TextBlock FontSize="12" FontStyle="Italic" Text="Navigate Through Data With" VerticalAlignment="Center" Foreground="#007ACC"/>
-                    <TextBlock FontSize="13" FontStyle="Italic" Text=" Arrow Keys" VerticalAlignment="Center" Foreground="#FFA500"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
-                    <Image Source="/Resources/Images/info.png" Width="20" Height="20" Margin="0 0 5 0"/>
-                    <TextBlock FontSize="12" FontStyle="Italic" Text="To Start The Demo, Press" VerticalAlignment="Center" Foreground="#007ACC"/>
-                    <TextBlock FontSize="13" FontStyle="Italic" Text=" CTRL + D" VerticalAlignment="Center" Foreground="#FFA500"/>
-                </StackPanel>
-            </StackPanel>
-                </Border>
+            </Border>
+
         </Grid>
 
 
 
         <!-- Tabs section -->
         <TabControl Grid.Row="1">
+            <TabControl.Resources>
+                <!-- Define the gradient brush -->
+                <LinearGradientBrush x:Key="TabGradient" StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Offset="0" Color="#E9F1F7" />
+                    <GradientStop Offset="1" Color="#C9D9ED" />
+                </LinearGradientBrush>
+            </TabControl.Resources>
+            <TabControl.ItemContainerStyle>
+                <Style TargetType="{x:Type TabItem}">
+                    <Setter Property="Foreground" Value="Black"/>
+                    <Setter Property="Background" Value="{StaticResource TabGradient}"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type TabItem}">
+                                <Border BorderThickness="5,5,5,5" BorderBrush="#C9D9ED" CornerRadius="25,5,0,0" Background="{TemplateBinding Background}">
+                                    <ContentPresenter x:Name="HeaderContentPresenter" ContentSource="Header" Margin="10,2,10,2">
+                                        <ContentPresenter.Effect>
+                                            <DropShadowEffect Color="#FFA500" BlurRadius="10" ShadowDepth="0"/>
+                                        </ContentPresenter.Effect>
+                                    </ContentPresenter>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Foreground" Value="#FFA500"/>
+                                        <Setter TargetName="HeaderContentPresenter" Property="Effect">
+                                            <Setter.Value>
+                                                <DropShadowEffect Color="#FFA500" BlurRadius="10" ShadowDepth="0"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Trigger.EnterActions>
+                                            <BeginStoryboard x:Name="GlowingEffectStoryboard">
+                                                <Storyboard>
+                                                    <ThicknessAnimation Storyboard.TargetName="HeaderContentPresenter" Storyboard.TargetProperty="(FrameworkElement.Margin)" From="10,2,10,2" To="10,-8,10,2" Duration="0:0:1.5" AutoReverse="True" RepeatBehavior="Forever"/>
+                                                    <DoubleAnimation Storyboard.TargetName="HeaderContentPresenter" Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.Opacity)" From="0.5" To="1" Duration="0:0:0.8" AutoReverse="True" RepeatBehavior="Forever"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </Trigger.EnterActions>
+                                        <Trigger.ExitActions>
+                                            <StopStoryboard BeginStoryboardName="GlowingEffectStoryboard"/>
+                                        </Trigger.ExitActions>
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="False">
+                                        <Setter Property="Foreground" Value="#007ACC"/>
+                                        <Setter TargetName="HeaderContentPresenter" Property="Effect" Value="{x:Null}"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TabControl.ItemContainerStyle>
+            <TabControl.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Offset="0" Color="#E9F1F7" />
+                    <GradientStop Offset="1" Color="#C9D9ED" />
+                </LinearGradientBrush>
+            </TabControl.Background>
+
             <!-- Tours tab -->
             <TabItem>
                 <TabItem.Header>
-                    <TextBlock Text="Today's Tours" FontSize="24" FontWeight="Bold" Margin="5"/>
+                    <TextBlock Text="Today's Tours" FontSize="17"  Margin="5"/>
                 </TabItem.Header>
-                <TabItem.Style>
-                    <Style TargetType="{x:Type TabItem}">
-                        <Setter Property="Foreground" Value="Black"/>
-                        <Setter Property="Background" Value="Transparent"/>
-                        <Style.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Foreground" Value="#007ACC"/>
-                                <Setter Property="Background" Value="#F2F2F2"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </TabItem.Style>
                 <StackPanel Margin="10">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="261*" />
-                            <ColumnDefinition Width="602*"/>
+                            <ColumnDefinition Width="14*" />
+                            <ColumnDefinition Width="249*"/>
+                            <ColumnDefinition Width="605*"/>
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Content="Create Tour&#x0a;(CTRL + A)" Margin="5,0,0,0" Height="50" Width="130" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Left" Click="CreateButton_Click"/>
-                        <Button Grid.Column="2" Content="Start Tour&#x0a; (ENTER)" Height="50" Width="130" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Left"/>
+                        <Button Grid.Column="0" Content="Create Tour&#x0a;(CTRL + A)" Margin="5,0,0,0" Height="50" Width="130" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Left" Click="CreateButton_Click" Grid.ColumnSpan="2">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <EventTrigger RoutedEvent="Button.Click">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="#005F8B" />
+                                        </Trigger>
+                                        <Trigger Property="IsPressed" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="#00415E" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                        <Button Grid.Column="3" Content="Start Tour&#x0a; (ENTER)" Height="50" Width="130" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Center">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <EventTrigger RoutedEvent="Button.Click">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="#005F8B" />
+                                        </Trigger>
+                                        <Trigger Property="IsPressed" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="#00415E" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
                     </Grid>
-                    <GroupBox Header="Today's Tours" FontSize="28" Foreground="#007ACC">
+                    <GroupBox Header="Today's Tours" FontSize="28" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="3">
                         <StackPanel Margin="0 20 0 0">
-                            <ScrollViewer Height="360" VerticalScrollBarVisibility="Auto">
-                                <DataGrid ItemsSource="{Binding CurrentTours}" SelectedItem="{Binding Path=SelectedDTO}" AutoGenerateColumns="False" Name="CurrentToursDataGrid" IsReadOnly="true" MouseDoubleClick="CurrentToursDataGrid_MouseDoubleClick" HorizontalAlignment="Stretch">
+                            <ScrollViewer Height="300" VerticalScrollBarVisibility="Auto">
+                                <DataGrid Margin ="10" ItemsSource="{Binding CurrentTours}" SelectedItem="{Binding Path=SelectedDTO}" AutoGenerateColumns="False" Name="CurrentToursDataGrid" IsReadOnly="true" MouseDoubleClick="CurrentToursDataGrid_MouseDoubleClick" HorizontalAlignment="Stretch">
                                     <DataGrid.CellStyle>
                                         <Style TargetType="DataGridCell">
                                             <Setter Property="FontSize" Value="18"/>
@@ -159,30 +291,93 @@
             <!-- Upcoming Tours tab -->
             <TabItem>
                 <TabItem.Header>
-                    <TextBlock Text="Upcoming Tours" FontSize="24" FontWeight="Bold" Margin="5"/>
+                    <TextBlock Text="Upcoming Tours" FontSize="17"  Margin="5"/>
                 </TabItem.Header>
-                <TabItem.Style>
-                    <Style TargetType="{x:Type TabItem}">
-                        <Setter Property="Foreground" Value="Black"/>
-                        <Setter Property="Background" Value="Transparent"/>
-                        <Style.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Foreground" Value="#007ACC"/>
-                                <Setter Property="Background" Value="#F2F2F2"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </TabItem.Style>
                 <StackPanel Margin="10">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Content="Create Tour&#x0a;(CTRL + A)" Margin="5 0 0 0" Height="50" Width="130" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Left" Click="CreateButton_Click"/>
-                        <Button Grid.Column="1" Content="Create Tour&#x0a;(CTRL + A)" Margin="5 0 0 0" Height="50" Width="130" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Left" Click="CreateButton_Click"/>
-                        <Button Grid.Column="1" Content="Abort Selected Tour&#x0a;         (ENTER)" Margin="0 0 5 0" Height="50" Width="160" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Right"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" Content="Create Tour&#x0a;(CTRL + A)" Margin="0 0 10 0" Height="50" Width="130" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Left" Click="CreateButton_Click">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <EventTrigger RoutedEvent="Button.Click">
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="border" Property="Background" Value="#005F8B" />
+                                            </Trigger>
+                                            <Trigger Property="IsPressed" Value="True">
+                                                <Setter TargetName="border" Property="Background" Value="#00415E" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                            <Button Grid.Column="1" Content="Generate Report&#x0a;         (ENTER)" Margin="0 0 5 0" Height="50" Width="160" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Right">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <EventTrigger RoutedEvent="Button.Click">
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="border" Property="Background" Value="#005F8B" />
+                                            </Trigger>
+                                            <Trigger Property="IsPressed" Value="True">
+                                                <Setter TargetName="border" Property="Background" Value="#00415E" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                        </Grid>
+                        <Button Grid.Column="1" Content="Abort Selected Tour&#x0a;         (ENTER)" Margin="0 0 5 0" Height="50" Width="160" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Right">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <EventTrigger RoutedEvent="Button.Click">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="#005F8B" />
+                                        </Trigger>
+                                        <Trigger Property="IsPressed" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="#00415E" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+
                     </Grid>
                     <GroupBox Header="Upcoming Tours" FontSize="28" Foreground="#007ACC">
                         <StackPanel Margin="0 20 0 0">
@@ -208,7 +403,7 @@
             <!-- Tour Statistics tab -->
             <TabItem>
                 <TabItem.Header>
-                    <TextBlock Text="Tour Statistics" FontSize="20" FontWeight="Bold"/>
+                    <TextBlock Text="Tour Statistics" FontSize="17" />
                 </TabItem.Header>
                 <StackPanel Margin="10">
 
@@ -216,7 +411,7 @@
             </TabItem>
             <TabItem>
                 <TabItem.Header>
-                    <TextBlock Text="Requests" FontSize="20" FontWeight="Bold"/>
+                    <TextBlock Text="Requests" FontSize="17"/>
                 </TabItem.Header>
                 <StackPanel Margin="10">
 
@@ -224,7 +419,7 @@
             </TabItem>
             <TabItem>
                 <TabItem.Header>
-                    <TextBlock Text="Request Statistics" FontSize="20" FontWeight="Bold"/>
+                    <TextBlock Text="Request Statistics" FontSize="17"/>
                 </TabItem.Header>
                 <StackPanel Margin="10">
 
@@ -232,12 +427,10 @@
             </TabItem>
             <TabItem>
                 <TabItem.Header>
-                    <TextBlock Text="Upcoming Tours" FontSize="20" FontWeight="Bold"/>
+                    <TextBlock Text="Complex Tours" FontSize="17"/>
                 </TabItem.Header>
                 <StackPanel Margin="10">
-                    <!-- Statistic section -->
-                    <TextBlock FontSize="18" FontWeight="Bold" Text="Statistics" Margin="0 0 10 0"/>
-                    <!-- Add statistic elements here -->
+
                 </StackPanel>
             </TabItem>
         </TabControl>
