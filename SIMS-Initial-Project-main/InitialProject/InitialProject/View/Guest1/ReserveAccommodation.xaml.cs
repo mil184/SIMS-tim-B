@@ -26,7 +26,6 @@ namespace InitialProject.View.Guest1
     public partial class ReserveAccommodation : Window
     {
         private readonly AccommodationReservationRepository _accommodationReservationRepository;
-
         private readonly AccommodationRepository _accommodationRepository;
 
         private AccommodationReservation _reservation;
@@ -138,6 +137,20 @@ namespace InitialProject.View.Guest1
                 }
             }
         }
+
+        private int _ownerId;
+        public int OwnerId
+        {
+            get => _ownerId;
+            set
+            {
+                if (value != _ownerId)
+                {
+                    _ownerId = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         public ReserveAccommodation(GuestAccommodationDTO selectedAccommodation, User user, AccommodationRepository accommodationRepository, AccommodationReservationRepository accommodationReservationRepository)
         {
             InitializeComponent();
@@ -148,6 +161,7 @@ namespace InitialProject.View.Guest1
 
             Reservation = new AccommodationReservation();
             Reservation.AccommodationId = selectedAccommodation.Id;
+
 
             _accommodationRepository = accommodationRepository;
             _accommodationReservationRepository = accommodationReservationRepository;
@@ -206,7 +220,7 @@ namespace InitialProject.View.Guest1
             DateTime startDate = StartDate;
             DateTime endDate = EndDate;
 
-            return new ObservableCollection<DateTime>(_accommodationReservationRepository.GetAvailableDates(accommodationId, startDate, endDate)); //tvoja funckcija
+            return new ObservableCollection<DateTime>(_accommodationReservationRepository.GetAvailableDates(accommodationId, startDate, endDate));
         }
 
         private void AddDateRanges(List<DatesDTO> dateRanges)
@@ -331,7 +345,7 @@ namespace InitialProject.View.Guest1
 
                 if (messageBoxResult == MessageBoxResult.Yes)
                 {
-                    var reservation = new AccommodationReservation(LoggedInUser.Id, SelectedAccommodation.Id, selectedItem.StartDate, selectedItem.EndDate, NumberOfDays, MaxGuests);
+                    var reservation = new AccommodationReservation(LoggedInUser.Id, SelectedAccommodation.Id, selectedItem.StartDate, selectedItem.EndDate, NumberOfDays, MaxGuests, OwnerId, false);
                     _accommodationReservationRepository.Save(reservation);
 
                     MessageBox.Show("Reservation created successfully.");

@@ -31,6 +31,16 @@ namespace InitialProject.View.Guest1
         public ObservableCollection<Accommodation> AllAccommodations { get; set; }
         public ObservableCollection<GuestAccommodationDTO> PresentableAccommodations { get; set; }
 
+        public ObservableCollection<Location> Locations;
+        public GuestAccommodationDTO SelectedAccommodation { get; set; }
+
+
+        public AccommodationRatingsDTO SelectedUnratedAccommodation { get; set; }
+        public ObservableCollection<AccommodationRatings> AccommodationRatings { get; set; }
+        public AccommodationRatings SelectedAccommodationRatings { get; set; }
+        public ObservableCollection<AccommodationReservation> UnratedReservations { get; set; }
+
+
         private readonly AccommodationRepository _accommodationRepository;
 
         private readonly LocationRepository _locationRepository;
@@ -39,10 +49,9 @@ namespace InitialProject.View.Guest1
 
         private readonly ImageRepository _imageRepository;
 
-        private AccommodationReservationRepository _accommodationReservationRepository;
+        private readonly AccommodationReservationRepository _accommodationReservationRepository;
 
-        public ObservableCollection<Location> Locations;
-        public GuestAccommodationDTO SelectedAccommodation { get; set; }
+        private readonly AccommodationRatingsRepository _accommodationRatingsRepository;
 
 
         private string searchText;
@@ -70,6 +79,22 @@ namespace InitialProject.View.Guest1
                 OnPropertyChanged();
             }
         }
+
+        private ObservableCollection<AccommodationRatingsDTO> _unratedAccommodations;
+        public ObservableCollection<AccommodationRatingsDTO> UnratedAccommodations
+        {
+            get => _unratedAccommodations;
+            set
+            {
+                if (_unratedAccommodations != value)
+                {
+                    _unratedAccommodations = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
         public Guest1Window(User user)
         {
             InitializeComponent();
@@ -85,11 +110,21 @@ namespace InitialProject.View.Guest1
             _locationRepository = new LocationRepository();
             _locationRepository.Subscribe(this);
 
+            _userRepository = new UserRepository();
+            _userRepository.Subscribe(this);
+
             _imageRepository = new ImageRepository();
             _imageRepository.Subscribe(this);
 
+            _accommodationRatingsRepository = new AccommodationRatingsRepository();
+            _accommodationRatingsRepository.Subscribe(this);
+
             AllAccommodations = new ObservableCollection<Accommodation>(_accommodationRepository.GetAll());
             PresentableAccommodations = ConvertToDTO(AllAccommodations);
+
+            UnratedAccommodations = new ObservableCollection<AccommodationRatingsDTO>();
+            FormUnratedReservation();
+            UnratedReservations = new ObservableCollection<AccommodationReservation>();
         }
 
         private void ReserveButton_Click(object sender, RoutedEventArgs e)
@@ -251,9 +286,26 @@ namespace InitialProject.View.Guest1
 
         }
 
-        public void Update()
+        public AccommodationRatingsDTO ConvertToDTO(AccommodationReservation reservation)
         {
-            
+            return new AccommodationRatingsDTO(reservation.Id,
+                _userRepository.GetById(reservation.OwnerId).Username,
+                _accommodationRepository.GetById(reservation.AccommodationId).Name);
+
+        }
+        public ObservableCollection<AccommodationRatingsDTO> ConvertToDTO(ObservableCollection<AccommodationReservation> reservations)
+        {
+            ObservableCollection<AccommodationRatingsDTO> dto = new ObservableCollection<AccommodationRatingsDTO>();
+            foreach (AccommodationReservation reservation in reservations)
+            {
+                dto.Add(ConvertToDTO(reservation));
+            }
+            return dto;
+        }
+
+        public void Update() 
+        {
+            FormUnratedReservation();
         }
 
         private void ImagesButton_Click(object sender, RoutedEventArgs e)
@@ -282,5 +334,41 @@ namespace InitialProject.View.Guest1
             signInForm.Show();
             Close();
         }
+
+        public bool RecentlyEnded(AccommodationReservation reservation)
+        {
+            TimeSpan daysPassed = DateTime.Today - reservation.EndDate;
+            return daysPassed.TotalDays >= 0 && daysPassed.TotalDays <= 5;
+        }
+
+        public void FormUnratedReservation()
+        {
+            UnratedAccommodations.Clear();
+            var reservations = _accommodationReservationRepository.GetUnratedAccommodations().Where(r => RecentlyEnded(r)); 
+            UnratedAccommodations = ConvertToDTO(new ObservableCollection<AccommodationReservation>(reservations));
+        }
+
+
+        public void CheckForAvailableRatings()
+        {
+            UnratedAccommodations = new ObservableCollection<AccommodationRatingsDTO>();
+            UnratedReservations = new ObservableCollection<AccommodationReservation>();
+            FormUnratedReservation();
+        }
+
+        private void Evaluate_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedUnratedAccommodation != null)
+            {
+                Evaluate evaluateAccommodation = new Evaluate(SelectedUnratedAccommodation, _accommodationRatingsRepository, _accommodationReservationRepository, _imageRepository);
+                evaluateAccommodation.ShowDialog();
+            }
+        }
+
+        private void Cancel_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
     }
 }
