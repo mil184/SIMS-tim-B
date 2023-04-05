@@ -17,13 +17,12 @@ namespace InitialProject.Model
         public int Cleanliness { get; set; }
         public int Correctness { get; set; }
         public string Comment { get; set; }
-        public bool IsRated { get; set; }
 
         public ObservableCollection<int> ImageIds;
 
         public AccommodationRatings() { ImageIds = new ObservableCollection<int>(); }
 
-        public AccommodationRatings(int id, int reservationId, int ownerId, int accommodationId, int cleanliness, int correctness, string comment, ObservableCollection<int> imageIds, bool isRated) 
+        public AccommodationRatings(int id, int reservationId, int ownerId, int accommodationId, int cleanliness, int correctness, string comment, ObservableCollection<int> imageIds) 
         {
             Id = id;
             ReservationId = reservationId;
@@ -33,12 +32,11 @@ namespace InitialProject.Model
             Correctness = correctness;
             Comment = comment;
             ImageIds = imageIds;
-            IsRated = isRated;
         }
 
         public string[] ToCSV()
         {
-            string[] csvValues = { Id.ToString(), ReservationId.ToString(), OwnerId.ToString(), AccommodationId.ToString(), Cleanliness.ToString(), Correctness.ToString(), Comment, string.Join(",", ImageIds), IsRated.ToString() };
+            string[] csvValues = { Id.ToString(), ReservationId.ToString(), OwnerId.ToString(), AccommodationId.ToString(), Cleanliness.ToString(), Correctness.ToString(), Comment, string.Join(",", ImageIds) };
             return csvValues;
         }
        
@@ -55,7 +53,6 @@ namespace InitialProject.Model
             {
                 ImageIds.Add(int.Parse(id));
             }
-            IsRated = Convert.ToBoolean(values[8]);
         }
     }
 }

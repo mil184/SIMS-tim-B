@@ -81,6 +81,31 @@ namespace InitialProject.Repository
             return availableDates;
         }
 
+        public List<AccommodationReservation> GetUnratedAccommodations()
+        {
+            List<AccommodationReservation> unratedAccommodations = new List<AccommodationReservation>();
+
+            foreach (AccommodationReservation reservation in _accommodationReservations)
+            {
+                if (!reservation.IsRated)
+                {
+                    unratedAccommodations.Add(reservation);
+                }
+            }
+            return unratedAccommodations;
+        }
+        public AccommodationReservation Update(AccommodationReservation accommodationReservation)
+        {
+            _accommodationReservations = _serializer.FromCSV(FilePath);
+            AccommodationReservation current = _accommodationReservations.Find(c => c.Id == accommodationReservation.Id);
+            int index = _accommodationReservations.IndexOf(current);
+            _accommodationReservations.Remove(current);
+            _accommodationReservations.Insert(index, accommodationReservation);
+            _serializer.ToCSV(FilePath, _accommodationReservations);
+            NotifyObservers();
+            return accommodationReservation;
+        }
+
         public void Subscribe(IObserver observer)
         {
             _observers.Add(observer);

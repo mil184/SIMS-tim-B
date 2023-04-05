@@ -160,7 +160,10 @@ namespace InitialProject.View.Guest1
               {
                     SetRatingsForCleanlinees();
                     SetRatingsForCorrectness();
-                    AccommodationRatings accommodationRatings = new AccommodationRatings(Reservation.Id, Reservation.AccommodationId, Reservation.OwnerId, Reservation.GuestId, Cleanliness, Correctness, Comment, _imageIds, true);
+                    AccommodationRatings accommodationRatings = new AccommodationRatings(Reservation.Id, Reservation.AccommodationId, Reservation.OwnerId, Reservation.GuestId, Cleanliness, Correctness, Comment, _imageIds);
+                    AccommodationReservation reservation = _accommodationReservationRepository.GetById(Reservation.Id);
+                    reservation.IsRated = true;
+                    _accommodationReservationRepository.Update(reservation);
                     _accommodationRatingsRepository.Save(accommodationRatings);
                     MessageBox.Show("Rating saved successfully.");
                     Close();

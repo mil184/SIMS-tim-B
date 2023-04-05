@@ -162,6 +162,7 @@ namespace InitialProject.View.Guest1
             Reservation = new AccommodationReservation();
             Reservation.AccommodationId = selectedAccommodation.Id;
 
+
             _accommodationRepository = accommodationRepository;
             _accommodationReservationRepository = accommodationReservationRepository;
 
@@ -344,7 +345,7 @@ namespace InitialProject.View.Guest1
 
                 if (messageBoxResult == MessageBoxResult.Yes)
                 {
-                    var reservation = new AccommodationReservation(LoggedInUser.Id, SelectedAccommodation.Id, selectedItem.StartDate, selectedItem.EndDate, NumberOfDays, MaxGuests, OwnerId);
+                    var reservation = new AccommodationReservation(LoggedInUser.Id, SelectedAccommodation.Id, selectedItem.StartDate, selectedItem.EndDate, NumberOfDays, MaxGuests, OwnerId, false);
                     _accommodationReservationRepository.Save(reservation);
 
                     MessageBox.Show("Reservation created successfully.");

@@ -38,7 +38,7 @@ namespace InitialProject.View.Guest1
         public AccommodationRatingsDTO SelectedUnratedAccommodation { get; set; }
         public ObservableCollection<AccommodationRatings> AccommodationRatings { get; set; }
         public AccommodationRatings SelectedAccommodationRatings { get; set; }
-        public ObservableCollection<AccommodationReservation> UnreviewedReservations { get; set; }
+        public ObservableCollection<AccommodationReservation> UnratedReservations { get; set; }
 
 
         private readonly AccommodationRepository _accommodationRepository;
@@ -122,7 +122,9 @@ namespace InitialProject.View.Guest1
             AllAccommodations = new ObservableCollection<Accommodation>(_accommodationRepository.GetAll());
             PresentableAccommodations = ConvertToDTO(AllAccommodations);
 
-            CheckForAvailableRatings();
+            UnratedAccommodations = new ObservableCollection<AccommodationRatingsDTO>();
+            FormUnratedReservation();
+            UnratedReservations = new ObservableCollection<AccommodationReservation>();
         }
 
         private void ReserveButton_Click(object sender, RoutedEventArgs e)
@@ -284,6 +286,23 @@ namespace InitialProject.View.Guest1
 
         }
 
+        public AccommodationRatingsDTO ConvertToDTO(AccommodationReservation reservation)
+        {
+            return new AccommodationRatingsDTO(reservation.Id,
+                _userRepository.GetById(reservation.OwnerId).Username,
+                _accommodationRepository.GetById(reservation.AccommodationId).Name);
+
+        }
+        public ObservableCollection<AccommodationRatingsDTO> ConvertToDTO(ObservableCollection<AccommodationReservation> reservations)
+        {
+            ObservableCollection<AccommodationRatingsDTO> dto = new ObservableCollection<AccommodationRatingsDTO>();
+            foreach (AccommodationReservation reservation in reservations)
+            {
+                dto.Add(ConvertToDTO(reservation));
+            }
+            return dto;
+        }
+
         public void Update() 
         {
             FormUnratedReservation();
@@ -322,32 +341,18 @@ namespace InitialProject.View.Guest1
             return daysPassed.TotalDays >= 0 && daysPassed.TotalDays <= 5;
         }
 
-        public bool OwnerRated(AccommodationReservation reservation)
-        {
-            return _accommodationRatingsRepository.GetAll().Any(item => item.ReservationId == reservation.Id);
-        }
-
-
         public void FormUnratedReservation()
         {
             UnratedAccommodations.Clear();
-            foreach (AccommodationReservation reservation in _accommodationReservationRepository.GetAll())
-            {
-                if(RecentlyEnded(reservation) && !OwnerRated(reservation))
-                {
-                    if(AllAccommodations.Any(a => a.Id == reservation.AccommodationId))
-                    {
-                        UnratedAccommodations.Add(new AccommodationRatingsDTO(reservation.Id, _userRepository.GetById(reservation.OwnerId).Username, _accommodationRepository.GetById(reservation.AccommodationId).Name));
-                        UnreviewedReservations.Add(reservation);
-                    }
-                }
-            }
+            var reservations = _accommodationReservationRepository.GetUnratedAccommodations().Where(r => RecentlyEnded(r)); 
+            UnratedAccommodations = ConvertToDTO(new ObservableCollection<AccommodationReservation>(reservations));
         }
+
 
         public void CheckForAvailableRatings()
         {
             UnratedAccommodations = new ObservableCollection<AccommodationRatingsDTO>();
-            UnreviewedReservations = new ObservableCollection<AccommodationReservation>();
+            UnratedReservations = new ObservableCollection<AccommodationReservation>();
             FormUnratedReservation();
         }
 
