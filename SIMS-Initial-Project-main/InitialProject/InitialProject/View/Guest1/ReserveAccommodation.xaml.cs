@@ -151,6 +151,21 @@ namespace InitialProject.View.Guest1
                 }
             }
         }
+
+
+        private int _cancellationPeriod;
+        public int CancellationPeriod
+        {
+            get => _cancellationPeriod;
+            set
+            {
+                if (value != _cancellationPeriod)
+                {
+                    _cancellationPeriod = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         public ReserveAccommodation(GuestAccommodationDTO selectedAccommodation, User user, AccommodationRepository accommodationRepository, AccommodationReservationRepository accommodationReservationRepository)
         {
             InitializeComponent();
@@ -345,7 +360,7 @@ namespace InitialProject.View.Guest1
 
                 if (messageBoxResult == MessageBoxResult.Yes)
                 {
-                    var reservation = new AccommodationReservation(LoggedInUser.Id, SelectedAccommodation.Id, selectedItem.StartDate, selectedItem.EndDate, NumberOfDays, MaxGuests, OwnerId, false);
+                    var reservation = new AccommodationReservation(LoggedInUser.Id, SelectedAccommodation.Id, selectedItem.StartDate, selectedItem.EndDate, NumberOfDays, MaxGuests, OwnerId, false, CancellationPeriod);
                     _accommodationReservationRepository.Save(reservation);
 
                     MessageBox.Show("Reservation created successfully.");

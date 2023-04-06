@@ -106,6 +106,26 @@ namespace InitialProject.Repository
             return accommodationReservation;
         }
 
+        public void Remove(AccommodationReservation reservation)
+        {
+            var reservations = _serializer.FromCSV(FilePath);
+            var existingReservation = reservations.FirstOrDefault(r => r.Id == reservation.Id);
+
+            if (existingReservation != null)
+            {
+                reservations.Remove(existingReservation);
+               
+                int index = 1;
+                foreach (var r in reservations)
+                {
+                    r.Id = index++;
+                }
+                _serializer.ToCSV(FilePath, reservations);
+                _accommodationReservations = reservations;
+                NotifyObservers();
+            }
+        }
+
         public void Subscribe(IObserver observer)
         {
             _observers.Add(observer);
