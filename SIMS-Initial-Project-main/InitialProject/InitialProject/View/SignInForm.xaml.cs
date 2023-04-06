@@ -68,7 +68,7 @@ namespace InitialProject
                         commentsOverview.Show();
                         Close();
                     }
-                    else if (user.Type == InitialProject.Resources.Enums.UserType.owner) 
+                    else if (user.Type == InitialProject.Resources.Enums.UserType.owner || user.Type == InitialProject.Resources.Enums.UserType.superowner) 
                     {
                         OwnerWindow ownerWindow = new OwnerWindow(user);
                         ownerWindow.Show();
