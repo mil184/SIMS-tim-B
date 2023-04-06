@@ -279,5 +279,18 @@ namespace InitialProject.View.Guest2
             signInForm.Show();
             Close();
         }
+
+        private void RateButton_Click(object sender, RoutedEventArgs e)
+        {
+/*            if (SelectedGuest2TourDTO != null)
+            { 
+                RateTour rateTour = new RateTour();
+                rateTour.Show();
+            }*/
+
+            RateTour rateTour = new RateTour(SelectedGuest2TourDTO, LoggedInUser);
+            rateTour.Show();
+            Update();
+        }
     }
 }
