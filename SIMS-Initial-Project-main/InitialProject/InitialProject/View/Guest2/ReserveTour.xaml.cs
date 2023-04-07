@@ -69,7 +69,7 @@ namespace InitialProject.View.Guest2
             int personCount = int.Parse(PersonCount);
             int spacesLeft = selectedTour.MaxGuests - selectedTour.CurrentGuestCount;
 
-            if (SelectedVoucher != null ^ NoVoucherBtn.IsChecked == true)
+            if ((SelectedVoucher != null ^ NoVoucherBtn.IsChecked == true) & (personCount!=null))
             {
                 if (personCount > spacesLeft && selectedTour.CurrentGuestCount != selectedTour.MaxGuests)
                 {
