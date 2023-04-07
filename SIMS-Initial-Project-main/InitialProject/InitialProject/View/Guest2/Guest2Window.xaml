@@ -89,7 +89,7 @@
                     <!-- Tour overview section -->
                     <GroupBox Grid.Row="1" Header="Finished Tours" Margin="0 0 0 10" Height="221" Width="532">
                         <ScrollViewer VerticalScrollBarVisibility="Auto">
-                            <DataGrid ItemsSource="{Binding TourDTOs}" 
+                            <DataGrid ItemsSource="{Binding FinishedTourDTOs}" 
                                       SelectedItem="{Binding Path=SelectedGuest2TourDTO}"
                                       AutoGenerateColumns="False" IsReadOnly="True" Height="200" Width="500">
                                 <DataGrid.Columns>

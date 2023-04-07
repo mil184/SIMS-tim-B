@@ -175,8 +175,7 @@ namespace InitialProject.View.Guest2
                 SetRatingForInterestingness();
 
                 TourRating tourRating = new TourRating(
-                        //SelectedTour.TourId,
-                        1,
+                        SelectedTour.TourId,
                         GuideKnowledge,
                         GuideLanguage,
                         Interestingness,
