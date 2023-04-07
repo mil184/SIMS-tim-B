@@ -41,6 +41,10 @@ namespace InitialProject.View.Guest1
         public ObservableCollection<AccommodationReservation> UnratedReservations { get; set; }
 
 
+        public ObservableCollection<AccommodationReservation> PresentableReservations { get; set; }
+        public AccommodationReservation SelectedReservation { get; set; }
+
+
         private readonly AccommodationRepository _accommodationRepository;
 
         private readonly LocationRepository _locationRepository;
@@ -125,6 +129,8 @@ namespace InitialProject.View.Guest1
             UnratedAccommodations = new ObservableCollection<AccommodationRatingsDTO>();
             FormUnratedReservation();
             UnratedReservations = new ObservableCollection<AccommodationReservation>();
+
+            PresentableReservations = new ObservableCollection<AccommodationReservation>(_accommodationReservationRepository.GetAll());
         }
 
         private void ReserveButton_Click(object sender, RoutedEventArgs e)
@@ -370,5 +376,71 @@ namespace InitialProject.View.Guest1
             Close();
         }
 
+
+        private void CancelReservation_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedReservation != null)
+            {
+               
+                var messageBoxResult = MessageBox.Show($"Are you sure you want to cancel reservation for date: {SelectedReservation.StartDate:d} - {SelectedReservation.EndDate:d}", "Cancel Reservation Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                if (messageBoxResult == MessageBoxResult.Yes)
+                {
+
+                    if (CancellationPeriodPassed(SelectedReservation))
+                    {
+                        return;
+                    }
+
+                    _accommodationReservationRepository.Remove(SelectedReservation);
+                    MessageBox.Show("Reservation canceled successfully.");
+
+                    RefreshPresentableReservations();
+                }
+            }
+        }
+
+        public void RefreshPresentableReservations()
+        {
+            PresentableReservations.Clear();
+            var reservations = _accommodationReservationRepository.GetAll();
+            foreach (var reservation in reservations)
+            {
+                PresentableReservations.Add(reservation);
+            }
+        }
+        private void SendRequest_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        public bool CancellationPeriodPassed(AccommodationReservation reservation)
+        {
+            TimeSpan timeLeft = reservation.StartDate - DateTime.Now;
+            if (timeLeft.TotalHours <= 24)
+            {
+                ShowCancelWarning();
+                return true;
+            }
+            else if (timeLeft.TotalDays <= reservation.CancellationPeriod)
+            {
+                ShowCancelPeriodWarning();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private void ShowCancelWarning()
+        {
+            MessageBox.Show("Cannot cancel reservation. Less than 24 hours left before start date.", "Cancel reservation warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+
+        private void ShowCancelPeriodWarning()
+        {
+            MessageBox.Show($"Cannot cancel reservation. Less than {SelectedReservation.CancellationPeriod} left before start date.", "Cancel reservation warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
     }
 }

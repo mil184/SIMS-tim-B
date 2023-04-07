@@ -20,9 +20,10 @@ namespace InitialProject.Model
         public int MaxGuests { get; set; }
         public int OwnerId { get; set; }
         public bool IsRated { get; set; }
+        public int CancellationPeriod { get; set; }
 
         public AccommodationReservation() { }
-        public AccommodationReservation( int guestId, int accommodationId, DateTime startDate, DateTime endDate, int numberDays, int maxGuests, int ownerId, bool isRated)
+        public AccommodationReservation( int guestId, int accommodationId, DateTime startDate, DateTime endDate, int numberDays, int maxGuests, int ownerId, bool isRated, int cancellationPeriod)
         {
             GuestId = guestId;
             AccommodationId = accommodationId;
@@ -33,10 +34,11 @@ namespace InitialProject.Model
             MaxGuests = maxGuests;
             OwnerId = ownerId;
             IsRated = isRated;
+            CancellationPeriod = cancellationPeriod;
         }
         public string[] ToCSV()
         {
-            string[] csvValues = { Id.ToString(), GuestId.ToString(), AccommodationId.ToString(), StartDate.ToString(), EndDate.ToString(), NumberDays.ToString(), MaxGuests.ToString(), IsAvailable.ToString(), OwnerId.ToString(), IsRated.ToString() };
+            string[] csvValues = { Id.ToString(), GuestId.ToString(), AccommodationId.ToString(), StartDate.ToString(), EndDate.ToString(), NumberDays.ToString(), MaxGuests.ToString(), IsAvailable.ToString(), OwnerId.ToString(), IsRated.ToString(), CancellationPeriod.ToString() };
             return csvValues;
         }
 
@@ -52,6 +54,7 @@ namespace InitialProject.Model
             IsAvailable = Convert.ToBoolean(values[7]);
             OwnerId = Convert.ToInt32(values[8]);
             IsRated = Convert.ToBoolean(values[9]);
+            CancellationPeriod = Convert.ToInt32(values[10]);
         }
     }
 }

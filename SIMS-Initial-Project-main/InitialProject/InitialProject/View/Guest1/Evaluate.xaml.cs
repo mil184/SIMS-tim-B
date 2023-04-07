@@ -30,6 +30,7 @@ namespace InitialProject.View.Guest1
         private readonly AccommodationReservationRepository _accommodationReservationRepository;
         private readonly AccommodationRatingsDTO SelectedUnratedAccommodation;
         private readonly ImageRepository _imageRepository;
+        private readonly UserRepository _userRepository;
 
         public AccommodationReservation Reservation { get; set; }
 
@@ -100,6 +101,7 @@ namespace InitialProject.View.Guest1
             _accommodationRatingsRepository = accommodationRatingsRepository;
             _accommodationReservationRepository = accommodationReservationRepository;
             _imageRepository = imageRepository;
+            _userRepository = new UserRepository();
 
             Reservation = _accommodationReservationRepository.GetById(SelectedUnratedAccommodation.ReservationId);
         }
@@ -166,8 +168,34 @@ namespace InitialProject.View.Guest1
                     _accommodationReservationRepository.Update(reservation);
                     _accommodationRatingsRepository.Save(accommodationRatings);
                     MessageBox.Show("Rating saved successfully.");
+                    CheckForSuperOwnerPrivileges(Reservation.OwnerId);
                     Close();
             }
+        }
+
+        private void CheckForSuperOwnerPrivileges(int id)
+        {
+            int numberOfRatings = _accommodationRatingsRepository.GetAll().Where(x => x.OwnerId == id).Count();
+            int cleanlinessSum = _accommodationRatingsRepository.GetAll().Where(x => x.OwnerId == id).Sum(x => x.Cleanliness);
+            int correctnessSum = _accommodationRatingsRepository.GetAll().Where(x => x.OwnerId == id).Sum(x => x.Correctness);
+
+            double averageRating = (cleanlinessSum + correctnessSum) / (numberOfRatings * 2);
+
+            SetSuperOwnerPrivileges(id, numberOfRatings, averageRating);
+        }
+
+        private void SetSuperOwnerPrivileges(int id, int numberOfRatings, double averageRating)
+        {
+            User owner = _userRepository.GetById(id);
+            if (numberOfRatings >= 50 && averageRating > 4.5)
+            {
+                owner.Type = InitialProject.Resources.Enums.UserType.superowner;
+            }
+            else
+            {
+                owner.Type = InitialProject.Resources.Enums.UserType.owner;
+            }
+            _userRepository.Update(owner);
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
