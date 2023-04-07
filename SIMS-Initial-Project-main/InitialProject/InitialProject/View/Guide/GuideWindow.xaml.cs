@@ -31,7 +31,9 @@ namespace InitialProject.View.Guide
         public ObservableCollection<GuideTourDTO> FinishedTours { get; set; }
 
         public bool TourActive { get; set; }
-        public GuideTourDTO SelectedDTO { get; set; }
+        public GuideTourDTO SelectedCurrentTourDTO { get; set; }
+        public GuideTourDTO SelectedUpcomingTourDTO { get; set; }
+        public GuideTourDTO SelectedFinishedTourDTO { get; set; }
 
         private GuideTourDTO _activeTour;
         public GuideTourDTO ActiveTour
@@ -264,11 +266,20 @@ namespace InitialProject.View.Guide
         private void CurrentToursDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             CheckIfTourIsActive();
-            Tour selectedTour = ConvertToTour(SelectedDTO);
+            Tour selectedTour = ConvertToTour(SelectedCurrentTourDTO);
 
             if (selectedTour != null)
             {
                 HandleSelectedTour(selectedTour);
+            }
+        }
+        private void FinishedToursDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            Tour selectedTour = ConvertToTour(SelectedFinishedTourDTO);
+            if (selectedTour != null)
+            {
+                Statistics statistics = new Statistics(selectedTour);
+                statistics.Show();
             }
         }
         private void CheckIfTourIsActive()

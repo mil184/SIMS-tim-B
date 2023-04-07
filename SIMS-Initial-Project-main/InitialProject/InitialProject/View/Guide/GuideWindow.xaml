@@ -283,7 +283,7 @@
                     <GroupBox Header="Today's Tours" FontSize="28" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2">
                         <StackPanel Margin="0 20 0 0">
                             <ScrollViewer Height="300" VerticalScrollBarVisibility="Auto">
-                                <DataGrid Margin ="10" ItemsSource="{Binding CurrentTours}" SelectedItem="{Binding Path=SelectedDTO}" AutoGenerateColumns="False" Name="CurrentToursDataGrid" IsReadOnly="true" MouseDoubleClick="CurrentToursDataGrid_MouseDoubleClick" HorizontalAlignment="Stretch">
+                                <DataGrid Margin ="10" ItemsSource="{Binding CurrentTours}" SelectedItem="{Binding Path=SelectedCurrentTourDTO}" AutoGenerateColumns="False" Name="CurrentToursDataGrid" IsReadOnly="true" MouseDoubleClick="CurrentToursDataGrid_MouseDoubleClick" HorizontalAlignment="Stretch">
                                     <DataGrid.CellStyle>
                                         <Style TargetType="DataGridCell">
                                             <Setter Property="FontSize" Value="18"/>
@@ -397,7 +397,7 @@
                     <GroupBox Header="Upcoming Tours" FontSize="28" Foreground="#007ACC">
                         <StackPanel Margin="0 20 0 0">
                             <ScrollViewer Height="360" VerticalScrollBarVisibility="Auto">
-                                <DataGrid ItemsSource="{Binding UpcomingTours}" SelectedItem="{Binding Path=SelectedDTO}" AutoGenerateColumns="False" Name="UpcomingToursDataGrid" IsReadOnly="true"  HorizontalAlignment="Stretch">
+                                <DataGrid ItemsSource="{Binding UpcomingTours}" SelectedItem="{Binding Path=SelectedUpcomingTourDTO}" AutoGenerateColumns="False" Name="UpcomingToursDataGrid" IsReadOnly="true"  HorizontalAlignment="Stretch">
                                     <DataGrid.CellStyle>
                                         <Style TargetType="DataGridCell">
                                             <Setter Property="FontSize" Value="18"/>
@@ -472,7 +472,7 @@
                         </Button>
                     </Grid>
                     <GroupBox Header="Finished Tours" FontSize="28" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2">
-                        <DataGrid Height ="240" ItemsSource="{Binding FinishedTours}" SelectedItem="{Binding Path=SelectedDTO}" AutoGenerateColumns="False" Name="FinishedToursDataGrid" IsReadOnly="true" Margin="10 10 10 10">
+                        <DataGrid Height ="240" ItemsSource="{Binding FinishedTours}" SelectedItem="{Binding Path=SelectedFinishedTourDTO}" AutoGenerateColumns="False" Name="FinishedToursDataGrid" IsReadOnly="true" MouseDoubleClick="FinishedToursDataGrid_MouseDoubleClick" Margin="10 10 10 10">
                             <DataGrid.CellStyle>
                                 <Style TargetType="DataGridCell">
                                     <Setter Property="FontSize" Value="18"/>
