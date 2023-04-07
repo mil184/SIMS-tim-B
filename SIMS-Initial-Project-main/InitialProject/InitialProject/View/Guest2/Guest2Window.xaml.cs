@@ -26,11 +26,17 @@ namespace InitialProject.View.Guest2
     public partial class Guest2Window : Window, INotifyPropertyChanged, IObserver
     {
         public User LoggedInUser { get; set; }
+
         public Guest2TourDTO SelectedGuest2TourDTO { get; set; }
         public ObservableCollection<Guest2TourDTO> TourDTOs { get; set; }
         public ObservableCollection<Tour> Tours { get; set; }
+
         public ObservableCollection<Guest2TourDTO> FinishedTourDTOs { get; set; }
         public ObservableCollection<Tour> FinishedTours { get; set; }
+
+        public Voucher SelectedVoucher { get; set; }
+        public ObservableCollection<Voucher> Vouchers { get; set; }
+
         
         public ObservableCollection<Location> Locations;
 
@@ -98,7 +104,7 @@ namespace InitialProject.View.Guest2
             FinishedTours = new ObservableCollection<Tour>(_tourService.GetFinishedTours(UserTours));
             FinishedTourDTOs = ConvertToDTO(FinishedTours);
 
-            RemoveReservedTours();
+            
 
         }
 
@@ -113,23 +119,6 @@ namespace InitialProject.View.Guest2
             foreach (Tour tour in _tourService.GetAll())
             {
                 TourDTOs.Add(ConvertToDTO(tour));
-            }
-        }
-
-        public void RemoveByTourId(int id)
-        {
-            Guest2TourDTO tourForRemoval = TourDTOs.FirstOrDefault(t => t.TourId == id);
-            TourDTOs.Remove(tourForRemoval);
-        }
-
-        public void RemoveReservedTours()
-        {
-            foreach(TourReservation tourReservation in _tourReservationRepository.GetAll())
-            {
-                if(tourReservation.UserId == LoggedInUser.Id)
-                {
-                    RemoveByTourId(tourReservation.TourId);
-                }
             }
         }
 
@@ -173,10 +162,13 @@ namespace InitialProject.View.Guest2
 
         private void ReserveButton_Click(object sender, RoutedEventArgs e)
         {
-            if (SelectedGuest2TourDTO != null)
+            if (SelectedGuest2TourDTO != null & (SelectedVoucher != null ^ NoVoucherBtn != null)) // treba unchecked a ne null
             {
-                ReserveTour reserveTourForm = new ReserveTour(SelectedGuest2TourDTO, LoggedInUser, _tourService);
-                reserveTourForm.ShowDialog();
+                
+                    ReserveTour reserveTourForm = new ReserveTour(SelectedGuest2TourDTO, LoggedInUser, _tourService);
+                    reserveTourForm.ShowDialog();
+                
+                
             }
             Update();
         }

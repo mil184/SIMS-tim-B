@@ -31,6 +31,8 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
                     <!-- Tour list section -->
@@ -79,6 +81,24 @@
                             </DataGrid>
                         </ScrollViewer>
                     </GroupBox>
+
+                    <GroupBox Grid.Row="2" Header="Your Vouchers" Margin="0 0 0 10">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <DataGrid ItemsSource="{Binding TourDTOs}" 
+                                      SelectedItem="{Binding Path=SelectedVoucher}"
+                                      AutoGenerateColumns="False" IsReadOnly="True">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+                                    <DataGridTextColumn Header="Start Date" Binding="{Binding StartDateTime}" Width="*"/>
+                                    <DataGridTextColumn Header="Expiration Date" Binding="{Binding ExpirationDateTime}" Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ScrollViewer>
+                    </GroupBox>
+
+                    <RadioButton Grid.Row="3" Name="NoVoucherBtn">
+                        I don't want to use a voucher.
+                    </RadioButton>
                 </Grid>
             </TabItem>
 

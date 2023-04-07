@@ -2,13 +2,8 @@
 using InitialProject.Model.DTO;
 using InitialProject.Resources.Observer;
 using InitialProject.Serializer;
-using InitialProject.View.Guest2;
-using InitialProject.View.Guide;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Xml.Linq;
 
 namespace InitialProject.Repository
 {
