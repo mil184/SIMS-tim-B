@@ -3,12 +3,14 @@ using InitialProject.Model.DTO;
 using InitialProject.Repository;
 using InitialProject.Resources.Observer;
 using InitialProject.Service;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 
@@ -25,6 +27,9 @@ namespace InitialProject.View.Guide
         public User CurrentUser { get; set; }
         public ObservableCollection<GuideTourDTO> CurrentTours { get; set; }
         public ObservableCollection<GuideTourDTO> UpcomingTours { get; set; }
+
+        public ObservableCollection<GuideTourDTO> FinishedTours { get; set; }
+
         public bool TourActive { get; set; }
         public GuideTourDTO SelectedDTO { get; set; }
 
@@ -38,6 +43,33 @@ namespace InitialProject.View.Guide
                 {
                     _activeTour = value;
                     OnPropertyChanged(nameof(ActiveTour));
+                }
+            }
+        }
+
+        private GuideTourDTO _mostVisited;
+        public GuideTourDTO MostVisited
+        {
+            get { return _mostVisited; }
+            set
+            {
+                if (_mostVisited != value)
+                {
+                    _mostVisited = value;
+                    OnPropertyChanged(nameof(MostVisited));
+                }
+            }
+        }
+        private string _years;
+        public string Years
+        {
+            get => _years;
+            set
+            {
+                if (value != _years)
+                {
+                    _years = value;
+                    OnPropertyChanged();
                 }
             }
         }
@@ -66,8 +98,10 @@ namespace InitialProject.View.Guide
             _userRepository.Subscribe(this);
 
             InitializeCollections();
+            InitializeStartingSearchValues();
+            InitializeComboBoxes();
             FindActiveTour();
-            SortUpcomingTours();
+            SortTours();
 
             CurrentUser.Username = "Gorana";
 
@@ -76,7 +110,46 @@ namespace InitialProject.View.Guide
         {
             CurrentTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourService.GetTodaysTours()));
             UpcomingTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourService.GetUpcomingTours()));
+            FinishedTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourService.GetFinishedTours()));
         }
+        private void InitializeComboBoxes()
+        {
+            Years_cb.Items.Add("Alltime");
+            Years_cb.SelectedItem = Years_cb.Items[0];
+            for (int i = 2000; i <= DateTime.Now.Year ; i++)
+            {
+                Years_cb.Items.Add(i.ToString());
+            }
+        }
+        private void InitializeStartingSearchValues()
+        {
+            MostVisited = ConvertToDTO(_tourService.GetMostVisitedTour(_tourService.GetFinishedTours()));
+        }
+        private void Years_cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (Years_cb.SelectedItem != null)
+            {
+                if (int.TryParse(Years_cb.SelectedItem.ToString(), out int year))
+                {
+                    List<Tour> toursByYear = _tourService.GetToursByYear(year);
+                    if (toursByYear.Count == 0)
+                    {
+                        MostVisited = new GuideTourDTO { Name = "No information", Location = "", NumberOfGuestsMessage = "" };
+                    }
+                    else
+                    {
+                        MostVisited = ConvertToDTO(_tourService.GetMostVisitedTour(toursByYear));
+                    }
+                }
+                else if(Years_cb.SelectedItem.ToString() == "Alltime") 
+                {
+                    MostVisited = ConvertToDTO(_tourService.GetMostVisitedTour(_tourService.GetFinishedTours()));
+                }
+
+            }
+        }
+
+
         private void FindActiveTour()
         {
             ActiveTour = null;
@@ -91,10 +164,10 @@ namespace InitialProject.View.Guide
                 }
             }
         }
-        private void SortUpcomingTours()
+        private void SortTours()
         {
-            var view = CollectionViewSource.GetDefaultView(UpcomingTours);
-            view.SortDescriptions.Add(new SortDescription("StartTime", ListSortDirection.Ascending));
+            var view1 = CollectionViewSource.GetDefaultView(UpcomingTours);
+            view1.SortDescriptions.Add(new SortDescription("StartTime", ListSortDirection.Ascending));
         }
 
         private void CreateButton_Click(object sender, RoutedEventArgs e)
@@ -112,6 +185,7 @@ namespace InitialProject.View.Guide
         {
             UpdateUpcomingTours();
             UpdateCurrentTours();
+            UpdateFinishedTours();
             UpdateActiveTour();
         }
         private void UpdateUpcomingTours()
@@ -128,6 +202,14 @@ namespace InitialProject.View.Guide
             foreach (Tour tour in _tourService.GetTodaysTours())
             {
                 CurrentTours.Add(ConvertToDTO(tour));
+            }
+        }
+        private void UpdateFinishedTours()
+        {
+            FinishedTours.Clear();
+            foreach (Tour tour in _tourService.GetFinishedTours())
+            {
+                FinishedTours.Add(ConvertToDTO(tour));
             }
         }
         private void UpdateActiveTour()
@@ -154,18 +236,24 @@ namespace InitialProject.View.Guide
                     tour.Name,
                     _locationService.GetById(tour.LocationId).Country,
                     _locationService.GetById(tour.LocationId).City,
-                    tour.StartTime)); 
+                    tour.StartTime,
+                    tour.CurrentGuestCount)); 
             }
             return dto;
         }
         public GuideTourDTO ConvertToDTO(Tour tour)
         {
+
+            if (tour == null)
+                return null;
+
             return new GuideTourDTO(
                     tour.Id,
                     tour.Name,
                     _locationService.GetById(tour.LocationId).Country,
                     _locationService.GetById(tour.LocationId).City,
-                    tour.StartTime); 
+                    tour.StartTime,
+                    tour.CurrentGuestCount); 
         }
         public Tour ConvertToTour(GuideTourDTO dto)
         {
@@ -263,5 +351,6 @@ namespace InitialProject.View.Guide
             var messageBoxResult = MessageBox.Show($"Are you sure you want to start the {selectedTour.Name} tour?", "Start Tour Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
             return messageBoxResult == MessageBoxResult.Yes;
         }
+
     }
 }

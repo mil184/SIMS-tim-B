@@ -246,8 +246,8 @@ namespace InitialProject.View.Guide
         }
         private void UpdateTourStatus()
         {
-            SelectedTour.CurrentCheckpointId = -1;
             SelectedTour.IsActive = false;
+            SelectedTour.IsFinished = true;
             _tourService.Update(SelectedTour);
         }
         private void UpdateTourReservations()
