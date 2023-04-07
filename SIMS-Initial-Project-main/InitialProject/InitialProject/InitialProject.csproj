@@ -75,6 +75,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Resources\Images\guest2.png" />
     <Resource Include="Resources\Images\upload.png" />
   </ItemGroup>

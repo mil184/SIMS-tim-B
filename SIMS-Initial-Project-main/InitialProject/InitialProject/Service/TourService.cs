@@ -13,11 +13,13 @@ namespace InitialProject.Service
     {
         private readonly TourRepository _tourRepository;
         private readonly LocationRepository _locationRepository;
+        private readonly TourReservationRepository _tourReservationRepository;
 
         public TourService()
         {
             _tourRepository = new TourRepository();
             _locationRepository = new LocationRepository();
+            _tourReservationRepository = new TourReservationRepository();
         }
 
         public List<Tour> RemoveFromListById(List<Tour> tours, int id)
@@ -33,13 +35,27 @@ namespace InitialProject.Service
 
             foreach (var tour in _tourRepository.GetAll())
             {
-                if (tour.StartTime.Date == currentDateTime.Date && tour.StartTime >= currentDateTime)
+                if (tour.StartTime.Date == currentDateTime.Date && tour.StartTime >= currentDateTime && !tour.IsFinished)
                 {
                     currentTours.Add(tour);
                 }
             }
 
             return currentTours;
+        }
+        public List<Tour> GetFinishedTours()
+        {
+            var finishedTours = new List<Tour>();
+
+            foreach (var tour in _tourRepository.GetAll())
+            {
+                if (tour.IsFinished)
+                {
+                    finishedTours.Add(tour);
+                }
+            }
+
+            return finishedTours;
         }
         public List<Tour> GetUpcomingTours()
         {
@@ -56,20 +72,7 @@ namespace InitialProject.Service
             }
             return upcomingTours;
         }
-        public List<Tour> GetByCity(Location location)
-        {
-            var toursByCity = new List<Tour>();
 
-            foreach (var tour in _tourRepository.GetAll())
-            {
-                if (_locationRepository.GetById(tour.LocationId).City == location.City)
-                {
-                    toursByCity.Add(tour);
-                }
-            }
-
-            return toursByCity;
-        }
         public List<Tour> GetByCityName(string city)
         {
             var toursByCityName = new List<Tour>();
@@ -84,23 +87,40 @@ namespace InitialProject.Service
 
             return toursByCityName;
         }
-        public bool HasAvailableSpace(Tour tour, int guestsToAdd)
-        {
-            return (tour.CurrentGuestCount + guestsToAdd < tour.MaxGuests);
-        }
-        public List<Tour> GetByCountry(Location location)
-        {
-            var toursByCountry = new List<Tour>();
 
-            foreach (var tour in _tourRepository.GetAll())
+        public List<Tour> GetToursByYear(int year) 
+        {
+            List<Tour> toursThisYear = new List<Tour>();
+
+            DateTime LeftBoundary = new DateTime(year,1,1);
+            DateTime RightBoundary = new DateTime(year, 12, 31);
+
+            foreach (Tour tour in GetFinishedTours()) 
             {
-                if (_locationRepository.GetById(tour.LocationId).Country == location.Country)
+                if(tour.StartTime >= LeftBoundary && tour.StartTime <= RightBoundary) 
                 {
-                    toursByCountry.Add(tour);
+                    toursThisYear.Add(tour);
                 }
             }
+            return toursThisYear;
+        }
+        public Tour GetMostVisitedTour(List<Tour> toursThisYear) 
+        {
+            if (toursThisYear.Count == 0) 
+            {
+                return null;
+            }
 
-            return toursByCountry;
+            Tour mostVisitedTour = toursThisYear[0];
+
+            foreach (Tour tour in toursThisYear) 
+            {
+                if(tour.CurrentGuestCount > mostVisitedTour.CurrentGuestCount) 
+                {
+                    mostVisitedTour = tour;
+                }
+            }
+            return mostVisitedTour;
         }
         public Tour GetById(int id)
         {
