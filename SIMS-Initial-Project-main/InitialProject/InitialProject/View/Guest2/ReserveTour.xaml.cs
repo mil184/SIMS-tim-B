@@ -58,7 +58,7 @@ namespace InitialProject.View.Guest2
             _voucherRepository = new VoucherRepository();
             _voucherService = new VoucherService();
 
-            Vouchers = new ObservableCollection<Voucher>(_voucherRepository.GetAll());
+            Vouchers = new ObservableCollection<Voucher>(_voucherService.GetUserVouchers(LoggedInUser));
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
