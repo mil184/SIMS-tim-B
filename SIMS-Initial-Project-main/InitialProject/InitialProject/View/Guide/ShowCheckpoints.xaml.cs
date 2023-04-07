@@ -82,11 +82,21 @@ namespace InitialProject.View.Guide
                 User user = _userRepository.GetById(id);
                 UserDTO userDto = ConvertUserToDTO(user);
 
-                if (!UnmarkedGuests.Contains(userDto))
-                {
+                if(!HasUser(userDto.UserId))
                     UnmarkedGuests.Add(userDto);
+            }
+        }
+
+        private bool HasUser(int userId) 
+        {
+            foreach(UserDTO user in UnmarkedGuests) 
+            {
+                if(user.UserId == userId) 
+                {
+                    return true;
                 }
             }
+            return false;
         }
         private void LoadTourCheckpoints()
         {
