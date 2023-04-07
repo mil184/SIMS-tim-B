@@ -66,40 +66,45 @@ namespace InitialProject.View.Guest2
             Tour selectedTour = new Tour();
             selectedTour = _tourService.GetById(SelectedTour.TourId);
 
-            int personCount = int.Parse(PersonCount);
-            int spacesLeft = selectedTour.MaxGuests - selectedTour.CurrentGuestCount;
-
-            if (SelectedVoucher != null ^ NoVoucherBtn.IsChecked == true)
+            if (PersonCount != null)
             {
-                if (personCount > spacesLeft && selectedTour.CurrentGuestCount != selectedTour.MaxGuests)
+                int personCount = int.Parse(PersonCount);
+                int spacesLeft = selectedTour.MaxGuests - selectedTour.CurrentGuestCount;
+
+                if (SelectedVoucher != null ^ NoVoucherBtn.IsChecked == true)
                 {
-                    if (spacesLeft == 1)
-                        MessageBox.Show("You've tried adding too many guests. There is only 1 space left.");
+                    if (personCount > spacesLeft && selectedTour.CurrentGuestCount != selectedTour.MaxGuests)
+                    {
+                        if (spacesLeft == 1)
+                            MessageBox.Show("You've tried adding too many guests. There is only 1 space left.");
+                        else
+                            MessageBox.Show("You've tried adding too many guests. There are only " + spacesLeft.ToString() + " spaces left.");
+                    }
+                    else if (selectedTour.CurrentGuestCount == selectedTour.MaxGuests)
+                    {
+                        ZeroSpacesForReservation zeroSpacesForReservation
+                            = new ZeroSpacesForReservation(SelectedTour, LoggedInUser, _tourService);
+                        zeroSpacesForReservation.ShowDialog();
+                        Close();
+                    }
                     else
-                        MessageBox.Show("You've tried adding too many guests. There are only " + spacesLeft.ToString() + " spaces left.");
-                }
-                else if (selectedTour.CurrentGuestCount == selectedTour.MaxGuests)
-                {
-                    ZeroSpacesForReservation zeroSpacesForReservation
-                        = new ZeroSpacesForReservation(SelectedTour, LoggedInUser, _tourService);
-                    zeroSpacesForReservation.ShowDialog();
-                    Close();
-                }
-                else
-                {
-                    TourReservation tourReservation = new TourReservation(
-                                                        LoggedInUser.Id,
-                                                        SelectedTour.TourId,
-                                                        personCount);
+                    {
+                        TourReservation tourReservation = new TourReservation(
+                                                            LoggedInUser.Id,
+                                                            SelectedTour.TourId,
+                                                            personCount);
 
-                    _tourReservationRepository.Save(tourReservation);
+                        _tourReservationRepository.Save(tourReservation);
 
-                    selectedTour.CurrentGuestCount += personCount;
-                    _tourService.Update(selectedTour);
+                        selectedTour.CurrentGuestCount += personCount;
+                        _tourService.Update(selectedTour);
 
-                    Close();
+                        Close();
+                    }
                 }
             }
+
+            
 
             
         }
