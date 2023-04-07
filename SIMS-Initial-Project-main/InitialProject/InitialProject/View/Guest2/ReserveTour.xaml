@@ -12,6 +12,8 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <!-- Tour info -->
@@ -24,8 +26,26 @@
             <TextBox Width="50" Text="{Binding PersonCount}" />
         </StackPanel>
 
+        <GroupBox Grid.Row="2" Header="Your Vouchers" Margin="0 0 0 10">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <DataGrid ItemsSource="{Binding Vouchers}" 
+                                      SelectedItem="{Binding Path=SelectedVoucher}"
+                                      AutoGenerateColumns="False" IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+                        <DataGridTextColumn Header="Start Date" Binding="{Binding StartDateTime}" Width="*"/>
+                        <DataGridTextColumn Header="Expiration Date" Binding="{Binding ExpirationDateTime}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </ScrollViewer>
+        </GroupBox>
+
+        <RadioButton Grid.Row="3" Name="NoVoucherBtn">
+            I don't want to use a voucher.
+        </RadioButton>
+
         <!-- Buttons -->
-        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="10">
+        <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="10">
             <Button Content="Save" Margin="0 0 10 0" Click="SaveButton_Click" />
             <Button Content="Cancel" Click="Button_Click" />
         </StackPanel>

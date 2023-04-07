@@ -2,6 +2,7 @@
 using InitialProject.Model.DTO;
 using InitialProject.Repository;
 using InitialProject.Service;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -12,6 +13,9 @@ namespace InitialProject.View.Guest2
     {
         public User LoggedInUser { get; set; }
         public Guest2TourDTO SelectedTour { get; set; }
+
+        public Voucher SelectedVoucher { get; set; }
+        public ObservableCollection<Voucher> Vouchers { get; set; }
 
         private string _personCount;
         public string PersonCount
@@ -30,6 +34,9 @@ namespace InitialProject.View.Guest2
         private readonly TourReservationRepository _tourReservationRepository;
         private readonly TourService _tourService;
 
+        private readonly VoucherRepository _voucherRepository;
+        private readonly VoucherService _voucherService;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -47,6 +54,11 @@ namespace InitialProject.View.Guest2
 
             _tourReservationRepository = new TourReservationRepository();
             _tourService = tourService;
+
+            _voucherRepository = new VoucherRepository();
+            _voucherService = new VoucherService();
+
+            Vouchers = new ObservableCollection<Voucher>(_voucherRepository.GetAll());
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
@@ -57,34 +69,39 @@ namespace InitialProject.View.Guest2
             int personCount = int.Parse(PersonCount);
             int spacesLeft = selectedTour.MaxGuests - selectedTour.CurrentGuestCount;
 
-            if (personCount > spacesLeft && selectedTour.CurrentGuestCount != selectedTour.MaxGuests)
+            if (SelectedVoucher != null ^ NoVoucherBtn.IsChecked == true)
             {
-                if (spacesLeft == 1)
-                    MessageBox.Show("You've tried adding too many guests. There is only 1 space left.");
+                if (personCount > spacesLeft && selectedTour.CurrentGuestCount != selectedTour.MaxGuests)
+                {
+                    if (spacesLeft == 1)
+                        MessageBox.Show("You've tried adding too many guests. There is only 1 space left.");
+                    else
+                        MessageBox.Show("You've tried adding too many guests. There are only " + spacesLeft.ToString() + " spaces left.");
+                }
+                else if (selectedTour.CurrentGuestCount == selectedTour.MaxGuests)
+                {
+                    ZeroSpacesForReservation zeroSpacesForReservation
+                        = new ZeroSpacesForReservation(SelectedTour, LoggedInUser, _tourService);
+                    zeroSpacesForReservation.ShowDialog();
+                    Close();
+                }
                 else
-                    MessageBox.Show("You've tried adding too many guests. There are only " + spacesLeft.ToString() + " spaces left.");
-            }
-            else if (selectedTour.CurrentGuestCount == selectedTour.MaxGuests)
-            {
-                ZeroSpacesForReservation zeroSpacesForReservation
-                    = new ZeroSpacesForReservation(SelectedTour, LoggedInUser, _tourService);
-                zeroSpacesForReservation.ShowDialog();
-                Close();
-            }
-            else
-            {
-                TourReservation tourReservation = new TourReservation(
-                                                    LoggedInUser.Id,
-                                                    SelectedTour.TourId,
-                                                    personCount);
+                {
+                    TourReservation tourReservation = new TourReservation(
+                                                        LoggedInUser.Id,
+                                                        SelectedTour.TourId,
+                                                        personCount);
 
-                _tourReservationRepository.Save(tourReservation);
+                    _tourReservationRepository.Save(tourReservation);
 
-                selectedTour.CurrentGuestCount += personCount;
-                _tourService.Update(selectedTour);
-                
-                Close();
+                    selectedTour.CurrentGuestCount += personCount;
+                    _tourService.Update(selectedTour);
+
+                    Close();
+                }
             }
+
+            
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

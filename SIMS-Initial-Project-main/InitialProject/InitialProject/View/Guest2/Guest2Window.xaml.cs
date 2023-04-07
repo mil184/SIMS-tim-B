@@ -34,8 +34,7 @@ namespace InitialProject.View.Guest2
         public ObservableCollection<Guest2TourDTO> FinishedTourDTOs { get; set; }
         public ObservableCollection<Tour> FinishedTours { get; set; }
 
-        public Voucher SelectedVoucher { get; set; }
-        public ObservableCollection<Voucher> Vouchers { get; set; }
+       
 
         
         public ObservableCollection<Location> Locations;
@@ -162,7 +161,7 @@ namespace InitialProject.View.Guest2
 
         private void ReserveButton_Click(object sender, RoutedEventArgs e)
         {
-            if (SelectedGuest2TourDTO != null & (SelectedVoucher != null ^ NoVoucherBtn != null)) // treba unchecked a ne null
+            if (SelectedGuest2TourDTO != null) // & (SelectedVoucher != null ^ NoVoucherBtn != null)) // treba unchecked a ne null
             {
                 
                     ReserveTour reserveTourForm = new ReserveTour(SelectedGuest2TourDTO, LoggedInUser, _tourService);
