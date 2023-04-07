@@ -107,20 +107,6 @@ namespace InitialProject.Repository
             return _tourReservations;
         }
 
-        public List<int> GetTourIdsByUser(User user)
-        {
-            List<int> tourIds = new List<int>();
-
-            foreach (TourReservation reservation in _tourReservations)
-            {
-                if (reservation.UserId == user.Id)
-                {
-                    tourIds.Add(reservation.TourId);
-                }
-            }
-            return tourIds;
-        }
-
         public void Subscribe(IObserver observer)
         {
             _observers.Add(observer);

@@ -1,4 +1,5 @@
 ﻿using InitialProject.Model;
+using InitialProject.Model.DTO;
 using InitialProject.Resources.Observer;
 using InitialProject.Serializer;
 using InitialProject.View.Guest2;
@@ -68,6 +69,7 @@ namespace InitialProject.Repository
         {
             return _tours;
         }
+
         public void Subscribe(IObserver observer)
         {
             _observers.Add(observer);

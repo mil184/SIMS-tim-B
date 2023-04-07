@@ -29,7 +29,9 @@ namespace InitialProject.View.Guest2
         public Guest2TourDTO SelectedGuest2TourDTO { get; set; }
         public ObservableCollection<Guest2TourDTO> TourDTOs { get; set; }
         public ObservableCollection<Tour> Tours { get; set; }
-
+        public ObservableCollection<Guest2TourDTO> FinishedTourDTOs { get; set; }
+        public ObservableCollection<Tour> FinishedTours { get; set; }
+        
         public ObservableCollection<Location> Locations;
 
         public ObservableCollection<Guest2TourDTO> NonReservedTours { get; set; }
@@ -91,6 +93,10 @@ namespace InitialProject.View.Guest2
 
             Tours = new ObservableCollection<Tour>(_tourService.GetAll());
             TourDTOs = ConvertToDTO(Tours);
+
+            ObservableCollection<Tour> UserTours = new ObservableCollection<Tour>(_tourService.GetUserTours(LoggedInUser));
+            FinishedTours = new ObservableCollection<Tour>(_tourService.GetFinishedTours(UserTours));
+            FinishedTourDTOs = ConvertToDTO(FinishedTours);
 
             RemoveReservedTours();
 
@@ -278,6 +284,16 @@ namespace InitialProject.View.Guest2
             SignInForm signInForm = new SignInForm();
             signInForm.Show();
             Close();
+        }
+
+        private void RateButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedGuest2TourDTO != null)
+            {
+                RateTour rateTour = new RateTour(SelectedGuest2TourDTO, LoggedInUser);
+                rateTour.Show();
+                Update();
+            }
         }
     }
 }
