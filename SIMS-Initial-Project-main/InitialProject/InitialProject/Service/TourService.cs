@@ -59,6 +59,11 @@ namespace InitialProject.Service
             return tours.FindAll(tour => tour.IsFinished);
         }
 
+        public bool CheckIfTourCanBeAborted(Tour tour) 
+        {
+            return tour.StartTime.AddDays(-2) >= DateTime.Now;
+        }
+
         public List<Tour> RemoveFromListById(List<Tour> tours, int id)
         {
             List<Tour> toursRemoved = tours;
@@ -102,7 +107,7 @@ namespace InitialProject.Service
             foreach (var tour in _tourRepository.GetAll())
             {
                 var tourStartDate = tour.StartTime.Date;
-                if (tourStartDate > currentDate)
+                if (tourStartDate > currentDate && !tour.IsAborted)
                 {
                     upcomingTours.Add(tour);
                 }

@@ -397,7 +397,7 @@
                     <GroupBox Header="Upcoming Tours" FontSize="28" Foreground="#007ACC">
                         <StackPanel Margin="0 20 0 0">
                             <ScrollViewer Height="360" VerticalScrollBarVisibility="Auto">
-                                <DataGrid ItemsSource="{Binding UpcomingTours}" SelectedItem="{Binding Path=SelectedUpcomingTourDTO}" AutoGenerateColumns="False" Name="UpcomingToursDataGrid" IsReadOnly="true"  HorizontalAlignment="Stretch">
+                                <DataGrid ItemsSource="{Binding UpcomingTours}" SelectedItem="{Binding Path=SelectedUpcomingTourDTO}" AutoGenerateColumns="False" Name="UpcomingToursDataGrid" IsReadOnly="true"  HorizontalAlignment="Stretch" MouseDoubleClick="UpcomingToursDataGrid_MouseDoubleClick">
                                     <DataGrid.CellStyle>
                                         <Style TargetType="DataGridCell">
                                             <Setter Property="FontSize" Value="18"/>

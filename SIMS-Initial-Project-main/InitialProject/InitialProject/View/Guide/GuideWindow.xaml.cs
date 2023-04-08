@@ -24,6 +24,7 @@ namespace InitialProject.View.Guide
         private readonly ImageRepository _imageRepository;
         private readonly CheckpointRepository _checkpointRepository;
         private readonly UserRepository _userRepository;
+        private readonly VoucherRepository _voucherRepository;
         public User CurrentUser { get; set; }
         public ObservableCollection<GuideTourDTO> CurrentTours { get; set; }
         public ObservableCollection<GuideTourDTO> UpcomingTours { get; set; }
@@ -98,6 +99,9 @@ namespace InitialProject.View.Guide
 
             _userRepository = new UserRepository();
             _userRepository.Subscribe(this);
+
+            _voucherRepository = new VoucherRepository();
+            _voucherRepository.Subscribe(this);
 
             InitializeCollections();
             InitializeStartingSearchValues();
@@ -282,6 +286,33 @@ namespace InitialProject.View.Guide
                 statistics.Show();
             }
         }
+        private void UpcomingToursDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            List<int> vouchersAdded = new List<int>();
+            Tour tour = ConvertToTour(SelectedUpcomingTourDTO);
+
+            if (!_tourService.CheckIfTourCanBeAborted(tour)) 
+            {
+                ShowAbortTourWarning();
+                return;
+            }
+
+                if (ConfirmAbortTour(ConvertToTour(SelectedUpcomingTourDTO)))
+            {
+                foreach (int userId in _tourReservationRepository.GetUserIdsByTour(ConvertToTour(SelectedUpcomingTourDTO)))
+                {
+                    if (!vouchersAdded.Contains(userId))
+                    {
+                        vouchersAdded.Add(userId);
+                        Voucher voucher = new Voucher(SelectedUpcomingTourDTO.Name, DateTime.Now, DateTime.Now.AddYears(1), userId);
+                        _voucherRepository.Save(voucher);
+                       
+                        tour.IsAborted = true;
+                        _tourService.Update(tour);
+                    }
+                }
+            }
+        }
         private void CheckIfTourIsActive()
         {
             TourActive = false;
@@ -357,11 +388,19 @@ namespace InitialProject.View.Guide
         {
             MessageBox.Show("An active tour is already in progress. Please finish the current tour before starting a new one.", "Active Tour Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
+        private void ShowAbortTourWarning()
+        { 
+            MessageBox.Show("You may not abort this tour as you are breaking the 2 day rule.", "Abort Tour Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
         private bool ConfirmStartTour(Tour selectedTour)
         {
             var messageBoxResult = MessageBox.Show($"Are you sure you want to start the {selectedTour.Name} tour?", "Start Tour Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
             return messageBoxResult == MessageBoxResult.Yes;
         }
-
+        private bool ConfirmAbortTour(Tour selectedTour)
+        {
+            var messageBoxResult = MessageBox.Show($"Are you sure you want to abort the {selectedTour.Name} tour?", "Abort Tour Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            return messageBoxResult == MessageBoxResult.Yes;
+        }
     }
 }
