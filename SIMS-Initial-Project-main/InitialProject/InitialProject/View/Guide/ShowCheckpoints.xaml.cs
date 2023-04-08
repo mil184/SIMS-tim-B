@@ -241,8 +241,9 @@ namespace InitialProject.View.Guide
         {
             UpdateTourStatus();
             UpdateTourReservations();
-            DisplayEndTourMessage();
             Close();
+            Ratings ratings = new Ratings(SelectedTour);
+            ratings.Show();
         }
         private void UpdateTourStatus()
         {
