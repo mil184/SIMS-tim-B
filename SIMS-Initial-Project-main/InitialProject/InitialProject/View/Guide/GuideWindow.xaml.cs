@@ -288,12 +288,16 @@ namespace InitialProject.View.Guide
         }
         private void UpcomingToursDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (SelectedUpcomingTourDTO == null)
-                return;
-
             List<int> vouchersAdded = new List<int>();
+            Tour tour = ConvertToTour(SelectedUpcomingTourDTO);
 
-            if (ConfirmAbortTour(ConvertToTour(SelectedUpcomingTourDTO)))
+            if (!_tourService.CheckIfTourCanBeAborted(tour)) 
+            {
+                ShowAbortTourWarning();
+                return;
+            }
+
+                if (ConfirmAbortTour(ConvertToTour(SelectedUpcomingTourDTO)))
             {
                 foreach (int userId in _tourReservationRepository.GetUserIdsByTour(ConvertToTour(SelectedUpcomingTourDTO)))
                 {
@@ -303,9 +307,8 @@ namespace InitialProject.View.Guide
                         Voucher voucher = new Voucher(SelectedUpcomingTourDTO.Name, DateTime.Now, DateTime.Now.AddYears(1), userId);
                         _voucherRepository.Save(voucher);
                        
-                        //Tour tour = ConvertToTour(SelectedUpcomingTourDTO);
-                        //tour.IsAborted = true;
-                        //_tourService.Update(tour);
+                        tour.IsAborted = true;
+                        _tourService.Update(tour);
                     }
                 }
             }
@@ -384,6 +387,10 @@ namespace InitialProject.View.Guide
         private void ShowActiveTourWarning()
         {
             MessageBox.Show("An active tour is already in progress. Please finish the current tour before starting a new one.", "Active Tour Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+        private void ShowAbortTourWarning()
+        { 
+            MessageBox.Show("You may not abort this tour as you are breaking the 2 day rule.", "Abort Tour Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
         private bool ConfirmStartTour(Tour selectedTour)
         {
