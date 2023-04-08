@@ -12,6 +12,7 @@ namespace InitialProject.View.Owner
         private readonly GuestReviewRepository _repository;
         private readonly GuestReviewDTO SelectedUnreviewedGuest;
         private readonly AccommodationReservationRepository _reservations;
+        private readonly AccommodationRatingsRepository _ratings;
         public AccommodationReservation Reservation { get; set; }
 
         private string _comment;
@@ -56,7 +57,7 @@ namespace InitialProject.View.Owner
             }
         }
 
-        public ReviewGuest(GuestReviewRepository repository, GuestReviewDTO selectedUnreviewedGuest, AccommodationReservationRepository reservations)
+        public ReviewGuest(GuestReviewRepository repository, GuestReviewDTO selectedUnreviewedGuest, AccommodationReservationRepository reservations, AccommodationRatingsRepository ratings)
         {
             InitializeComponent();
             DataContext = this;
@@ -64,6 +65,7 @@ namespace InitialProject.View.Owner
             _repository = repository;
             SelectedUnreviewedGuest = selectedUnreviewedGuest;
             _reservations = reservations;
+            _ratings = ratings;
 
             Reservation = _reservations.GetById(SelectedUnreviewedGuest.ReservationId);
         }
@@ -93,8 +95,9 @@ namespace InitialProject.View.Owner
         {
             if (IsValid)
             {
-                GuestReview guestReview= new GuestReview(Reservation.Id, Reservation.AccommodationId, Reservation.GuestId, Comment, Cleanness, Behaviour);
+                GuestReview guestReview = new GuestReview(Reservation.Id, Reservation.AccommodationId, Reservation.GuestId, Comment, Cleanness, Behaviour);
                 _repository.Save(guestReview);
+                _ratings.NotifyObservers();
                 Close();
             }
             else

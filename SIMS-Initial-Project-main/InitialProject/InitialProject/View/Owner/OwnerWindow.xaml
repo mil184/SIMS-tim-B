@@ -54,7 +54,23 @@
             </TabItem>
             <TabItem Header="Ratings">
                 <StackPanel Margin="10">
-                    <TextBlock FontSize="18" FontWeight="Bold" Text="Ratings" Margin="0 0 10 0"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontSize="18" FontWeight="Bold" Text="Ratings" Margin="0 0 10 0"/>
+                    </StackPanel>
+                    <StackPanel Margin="0 10 0 0">
+                        <DataGrid DockPanel.Dock="Bottom" 
+                                  ItemsSource="{Binding Path=RatingsDTO, UpdateSourceTrigger=PropertyChanged}"
+                                  AutoGenerateColumns="False" IsReadOnly="True"
+                                  Width="700" Height="200">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Username" Binding="{Binding UserName}" Width="*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Accommodation" Binding="{Binding AccommodationName}" Width="2*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Cleanliness" Binding="{Binding Cleanliness}" Width="*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Correctness" Binding="{Binding Correctness}" Width="*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Comment" Binding="{Binding Comment}" Width="2*"></DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
                 </StackPanel>
             </TabItem>
             <TabItem Header="Guest Reviews">

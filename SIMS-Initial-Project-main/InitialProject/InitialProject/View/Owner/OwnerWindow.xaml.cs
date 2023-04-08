@@ -25,6 +25,8 @@ namespace InitialProject.View.Owner
         public ObservableCollection<GuestReviewDTO> UnreviewedGuests { get; set; }
         public GuestReviewDTO SelectedUnreviewedGuest { get; set; }
         public ObservableCollection<AccommodationReservation> UnreviewedReservations { get; set; }
+        public ObservableCollection<AccommodationRatings> Ratings { get; set; }
+        public ObservableCollection<RatingsDTO> RatingsDTO { get; set; }
 
         private AccommodationRepository _repository;
         private readonly LocationService _locationService;
@@ -32,6 +34,7 @@ namespace InitialProject.View.Owner
         private readonly AccommodationReservationRepository _reservationRepository;
         private readonly GuestReviewRepository _guestReviewRepository;
         private readonly UserRepository _userRepository;
+        private readonly AccommodationRatingsRepository _ratingRepository;
 
         public OwnerWindow(User user)
         {
@@ -51,10 +54,39 @@ namespace InitialProject.View.Owner
             _guestReviewRepository.Subscribe(this);
             _userRepository = new UserRepository();
             _userRepository.Subscribe(this);
+            _ratingRepository = new AccommodationRatingsRepository();
+            _ratingRepository.Subscribe(this);
 
             InitializeAccommodations();
-
+            InitializeRatings();
             CheckForEligibleReviews();
+        }
+
+        public void FormRatings()
+        {
+            /*foreach (AccommodationRatings rating in _ratingRepository.GetAll())
+            {
+                if (rating.OwnerId == LoggedInUser.Id && _guestReviewRepository.GetAll().Any(t => t.ReservationId == rating.ReservationId))
+                {
+                    Ratings.Add(rating);
+                }
+            }*/
+
+            foreach (AccommodationRatings rating in _ratingRepository.GetAll())
+            {
+                if (rating.OwnerId == LoggedInUser.Id && _guestReviewRepository.GetAll().Any(t => t.ReservationId == rating.ReservationId))
+                {
+                    RatingsDTO dto = new RatingsDTO(_userRepository.GetById(_reservationRepository.GetById(rating.ReservationId).GuestId).Username, _repository.GetById(rating.AccommodationId).Name, rating.Cleanliness, rating.Correctness, rating.Comment);
+                    RatingsDTO.Add(dto);
+                }
+            }
+        }
+
+        public void InitializeRatings()
+        {
+            Ratings = new ObservableCollection<AccommodationRatings>();
+            RatingsDTO = new ObservableCollection<RatingsDTO>();
+            FormRatings();
         }
 
         public void FormAccommodations()
@@ -142,7 +174,7 @@ namespace InitialProject.View.Owner
         {
             if(SelectedUnreviewedGuest != null)
             {
-                ReviewGuest reviewGuest = new ReviewGuest(_guestReviewRepository, SelectedUnreviewedGuest, _reservationRepository);
+                ReviewGuest reviewGuest = new ReviewGuest(_guestReviewRepository, SelectedUnreviewedGuest, _reservationRepository, _ratingRepository);
                 reviewGuest.Show();
             }
         }
@@ -160,6 +192,9 @@ namespace InitialProject.View.Owner
 
             UnreviewedGuests.Clear();
             FormUnreviewedGuests();
+
+            Ratings.Clear();
+            FormRatings();
         }
     }
 }
