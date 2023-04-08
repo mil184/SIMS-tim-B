@@ -31,6 +31,7 @@ namespace InitialProject.Model
         public bool IsActive { get; set; }
         public bool IsFinished { get; set; }
         public bool IsAborted { get; set; }
+        public bool IsRated { get; set; }
         public Tour() { ImageIds = new ObservableCollection<int>(); CheckpointIds = new ObservableCollection<int>(); }
         public Tour(string name, int locationId, string description, string language, int maxGuests, int currentGuestCount, DateTime startTime, double duration, int guideId, ObservableCollection<int> imageIds, ObservableCollection<int> checkpointIds)
         {
@@ -49,6 +50,7 @@ namespace InitialProject.Model
             IsActive = false;
             IsFinished = false;
             IsAborted = false;
+            IsRated = false;
         }
         public string[] ToCSV()
         {
@@ -68,7 +70,8 @@ namespace InitialProject.Model
             CurrentCheckpointId.ToString(),
             IsActive.ToString(),
             IsFinished.ToString(),
-            IsAborted.ToString()
+            IsAborted.ToString(),
+            IsRated.ToString()
         };
             return csvValues;
         }
@@ -97,6 +100,7 @@ namespace InitialProject.Model
             IsActive = bool.Parse(values[13]);
             IsFinished = bool.Parse(values[14]);
             IsAborted = bool.Parse(values[15]);
+            IsRated = bool.Parse(values[16]);
         }
 
     }

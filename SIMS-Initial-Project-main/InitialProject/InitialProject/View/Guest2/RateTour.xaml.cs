@@ -180,7 +180,8 @@ namespace InitialProject.View.Guest2
                         GuideLanguage,
                         Interestingness,
                         Comment,
-                        _imageIds);
+                        _imageIds,
+                        LoggedInUser.Id);
 
                 // dobavi koja je tura
                 // promeni israted = true

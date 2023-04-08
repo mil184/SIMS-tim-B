@@ -13,13 +13,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Border Background="#E9F1F7" BorderThickness="3" BorderBrush="#007ACC" CornerRadius="5" Margin="5">
-        <TextBlock FontSize="30" VerticalAlignment="Center" FontStyle="Italic">
-        <Run Text="The " Foreground="#007ACC"/>
-        <Run Text="{Binding FinishedTour.Name}" Foreground="#FFA500" />
-        <Run Text=" tour has finished." Foreground="#007ACC" />
-            </TextBlock>
-        </Border>
+     
         <Button Grid.Column="3" Content="Report Selected User&#x0a;          (ENTER)" Height="60" Width="170" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Right" Margin="10">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
@@ -45,13 +39,18 @@
             </Button.Template>
         </Button>
         <GroupBox Header="Ratings" FontSize="32" Margin="10" Grid.Row="1" Foreground="#007ACC" BorderBrush="#007ACC" Background="#E9F1F7" BorderThickness="2">
-            <DataGrid ItemsSource="{Binding Ratings}" IsReadOnly="True" Margin="10">
+            <DataGrid Height ="240" ItemsSource="{Binding GuestRatings}" SelectedItem="{Binding Path=SelectedRatingDTO}" AutoGenerateColumns="False" Name="RatingsDataGrid" IsReadOnly="true" MouseDoubleClick="RatingsDataGrid_MouseDoubleClick" Margin="10 10 10 10">
+                <DataGrid.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="FontSize" Value="15"/>
+                        <Setter Property="Padding" Value="10"/>
+                    </Style>
+                </DataGrid.CellStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Username" Binding="{Binding Username}" Width="Auto"/>
-                    <DataGridTextColumn Header="Checkpoint" Binding="{Binding Checkpoint}" Width="Auto"/>
-                    <DataGridTextColumn Header="Comment" Binding="{Binding Comment}" Width="*"/>
-                    <DataGridTextColumn Header="Rating" Binding="{Binding Rating}" Width="Auto" />
-                    <DataGridTextColumn Header="Valid" Binding="{Binding Valid}" Width="Auto"/>
+                    <DataGridTextColumn Header="Username" Binding="{Binding Username}" Width="*" FontSize="20"/>
+                    <DataGridTextColumn Header="Arrival" Binding="{Binding Checkpoint}" Width="*" FontSize="20"/>
+                    <DataGridTextColumn Header="Rating" Binding="{Binding Rating}" Width="*" FontSize="20"/>
+                    <DataGridTextColumn Header="Valid" Binding="{Binding IsValidText}" Width="*" FontSize="20"/>
                 </DataGrid.Columns>
             </DataGrid>
         </GroupBox>

@@ -99,6 +99,20 @@ namespace InitialProject.Service
 
             return finishedTours;
         }
+        public List<Tour> GetRatedTours()
+        {
+            var ratedTours = new List<Tour>();
+
+            foreach (var tour in GetFinishedTours())
+            {
+                if (tour.IsRated)
+                {
+                    ratedTours.Add(tour);
+                }
+            }
+
+            return ratedTours;
+        }
         public List<Tour> GetUpcomingTours()
         {
             var upcomingTours = new List<Tour>();

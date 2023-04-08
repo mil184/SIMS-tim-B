@@ -20,6 +20,7 @@ namespace InitialProject.View.Guide
     {
         private readonly TourService _tourService;
         private readonly TourReservationRepository _tourReservationRepository;
+        private readonly TourRatingRepository _tourRatingRepository;
         private readonly LocationService _locationService;
         private readonly ImageRepository _imageRepository;
         private readonly CheckpointRepository _checkpointRepository;
@@ -28,13 +29,14 @@ namespace InitialProject.View.Guide
         public User CurrentUser { get; set; }
         public ObservableCollection<GuideTourDTO> CurrentTours { get; set; }
         public ObservableCollection<GuideTourDTO> UpcomingTours { get; set; }
-
         public ObservableCollection<GuideTourDTO> FinishedTours { get; set; }
+        public ObservableCollection<GuideTourDTO> RatedTours { get; set; }
 
         public bool TourActive { get; set; }
         public GuideTourDTO SelectedCurrentTourDTO { get; set; }
         public GuideTourDTO SelectedUpcomingTourDTO { get; set; }
         public GuideTourDTO SelectedFinishedTourDTO { get; set; }
+        public GuideTourDTO SelectedRatedTourDTO { get; set; }
 
         private GuideTourDTO _activeTour;
         public GuideTourDTO ActiveTour
@@ -103,6 +105,9 @@ namespace InitialProject.View.Guide
             _voucherRepository = new VoucherRepository();
             _voucherRepository.Subscribe(this);
 
+            _tourRatingRepository = new TourRatingRepository();
+            _tourRatingRepository.Subscribe(this);
+
             InitializeCollections();
             InitializeStartingSearchValues();
             InitializeComboBoxes();
@@ -117,6 +122,7 @@ namespace InitialProject.View.Guide
             CurrentTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourService.GetTodaysTours()));
             UpcomingTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourService.GetUpcomingTours()));
             FinishedTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourService.GetFinishedTours()));
+            RatedTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourService.GetRatedTours()));
         }
         private void InitializeComboBoxes()
         {
@@ -313,6 +319,11 @@ namespace InitialProject.View.Guide
                 }
             }
         }
+        private void RatedToursDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            Ratings ratings = new Ratings(ConvertToTour(SelectedRatedTourDTO), _userRepository, _tourRatingRepository, _tourReservationRepository, _checkpointRepository);
+            ratings.Show();
+        }
         private void CheckIfTourIsActive()
         {
             TourActive = false;
@@ -333,7 +344,7 @@ namespace InitialProject.View.Guide
             if (selectedTour.IsActive)
             {
                 ActiveTour = ConvertToDTO(selectedTour);
-                ShowCheckpoints showCheckpoints = new ShowCheckpoints(selectedTour, _checkpointRepository, _tourService, _tourReservationRepository, _userRepository);
+                ShowCheckpoints showCheckpoints = new ShowCheckpoints(selectedTour, _checkpointRepository, _tourService, _tourReservationRepository, _userRepository, _tourRatingRepository);
                 showCheckpoints.ShowDialog();
             }
             else if (TourActive)
@@ -375,7 +386,7 @@ namespace InitialProject.View.Guide
         }
         private void ShowCheckpointsForTour(Tour tour)
         {
-            ShowCheckpoints showCheckpoints = new ShowCheckpoints(tour, _checkpointRepository, _tourService, _tourReservationRepository, _userRepository);
+            ShowCheckpoints showCheckpoints = new ShowCheckpoints(tour, _checkpointRepository, _tourService, _tourReservationRepository, _userRepository, _tourRatingRepository);
             showCheckpoints.ShowDialog();
         }
         private void LogOut_Click(object sender, RoutedEventArgs e)
@@ -402,5 +413,6 @@ namespace InitialProject.View.Guide
             var messageBoxResult = MessageBox.Show($"Are you sure you want to abort the {selectedTour.Name} tour?", "Abort Tour Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
             return messageBoxResult == MessageBoxResult.Yes;
         }
+
     }
 }

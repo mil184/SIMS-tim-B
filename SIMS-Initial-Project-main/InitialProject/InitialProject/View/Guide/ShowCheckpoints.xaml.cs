@@ -50,7 +50,7 @@ namespace InitialProject.View.Guide
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public ShowCheckpoints(Tour tour, CheckpointRepository checkpointRepository, TourService tourService, TourReservationRepository tourReservationRepository, UserRepository userRepository)
+        public ShowCheckpoints(Tour tour, CheckpointRepository checkpointRepository, TourService tourService, TourReservationRepository tourReservationRepository, UserRepository userRepository, TourRatingRepository tourRatingRepository)
         {
             InitializeComponent();
             DataContext = this;
@@ -60,6 +60,7 @@ namespace InitialProject.View.Guide
             _tourService = tourService;
             _tourReservationRepository = tourReservationRepository;
             _userRepository = userRepository;
+
 
             InitializeCollections();
             LoadUnmarkedGuests();
@@ -250,10 +251,8 @@ namespace InitialProject.View.Guide
         private void EndTour()
         {
             UpdateTourStatus();
-            UpdateTourReservations();
+            //UpdateTourReservations();
             Close();
-            Ratings ratings = new Ratings(SelectedTour);
-            ratings.Show();
         }
         private void UpdateTourStatus()
         {

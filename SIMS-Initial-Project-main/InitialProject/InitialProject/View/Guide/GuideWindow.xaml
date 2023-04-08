@@ -488,8 +488,61 @@
                     </GroupBox>
                 </StackPanel>
             </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Ratings" FontSize="17"/>
+                </TabItem.Header>
+                <StackPanel Margin="10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="14*" />
+                            <ColumnDefinition Width="249*"/>
+                            <ColumnDefinition Width="605*"/>
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
 
-
+                        <Button Grid.Column="3" Content="  View Ratings For&#x0a;     Selected Tour  &#x0a;         (ENTER)" Height="80" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Right" Margin="10">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <EventTrigger RoutedEvent="Button.Click">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="#005F8B" />
+                                        </Trigger>
+                                        <Trigger Property="IsPressed" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="#00415E" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>   
+                    </Grid>
+                    <GroupBox Header="Rated Tours" FontSize="28" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2">
+                        <DataGrid Height ="240" ItemsSource="{Binding RatedTours}" SelectedItem="{Binding Path=SelectedRatedTourDTO}" AutoGenerateColumns="False" Name="RatingsDataGrid" IsReadOnly="true" MouseDoubleClick="RatedToursDataGrid_MouseDoubleClick" Margin="10 10 10 10">
+                            <DataGrid.CellStyle>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="FontSize" Value="18"/>
+                                    <Setter Property="Padding" Value="10"/>
+                                </Style>
+                            </DataGrid.CellStyle>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" FontSize="18"/>
+                                <DataGridTextColumn Header="Location" Binding="{Binding Location}" Width="*" FontSize="18"/>
+                                <DataGridTextColumn Header="Start Time" Binding="{Binding Path=StartTime,StringFormat={}{0:dd.M.yyyy. HH:mm}}" Width="*" FontSize="18"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </GroupBox>
+                </StackPanel>
+            </TabItem>
             <TabItem>
                 <TabItem.Header>
                     <TextBlock Text="Requests" FontSize="17"/>

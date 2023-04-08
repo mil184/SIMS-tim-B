@@ -93,9 +93,14 @@ namespace InitialProject.View.Guest2
                                                             LoggedInUser.Id,
                                                             SelectedTour.TourId,
                                                             personCount);
-
-                        _tourReservationRepository.Save(tourReservation);
-
+                        if (CheckIfReservationAlreadyExists(tourReservation))
+                        {
+                            _tourReservationRepository.Update(tourReservation);
+                        }
+                        else
+                        {
+                            _tourReservationRepository.Save(tourReservation);
+                        }
                         selectedTour.CurrentGuestCount += personCount;
                         _tourService.Update(selectedTour);
 
@@ -108,7 +113,17 @@ namespace InitialProject.View.Guest2
 
             
         }
-
+        public bool CheckIfReservationAlreadyExists(TourReservation tourReservation) 
+        {
+            foreach(TourReservation reservation in _tourReservationRepository.GetAll()) 
+            {
+                if(reservation.TourId  == tourReservation.TourId && reservation.UserId == tourReservation.UserId) 
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Close();

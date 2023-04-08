@@ -78,5 +78,24 @@ namespace InitialProject.Repository
             NotifyObservers();
             return tourRating;
         }
+
+        public List<TourRating> GetTourRatings(Tour tour)
+        {
+            List<TourRating> ratings = new List<TourRating>();
+
+            foreach (TourRating rating in _tourRatings) 
+            {
+                if(rating.TourId == tour.Id && rating.isValid) 
+                {
+                    ratings.Add(rating);
+                }
+            }
+            return ratings;
+        }
+        public TourRating GetById(int id)
+        {
+            _tourRatings = _serializer.FromCSV(FilePath);
+            return _tourRatings.Find(c => c.Id == id);
+        }
     }
 }
