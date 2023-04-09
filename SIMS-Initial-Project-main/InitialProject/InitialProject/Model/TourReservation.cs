@@ -15,22 +15,23 @@ namespace InitialProject.Model
         public int TourId { get; set; }
         public int PersonCount { get; set; }
         public int CheckpointArrivalId { get; set; }
-
         public bool Checked { get; set; }
+        public double AverageAge { get; set; }
         public TourReservation() { }
 
-        public TourReservation(int userId, int tourId, int personCount)
+        public TourReservation(int userId, int tourId, int personCount, double averageAge)
         {
             UserId = userId;
             TourId = tourId;
             PersonCount = personCount;
             CheckpointArrivalId = -1;
             Checked = false;
+            AverageAge = averageAge;
         }
 
         public string[] ToCSV()
         {
-            string[] csvValues = { Id.ToString(), UserId.ToString(), TourId.ToString(), PersonCount.ToString(), CheckpointArrivalId.ToString(), Checked.ToString() };
+            string[] csvValues = { Id.ToString(), UserId.ToString(), TourId.ToString(), PersonCount.ToString(), CheckpointArrivalId.ToString(), Checked.ToString(), AverageAge.ToString() };
             return csvValues;
         }
 
@@ -42,6 +43,7 @@ namespace InitialProject.Model
             PersonCount = Convert.ToInt32(values[3]);
             CheckpointArrivalId = Convert.ToInt32(values[4]);
             Checked = Convert.ToBoolean(values[5]);
+            AverageAge = Convert.ToDouble (values[6]);
         }
     }
 }
