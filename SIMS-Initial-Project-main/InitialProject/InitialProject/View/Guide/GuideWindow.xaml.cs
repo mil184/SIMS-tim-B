@@ -303,7 +303,7 @@ namespace InitialProject.View.Guide
                 return;
             }
 
-                if (ConfirmAbortTour(ConvertToTour(SelectedUpcomingTourDTO)))
+            if (ConfirmAbortTour(ConvertToTour(SelectedUpcomingTourDTO)))
             {
                 foreach (int userId in _tourReservationRepository.GetUserIdsByTour(ConvertToTour(SelectedUpcomingTourDTO)))
                 {

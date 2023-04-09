@@ -21,7 +21,7 @@ namespace InitialProject.Model
         public int UsedVoucherId { get; set; }
         public TourReservation() { }
 
-        public TourReservation(int userId, int tourId, int personCount, double averageAge, int voucherId)
+        public TourReservation(int userId, int tourId, int personCount, double averageAge, int usedVoucher)
         {
             UserId = userId;
             TourId = tourId;
@@ -30,7 +30,7 @@ namespace InitialProject.Model
             Checked = false;
             IsRated = false;
             AverageAge = averageAge;
-            UsedVoucherId = voucherId;
+            UsedVoucherId = usedVoucher;
         }
 
         public string[] ToCSV()

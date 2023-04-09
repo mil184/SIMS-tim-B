@@ -160,6 +160,30 @@ namespace InitialProject.Repository
             }
             return counter;
         }
+        public int GetUsedVoucherCount(Tour tour)
+        {
+            int counter = 0;
+            foreach (TourReservation reservation in _tourReservations)
+            {
+                if (tour.Id == reservation.TourId && reservation.UsedVoucherId != -1)
+                {
+                    counter++;
+                }
+            }
+            return counter;
+        }
+        public int GetUnusedVoucherCount(Tour tour)
+        {
+            int counter = 0;
+            foreach (TourReservation reservation in _tourReservations)
+            {
+                if (tour.Id == reservation.TourId && reservation.UsedVoucherId == -1)
+                {
+                    counter++;
+                }
+            }
+            return counter;
+        }
         public List<TourReservation> GetAll()
         {
             return _tourReservations;

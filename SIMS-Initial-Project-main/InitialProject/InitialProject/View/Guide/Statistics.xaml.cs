@@ -77,7 +77,7 @@ namespace InitialProject.View.Guide
                 new ColumnSeries
                 {
                     Title = "Yes",
-                    Values = new ChartValues<double> { 10 },
+                    Values = new ChartValues<double> { _tourReservationRepository.GetUsedVoucherCount(SelectedTour) },
                     Stroke = Brushes.Black, // Set the outline color of the columns to black
                     Fill = new SolidColorBrush(Color.FromRgb(0x00, 0xFF, 0x00)), // Set the fill color of the first column to green
                     ColumnPadding = 30, // Set the column padding to 0 to remove the space between columns
@@ -86,7 +86,7 @@ namespace InitialProject.View.Guide
                 new ColumnSeries
                 {
                     Title = "No",
-                    Values = new ChartValues<double> { 20 },
+                    Values = new ChartValues<double> { _tourReservationRepository.GetUnusedVoucherCount(SelectedTour)  },
                     Stroke = Brushes.Black, // Set the outline color of the columns to black
                     Fill = new SolidColorBrush(Color.FromRgb(0xFF, 0x00, 0x00)), // Set the fill color of the second column to blue
                     ColumnPadding = 30, // Set the column padding to 0 to remove the space between columns
@@ -95,6 +95,11 @@ namespace InitialProject.View.Guide
             };
 
             VaucherLabels = new[] { "Used A Voucher?" };
+        }
+
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }
