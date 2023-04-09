@@ -1,10 +1,13 @@
 ﻿using InitialProject.Model;
 using InitialProject.Model.DTO;
 using InitialProject.Repository;
+using InitialProject.Resources.Observer;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -21,7 +24,7 @@ namespace InitialProject.View.Guide
     /// <summary>
     /// Interaction logic for Ratings.xaml
     /// </summary>
-    public partial class Ratings : Window
+    public partial class Ratings : Window, INotifyPropertyChanged, IObserver
     {
         private readonly UserRepository _userRepository;
         private readonly TourRatingRepository _tourRatingRepository;
@@ -30,7 +33,16 @@ namespace InitialProject.View.Guide
 
         public Tour FinishedTour { get; set; }
 
-        public ObservableCollection<GuideRatingDTO> GuestRatings { get; set; } 
+        private ObservableCollection<GuideRatingDTO> _guestRatings;
+        public ObservableCollection<GuideRatingDTO> GuestRatings
+        {
+            get => _guestRatings;
+            set
+            {
+                _guestRatings = value;
+                OnPropertyChanged();
+            }
+        }
 
         public GuideRatingDTO SelectedRatingDTO { get; set; }
         public Ratings(Tour finishedTour, UserRepository userRepository, TourRatingRepository tourRatingRepository, TourReservationRepository tourReservationRepository, CheckpointRepository checkpointRepository)
@@ -44,6 +56,8 @@ namespace InitialProject.View.Guide
             _tourReservationRepository = tourReservationRepository;
             _checkpointRepository = checkpointRepository;
 
+                        _tourRatingRepository.Subscribe(this);
+
             GuestRatings = new ObservableCollection<GuideRatingDTO>(ConvertToDTO(_tourRatingRepository.GetTourRatings(finishedTour)));
 
         }
@@ -53,15 +67,30 @@ namespace InitialProject.View.Guide
             if (rating == null)
                 return null;
 
+            string checkpointName;
+
+            if(_tourReservationRepository.GetReservationByGuestIdAndTourId(rating.UserId, rating.TourId).CheckpointArrivalId == -1)
+            {
+                checkpointName = "Did not arrive";
+            }
+            else 
+            {
+                checkpointName = _checkpointRepository.GetById(_tourReservationRepository.GetReservationByGuestIdAndTourId(rating.UserId, rating.TourId).CheckpointArrivalId).Order.ToString() + ". " +
+                    _checkpointRepository.GetById(_tourReservationRepository.GetReservationByGuestIdAndTourId(rating.UserId, rating.TourId).CheckpointArrivalId).Name;
+            }
+
+
+
             return new GuideRatingDTO(
                     rating.Id,
                     _userRepository.GetById(rating.UserId).Username,
-                    _checkpointRepository.GetById(_tourReservationRepository.GetReservationByGuestIdAndTourId(rating.UserId, rating.TourId).CheckpointArrivalId).Name,
+                    checkpointName,
                     rating.Comment,
                     rating.GuideKnowledge,
                     rating.GuideLanguage,
                     rating.Interestingness,
-                    rating.isValid);
+                    rating.isValid,
+                    _tourRatingRepository.FindRatingUrls(rating));             
         }
         public List<GuideRatingDTO> ConvertToDTO(List<TourRating> ratings)
         {
@@ -82,7 +111,28 @@ namespace InitialProject.View.Guide
         private void RatingsDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             RatingsOverview overview = new RatingsOverview(SelectedRatingDTO);
-            overview.Show();
+            overview.Show();           
+        }
+        private void ReportButton_Click(object sender, RoutedEventArgs e)
+        {
+            TourRating rating = ConvertToRating(SelectedRatingDTO);
+            rating.isValid = false;
+            _tourRatingRepository.Update(rating);
+        }
+        private void ExitButton_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void Update()
+        {
+            GuestRatings.Clear();
+            GuestRatings = new ObservableCollection<GuideRatingDTO>(ConvertToDTO(_tourRatingRepository.GetTourRatings(FinishedTour)));
         }
     }
 }

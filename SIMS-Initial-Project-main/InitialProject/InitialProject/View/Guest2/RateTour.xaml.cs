@@ -186,8 +186,10 @@ namespace InitialProject.View.Guest2
                 // dobavi koja je tura
                 // promeni israted = true
                 // update
-
+                Tour tour = _tourRepository.GetById(tourRating.TourId);
+                tour.IsRated = true;
                 _tourRatingRepository.Save(tourRating);
+                _tourRepository.Update(tour);
 
                 MessageBox.Show("Rating saved successfully.");
                 Close();

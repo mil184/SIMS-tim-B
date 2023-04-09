@@ -70,7 +70,7 @@ namespace InitialProject.Repository
 
             foreach(TourReservation reservation in _tourReservations) 
             {
-                if(reservation.TourId == tour.Id) 
+                if(reservation.TourId == tour.Id && !reservation.Checked) 
                 {
                     userIds.Add(reservation.UserId);
                 }   

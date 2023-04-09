@@ -13,8 +13,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-     
-        <Button Grid.Column="3" Content="Report Selected User&#x0a;          (ENTER)" Height="60" Width="170" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Right" Margin="10">
+        <Button Content="Report Rating&#x0a;  (CTRL + R)" Height="60" Width="120" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2"  Margin="10" Click="ReportButton_Click" HorizontalAlignment="Right">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -39,7 +38,7 @@
             </Button.Template>
         </Button>
         <GroupBox Header="Ratings" FontSize="32" Margin="10" Grid.Row="1" Foreground="#007ACC" BorderBrush="#007ACC" Background="#E9F1F7" BorderThickness="2">
-            <DataGrid Height ="240" ItemsSource="{Binding GuestRatings}" SelectedItem="{Binding Path=SelectedRatingDTO}" AutoGenerateColumns="False" Name="RatingsDataGrid" IsReadOnly="true" MouseDoubleClick="RatingsDataGrid_MouseDoubleClick" Margin="10 10 10 10">
+            <DataGrid ItemsSource="{Binding GuestRatings}" SelectedItem="{Binding Path=SelectedRatingDTO}" AutoGenerateColumns="False" Name="RatingsDataGrid" IsReadOnly="true" MouseDoubleClick="RatingsDataGrid_MouseDoubleClick" Margin="10 10 10 10">
                 <DataGrid.CellStyle>
                     <Style TargetType="DataGridCell">
                         <Setter Property="FontSize" Value="15"/>
@@ -49,13 +48,19 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Username" Binding="{Binding Username}" Width="*" FontSize="20"/>
                     <DataGridTextColumn Header="Arrival" Binding="{Binding Checkpoint}" Width="*" FontSize="20"/>
-                    <DataGridTextColumn Header="Rating" Binding="{Binding Rating}" Width="*" FontSize="20"/>
-                    <DataGridTextColumn Header="Valid" Binding="{Binding IsValidText}" Width="*" FontSize="20"/>
+                    <DataGridTextColumn Header="Rating" Binding="{Binding Rating, StringFormat={}{0:F2}}" Width="*" FontSize="20"/>
+                    <DataGridTemplateColumn Header="Valid" Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image Source="{Binding IsValidImage}" Width="20" Height="20" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </GroupBox>
 
-        <Button Grid.Row="2" Content="  Exit&#x0a; (ESC)" Height="50" Width="130" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2"  Margin="10">
+        <Button Grid.Row="2" Content="  Exit&#x0a; (ESC)" Height="50" Width="130" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2"  Margin="10" Click="ExitButton_Click">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">

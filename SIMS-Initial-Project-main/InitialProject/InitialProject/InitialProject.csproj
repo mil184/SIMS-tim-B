@@ -21,12 +21,15 @@
     <None Remove="Resources\Images\edit.png" />
     <None Remove="Resources\Images\favicon.ico" />
     <None Remove="Resources\Images\gorana.jpg" />
+    <None Remove="Resources\Images\green-check.png" />
     <None Remove="Resources\Images\guest.png" />
     <None Remove="Resources\Images\guest2.png" />
     <None Remove="Resources\Images\home.png" />
+    <None Remove="Resources\Images\image_unavailable.png" />
     <None Remove="Resources\Images\info.png" />
     <None Remove="Resources\Images\inspection.png" />
     <None Remove="Resources\Images\owner.png" />
+    <None Remove="Resources\Images\red-x.png" />
     <None Remove="Resources\Images\search.jpg" />
     <None Remove="Resources\Images\tour-guide.png" />
     <None Remove="Resources\Images\traveler.png" />
@@ -53,12 +56,21 @@
     <Resource Include="Resources\Images\gorana.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\Images\green-check.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Images\guest.png" />
+    <Resource Include="Resources\Images\image_unavailable.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Images\info.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\inspection.png" />
     <Resource Include="Resources\Images\owner.png" />
+    <Resource Include="Resources\Images\red-x.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Images\search.jpg" />
     <Resource Include="Resources\Images\tour-guide.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

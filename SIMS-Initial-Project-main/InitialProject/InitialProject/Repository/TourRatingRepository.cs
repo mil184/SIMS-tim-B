@@ -17,6 +17,8 @@ namespace InitialProject.Repository
 
         private List<TourRating> _tourRatings;
 
+        private readonly ImageRepository _imageRepository;
+
         private readonly List<IObserver> _observers;
 
         public TourRatingRepository()
@@ -24,6 +26,8 @@ namespace InitialProject.Repository
             _serializer = new Serializer<TourRating>();
             _tourRatings = _serializer.FromCSV(FilePath);
             _observers = new List<IObserver>();
+
+            _imageRepository = new ImageRepository();
 
         }
 
@@ -85,7 +89,7 @@ namespace InitialProject.Repository
 
             foreach (TourRating rating in _tourRatings) 
             {
-                if(rating.TourId == tour.Id && rating.isValid) 
+                if(rating.TourId == tour.Id) 
                 {
                     ratings.Add(rating);
                 }
@@ -96,6 +100,15 @@ namespace InitialProject.Repository
         {
             _tourRatings = _serializer.FromCSV(FilePath);
             return _tourRatings.Find(c => c.Id == id);
+        }
+        public List<string> FindRatingUrls(TourRating rating)
+        {
+            List<string> urls = new List<string>();
+            foreach (int id in rating.ImageIds)
+            {
+                urls.Add(_imageRepository.GetById(id).Url);
+            }
+            return urls;
         }
     }
 }

@@ -251,7 +251,6 @@ namespace InitialProject.View.Guide
         private void EndTour()
         {
             UpdateTourStatus();
-            //UpdateTourReservations();
             Close();
         }
         private void UpdateTourStatus()
@@ -259,14 +258,6 @@ namespace InitialProject.View.Guide
             SelectedTour.IsActive = false;
             SelectedTour.IsFinished = true;
             _tourService.Update(SelectedTour);
-        }
-        private void UpdateTourReservations()
-        {
-            foreach (TourReservation reservation in _tourReservationRepository.GetReservationsByTourId(SelectedTour.Id))
-            {
-                reservation.CheckpointArrivalId = -1;
-                _tourReservationRepository.Update(reservation);
-            }
         }
         private void UpdateNextCheckpoint(int nextIndex)
         {
@@ -372,6 +363,9 @@ namespace InitialProject.View.Guide
                 if (guest.UserId == guestId)
                 {
                     guest.CheckpointArrivalName = checkpointName;
+                    TourReservation reservation = _tourReservationRepository.GetReservationByGuestIdAndTourId(guestId, SelectedTour.Id);
+                    reservation.Checked = true;
+                    _tourReservationRepository.Update(reservation);
                 }
             }
         }
@@ -388,10 +382,6 @@ namespace InitialProject.View.Guide
                 if (!UnmarkedGuests.Contains(ConvertUserToDTO(_userRepository.GetById(id))))
                     UnmarkedGuests.Add(ConvertUserToDTO(_userRepository.GetById(id)));
             }
-        }
-        private void DisplayEndTourMessage()
-        {
-            MessageBox.Show($"The {SelectedTour.Name} tour finished", "End Tour Information", MessageBoxButton.OK, MessageBoxImage.Information);
         }
         private MessageBoxResult ShowEndTourConfirmationMessage()
         {

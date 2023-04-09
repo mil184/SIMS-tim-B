@@ -95,6 +95,11 @@ namespace InitialProject.View.Guest2
                                                             personCount);
                         if (CheckIfReservationAlreadyExists(tourReservation))
                         {
+                            tourReservation.Id = _tourReservationRepository.GetReservationByGuestIdAndTourId(LoggedInUser.Id, SelectedTour.TourId).Id;
+                            int currentPersonCount = _tourReservationRepository.GetReservationByGuestIdAndTourId(LoggedInUser.Id, SelectedTour.TourId).PersonCount;
+                            currentPersonCount += personCount;
+                            tourReservation.PersonCount = currentPersonCount;
+
                             _tourReservationRepository.Update(tourReservation);
                         }
                         else
