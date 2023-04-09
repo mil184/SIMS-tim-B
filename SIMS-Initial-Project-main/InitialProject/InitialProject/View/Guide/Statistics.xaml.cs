@@ -45,7 +45,7 @@ namespace InitialProject.View.Guide
                     Stroke = Brushes.Black, // Set the outline color of the columns to black
                     Fill = new SolidColorBrush(Color.FromRgb(0xFF, 0xFF, 0x00)), // Set the fill color of the first column to yellow
                     ColumnPadding = 30, // Set the column padding to 0 to remove the space between columns
-                    MaxColumnWidth = 80
+                    MaxColumnWidth = 120 // Increase the maximum width of the columns to 120
                 },
                 new ColumnSeries
                 {   
@@ -54,7 +54,7 @@ namespace InitialProject.View.Guide
                     Stroke = Brushes.Black, // Set the outline color of the columns to black
                     Fill = new SolidColorBrush(Color.FromRgb(0x00, 0x00, 0xFF)), // Set the fill color of the second column to blue
                     ColumnPadding = 30, // Set the column padding to 0 to remove the space between columns
-                    MaxColumnWidth = 80
+                    MaxColumnWidth = 120 // Increase the maximum width of the columns to 120
                 },
                 new ColumnSeries
                 {
@@ -63,11 +63,11 @@ namespace InitialProject.View.Guide
                     Stroke = Brushes.Black, // Set the outline color of the columns to black
                     Fill = new SolidColorBrush(Color.FromRgb(0xFF, 0x66, 0x00)), // Set the fill color of the third column to orange
                     ColumnPadding = 30, // Set the column padding to 0 to remove the space between columns
-                    MaxColumnWidth = 80
+                    MaxColumnWidth = 120 // Increase the maximum width of the columns to 120
                 }
             };
 
-            AgeLabels = new[] { "<18", "18-50", "50+" };
+            AgeLabels = new[] {"Age Groups"};
 
             VaucherSeriesCollection = new SeriesCollection
             {
@@ -78,7 +78,7 @@ namespace InitialProject.View.Guide
                     Stroke = Brushes.Black, // Set the outline color of the columns to black
                     Fill = new SolidColorBrush(Color.FromRgb(0x00, 0xFF, 0x00)), // Set the fill color of the first column to green
                     ColumnPadding = 30, // Set the column padding to 0 to remove the space between columns
-                    MaxColumnWidth = 80
+                    MaxColumnWidth = 120 // Increase the maximum width of the columns to 120
                 },
                 new ColumnSeries
                 {
@@ -87,11 +87,11 @@ namespace InitialProject.View.Guide
                     Stroke = Brushes.Black, // Set the outline color of the columns to black
                     Fill = new SolidColorBrush(Color.FromRgb(0xFF, 0x00, 0x00)), // Set the fill color of the second column to blue
                     ColumnPadding = 30, // Set the column padding to 0 to remove the space between columns
-                    MaxColumnWidth = 80
+                    MaxColumnWidth = 120 // Increase the maximum width of the columns to 120
                 }
             };
 
-            VaucherLabels = new[] { "Yes", "No" };
+            VaucherLabels = new[] { "Used A Voucher?" };
         }
     }
 }
