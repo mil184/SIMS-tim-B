@@ -115,6 +115,17 @@ namespace InitialProject.View.Guest2
                             double currentAverageAge = _tourReservationRepository.GetReservationByGuestIdAndTourId(LoggedInUser.Id, SelectedTour.TourId).AverageAge;
                             currentAverageAge = (currentAverageAge + double.Parse(AverageAge)) / 2;
 
+                            int currentVoucherId = _tourReservationRepository.GetReservationByGuestIdAndTourId(LoggedInUser.Id, SelectedTour.TourId).UsedVoucherId;
+
+                            if(currentVoucherId == -1) 
+                            {
+                                tourReservation.UsedVoucherId = SelectedVoucher.Id;
+                            }
+                            else 
+                            {
+                                tourReservation.UsedVoucherId = currentVoucherId;
+                            }
+
                             tourReservation.PersonCount = currentPersonCount;
                             tourReservation.AverageAge = currentAverageAge;
 
