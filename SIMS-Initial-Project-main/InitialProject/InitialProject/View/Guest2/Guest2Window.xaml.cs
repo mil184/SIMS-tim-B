@@ -32,7 +32,7 @@ namespace InitialProject.View.Guest2
         public ObservableCollection<Tour> Tours { get; set; }
 
         public ObservableCollection<Guest2TourDTO> FinishedTourDTOs { get; set; }
-        public ObservableCollection<Tour> FinishedTours { get; set; }
+        public List<Tour> FinishedTours { get; set; }
 
        
 
@@ -47,7 +47,7 @@ namespace InitialProject.View.Guest2
         private readonly CheckpointRepository _checkpointRepository;
         private readonly UserRepository _userRepository;
         private readonly TourReservationRepository _tourReservationRepository;
-
+        private readonly TourRatingRepository _tourRatingRepository;
 
 
         private string searchText;
@@ -96,11 +96,15 @@ namespace InitialProject.View.Guest2
             _tourReservationRepository = new TourReservationRepository();
             _tourReservationRepository.Subscribe(this); 
 
+            _tourRatingRepository = new TourRatingRepository();
+            _tourRatingRepository.Subscribe(this);
+
             Tours = new ObservableCollection<Tour>(_tourService.GetAll());
-            TourDTOs = ConvertToDTO(Tours);
+            
+            TourDTOs = ConvertToDTO(new List<Tour>(Tours));
 
             List<Tour> UserTours = new List<Tour>(_tourService.GetUserTours(LoggedInUser));
-            FinishedTours = new ObservableCollection<Tour>(_tourService.GetFinishedTours(UserTours));
+            FinishedTours = _tourService.GetFinishedTours(UserTours);
             FinishedTourDTOs = ConvertToDTO(FinishedTours);
         }
 
@@ -118,12 +122,11 @@ namespace InitialProject.View.Guest2
             }
 
             FinishedTourDTOs.Clear();
-            List<Tour> UserTours = new List<Tour>(_tourService.GetUserTours(LoggedInUser));
-            FinishedTours = new ObservableCollection<Tour>(_tourService.GetFinishedTours(UserTours));
-            FinishedTourDTOs = ConvertToDTO(FinishedTours);
+            List<Tour> UserTours = _tourService.GetUserTours(LoggedInUser);
+            FinishedTourDTOs = ConvertToDTO(_tourService.GetFinishedTours(UserTours));
         }
 
-        public ObservableCollection<Guest2TourDTO> ConvertToDTO(ObservableCollection<Tour> tours)
+        public ObservableCollection<Guest2TourDTO> ConvertToDTO(List<Tour> tours)
         {
             ObservableCollection<Guest2TourDTO> dto = new ObservableCollection<Guest2TourDTO>();
 
@@ -163,15 +166,12 @@ namespace InitialProject.View.Guest2
 
         private void ReserveButton_Click(object sender, RoutedEventArgs e)
         {
-            if (SelectedGuest2TourDTO != null) // & (SelectedVoucher != null ^ NoVoucherBtn != null)) // treba unchecked a ne null
+            if (SelectedGuest2TourDTO != null)
             {
-                
-                    ReserveTour reserveTourForm = new ReserveTour(SelectedGuest2TourDTO, LoggedInUser, _tourService);
-                    reserveTourForm.ShowDialog();
-                
-                
+                ReserveTour reserveTourForm = new ReserveTour(SelectedGuest2TourDTO, LoggedInUser, _tourService);
+                reserveTourForm.ShowDialog();
             }
-            Update();
+           // Update();
         }
 
         private void Search_Click(object sender, RoutedEventArgs e)
@@ -283,9 +283,8 @@ namespace InitialProject.View.Guest2
         {
             if (SelectedGuest2TourDTO != null)
             {
-                RateTour rateTour = new RateTour(SelectedGuest2TourDTO, LoggedInUser);
+                RateTour rateTour = new RateTour(SelectedGuest2TourDTO, LoggedInUser, _tourRatingRepository, _tourReservationRepository, _tourService, _imageRepository);
                 rateTour.Show();
-                Update();
             }
         }
     }

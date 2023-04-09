@@ -52,8 +52,6 @@ namespace InitialProject.Service
             return finishedTours;
         }
 
-        
-
         public List<Tour> GetFinishedTours1(List<Tour> tours)
         {
             return tours.FindAll(tour => tour.IsFinished);
@@ -70,6 +68,7 @@ namespace InitialProject.Service
             toursRemoved.RemoveAll(t => t.Id == id);
             return toursRemoved;
         }
+
         public List<Tour> GetTodaysTours()
         {
             var currentDateTime = DateTime.Now;
