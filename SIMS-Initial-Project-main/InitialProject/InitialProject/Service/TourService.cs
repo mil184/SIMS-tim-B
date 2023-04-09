@@ -23,16 +23,14 @@ namespace InitialProject.Service
             _tourReservationRepository = new TourReservationRepository();
         }
 
-        public ObservableCollection<Tour> GetUserTours(User user)
+        public List<Tour> GetUserTours(User user)
         {
-            ObservableCollection<Tour> tours = new ObservableCollection<Tour>();
-
-            TourReservationRepository _tourReservationRepository = new TourReservationRepository();
+            List<Tour> tours = new List<Tour>();
             List<TourReservation> tourReservations = _tourReservationRepository.GetAll();
 
             foreach (TourReservation tourReservation in tourReservations)
             {
-                if (tourReservation.UserId == user.Id)
+                if (tourReservation.UserId == user.Id && !tourReservation.IsRated)
                 {
                     tours.Add(GetById(tourReservation.TourId));
                 }
@@ -41,9 +39,9 @@ namespace InitialProject.Service
             return tours;
         }
 
-        public ObservableCollection<Tour> GetFinishedTours(ObservableCollection<Tour> tours)
+        public List<Tour> GetFinishedTours(List<Tour> tours)
         {
-            ObservableCollection<Tour> finishedTours = new ObservableCollection<Tour>();
+            List<Tour> finishedTours = new List<Tour>();
 
             foreach (Tour tour in tours)
             {
@@ -53,6 +51,8 @@ namespace InitialProject.Service
 
             return finishedTours;
         }
+
+        
 
         public List<Tour> GetFinishedTours1(List<Tour> tours)
         {

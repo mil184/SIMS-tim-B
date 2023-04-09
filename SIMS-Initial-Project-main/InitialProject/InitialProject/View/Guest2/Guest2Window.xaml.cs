@@ -99,12 +99,9 @@ namespace InitialProject.View.Guest2
             Tours = new ObservableCollection<Tour>(_tourService.GetAll());
             TourDTOs = ConvertToDTO(Tours);
 
-            ObservableCollection<Tour> UserTours = new ObservableCollection<Tour>(_tourService.GetUserTours(LoggedInUser));
+            List<Tour> UserTours = new List<Tour>(_tourService.GetUserTours(LoggedInUser));
             FinishedTours = new ObservableCollection<Tour>(_tourService.GetFinishedTours(UserTours));
             FinishedTourDTOs = ConvertToDTO(FinishedTours);
-
-            
-
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -119,6 +116,11 @@ namespace InitialProject.View.Guest2
             {
                 TourDTOs.Add(ConvertToDTO(tour));
             }
+
+            FinishedTourDTOs.Clear();
+            List<Tour> UserTours = new List<Tour>(_tourService.GetUserTours(LoggedInUser));
+            FinishedTours = new ObservableCollection<Tour>(_tourService.GetFinishedTours(UserTours));
+            FinishedTourDTOs = ConvertToDTO(FinishedTours);
         }
 
         public ObservableCollection<Guest2TourDTO> ConvertToDTO(ObservableCollection<Tour> tours)

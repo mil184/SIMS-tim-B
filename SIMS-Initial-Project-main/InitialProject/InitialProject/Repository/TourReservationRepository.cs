@@ -77,6 +77,22 @@ namespace InitialProject.Repository
             }
             return userIds;
         }
+
+        public List<int> GetUnratedTourIds()
+        {
+            List<int> tourIds = new List<int>();
+
+            foreach (TourReservation reservation in _tourReservations)
+            {
+                if (!reservation.IsRated)
+                {
+                    tourIds.Add(reservation.TourId);
+                }
+            }
+
+            return tourIds;
+        }
+
         public TourReservation GetReservationByGuestIdAndTourId(int guestId, int tourId)
         {
             foreach(TourReservation tourReservation in _tourReservations) 
