@@ -30,7 +30,19 @@ namespace InitialProject.View.Guest2
                 }
             }
         }
-
+        private string _averageAge;
+        public string AverageAge
+        {
+            get => _averageAge;
+            set
+            {
+                if (value != _averageAge)
+                {
+                    _averageAge = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         private readonly TourReservationRepository _tourReservationRepository;
         private readonly TourService _tourService;
 
@@ -92,13 +104,19 @@ namespace InitialProject.View.Guest2
                         TourReservation tourReservation = new TourReservation(
                                                             LoggedInUser.Id,
                                                             SelectedTour.TourId,
-                                                            personCount);
+                                                            personCount,
+                                                            double.Parse(AverageAge));
                         if (CheckIfReservationAlreadyExists(tourReservation))
                         {
                             tourReservation.Id = _tourReservationRepository.GetReservationByGuestIdAndTourId(LoggedInUser.Id, SelectedTour.TourId).Id;
                             int currentPersonCount = _tourReservationRepository.GetReservationByGuestIdAndTourId(LoggedInUser.Id, SelectedTour.TourId).PersonCount;
                             currentPersonCount += personCount;
+
+                            double currentAverageAge = _tourReservationRepository.GetReservationByGuestIdAndTourId(LoggedInUser.Id, SelectedTour.TourId).AverageAge;
+                            currentAverageAge = (currentAverageAge + double.Parse(AverageAge)) / 2;
+
                             tourReservation.PersonCount = currentPersonCount;
+                            tourReservation.AverageAge = currentAverageAge;
 
                             _tourReservationRepository.Update(tourReservation);
                         }

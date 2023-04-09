@@ -117,7 +117,43 @@ namespace InitialProject.Repository
             }
             return reservations;
         }
-
+        
+        public int GetUnder18Count(Tour tour) 
+        {
+            int counter = 0;
+            foreach(TourReservation reservation in _tourReservations) 
+            {
+                if(tour.Id == reservation.TourId && reservation.AverageAge < 18) 
+                {
+                    counter++;
+                }
+            }
+            return counter;
+        }
+        public int GetBetween18And50Count(Tour tour)
+        {
+            int counter = 0;
+            foreach (TourReservation reservation in _tourReservations)
+            {
+                if (tour.Id == reservation.TourId && reservation.AverageAge >= 18 && reservation.AverageAge <= 50)
+                {
+                    counter++;
+                }
+            }
+            return counter;
+        }
+        public int GetAbove50Count(Tour tour)
+        {
+            int counter = 0;
+            foreach (TourReservation reservation in _tourReservations)
+            {
+                if (tour.Id == reservation.TourId && reservation.AverageAge > 50)
+                {
+                    counter++;
+                }
+            }
+            return counter;
+        }
         public List<TourReservation> GetAll()
         {
             return _tourReservations;

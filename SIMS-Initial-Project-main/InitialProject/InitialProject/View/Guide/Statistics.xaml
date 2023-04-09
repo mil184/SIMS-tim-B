@@ -37,9 +37,17 @@
                     <!-- Chart -->
                     <lvc:CartesianChart Grid.Row="1" Series="{Binding AgeSeriesCollection}" LegendLocation="Right" Width="600" Height="220">
                         <lvc:CartesianChart.AxisX>
-                            <lvc:Axis Labels="{Binding AgeLabels}"/>
+                            <lvc:Axis Labels="{Binding AgeLabels}">
+                                <lvc:Axis.Separator>
+                                    <lvc:Separator Stroke="#FFC5C5C5" StrokeThickness="1" StrokeDashArray="1, 4" />
+                                </lvc:Axis.Separator>
+                            </lvc:Axis>
                         </lvc:CartesianChart.AxisX>
+                        <lvc:CartesianChart.Background>
+                            <SolidColorBrush Color="White"/>
+                        </lvc:CartesianChart.Background>
                     </lvc:CartesianChart>
+
                 </Grid>
             </Border>
 
@@ -62,10 +70,18 @@
                 <!-- Chart -->
                 <lvc:CartesianChart Grid.Row="1" Series="{Binding VaucherSeriesCollection}" LegendLocation="Right" Width="600" Height="220">
                     <lvc:CartesianChart.AxisX>
-                        <lvc:Axis Labels="{Binding VaucherLabels}"/>
+                        <lvc:Axis Labels="{Binding VaucherLabels}">
+                            <lvc:Axis.Separator>
+                                <lvc:Separator Stroke="#FFC5C5C5" StrokeThickness="1" StrokeDashArray="1, 4" />
+                            </lvc:Axis.Separator>
+                        </lvc:Axis>
                     </lvc:CartesianChart.AxisX>
+                    <lvc:CartesianChart.Background>
+                        <SolidColorBrush Color="White"/>
+                    </lvc:CartesianChart.Background>
                 </lvc:CartesianChart>
-            </Grid>
+
+                </Grid>
                 </Border>
                     <Button Grid.Column="3" Content="Cancel (ESC)" Height="70" Width="140" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Center">
                 <Button.Template>
