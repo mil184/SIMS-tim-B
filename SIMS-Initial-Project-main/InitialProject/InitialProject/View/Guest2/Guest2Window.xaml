@@ -87,7 +87,7 @@
             </TabItem>
 
             <!-- Ratings tab -->
-            <TabItem Header="Ratings">
+            <TabItem Header="Ratings" Height="22" Margin="-2,-2,-2,0" VerticalAlignment="Top">
                 <StackPanel Margin="10">
 
                     <!-- Tour overview section -->

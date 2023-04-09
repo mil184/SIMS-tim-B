@@ -17,4 +17,10 @@
         Hut
     }
 
+    public enum RescheduleRequestStatus
+    {
+        onhold,
+        approved,
+        rejected
+    }
 }

@@ -28,8 +28,7 @@
                     <StackPanel Orientation="Horizontal">
                         <TextBlock FontSize="18" FontWeight="Bold" Text="Accommodations" Margin="0 0 10 0"/>
                         <Button Content="Register" Width="80" Margin="0 0 10 0" Click="RegisterButton_Click"/>
-                        <Button Content="Delete" Width="80" Margin="0 0 10 0" Click="DeleteButton_Click"/>
-                        <Button Content="Edit" Width="80"/>
+                        <Button Content="Remove" Width="80" Margin="0 0 10 0" Click="DeleteButton_Click"/>
                     </StackPanel>
                     <StackPanel Margin="0 10 0 0">
                         <DataGrid DockPanel.Dock="Bottom" 
@@ -47,9 +46,25 @@
                     </StackPanel>
                 </StackPanel>
             </TabItem>
-            <TabItem Header="Statistics">
+            <TabItem Header="Reschedule Requests">
                 <StackPanel Margin="10">
-                    <TextBlock FontSize="18" FontWeight="Bold" Text="Statistics" Margin="0 0 10 0"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontSize="18" FontWeight="Bold" Text="Reschedule Requests" Margin="0 0 10 0"/>
+                        <Button Content="Decide" Width="80" Margin="0 0 10 0" Click="DecideButton_Click"/>
+                    </StackPanel>
+                    <StackPanel Margin="0 10 0 0">
+                        <DataGrid DockPanel.Dock="Bottom" 
+                                  ItemsSource="{Binding Path=Requests, UpdateSourceTrigger=PropertyChanged}"
+                                  SelectedItem="{Binding Path=SelectedRequest, UpdateSourceTrigger=PropertyChanged}"
+                                  AutoGenerateColumns="False" IsReadOnly="True"
+                                  Width="700" Height="200">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Reservation Id" Binding="{Binding ReservationId}" Width="*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="New Start Date" Binding="{Binding NewStartDate}" Width="2*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="New End Date" Binding="{Binding NewEndDate}" Width="2*"></DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
                 </StackPanel>
             </TabItem>
             <TabItem Header="Ratings">

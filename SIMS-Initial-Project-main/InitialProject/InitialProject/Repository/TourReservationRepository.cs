@@ -43,6 +43,12 @@ namespace InitialProject.Repository
             return _tourReservations.Max(c => c.Id) + 1;
         }
 
+        public TourReservation GetByTourId(int id)
+        {
+            _tourReservations = _serializer.FromCSV(_filePath);
+            return _tourReservations.Find(c => c.TourId == id);
+        }
+
         public TourReservation Save(TourReservation tourReservation)
         {
             tourReservation.Id = NextId();
@@ -77,6 +83,22 @@ namespace InitialProject.Repository
             }
             return userIds;
         }
+
+        public List<int> GetUnratedTourIds()
+        {
+            List<int> tourIds = new List<int>();
+
+            foreach (TourReservation reservation in _tourReservations)
+            {
+                if (!reservation.IsRated)
+                {
+                    tourIds.Add(reservation.TourId);
+                }
+            }
+
+            return tourIds;
+        }
+
         public TourReservation GetReservationByGuestIdAndTourId(int guestId, int tourId)
         {
             foreach(TourReservation tourReservation in _tourReservations) 
