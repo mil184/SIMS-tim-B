@@ -27,6 +27,8 @@ namespace InitialProject.View.Owner
         public ObservableCollection<AccommodationReservation> UnreviewedReservations { get; set; }
         public ObservableCollection<AccommodationRatings> Ratings { get; set; }
         public ObservableCollection<RatingsDTO> RatingsDTO { get; set; }
+        public ObservableCollection<RescheduleRequest> Requests { get; set; }
+        public RescheduleRequest SelectedRequest { get; set; }
 
         private AccommodationRepository _repository;
         private readonly LocationService _locationService;
@@ -35,6 +37,7 @@ namespace InitialProject.View.Owner
         private readonly GuestReviewRepository _guestReviewRepository;
         private readonly UserRepository _userRepository;
         private readonly AccommodationRatingsRepository _ratingRepository;
+        private readonly RescheduleRequestRepository _rescheduleRequestRepository;
 
         public OwnerWindow(User user)
         {
@@ -44,7 +47,7 @@ namespace InitialProject.View.Owner
 
             _repository = new AccommodationRepository();
             _repository.Subscribe(this);
-            _locationService= new LocationService();
+            _locationService = new LocationService();
             _locationService.Subscribe(this);
             _imageRepository = new ImageRepository();
             _imageRepository.Subscribe(this);
@@ -56,10 +59,30 @@ namespace InitialProject.View.Owner
             _userRepository.Subscribe(this);
             _ratingRepository = new AccommodationRatingsRepository();
             _ratingRepository.Subscribe(this);
+            _rescheduleRequestRepository = new RescheduleRequestRepository();
+            _rescheduleRequestRepository.Subscribe(this);
 
             InitializeAccommodations();
             InitializeRatings();
+            InitializeRescheduleRequests();
             CheckForEligibleReviews();
+        }
+
+        public void FormRescheduleRequests()
+        {
+            foreach (RescheduleRequest request in _rescheduleRequestRepository.GetAll())
+            {
+                if (request.OwnerId == LoggedInUser.Id && request.Status == InitialProject.Resources.Enums.RescheduleRequestStatus.onhold)
+                {
+                    Requests.Add(request);
+                }
+            }
+        }
+
+        public void InitializeRescheduleRequests()
+        {
+            Requests = new ObservableCollection<RescheduleRequest>();
+            FormRescheduleRequests();
         }
 
         public void FormRatings()
@@ -195,6 +218,18 @@ namespace InitialProject.View.Owner
 
             Ratings.Clear();
             FormRatings();
+
+            Requests.Clear();
+            FormRescheduleRequests();
+        }
+
+        private void DecideButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedRequest != null)
+            {
+                ReviewRequest reviewRequest = new ReviewRequest(_reservationRepository, SelectedRequest, _rescheduleRequestRepository);
+                reviewRequest.Show();
+            }
         }
     }
 }
