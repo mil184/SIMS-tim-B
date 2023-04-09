@@ -80,7 +80,7 @@ namespace InitialProject.View.Guest2
             Tour selectedTour = new Tour();
             selectedTour = _tourService.GetById(SelectedTour.TourId);
 
-            if (PersonCount != null)
+            if (PersonCount != null && AverageAge != null)
             {
                 int personCount = int.Parse(PersonCount);
                 int spacesLeft = selectedTour.MaxGuests - selectedTour.CurrentGuestCount;
@@ -109,11 +109,19 @@ namespace InitialProject.View.Guest2
                     }
                     else
                     {
+                        int voucherId = -1;
+                        if (SelectedVoucher != null)
+                        {
+                            voucherId = SelectedVoucher.Id;
+                        }
+
                         TourReservation tourReservation = new TourReservation(
                                                             LoggedInUser.Id,
                                                             SelectedTour.TourId,
                                                             personCount,
-                                                            double.Parse(AverageAge));
+                                                            double.Parse(AverageAge),
+                                                            voucherId);
+
                         if (CheckIfReservationAlreadyExists(tourReservation))
                         {
                             tourReservation.Id = _tourReservationRepository.GetReservationByGuestIdAndTourId(LoggedInUser.Id, SelectedTour.TourId).Id;

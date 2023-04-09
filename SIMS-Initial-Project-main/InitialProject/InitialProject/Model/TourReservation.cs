@@ -18,9 +18,10 @@ namespace InitialProject.Model
         public bool Checked { get; set; }
         public bool IsRated { get; set; }
         public double AverageAge { get; set; }
+        public int UsedVoucherId { get; set; }
         public TourReservation() { }
 
-        public TourReservation(int userId, int tourId, int personCount, double averageAge)
+        public TourReservation(int userId, int tourId, int personCount, double averageAge, int voucherId)
         {
             UserId = userId;
             TourId = tourId;
@@ -29,11 +30,12 @@ namespace InitialProject.Model
             Checked = false;
             IsRated = false;
             AverageAge = averageAge;
+            UsedVoucherId = voucherId;
         }
 
         public string[] ToCSV()
         {
-            string[] csvValues = { Id.ToString(), UserId.ToString(), TourId.ToString(), PersonCount.ToString(), CheckpointArrivalId.ToString(), Checked.ToString(), IsRated.ToString(), AverageAge.ToString() };
+            string[] csvValues = { Id.ToString(), UserId.ToString(), TourId.ToString(), PersonCount.ToString(), CheckpointArrivalId.ToString(), Checked.ToString(), IsRated.ToString(), AverageAge.ToString(), UsedVoucherId.ToString() };
             return csvValues;
         }
 
@@ -47,6 +49,7 @@ namespace InitialProject.Model
             Checked = Convert.ToBoolean(values[5]);
             IsRated = Convert.ToBoolean(values[6]);
             AverageAge = Convert.ToDouble (values[7]);
+            UsedVoucherId = Convert.ToInt32(values[8]);
 
         }
     }
