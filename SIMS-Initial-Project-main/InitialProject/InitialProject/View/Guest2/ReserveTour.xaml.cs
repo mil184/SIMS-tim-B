@@ -2,6 +2,7 @@
 using InitialProject.Model.DTO;
 using InitialProject.Repository;
 using InitialProject.Service;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -44,7 +45,7 @@ namespace InitialProject.View.Guest2
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public ReserveTour(Guest2TourDTO selectedTour, User user, TourService tourService)
+        public ReserveTour(Guest2TourDTO selectedTour, User user, TourService tourService, TourReservationRepository tourReservationRepository)
         {
             InitializeComponent();
             DataContext = this;
@@ -52,13 +53,14 @@ namespace InitialProject.View.Guest2
             SelectedTour = selectedTour;
             LoggedInUser = user;
 
-            _tourReservationRepository = new TourReservationRepository();
+            _tourReservationRepository = tourReservationRepository;
             _tourService = tourService;
 
             _voucherRepository = new VoucherRepository();
             _voucherService = new VoucherService();
 
-            Vouchers = new ObservableCollection<Voucher>(_voucherService.GetUserVouchers(LoggedInUser));
+            List<Voucher> UserVouchers = _voucherService.GetUserVouchers(LoggedInUser);
+            Vouchers = new ObservableCollection<Voucher>(_voucherService.GetActiveVouchers(UserVouchers));
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
@@ -73,6 +75,12 @@ namespace InitialProject.View.Guest2
 
                 if (SelectedVoucher != null ^ NoVoucherBtn.IsChecked == true)
                 {
+                    if (SelectedVoucher != null)
+                    {
+                        SelectedVoucher.IsActive = false;
+                        _voucherRepository.Update(SelectedVoucher);
+                    }
+
                     if (personCount > spacesLeft && selectedTour.CurrentGuestCount != selectedTour.MaxGuests)
                     {
                         if (spacesLeft == 1)
@@ -113,11 +121,8 @@ namespace InitialProject.View.Guest2
                     }
                 }
             }
-
-            
-
-            
         }
+
         public bool CheckIfReservationAlreadyExists(TourReservation tourReservation) 
         {
             foreach(TourReservation reservation in _tourReservationRepository.GetAll()) 

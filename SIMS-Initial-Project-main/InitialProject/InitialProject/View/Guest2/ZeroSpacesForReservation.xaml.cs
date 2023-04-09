@@ -79,7 +79,7 @@ namespace InitialProject.View.Guest2
         {
             if (NewSelectedTour != null)
             {
-                ReserveTour reserveTourForm = new ReserveTour(NewSelectedTour, LoggedInUser, _tourService);
+                ReserveTour reserveTourForm = new ReserveTour(NewSelectedTour, LoggedInUser, _tourService, _tourReservationRepository);
                 reserveTourForm.ShowDialog();
             }
             Close();
