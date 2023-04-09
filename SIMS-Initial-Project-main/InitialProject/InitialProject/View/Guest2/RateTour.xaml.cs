@@ -1,6 +1,7 @@
 ﻿using InitialProject.Model;
 using InitialProject.Model.DTO;
 using InitialProject.Repository;
+using InitialProject.Service;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -28,7 +29,7 @@ namespace InitialProject.View.Guest2
 
         private readonly TourRatingRepository _tourRatingRepository;
         private readonly TourReservationRepository _tourReservationRepository;
-        private readonly TourRepository _tourRepository;
+        private readonly TourService _tourService;
         private readonly ImageRepository _imageRepository;
 
         private int _guideKnowledge;
@@ -87,7 +88,7 @@ namespace InitialProject.View.Guest2
             }
         }
 
-        public RateTour(Guest2TourDTO selectedTour, User user)
+        public RateTour(Guest2TourDTO selectedTour, User user, TourRatingRepository tourRatingRepository, TourReservationRepository tourReservationRepository, TourService tourService, ImageRepository imageRepository)
         {
             InitializeComponent();
             DataContext = this;
@@ -95,10 +96,10 @@ namespace InitialProject.View.Guest2
             SelectedTour = selectedTour;
             LoggedInUser = user;
 
-            _tourRatingRepository = new TourRatingRepository();
-            _tourReservationRepository = new TourReservationRepository();
-            _tourRepository = new TourRepository();
-            _imageRepository = new ImageRepository();
+            _tourRatingRepository = tourRatingRepository;
+            _tourReservationRepository = tourReservationRepository;
+            _tourService = tourService;
+            _imageRepository = imageRepository;
         }
 
         private ObservableCollection<string> _imageUrls = new ObservableCollection<string>();
@@ -183,13 +184,9 @@ namespace InitialProject.View.Guest2
                         _imageIds,
                         LoggedInUser.Id);
 
-                // dobavi koja je tura
-                // promeni israted = true
-                // update
-
-                Tour tour = _tourRepository.GetById(tourRating.TourId);
+                Tour tour = _tourService.GetById(tourRating.TourId);
                 tour.IsRated = true;
-                _tourRepository.Update(tour);
+                _tourService.Update(tour);
 
                 TourReservation tourReservation = _tourReservationRepository.GetReservationByGuestIdAndTourId(LoggedInUser.Id, SelectedTour.TourId);
                 tourReservation.IsRated = true;
@@ -197,7 +194,6 @@ namespace InitialProject.View.Guest2
 
                 _tourRatingRepository.Save(tourRating);
 
-                MessageBox.Show("Rating saved successfully.");
                 Close();
             }
         }

@@ -43,6 +43,12 @@ namespace InitialProject.Repository
             return _tourReservations.Max(c => c.Id) + 1;
         }
 
+        public TourReservation GetByTourId(int id)
+        {
+            _tourReservations = _serializer.FromCSV(_filePath);
+            return _tourReservations.Find(c => c.TourId == id);
+        }
+
         public TourReservation Save(TourReservation tourReservation)
         {
             tourReservation.Id = NextId();
