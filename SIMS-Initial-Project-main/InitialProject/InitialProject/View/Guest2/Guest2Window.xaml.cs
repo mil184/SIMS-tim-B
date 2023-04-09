@@ -122,8 +122,15 @@ namespace InitialProject.View.Guest2
             }
 
             FinishedTourDTOs.Clear();
-            List<Tour> UserTours = _tourService.GetUserTours(LoggedInUser);
-            FinishedTourDTOs = ConvertToDTO(_tourService.GetFinishedTours(UserTours));
+            /*List<Tour> UserTours = _tourService.GetUserTours(LoggedInUser);
+            FinishedTourDTOs = ConvertToDTO(_tourService.GetFinishedTours(UserTours));*/
+            foreach (Tour userTour in _tourService.GetUserTours(LoggedInUser))
+            {
+                if (userTour.IsFinished == true && _tourReservationRepository.GetById(userTour.Id).IsRated  == false)
+                {
+                    FinishedTourDTOs.Add(ConvertToDTO(userTour));
+                }
+            }
         }
 
         public ObservableCollection<Guest2TourDTO> ConvertToDTO(List<Tour> tours)
