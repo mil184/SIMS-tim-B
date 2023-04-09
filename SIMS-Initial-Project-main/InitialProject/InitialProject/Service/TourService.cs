@@ -41,19 +41,6 @@ namespace InitialProject.Service
 
         public List<Tour> GetFinishedTours(List<Tour> tours)
         {
-            List<Tour> finishedTours = new List<Tour>();
-
-            foreach (Tour tour in tours)
-            {
-                if (tour.IsFinished)
-                    finishedTours.Add(tour);
-            }
-
-            return finishedTours;
-        }
-
-        public List<Tour> GetFinishedTours1(List<Tour> tours)
-        {
             return tours.FindAll(tour => tour.IsFinished);
         }
 

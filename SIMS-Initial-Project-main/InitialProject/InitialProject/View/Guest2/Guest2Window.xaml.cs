@@ -116,17 +116,25 @@ namespace InitialProject.View.Guest2
         public void Update()
         {
             TourDTOs.Clear();
+            FormTours();
+
+            FinishedTourDTOs.Clear();
+            FormFinishedTours();
+        }
+
+        public void FormTours()
+        {
             foreach (Tour tour in _tourService.GetAll())
             {
                 TourDTOs.Add(ConvertToDTO(tour));
             }
+        }
 
-            FinishedTourDTOs.Clear();
-            /*List<Tour> UserTours = _tourService.GetUserTours(LoggedInUser);
-            FinishedTourDTOs = ConvertToDTO(_tourService.GetFinishedTours(UserTours));*/
+        public void FormFinishedTours()
+        {
             foreach (Tour userTour in _tourService.GetUserTours(LoggedInUser))
             {
-                if (userTour.IsFinished == true && _tourReservationRepository.GetById(userTour.Id).IsRated  == false)
+                if (userTour.IsFinished && !_tourReservationRepository.GetByTourId(userTour.Id).IsRated)
                 {
                     FinishedTourDTOs.Add(ConvertToDTO(userTour));
                 }
@@ -178,7 +186,6 @@ namespace InitialProject.View.Guest2
                 ReserveTour reserveTourForm = new ReserveTour(SelectedGuest2TourDTO, LoggedInUser, _tourService);
                 reserveTourForm.ShowDialog();
             }
-           // Update();
         }
 
         private void Search_Click(object sender, RoutedEventArgs e)
