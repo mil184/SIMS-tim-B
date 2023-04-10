@@ -417,7 +417,11 @@ namespace InitialProject.View.Guest1
         }
         private void SendRequest_Click(object sender, RoutedEventArgs e)
         {
-
+            if (SelectedReservation != null)
+            {
+                SendRequest sendRequest = new SendRequest(SelectedReservation, _rescheduleRequestRepository);
+                sendRequest.ShowDialog();
+            }
         }
 
         public bool CancellationPeriodPassed(AccommodationReservation reservation)
