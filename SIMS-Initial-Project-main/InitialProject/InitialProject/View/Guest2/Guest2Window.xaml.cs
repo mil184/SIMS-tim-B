@@ -31,12 +31,13 @@ namespace InitialProject.View.Guest2
         public ObservableCollection<Guest2TourDTO> TourDTOs { get; set; }
         public ObservableCollection<Tour> Tours { get; set; }
 
+        public List<Tour> CheckedTours { get; set; }
+        public Tour CurrentlyActiveTour { get; set; }
+        public Checkpoint CurrentlyActiveCheckpoint { get; set; }
+
         public ObservableCollection<Guest2TourDTO> FinishedTourDTOs { get; set; }
         public List<Tour> FinishedTours { get; set; }
 
-       
-
-        
         public ObservableCollection<Location> Locations;
 
         public ObservableCollection<Guest2TourDTO> NonReservedTours { get; set; }
@@ -100,12 +101,25 @@ namespace InitialProject.View.Guest2
             _tourRatingRepository.Subscribe(this);
 
             Tours = new ObservableCollection<Tour>(_tourService.GetAll());
-            
             TourDTOs = ConvertToDTO(new List<Tour>(Tours));
+
+            CheckedTours = new List<Tour>();
+            foreach (int id in _tourReservationRepository.GetCheckedTourIds(LoggedInUser))
+            {
+                CheckedTours.Add(_tourService.GetById(id));
+            }
+
+            if(!CheckedTours[0].IsFinished)
+            {
+                CurrentlyActiveTour = CheckedTours[0];
+                CurrentlyActiveCheckpoint = _checkpointRepository.GetById(CurrentlyActiveTour.CurrentCheckpointId);
+            }
 
             List<Tour> UserTours = new List<Tour>(_tourService.GetUserTours(LoggedInUser));
             FinishedTours = _tourService.GetFinishedTours(UserTours);
             FinishedTourDTOs = ConvertToDTO(FinishedTours);
+
+            ConfirmArrival();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -120,6 +134,29 @@ namespace InitialProject.View.Guest2
 
             FinishedTourDTOs.Clear();
             FormFinishedTours();
+        }
+
+        public void ConfirmArrival()
+        {
+
+            if (CheckedTours.Count != 0)
+            {
+                TourReservation tourReservation = _tourReservationRepository.GetReservationByGuestIdAndTourId(LoggedInUser.Id, CheckedTours[0].Id);
+
+                if (tourReservation.MessageBoxShown)
+                {
+                    return;
+                }
+
+                MessageBox.Show("Please confirm your arrival at " + CheckedTours[0].Name, "ArrivalConfirmation", MessageBoxButton.YesNo, MessageBoxImage.Information);
+
+                if(MessageBoxResult.Yes == MessageBoxResult.Yes) 
+                {
+                    tourReservation.GuestArrived = true;
+                    tourReservation.MessageBoxShown = true;
+                    _tourReservationRepository.Update(tourReservation);
+                }
+            }
         }
 
         public void FormTours()

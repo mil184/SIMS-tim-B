@@ -122,13 +122,27 @@
                 </StackPanel>
             </TabItem>
 
-            <!-- Statistics tab -->
-            <TabItem Header="Statistics">
-                <StackPanel Margin="10">
+            <!-- Currently Active Tour tab -->
+            <TabItem Header="Currently Active Tour">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
-                    
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="25*"/>
+                        <ColumnDefinition Width="75*"/>
+                    </Grid.ColumnDefinitions>
 
-                </StackPanel>
+                    <Label Grid.Row="0" Grid.Column="0">Currently Active tour:</Label>
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Path=CurrentlyActiveTour.Name, FallbackValue=NoTourCurrentlyActive}"/>
+
+                    <Label Grid.Row="1" Grid.Column="0">Currently Active checkpoint:</Label>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Path=CurrentlyActiveCheckpoint.Name, FallbackValue=NoTourCurrentlyActive}"/>
+
+
+                </Grid>
             </TabItem>
 
         </TabControl>

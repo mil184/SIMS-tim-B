@@ -76,7 +76,7 @@ namespace InitialProject.Repository
 
             foreach(TourReservation reservation in _tourReservations) 
             {
-                if(reservation.TourId == tour.Id && !reservation.Checked) 
+                if(reservation.TourId == tour.Id && !reservation.GuestChecked) 
                 {
                     userIds.Add(reservation.UserId);
                 }   
@@ -84,13 +84,13 @@ namespace InitialProject.Repository
             return userIds;
         }
 
-        public List<int> GetUnratedTourIds()
+        public List<int> GetCheckedTourIds(User user)
         {
             List<int> tourIds = new List<int>();
 
             foreach (TourReservation reservation in _tourReservations)
             {
-                if (!reservation.IsRated)
+                if (reservation.UserId == user.Id && reservation.GuestChecked)
                 {
                     tourIds.Add(reservation.TourId);
                 }

@@ -15,7 +15,10 @@ namespace InitialProject.Model
         public int TourId { get; set; }
         public int PersonCount { get; set; }
         public int CheckpointArrivalId { get; set; }
-        public bool Checked { get; set; }
+        public bool GuestChecked { get; set; }
+
+        public bool MessageBoxShown { get; set; }
+        public bool GuestArrived { get; set; }
         public bool IsRated { get; set; }
         public double AverageAge { get; set; }
         public int UsedVoucherId { get; set; }
@@ -27,7 +30,9 @@ namespace InitialProject.Model
             TourId = tourId;
             PersonCount = personCount;
             CheckpointArrivalId = -1;
-            Checked = false;
+            GuestChecked = false;
+            MessageBoxShown = false;
+            GuestArrived = false;
             IsRated = false;
             AverageAge = averageAge;
             UsedVoucherId = usedVoucher;
@@ -35,7 +40,7 @@ namespace InitialProject.Model
 
         public string[] ToCSV()
         {
-            string[] csvValues = { Id.ToString(), UserId.ToString(), TourId.ToString(), PersonCount.ToString(), CheckpointArrivalId.ToString(), Checked.ToString(), IsRated.ToString(), AverageAge.ToString(), UsedVoucherId.ToString() };
+            string[] csvValues = { Id.ToString(), UserId.ToString(), TourId.ToString(), PersonCount.ToString(), CheckpointArrivalId.ToString(), GuestChecked.ToString(), MessageBoxShown.ToString(), GuestArrived.ToString(), IsRated.ToString(), AverageAge.ToString(), UsedVoucherId.ToString() };
             return csvValues;
         }
 
@@ -46,11 +51,12 @@ namespace InitialProject.Model
             TourId = Convert.ToInt32(values[2]);
             PersonCount = Convert.ToInt32(values[3]);
             CheckpointArrivalId = Convert.ToInt32(values[4]);
-            Checked = Convert.ToBoolean(values[5]);
-            IsRated = Convert.ToBoolean(values[6]);
-            AverageAge = Convert.ToDouble (values[7]);
-            UsedVoucherId = Convert.ToInt32(values[8]);
-
+            GuestChecked = Convert.ToBoolean(values[5]);
+            MessageBoxShown = Convert.ToBoolean(values[6]);
+            GuestArrived = Convert.ToBoolean(values[7]);
+            IsRated = Convert.ToBoolean(values[8]);
+            AverageAge = Convert.ToDouble (values[9]);
+            UsedVoucherId = Convert.ToInt32(values[10]);
         }
     }
 }

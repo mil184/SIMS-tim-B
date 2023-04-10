@@ -17,22 +17,6 @@ namespace InitialProject.Service
             _voucherRepository = new VoucherRepository();
         }
 
-        public ObservableCollection<Voucher> GetUserVouchers1(User user)
-        {
-            ObservableCollection<Voucher> vouchers = new ObservableCollection<Voucher>();
-            List<Voucher> allVouchers = _voucherRepository.GetAll();
-
-            foreach(Voucher voucher in allVouchers)
-            {
-                if (voucher.UserId == user.Id)
-                {
-                    vouchers.Add(voucher);
-                }
-            }
-
-            return vouchers;
-        }
-
         public List<Voucher> GetUserVouchers(User user)
         {
             List<Voucher> allVouchers = _voucherRepository.GetAll();

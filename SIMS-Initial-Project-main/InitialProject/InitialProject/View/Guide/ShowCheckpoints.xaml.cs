@@ -364,7 +364,7 @@ namespace InitialProject.View.Guide
                 {
                     guest.CheckpointArrivalName = checkpointName;
                     TourReservation reservation = _tourReservationRepository.GetReservationByGuestIdAndTourId(guestId, SelectedTour.Id);
-                    reservation.Checked = true;
+                    reservation.GuestChecked = true;
                     _tourReservationRepository.Update(reservation);
                 }
             }
