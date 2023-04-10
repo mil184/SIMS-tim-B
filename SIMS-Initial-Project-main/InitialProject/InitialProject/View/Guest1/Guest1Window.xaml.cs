@@ -19,6 +19,7 @@ using InitialProject.Resources.Observer;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using InitialProject.Model.DTO;
+using InitialProject.Resources.Enums;
 
 namespace InitialProject.View.Guest1
 {
@@ -442,6 +443,26 @@ namespace InitialProject.View.Guest1
                 return false;
             }
         }
+
+        private void CheckRescheduleRequestsStatus()
+        {
+            var requests = _rescheduleRequestRepository.GetAll().Where(r => r.GuestId == LoggedInUser.Id);
+
+            foreach (var request in requests)
+            {
+                if (request.Status == RescheduleRequestStatus.approved || request.Status == RescheduleRequestStatus.rejected)
+                {
+                    string message = $"The status of reschedule request {request.Id} has been changed to {request.Status}.";
+                    MessageBox.Show(message, "Reschedule Request Status Change", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+        }
+
+        private void GuestWindow_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            CheckRescheduleRequestsStatus();
+        }
+
 
         private void ShowCancelWarning()
         {

@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:InitialProject.View.Guest1"
         mc:Ignorable="d"
         Title="DMJM-Tours" Height="500" Width="950"
-        Icon ="/Resources/Images/favicon.ico">
+        Icon ="/Resources/Images/favicon.ico"
+        Loaded="GuestWindow_OnLoaded">
     <Grid>
         <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
