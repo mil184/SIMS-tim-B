@@ -289,7 +289,8 @@ namespace InitialProject.View.Guide
             Tour selectedTour = ConvertToTour(SelectedFinishedTourDTO);
             if (selectedTour != null)
             {
-                Statistics statistics = new Statistics(selectedTour, _tourReservationRepository);
+                StatisticsViewModel statisticsViewModel = new StatisticsViewModel(selectedTour, _tourReservationRepository);
+                Statistics statistics = new Statistics(statisticsViewModel);
                 statistics.Show();
             }
         }
