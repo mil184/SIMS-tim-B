@@ -43,6 +43,7 @@ namespace InitialProject.View.Guest1
 
         public ObservableCollection<AccommodationReservation> PresentableReservations { get; set; }
         public AccommodationReservation SelectedReservation { get; set; }
+        public ObservableCollection<RescheduleRequest> AllReschedules { get; set; }
 
 
         private readonly AccommodationRepository _accommodationRepository;
@@ -56,6 +57,7 @@ namespace InitialProject.View.Guest1
         private readonly AccommodationReservationRepository _accommodationReservationRepository;
 
         private readonly AccommodationRatingsRepository _accommodationRatingsRepository;
+        private readonly RescheduleRequestRepository _rescheduleRequestRepository;
 
 
         private string searchText;
@@ -123,6 +125,9 @@ namespace InitialProject.View.Guest1
             _accommodationRatingsRepository = new AccommodationRatingsRepository();
             _accommodationRatingsRepository.Subscribe(this);
 
+            _rescheduleRequestRepository = new RescheduleRequestRepository();
+            _rescheduleRequestRepository.Subscribe(this);
+
             AllAccommodations = new ObservableCollection<Accommodation>(_accommodationRepository.GetAll());
             PresentableAccommodations = ConvertToDTO(AllAccommodations);
 
@@ -131,6 +136,7 @@ namespace InitialProject.View.Guest1
             UnratedReservations = new ObservableCollection<AccommodationReservation>();
 
             PresentableReservations = new ObservableCollection<AccommodationReservation>(_accommodationReservationRepository.GetAll());
+            AllReschedules = new ObservableCollection<RescheduleRequest>(_rescheduleRequestRepository.GetAll());
         }
 
         private void ReserveButton_Click(object sender, RoutedEventArgs e)

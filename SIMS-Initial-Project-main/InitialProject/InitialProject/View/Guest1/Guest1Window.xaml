@@ -131,6 +131,22 @@
                     </GroupBox>
                 </Grid>
             </TabItem>
+
+            <TabItem Header="Request overview">
+                <Grid Margin="10">
+                    <GroupBox Grid.Row="1" Margin="0 5 0 10">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <DataGrid  ItemsSource="{Binding Path=AllReschedules}" SelectedItem="{Binding Path=SelectedReservation}" AutoGenerateColumns="False" IsReadOnly="True" >
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Accommodation id" Binding="{Binding AccommodationId}" Width="*"/>
+                                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*"/>
+                                    <DataGridTextColumn Header="Comment" Binding="{Binding Comment}" Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ScrollViewer>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
         </TabControl>
     </Grid>
 </Window>
