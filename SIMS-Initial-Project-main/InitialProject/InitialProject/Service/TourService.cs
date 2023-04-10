@@ -122,7 +122,7 @@ namespace InitialProject.Service
             foreach (var tour in _tourRepository.GetAll())
             {
                 var tourStartDate = tour.StartTime.Date;
-                if (tourStartDate >= currentDate && !tour.IsAborted)
+                if (tourStartDate >= currentDate && !tour.IsAborted && !tour.IsFinished)
                 {
                     upcomingTours.Add(tour);
                 }
