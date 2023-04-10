@@ -34,6 +34,10 @@ namespace InitialProject.View.Guest2
         public ObservableCollection<Guest2TourDTO> FinishedTourDTOs { get; set; }
         public List<Tour> FinishedTours { get; set; }
 
+        public List<Tour> CheckedTours { get; set; }
+        public Tour CurrentlyActiveTour { get; set; }
+        public Checkpoint CurrentlyActiveCheckpoint { get; set; }
+
         public ObservableCollection<Location> Locations;
 
         public ObservableCollection<Guest2TourDTO> NonReservedTours { get; set; }
@@ -133,6 +137,18 @@ namespace InitialProject.View.Guest2
             Tours = new ObservableCollection<Tour>(_tourService.GetReservableTours());
 
             TourDTOs = ConvertToDTO(new List<Tour>(Tours));
+
+            CheckedTours = new List<Tour>();
+            foreach (int id in _tourReservationRepository.GetCheckedTourIds(LoggedInUser))
+            {
+                CheckedTours.Add(_tourService.GetById(id));
+            }
+
+            if(CheckedTours.Count != 0 && !CheckedTours[0].IsFinished)
+            {
+                CurrentlyActiveTour = CheckedTours[0];
+                CurrentlyActiveCheckpoint = _checkpointRepository.GetById(CurrentlyActiveTour.CurrentCheckpointId);
+            }
 
             List<Tour> UserTours = new List<Tour>(_tourService.GetUserTours(LoggedInUser));
             FinishedTours = _tourService.GetFinishedTours(UserTours);
