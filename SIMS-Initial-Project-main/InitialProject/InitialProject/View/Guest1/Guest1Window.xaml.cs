@@ -19,6 +19,7 @@ using InitialProject.Resources.Observer;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using InitialProject.Model.DTO;
+using InitialProject.Resources.Enums;
 
 namespace InitialProject.View.Guest1
 {
@@ -43,6 +44,7 @@ namespace InitialProject.View.Guest1
 
         public ObservableCollection<AccommodationReservation> PresentableReservations { get; set; }
         public AccommodationReservation SelectedReservation { get; set; }
+        public ObservableCollection<RescheduleRequest> AllReschedules { get; set; }
 
 
         private readonly AccommodationRepository _accommodationRepository;
@@ -56,6 +58,7 @@ namespace InitialProject.View.Guest1
         private readonly AccommodationReservationRepository _accommodationReservationRepository;
 
         private readonly AccommodationRatingsRepository _accommodationRatingsRepository;
+        private readonly RescheduleRequestRepository _rescheduleRequestRepository;
 
 
         private string searchText;
@@ -123,6 +126,9 @@ namespace InitialProject.View.Guest1
             _accommodationRatingsRepository = new AccommodationRatingsRepository();
             _accommodationRatingsRepository.Subscribe(this);
 
+            _rescheduleRequestRepository = new RescheduleRequestRepository();
+            _rescheduleRequestRepository.Subscribe(this);
+
             AllAccommodations = new ObservableCollection<Accommodation>(_accommodationRepository.GetAll());
             PresentableAccommodations = ConvertToDTO(AllAccommodations);
 
@@ -131,6 +137,7 @@ namespace InitialProject.View.Guest1
             UnratedReservations = new ObservableCollection<AccommodationReservation>();
 
             PresentableReservations = new ObservableCollection<AccommodationReservation>(_accommodationReservationRepository.GetAll());
+            AllReschedules = new ObservableCollection<RescheduleRequest>(_rescheduleRequestRepository.GetAll());
         }
 
         private void ReserveButton_Click(object sender, RoutedEventArgs e)
@@ -411,7 +418,11 @@ namespace InitialProject.View.Guest1
         }
         private void SendRequest_Click(object sender, RoutedEventArgs e)
         {
-
+            if (SelectedReservation != null)
+            {
+                SendRequest sendRequest = new SendRequest(SelectedReservation, _rescheduleRequestRepository);
+                sendRequest.ShowDialog();
+            }
         }
 
         public bool CancellationPeriodPassed(AccommodationReservation reservation)
@@ -432,6 +443,26 @@ namespace InitialProject.View.Guest1
                 return false;
             }
         }
+
+        private void CheckRescheduleRequestsStatus()
+        {
+            var requests = _rescheduleRequestRepository.GetAll().Where(r => r.GuestId == LoggedInUser.Id);
+
+            foreach (var request in requests)
+            {
+                if (request.Status == RescheduleRequestStatus.approved || request.Status == RescheduleRequestStatus.rejected)
+                {
+                    string message = $"The status of reschedule request {request.Id} has been changed to {request.Status}.";
+                    MessageBox.Show(message, "Reschedule Request Status Change", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+        }
+
+        private void GuestWindow_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            CheckRescheduleRequestsStatus();
+        }
+
 
         private void ShowCancelWarning()
         {
