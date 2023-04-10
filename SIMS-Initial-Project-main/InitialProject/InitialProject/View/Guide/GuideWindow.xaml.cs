@@ -3,6 +3,7 @@ using InitialProject.Model.DTO;
 using InitialProject.Repository;
 using InitialProject.Resources.Observer;
 using InitialProject.Service;
+using InitialProject.ViewModel.Guide;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -288,7 +289,8 @@ namespace InitialProject.View.Guide
             Tour selectedTour = ConvertToTour(SelectedFinishedTourDTO);
             if (selectedTour != null)
             {
-                Statistics statistics = new Statistics(selectedTour, _tourReservationRepository);
+                StatisticsViewModel statisticsViewModel = new StatisticsViewModel(selectedTour, _tourReservationRepository);
+                Statistics statistics = new Statistics(statisticsViewModel);
                 statistics.Show();
             }
         }
@@ -321,7 +323,8 @@ namespace InitialProject.View.Guide
         }
         private void RatedToursDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            Ratings ratings = new Ratings(ConvertToTour(SelectedRatedTourDTO), _userRepository, _tourRatingRepository, _tourReservationRepository, _checkpointRepository);
+            RatingsViewModel ratingsViewModel = new RatingsViewModel(_userRepository, _tourRatingRepository, _tourReservationRepository, _checkpointRepository, ConvertToTour(SelectedRatedTourDTO));
+            Ratings ratings = new Ratings(ratingsViewModel);
             ratings.Show();
         }
         private void CheckIfTourIsActive()
