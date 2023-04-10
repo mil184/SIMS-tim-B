@@ -90,7 +90,7 @@
                         </Button.Template>
                     </Button>
                     <Border BorderBrush="#FFA500" BorderThickness="3" Margin="5" CornerRadius="5">
-                        <Image Name="picHolder" Width="300" Height="200" Stretch="Fill"/>
+                        <Image Width="300" Height="200" Stretch="Fill" Source="{Binding ImageSource}"/>
                     </Border>
                     <Button Content=">" Margin="0 0 10 0" Height="50" Width="50" FontSize="20" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Left" Click="NextButton_Click">
                         <Button.Template>

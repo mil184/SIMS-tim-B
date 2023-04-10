@@ -38,7 +38,8 @@ namespace InitialProject.View.Guide
 
         private void RatingsDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            RatingsOverview overview = new RatingsOverview(_viewModel.SelectedRatingDTO);
+            RatingsOverviewViewModel ratingsOverviewViewModel = new RatingsOverviewViewModel(_viewModel.SelectedRatingDTO);
+            RatingsOverview overview = new RatingsOverview(ratingsOverviewViewModel);
             overview.Show();
         }
 
