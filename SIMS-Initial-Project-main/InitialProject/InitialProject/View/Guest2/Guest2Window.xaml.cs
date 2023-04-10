@@ -31,10 +31,6 @@ namespace InitialProject.View.Guest2
         public ObservableCollection<Guest2TourDTO> TourDTOs { get; set; }
         public ObservableCollection<Tour> Tours { get; set; }
 
-        public List<Tour> CheckedTours { get; set; }
-        public Tour CurrentlyActiveTour { get; set; }
-        public Checkpoint CurrentlyActiveCheckpoint { get; set; }
-
         public ObservableCollection<Guest2TourDTO> FinishedTourDTOs { get; set; }
         public List<Tour> FinishedTours { get; set; }
 
@@ -51,25 +47,59 @@ namespace InitialProject.View.Guest2
         private readonly TourRatingRepository _tourRatingRepository;
 
 
-        private string searchText;
-        public string SearchText
+        private string country;
+        public string Country
         {
-            get { return searchText; }
+            get => country;
             set
             {
-                searchText = value;
-                OnPropertyChanged();
+                if (value != country)
+                {
+                    country = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
-        private string messageText;
-        public string MessageText
+        private string city;
+        public string City
         {
-            get { return messageText; }
+            get => city;
             set
             {
-                messageText = value;
-                OnPropertyChanged();
+                if (value != city)
+                {
+                    city = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string tourLanguage;
+        public string TourLanguage
+        {
+            get => tourLanguage;
+            set
+            {
+                if (value != tourLanguage)
+                {
+                    tourLanguage = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string personCount;
+        public string PersonCount
+        {
+            get => personCount;
+            set
+            {
+                if (value != personCount)
+                {
+                    personCount = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
@@ -95,31 +125,18 @@ namespace InitialProject.View.Guest2
             _userRepository.Subscribe(this);
 
             _tourReservationRepository = new TourReservationRepository();
-            _tourReservationRepository.Subscribe(this); 
+            _tourReservationRepository.Subscribe(this);
 
             _tourRatingRepository = new TourRatingRepository();
             _tourRatingRepository.Subscribe(this);
 
-            Tours = new ObservableCollection<Tour>(_tourService.GetAll());
+            Tours = new ObservableCollection<Tour>(_tourService.GetReservableTours());
+
             TourDTOs = ConvertToDTO(new List<Tour>(Tours));
-
-            CheckedTours = new List<Tour>();
-            foreach (int id in _tourReservationRepository.GetCheckedTourIds(LoggedInUser))
-            {
-                CheckedTours.Add(_tourService.GetById(id));
-            }
-
-            if(!CheckedTours[0].IsFinished)
-            {
-                CurrentlyActiveTour = CheckedTours[0];
-                CurrentlyActiveCheckpoint = _checkpointRepository.GetById(CurrentlyActiveTour.CurrentCheckpointId);
-            }
 
             List<Tour> UserTours = new List<Tour>(_tourService.GetUserTours(LoggedInUser));
             FinishedTours = _tourService.GetFinishedTours(UserTours);
             FinishedTourDTOs = ConvertToDTO(FinishedTours);
-
-            ConfirmArrival();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -136,32 +153,9 @@ namespace InitialProject.View.Guest2
             FormFinishedTours();
         }
 
-        public void ConfirmArrival()
-        {
-
-            if (CheckedTours.Count != 0)
-            {
-                TourReservation tourReservation = _tourReservationRepository.GetReservationByGuestIdAndTourId(LoggedInUser.Id, CheckedTours[0].Id);
-
-                if (tourReservation.MessageBoxShown)
-                {
-                    return;
-                }
-
-                MessageBox.Show("Please confirm your arrival at " + CheckedTours[0].Name, "ArrivalConfirmation", MessageBoxButton.YesNo, MessageBoxImage.Information);
-
-                if(MessageBoxResult.Yes == MessageBoxResult.Yes) 
-                {
-                    tourReservation.GuestArrived = true;
-                    tourReservation.MessageBoxShown = true;
-                    _tourReservationRepository.Update(tourReservation);
-                }
-            }
-        }
-
         public void FormTours()
         {
-            foreach (Tour tour in _tourService.GetAll())
+            foreach (Tour tour in _tourService.GetReservableTours())
             {
                 TourDTOs.Add(ConvertToDTO(tour));
             }
@@ -227,96 +221,51 @@ namespace InitialProject.View.Guest2
 
         private void Search_Click(object sender, RoutedEventArgs e)
         {
+            CheckIfAllEmpty();
+
             TourDTOs.Clear();
 
-            if (searchText != null && searchText != "")
+            List<Tour> result = new List<Tour>();
+
+            if (!string.IsNullOrEmpty(Country))
             {
-                string Text = searchText.ToLower();
-                Text = Text.Replace(" ", String.Empty);
-                string Query = Text;
-                string selectedSearchParam = (searchParamComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
-
-                int integerNum;
-                double doubleNum;
-
-                bool isInt = int.TryParse(Query, out integerNum);
-                bool isDouble = double.TryParse(Query, out doubleNum);
-
-                ObservableCollection<Tour> FilteredTours = new ObservableCollection<Tour>();
-                ObservableCollection<Location> FilteredLocations = SearchLocations(Tours, Query);
-
-                foreach (Tour tour in Tours)
-                {
-                    if (tour.Name.ToLower().Replace(" ", "").Contains(Query))
-                    {
-                        FilteredTours.Add(tour);
-                    }
-                    else if (FilteredLocations.Any(loc => loc.Id == tour.LocationId))
-                    {
-                        FilteredTours.Add(tour);
-                    }
-                    else if (tour.Language.ToString().ToLower().Replace(" ", "").Contains(Query))
-                    {
-                        FilteredTours.Add(tour);
-                    }
-                    else if (isDouble && tour.Duration == int.Parse(Query))
-                    {
-                        FilteredTours.Add(tour);
-                    }
-                    else if (isInt && selectedSearchParam == "Max Guests" && tour.MaxGuests == int.Parse(Query))
-                    {
-                        if (int.Parse(Query) > tour.MaxGuests)
-                        {
-                            MessageText = "The number of guests cannot be greater than max number of guests";
-                        }
-                        else
-                        {
-                            FilteredTours.Add(tour);
-                        }
-                    }
-                    else if (isInt && selectedSearchParam == "Current Guest Count" && tour.CurrentGuestCount == int.Parse(Query))
-                    {
-                        if (int.Parse(Query) < tour.CurrentGuestCount)
-                        {
-                            MessageText = "The number of guests cannot be greater than max number of guests";
-                        }
-                        else
-                        {
-                            FilteredTours.Add(tour);
-                        }
-                    }
-                }
-
-                foreach (Tour tour in FilteredTours)
-                {
-                    TourDTOs.Add(ConvertToDTO(tour));
-                }
-
+                result = _tourService.GetByCountryName(Country);
             }
             else
             {
-                foreach (Tour tour in Tours)
+                result = _tourService.GetReservableTours();
+            }
+
+            if (!string.IsNullOrEmpty(City))
+            {
+                result = result.Intersect(_tourService.GetByCityName(City)).ToList();
+            }
+            if (!string.IsNullOrEmpty(TourLanguage))
+            {
+                result = result.Intersect(_tourService.GetByLanguage(TourLanguage)).ToList();
+            }
+            if (!string.IsNullOrEmpty(PersonCount))
+            {
+                result = result.Intersect(_tourService.GetByGuests(int.Parse(PersonCount))).ToList();
+            }
+
+            ObservableCollection<Guest2TourDTO> searchResults = ConvertToDTO(result);
+            foreach (Guest2TourDTO dto in searchResults)
+            {
+                TourDTOs.Add(dto);
+            }
+        }
+
+        public void CheckIfAllEmpty()
+        {
+            if (string.IsNullOrEmpty(Country) && string.IsNullOrEmpty(City) && string.IsNullOrEmpty(TourLanguage) && string.IsNullOrEmpty(PersonCount))
+            {
+                foreach (Tour tour in _tourService.GetReservableTours())
                 {
                     TourDTOs.Add(ConvertToDTO(tour));
                 }
             }
         }
-
-        private ObservableCollection<Location> SearchLocations(ObservableCollection<Tour> tours, string query)
-        {
-            ObservableCollection<Location> FilteredLocations = new ObservableCollection<Location>();
-
-            foreach (Tour tour in tours)
-            {
-                Location location = _locationRepository.GetById(tour.LocationId);
-                if (location.Country.ToLower().Replace(" ", "").Contains(query) || location.City.ToLower().Replace(" ", "").Contains(query))
-                {
-                    FilteredLocations.Add(location);
-                }
-            }
-            return FilteredLocations;
-        }
-
         private void ShowMoreButton_Click(object sender, RoutedEventArgs e)
         {
             ShowTour showTour = new ShowTour(SelectedGuest2TourDTO);

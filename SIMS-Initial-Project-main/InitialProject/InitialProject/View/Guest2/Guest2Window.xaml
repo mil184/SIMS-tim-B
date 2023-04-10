@@ -33,25 +33,37 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
                     <!-- Tour list section -->
-                    <Grid Grid.Row="0">
+                    <Grid Grid.Row="0" Margin="10">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="50"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <Button Name="reserve" Content="Reserve Tour" Click="ReserveButton_Click" Width="200" Margin="0 0 10 0" FontWeight="Bold"/>
-                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBox Name="searchBox" Text="{Binding Path=SearchText}" Width="200" Height="25" Margin="0 0 5 0"/>
-                            <ComboBox x:Name="searchParamComboBox" Width="150" Margin="0 0 5 0">
-                                <ComboBoxItem Content="Max Guests"/>
-                                <ComboBoxItem Content="Current Guest Count"/>
-                            </ComboBox>
-                            <Button Name="search" Width="25" Height="25" Click="Search_Click">
-                                <Image Source="/Resources/Images/inspection.png" />
-                            </Button>
-                        </StackPanel>
+
+                        <TextBlock Grid.Row="0" Text="Country:" Margin="0 0 5 0" VerticalAlignment="Center"/>
+                        <TextBox  Width="150" Margin="0 0 10 0" Grid.Column="1" Text="{Binding Country}"/>
+
+                        <TextBlock Grid.Row="0" Text="City:" Margin="0 0 5 0" VerticalAlignment="Center" Grid.Column="2"/>
+                        <TextBox Width="150" Margin="0 0 10 0" Grid.Column="3" Text="{Binding City}"/>
+
+                        <TextBlock Grid.Row="0" Text="Language:" Margin="0 0 5 0" VerticalAlignment="Center" Grid.Column="4"/>
+                        <TextBox  Width="150" Margin="0 0 10 0" Grid.Column="5" Text="{Binding TourLanguage}"/>
+
+                        <TextBlock Grid.Row="0"  Text="Person Count:" Margin="0 0 5 0" VerticalAlignment="Center" Grid.Column="6"/>
+                        <TextBox  Width="50" Height="25" Margin="0 0 10 0" Grid.Column="7" Text="{Binding PersonCount}"/>
+
+                        <Button Grid.Row="0"  Name="search" Content="Search" Click="Search_Click" Grid.Column="8" FontWeight="Bold" HorizontalAlignment="Right" Margin="30 0 0 0"/>
+
                     </Grid>
 
                     <!-- Tour overview section -->
@@ -81,8 +93,7 @@
                             </DataGrid>
                         </ScrollViewer>
                     </GroupBox>
-
-                    
+                    <Button Grid.Row="2" Name="reserve" Content="Reserve Tour" Click="ReserveButton_Click" Width="200" Margin="10 0 0 0" FontWeight="Bold" HorizontalAlignment="Center"/>
                 </Grid>
             </TabItem>
 

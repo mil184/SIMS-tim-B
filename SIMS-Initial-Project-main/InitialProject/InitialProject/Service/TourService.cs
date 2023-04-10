@@ -114,12 +114,26 @@ namespace InitialProject.Service
             }
             return upcomingTours;
         }
+        public List<Tour> GetReservableTours()
+        {
+            var upcomingTours = new List<Tour>();
+            var currentDate = DateTime.Now.Date;
 
+            foreach (var tour in _tourRepository.GetAll())
+            {
+                var tourStartDate = tour.StartTime.Date;
+                if (tourStartDate >= currentDate && !tour.IsAborted)
+                {
+                    upcomingTours.Add(tour);
+                }
+            }
+            return upcomingTours;
+        }
         public List<Tour> GetByCityName(string city)
         {
             var toursByCityName = new List<Tour>();
 
-            foreach (var tour in _tourRepository.GetAll())
+            foreach (var tour in GetReservableTours())
             {
                 if (_locationRepository.GetById(tour.LocationId).City == city)
                 {
@@ -129,7 +143,62 @@ namespace InitialProject.Service
 
             return toursByCityName;
         }
+        public List<Tour> GetByCountryName(string country)
+        {
+            var tours = new List<Tour>();
 
+            foreach (var tour in GetReservableTours())
+            {
+                if (_locationRepository.GetById(tour.LocationId).Country == country)
+                {
+                    tours.Add(tour);
+                }
+            }
+
+            return tours;
+        }
+        public List<Tour> GetByLanguage(string language)
+        {
+            var tours = new List<Tour>();
+
+            foreach (var tour in GetReservableTours())
+            {
+                if (tour.Language == language)
+                {
+                    tours.Add(tour);
+                }
+            }
+
+            return tours;
+        }
+        public List<Tour> GetByDuration(double duration)
+        {
+            var tours = new List<Tour>();
+
+            foreach (var tour in GetReservableTours())
+            {
+                if (tour.Duration == duration)
+                {
+                    tours.Add(tour);
+                }
+            }
+
+            return tours;
+        }
+        public List<Tour> GetByGuests(int guestCount)
+        {
+            var tours = new List<Tour>();
+
+            foreach (var tour in GetReservableTours())
+            {
+                if (guestCount <= tour.MaxGuests - tour.CurrentGuestCount)
+                {
+                    tours.Add(tour);
+                }
+            }
+
+            return tours;
+        }
         public List<Tour> GetToursByYear(int year) 
         {
             List<Tour> toursThisYear = new List<Tour>();

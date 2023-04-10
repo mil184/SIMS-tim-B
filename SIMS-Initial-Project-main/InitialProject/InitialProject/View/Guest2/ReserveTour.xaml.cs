@@ -75,86 +75,97 @@ namespace InitialProject.View.Guest2
             Vouchers = new ObservableCollection<Voucher>(_voucherService.GetActiveVouchers(UserVouchers));
         }
 
-        public void TooManyGuestsMessage(int spacesLeft)
-        {
-            if (spacesLeft == 1)
-                MessageBox.Show("You've tried adding too many guests. There is only 1 space left.");
-            else
-                MessageBox.Show("You've tried adding too many guests. There are only " + spacesLeft.ToString() + " spaces left.");
-        }
-
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            Tour selectedTour = _tourService.GetById(SelectedTour.TourId);
+            Tour selectedTour = new Tour();
+            selectedTour = _tourService.GetById(SelectedTour.TourId);
 
-            if (PersonCount == null || AverageAge == null)
+            if (PersonCount != null && AverageAge != null)
             {
-                return;
-            }
+                int personCount = int.Parse(PersonCount);
+                int spacesLeft = selectedTour.MaxGuests - selectedTour.CurrentGuestCount;
 
-            int personCount = int.Parse(PersonCount);
-            int spacesLeft = selectedTour.MaxGuests - selectedTour.CurrentGuestCount;
-
-            if (personCount > spacesLeft && selectedTour.CurrentGuestCount != selectedTour.MaxGuests)
-            {
-                TooManyGuestsMessage(spacesLeft);
-            }
-
-            if (selectedTour.CurrentGuestCount == selectedTour.MaxGuests)
-            {
-                var zeroSpacesForReservation = new ZeroSpacesForReservation(SelectedTour, LoggedInUser, _tourService);
-                zeroSpacesForReservation.ShowDialog();
-                Close();
-                return;
-            }
-
-            if (SelectedVoucher != null ^ NoVoucherBtn.IsChecked == true)
-            {
-                if (SelectedVoucher != null)
+                if (SelectedVoucher != null ^ NoVoucherBtn.IsChecked == true)
                 {
-                    SelectedVoucher.IsActive = false;
-                    _voucherRepository.Update(SelectedVoucher);
+                    if (SelectedVoucher != null)
+                    {
+                        SelectedVoucher.IsActive = false;
+                        _voucherRepository.Update(SelectedVoucher);
+                    }
+
+                    if (personCount > spacesLeft && selectedTour.CurrentGuestCount != selectedTour.MaxGuests)
+                    {
+                        if (spacesLeft == 1)
+                            MessageBox.Show("You've tried adding too many guests. There is only 1 space left.");
+                        else
+                            MessageBox.Show("You've tried adding too many guests. There are only " + spacesLeft.ToString() + " spaces left.");
+                    }
+                    else if (selectedTour.CurrentGuestCount == selectedTour.MaxGuests)
+                    {
+                        ZeroSpacesForReservation zeroSpacesForReservation
+                            = new ZeroSpacesForReservation(SelectedTour, LoggedInUser, _tourService);
+                        zeroSpacesForReservation.ShowDialog();
+                        Close();
+                    }
+                    else
+                    {
+                        int voucherId = -1;
+                        if (SelectedVoucher != null)
+                        {
+                            voucherId = SelectedVoucher.Id;
+                        }
+
+                        TourReservation tourReservation = new TourReservation(
+                                                            LoggedInUser.Id,
+                                                            SelectedTour.TourId,
+                                                            personCount,
+                                                            double.Parse(AverageAge),
+                                                            voucherId);
+
+                        if (CheckIfReservationAlreadyExists(tourReservation))
+                        {
+                            tourReservation.Id = _tourReservationRepository.GetReservationByGuestIdAndTourId(LoggedInUser.Id, SelectedTour.TourId).Id;
+                            int currentPersonCount = _tourReservationRepository.GetReservationByGuestIdAndTourId(LoggedInUser.Id, SelectedTour.TourId).PersonCount;
+                            currentPersonCount += personCount;
+
+                            double currentAverageAge = _tourReservationRepository.GetReservationByGuestIdAndTourId(LoggedInUser.Id, SelectedTour.TourId).AverageAge;
+                            currentAverageAge = (currentAverageAge + double.Parse(AverageAge)) / 2;
+
+                            int currentVoucherId = _tourReservationRepository.GetReservationByGuestIdAndTourId(LoggedInUser.Id, SelectedTour.TourId).UsedVoucherId;
+
+                            if (currentVoucherId == -1)
+                            {
+                                if (SelectedVoucher != null)
+                                    tourReservation.UsedVoucherId = SelectedVoucher.Id;
+                            }
+                            else
+                            {
+                                tourReservation.UsedVoucherId = currentVoucherId;
+                            }
+
+                            tourReservation.PersonCount = currentPersonCount;
+                            tourReservation.AverageAge = currentAverageAge;
+
+                            _tourReservationRepository.Update(tourReservation);
+                        }
+                        else
+                        {
+                            _tourReservationRepository.Save(tourReservation);
+                        }
+                        selectedTour.CurrentGuestCount += personCount;
+                        _tourService.Update(selectedTour);
+
+                        Close();
+                    }
                 }
-
-                int voucherId = SelectedVoucher?.Id ?? -1;
-
-                TourReservation tourReservation = new TourReservation(
-                                                        LoggedInUser.Id,
-                                                        SelectedTour.TourId,
-                                                        personCount,
-                                                        double.Parse(AverageAge),
-                                                        voucherId);
-
-                if (CheckIfReservationAlreadyExists(tourReservation))
-                {
-                    tourReservation.Id = _tourReservationRepository.GetReservationByGuestIdAndTourId(LoggedInUser.Id, SelectedTour.TourId).Id;
-                    int currentPersonCount = _tourReservationRepository.GetReservationByGuestIdAndTourId(LoggedInUser.Id, SelectedTour.TourId).PersonCount;
-                    currentPersonCount += personCount;
-
-                    double currentAverageAge = _tourReservationRepository.GetReservationByGuestIdAndTourId(LoggedInUser.Id, SelectedTour.TourId).AverageAge;
-                    currentAverageAge = (currentAverageAge + double.Parse(AverageAge)) / 2;
-
-                    tourReservation.PersonCount = currentPersonCount;
-                    tourReservation.AverageAge = currentAverageAge;
-
-                    _tourReservationRepository.Update(tourReservation);
-                }
-                else
-                {
-                    _tourReservationRepository.Save(tourReservation);
-                }
-
-                selectedTour.CurrentGuestCount += personCount;
-                _tourService.Update(selectedTour);
-                Close();
             }
         }
 
-        public bool CheckIfReservationAlreadyExists(TourReservation tourReservation) 
+        public bool CheckIfReservationAlreadyExists(TourReservation tourReservation)
         {
-            foreach(TourReservation reservation in _tourReservationRepository.GetAll()) 
+            foreach (TourReservation reservation in _tourReservationRepository.GetAll())
             {
-                if(reservation.TourId  == tourReservation.TourId && reservation.UserId == tourReservation.UserId) 
+                if (reservation.TourId == tourReservation.TourId && reservation.UserId == tourReservation.UserId)
                 {
                     return true;
                 }
