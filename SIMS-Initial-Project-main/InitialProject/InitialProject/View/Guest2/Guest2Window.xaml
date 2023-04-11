@@ -98,7 +98,7 @@
             </TabItem>
 
             <!-- Ratings tab -->
-            <TabItem Header="Ratings" Height="22" Margin="-2,-2,-2,0" VerticalAlignment="Top">
+            <TabItem Header="Ratings" Height="22" Margin="-2,0,-2,2" VerticalAlignment="Bottom">
                 <StackPanel Margin="10">
 
                     <!-- Tour overview section -->
@@ -125,7 +125,7 @@
                             </DataGrid>
                         </ScrollViewer>
                     </GroupBox>
-                    
+
                     <!-- Rate Tour -->
                     <StackPanel Orientation="Horizontal" Margin="0, 10,0,0">
                         <Button Content="Rate This Tour" Width="100" Height="40" HorizontalAlignment="Center" Margin="300,0,40,0" Click="RateButton_Click"/>
@@ -151,11 +151,25 @@
 
                     <Label Grid.Row="1" Grid.Column="0">Currently Active checkpoint:</Label>
                     <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Path=CurrentlyActiveCheckpoint.Name, FallbackValue=NoTourCurrentlyActive}"/>
-
-
                 </Grid>
             </TabItem>
 
+            <!-- Vouchers tab -->
+            <TabItem Header="Vouchers" Height="22" Margin="-2,0,-2,2" VerticalAlignment="Bottom">
+                <GroupBox Grid.Row="3" Header="Your Vouchers" Margin="50 20 50 10">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <DataGrid ItemsSource="{Binding Vouchers}" 
+                                  AutoGenerateColumns="False" IsReadOnly="True">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" />
+                                <DataGridTextColumn Header="Start Date" Binding="{Binding StartDateTime}" Width="*" />
+                                <DataGridTextColumn Header="Expiration Date" Binding="{Binding ExpirationDateTime}" Width="*" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </ScrollViewer>
+                </GroupBox>
+            </TabItem>
+            
         </TabControl>
     </Grid>
 </Window>
