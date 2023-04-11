@@ -26,13 +26,6 @@ namespace InitialProject.Repository
             _observers = new List<IObserver>();
         }
 
-        public List<TourReservation> RemoveById(List<TourReservation> tourReservations, int id)
-        {
-            List<TourReservation> tourReservationsRemoved = tourReservations;
-            tourReservationsRemoved.RemoveAll(t => t.Id == id);
-            return tourReservationsRemoved;
-        }
-
         public int NextId()
         {
             _tourReservations = _serializer.FromCSV(_filePath);

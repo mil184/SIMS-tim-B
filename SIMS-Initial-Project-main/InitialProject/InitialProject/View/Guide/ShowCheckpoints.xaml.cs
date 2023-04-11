@@ -50,7 +50,7 @@ namespace InitialProject.View.Guide
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public ShowCheckpoints(Tour tour, CheckpointRepository checkpointRepository, TourService tourService, TourReservationRepository tourReservationRepository, UserRepository userRepository, TourRatingRepository tourRatingRepository)
+        public ShowCheckpoints(Tour tour, CheckpointRepository checkpointRepository, TourService tourService, TourReservationRepository tourReservationRepository, UserRepository userRepository, TourRatingService tourRatingService)
         {
             InitializeComponent();
             DataContext = this;
