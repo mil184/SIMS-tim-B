@@ -20,6 +20,8 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using InitialProject.Model.DTO;
 using InitialProject.Resources.Enums;
+using InitialProject.Service;
+using System.Diagnostics.Metrics;
 
 namespace InitialProject.View.Guest1
 {
@@ -59,31 +61,66 @@ namespace InitialProject.View.Guest1
 
         private readonly AccommodationRatingsRepository _accommodationRatingsRepository;
         private readonly RescheduleRequestRepository _rescheduleRequestRepository;
+        private readonly AccommodationService _accommodationService;
 
 
-        private string searchText;
-
-        public string SearchText
+        private string searchName;
+        public string SearchName
         {
-            get { return searchText; }
+            get { return searchName; }
             set
             {
-                searchText = value;
+                searchName = value;
 
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(SearchName));
             }
         }
 
-        private string messageText;
-
-        public string MessageText
+        private string searchCountry;
+        public string SearchCountry
         {
-            get { return messageText; }
+            get { return searchCountry; }
             set
             {
-                messageText = value;
+                searchCountry = value;
 
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(SearchCountry));
+            }
+        }
+
+        private string searchCity;
+        public string SearchCity
+        {
+            get { return searchCity; }
+            set
+            {
+                searchCity = value;
+
+                OnPropertyChanged(nameof(SearchCity));
+            }
+        }
+
+        private string searchGuests;
+        public string SearchGuests
+        {
+            get { return searchGuests; }
+            set
+            {
+                searchGuests = value;
+
+                OnPropertyChanged(nameof(SearchGuests));
+            }
+        }
+
+        private string searchDays;
+        public string SearchDays
+        {
+            get { return searchDays; }
+            set
+            {
+                searchDays = value;
+
+                OnPropertyChanged(nameof(SearchDays));
             }
         }
 
@@ -129,8 +166,11 @@ namespace InitialProject.View.Guest1
             _rescheduleRequestRepository = new RescheduleRequestRepository();
             _rescheduleRequestRepository.Subscribe(this);
 
-            AllAccommodations = new ObservableCollection<Accommodation>(_accommodationRepository.GetAll());
-            PresentableAccommodations = ConvertToDTO(AllAccommodations);
+            _accommodationService = new AccommodationService();
+            _accommodationService.Subscribe(this);
+
+            AllAccommodations = new ObservableCollection<Accommodation>(_accommodationService.GetAll());
+            PresentableAccommodations = ConvertToDTO(new List<Accommodation>(AllAccommodations));
 
             UnratedAccommodations = new ObservableCollection<AccommodationRatingsDTO>();
             FormUnratedReservation();
@@ -138,6 +178,7 @@ namespace InitialProject.View.Guest1
 
             PresentableReservations = new ObservableCollection<AccommodationReservation>(_accommodationReservationRepository.GetAll());
             AllReschedules = new ObservableCollection<RescheduleRequest>(_rescheduleRequestRepository.GetAll());
+
         }
 
         private void ReserveButton_Click(object sender, RoutedEventArgs e)
@@ -150,126 +191,54 @@ namespace InitialProject.View.Guest1
         }
         private void Search_Click(object sender, RoutedEventArgs e)
         {
+            CheckIfAllEmpty();
             PresentableAccommodations.Clear();
 
-            if (string.IsNullOrEmpty(searchText))
+            List<Accommodation> result = new List<Accommodation>();
+
+
+            if (!string.IsNullOrEmpty(SearchName))
             {
-                foreach (Accommodation accommodation in AllAccommodations)
+                result = _accommodationService.GetByName(SearchName);
+            }
+            else
+            {
+                result = _accommodationService.GetAll();
+            }
+
+            if (!string.IsNullOrEmpty(SearchCountry))
+            {
+                result = result.Intersect(_accommodationService.GetByCountryName(SearchCountry)).ToList();
+            }
+            if (!string.IsNullOrEmpty(SearchCity))
+            {
+                result = result.Intersect(_accommodationService.GetByCityName(SearchCity)).ToList();
+            }
+            if (!string.IsNullOrEmpty(SearchGuests))
+            {
+                result = result.Intersect(_accommodationService.GetByMaxGuests(int.Parse(SearchGuests))).ToList();
+            }
+            if (!string.IsNullOrEmpty(SearchDays))
+            {
+                result = result.Intersect(_accommodationService.GetByMinDays(int.Parse(SearchDays))).ToList();
+            }
+
+            ObservableCollection<GuestAccommodationDTO> searchResults = ConvertToDTO(result);
+            foreach (GuestAccommodationDTO dto in searchResults)
+            {
+                PresentableAccommodations.Add(dto);
+            }
+        }
+
+        public void CheckIfAllEmpty()
+        {
+            if (string.IsNullOrEmpty(SearchName) && string.IsNullOrEmpty(SearchCountry) && string.IsNullOrEmpty(SearchCity) && string.IsNullOrEmpty(SearchGuests) && string.IsNullOrEmpty(SearchDays))
+            {
+                foreach (Accommodation accommodation in _accommodationService.GetAll())
                 {
                     PresentableAccommodations.Add(ConvertToDTO(accommodation));
-                }
-                return;
+                }      
             }
-
-            string Query = GetQueryText(searchText);
-            string[] QueryWords = GetQueryWords(searchText);
-            string selectedSearchParam = (searchParamComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
-            ObservableCollection<Accommodation> filteredAccommodations = FilterAccommodations(AllAccommodations, Query, selectedSearchParam, QueryWords);
-
-            foreach (Accommodation accommodation in filteredAccommodations)
-            {
-                PresentableAccommodations.Add(ConvertToDTO(accommodation));
-            }
-        }
-
-        private string GetQueryText(string searchText)
-        {
-            string text = searchText.ToLower();
-            text = text.Replace(" ", string.Empty);
-            return text;
-        }
-
-        private string[] GetQueryWords(string searchText)
-        {
-          string[] words = searchText.ToLower().Split(new char[] {' '}, StringSplitOptions.RemoveEmptyEntries);
-          return words;
-        }
-        private ObservableCollection<Accommodation> FilterAccommodations(ObservableCollection<Accommodation> accommodations, string query, string selectedSearchParam, string[] queryWords)
-        {
-            ObservableCollection<Accommodation> filteredAccommodations = new ObservableCollection<Accommodation>();
-            ObservableCollection<Location> filteredLocations = SearchLocations(accommodations, queryWords);
-
-            foreach (Accommodation accommodation in accommodations)
-            {
-                if (MatchesQuery(accommodation, query, selectedSearchParam, filteredLocations))
-                {
-                    filteredAccommodations.Add(accommodation);
-                }
-            }
-
-            return filteredAccommodations;
-        }
-
-        private ObservableCollection<Location> SearchLocations(ObservableCollection<Accommodation> accommodations, string[] queryWords)
-        {
-            ObservableCollection<Location> filteredLocations = new ObservableCollection<Location>();
-            foreach (Accommodation accommodation in accommodations)
-            {
-                Location location = _locationRepository.GetById(accommodation.LocationId);
-                bool matchesQuery = true;
-                foreach (string word in queryWords)
-                {
-                    if (!location.Country.ToLower().Contains(word) && !location.City.ToLower().Contains(word))
-                    {
-                        matchesQuery = false;
-                        break;
-                    }
-                }
-                if (matchesQuery)
-                {
-                    filteredLocations.Add(location);
-                }
-            }
-            return filteredLocations;
-        }
-
-        private bool MatchesQuery(Accommodation accommodation, string query, string selectedSearchParam, ObservableCollection<Location> filteredLocations)
-        {
-            int intNum;
-            bool isInt = int.TryParse(query, out intNum);
-
-            if (accommodation.Name.ToLower().Replace(" ", "").Contains(query))
-            {
-                return true;
-            }
-
-            if (filteredLocations.Any(loc => loc.Id == accommodation.LocationId))
-            {
-                return true;
-            }
-
-            if (accommodation.Type.ToString().ToLower().Contains(query))
-            {
-                return true;
-            }
-
-            if (isInt && selectedSearchParam == "MaxGuests" && accommodation.MaxGuests == int.Parse(query))
-            {
-                if (int.Parse(query) > accommodation.MaxGuests)
-                {
-                    MessageText = "The number of guests cannot be greater than max number of guests";
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
-            }
-
-            if (isInt && selectedSearchParam == "MinReservationDays" && accommodation.MinReservationDays == int.Parse(query))
-            {
-                if (int.Parse(query) < accommodation.MinReservationDays)
-                {
-                    MessageText = "The number of reservation days cannot be less than min reservation days";
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
-            }
-
-            return false;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -278,7 +247,7 @@ namespace InitialProject.View.Guest1
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public ObservableCollection<GuestAccommodationDTO> ConvertToDTO(ObservableCollection<Accommodation> accommodations)
+        public ObservableCollection<GuestAccommodationDTO> ConvertToDTO(List<Accommodation> accommodations)
         {
             ObservableCollection<GuestAccommodationDTO> dto = new ObservableCollection<GuestAccommodationDTO>();
             foreach (Accommodation accommodation in accommodations)

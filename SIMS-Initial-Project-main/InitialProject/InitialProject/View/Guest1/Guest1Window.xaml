@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InitialProject.View.Guest1"
         mc:Ignorable="d"
-        Title="DMJM-Tours" Height="500" Width="950"
+        Title="DMJM-Tours" Height="600" Width="1000"
         Icon ="/Resources/Images/favicon.ico"
         Loaded="GuestWindow_OnLoaded">
     <Grid>
@@ -35,26 +35,71 @@
                     </Grid.RowDefinitions>
 
                     <!-- Accommodation list section -->
-                    <Grid Grid.Row="0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <Button Name="reserve" Content="Reserve Accommodation" Click="ReserveButton_Click" Width="200" Margin="0 0 10 0" FontWeight="Bold"/>
-                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBox Name="searchBox" Text="{Binding Path=SearchText}" Width="200" Height="25" Margin="0 0 5 0"/>
-                            <ComboBox x:Name="searchParamComboBox" Width="150" Margin="0 0 5 0">
-                                <ComboBoxItem Content="MaxGuests"/>
-                                <ComboBoxItem Content="MinReservationDays"/>
-                            </ComboBox>
-                            <Button Name="search" Width="25" Height="25" Click="Search_Click">
-                                <Image Source="/Resources/Images/search.jpg" />
-                            </Button>
-                        </StackPanel>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Reserve Button -->
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Button Name="reserve" Content="Reserve Accommodation" Click="ReserveButton_Click" Width="200" Height="30" HorizontalAlignment="Left" Margin="40 0 10 0" FontWeight="Bold"/>
+                        </Grid>
+
+                        <!-- Search Boxes -->
+                        <Grid Grid.Row="1" Height="120" Margin="10,20,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="20,0,0,0">
+                                <StackPanel Orientation="Horizontal" Margin="10,5,0,10">
+                                    <Label Content="Name:"/>
+                                    <TextBox Name="searchBox1" Text="{Binding Path=SearchName}" Width="150" Height="30" Margin="0,0,5,0"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,0,0,10">
+                                    <Label Content="Country:"/>
+                                    <TextBox Name="searchBox2" Text="{Binding Path=SearchConutry}" Width="150" Height="30" Margin="0,0,5,0"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,0,0,10">
+                                    <Label Content="City:"/>
+                                    <TextBox Name="searchBox3" Text="{Binding Path=SearchCity}" Width="150" Height="30" Margin="0,0,5,0"/>
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Orientation="Horizontal"  VerticalAlignment="Center" Margin="40,0,0,80">
+                                <Label Content="Type:"/>
+                                <ComboBox x:Name="searchParamComboBox" Width="150" Height="30" Margin="0,0,5,0">
+                                    <ComboBoxItem Content="Apartment"/>
+                                    <ComboBoxItem Content="House"/>
+                                    <ComboBoxItem Content="Hut"/>
+                                </ComboBox>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2" Orientation="Vertical" VerticalAlignment="Center" Margin="40,0,0,40" Height="80">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,5,0,10">
+                                    <Label Content="Max guests:"/>
+                                    <TextBox Name="searchBox4" Text="{Binding Path=SearchGuests}" Width="150" Height="30" Margin="0,0,5,0"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0,0,10">
+                                    <Label Content="Min days for reservation:"/>
+                                    <TextBox Name="searchBox5" Text="{Binding Path=SearchDays}" Width="150" Height="30" Margin="0,0,5,0"/>
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center" Margin="60,0,0,40">
+                                <Button Name="search" Width="40" Height="40" Click="Search_Click">
+                                    <Image Source="/Resources/Images/search.jpg" />
+                                </Button>
+                            </StackPanel>
+                        </Grid>
                     </Grid>
 
                     <!-- Accommodation overview section -->
-                    <GroupBox Grid.Row="1" Header="Explore Accommodation" Margin="0 0 0 10">
+                    <GroupBox Grid.Row="1" Header="Explore Accommodation" Margin="0,10,0,10">
                         <ScrollViewer VerticalScrollBarVisibility="Auto">
                             <DataGrid Name="presentableAccommodations" ItemsSource="{Binding Path=PresentableAccommodations}" AutoGenerateColumns="False" IsReadOnly="True" SelectedItem="{Binding Path=SelectedAccommodation}">
                                 <DataGrid.Columns>
