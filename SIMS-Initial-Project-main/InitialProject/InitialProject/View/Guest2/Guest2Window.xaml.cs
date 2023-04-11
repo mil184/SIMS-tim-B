@@ -1,25 +1,14 @@
-﻿using System;
+﻿using InitialProject.Model;
+using InitialProject.Model.DTO;
+using InitialProject.Repository;
+using InitialProject.Resources.Observer;
+using InitialProject.Service;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using InitialProject.Model;
-using InitialProject.Repository;
-using InitialProject.Resources.Observer;
-using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using InitialProject.Model.DTO;
-using InitialProject.Service;
+using System.Windows;
 
 namespace InitialProject.View.Guest2
 {
@@ -38,6 +27,8 @@ namespace InitialProject.View.Guest2
         public Tour CurrentlyActiveTour { get; set; }
         public Checkpoint CurrentlyActiveCheckpoint { get; set; }
 
+        public ObservableCollection<Voucher> Vouchers { get; set; }
+
         public ObservableCollection<Location> Locations;
 
         public ObservableCollection<Guest2TourDTO> NonReservedTours { get; set; }
@@ -49,6 +40,7 @@ namespace InitialProject.View.Guest2
         private readonly UserRepository _userRepository;
         private readonly TourReservationRepository _tourReservationRepository;
         private readonly TourRatingRepository _tourRatingRepository;
+        private readonly VoucherService _voucherService;
 
 
         private string country;
@@ -134,9 +126,14 @@ namespace InitialProject.View.Guest2
             _tourRatingRepository = new TourRatingRepository();
             _tourRatingRepository.Subscribe(this);
 
-            Tours = new ObservableCollection<Tour>(_tourService.GetReservableTours());
+            _voucherService = new VoucherService();
+            _voucherService.Subscribe(this);
 
+            Tours = new ObservableCollection<Tour>(_tourService.GetReservableTours());
             TourDTOs = ConvertToDTO(new List<Tour>(Tours));
+
+            List<Voucher> UserVouchers = _voucherService.GetUserVouchers(LoggedInUser);
+            Vouchers = new ObservableCollection<Voucher>(_voucherService.GetActiveVouchers(UserVouchers));
 
             CheckedTours = new List<Tour>();
             foreach (int id in _tourReservationRepository.GetCheckedTourIds(LoggedInUser))
