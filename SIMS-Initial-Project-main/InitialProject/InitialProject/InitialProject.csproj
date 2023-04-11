@@ -104,6 +104,7 @@
   <ItemGroup>
     <Folder Include="ViewModel\Guest1\" />
     <Folder Include="ViewModel\Owner\" />
+    <Folder Include="ViewModel\Guest2\" />
   </ItemGroup>
 
 </Project>

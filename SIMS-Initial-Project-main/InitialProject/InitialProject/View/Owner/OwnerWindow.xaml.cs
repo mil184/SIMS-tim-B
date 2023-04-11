@@ -3,29 +3,22 @@ using InitialProject.Model.DTO;
 using InitialProject.Repository;
 using InitialProject.Resources.Observer;
 using InitialProject.Service;
+using InitialProject.ViewModel.Owner;
 using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Windows;
 
 namespace InitialProject.View.Owner
 {
-    /// <summary>
-    /// Interaction logic for OwnerWindow.xaml
-    /// </summary>
-    public partial class OwnerWindow : Window, INotifyPropertyChanged, IObserver
+    public partial class OwnerWindow : Window, IObserver
     {
         public User LoggedInUser { get; set; }
         public ObservableCollection<Accommodation> Accommodations { get; set; }
         public Accommodation SelectedAccommodation { get; set; }
-        public ObservableCollection<GuestReview> GuestReviews { get; set; }
-        public GuestReview SelectedGuestReview { get; set; }
         public ObservableCollection<GuestReviewDTO> UnreviewedGuests { get; set; }
         public GuestReviewDTO SelectedUnreviewedGuest { get; set; }
         public ObservableCollection<AccommodationReservation> UnreviewedReservations { get; set; }
-        public ObservableCollection<AccommodationRatings> Ratings { get; set; }
         public ObservableCollection<RatingsDTO> RatingsDTO { get; set; }
         public ObservableCollection<RescheduleRequest> Requests { get; set; }
         public RescheduleRequest SelectedRequest { get; set; }
@@ -87,14 +80,6 @@ namespace InitialProject.View.Owner
 
         public void FormRatings()
         {
-            /*foreach (AccommodationRatings rating in _ratingRepository.GetAll())
-            {
-                if (rating.OwnerId == LoggedInUser.Id && _guestReviewRepository.GetAll().Any(t => t.ReservationId == rating.ReservationId))
-                {
-                    Ratings.Add(rating);
-                }
-            }*/
-
             foreach (AccommodationRatings rating in _ratingRepository.GetAll())
             {
                 if (rating.OwnerId == LoggedInUser.Id && _guestReviewRepository.GetAll().Any(t => t.ReservationId == rating.ReservationId))
@@ -107,7 +92,6 @@ namespace InitialProject.View.Owner
 
         public void InitializeRatings()
         {
-            Ratings = new ObservableCollection<AccommodationRatings>();
             RatingsDTO = new ObservableCollection<RatingsDTO>();
             FormRatings();
         }
@@ -197,15 +181,10 @@ namespace InitialProject.View.Owner
         {
             if(SelectedUnreviewedGuest != null)
             {
-                ReviewGuest reviewGuest = new ReviewGuest(_guestReviewRepository, SelectedUnreviewedGuest, _reservationRepository, _ratingRepository);
+                ReviewGuestViewModel reviewGuestViewModel = new ReviewGuestViewModel(_guestReviewRepository, SelectedUnreviewedGuest, _reservationRepository, _ratingRepository);
+                ReviewGuest reviewGuest = new ReviewGuest(reviewGuestViewModel);
                 reviewGuest.Show();
             }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         void IObserver.Update()
@@ -216,7 +195,7 @@ namespace InitialProject.View.Owner
             UnreviewedGuests.Clear();
             FormUnreviewedGuests();
 
-            Ratings.Clear();
+            RatingsDTO.Clear();
             FormRatings();
 
             Requests.Clear();
@@ -227,7 +206,8 @@ namespace InitialProject.View.Owner
         {
             if (SelectedRequest != null)
             {
-                ReviewRequest reviewRequest = new ReviewRequest(_reservationRepository, SelectedRequest, _rescheduleRequestRepository);
+                ReviewRequestViewModel _viewModel = new ReviewRequestViewModel(_reservationRepository, SelectedRequest, _rescheduleRequestRepository);
+                ReviewRequest reviewRequest = new ReviewRequest(_viewModel);
                 reviewRequest.Show();
             }
         }
