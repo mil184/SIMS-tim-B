@@ -43,7 +43,7 @@ namespace InitialProject.ViewModel.Guide
                 OnPropertyChanged();
             }
         }
-        public RatingsViewModel(UserRepository userRepository, TourRatingService tourRatingService, TourReservationService tourReservationService, CheckpointRepository checkpointRepository, Tour finishedTour)
+        public RatingsViewModel(UserRepository userRepository, TourRatingService tourRatingService, TourReservationService tourReservationService, CheckpointService checkpointService, Tour finishedTour)
         {
             _userRepository = userRepository;
             _tourRatingService = tourRatingService;

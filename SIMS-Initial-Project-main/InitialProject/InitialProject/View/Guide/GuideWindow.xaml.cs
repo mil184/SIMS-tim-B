@@ -324,7 +324,7 @@ namespace InitialProject.View.Guide
         }
         private void RatedToursDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            RatingsViewModel ratingsViewModel = new RatingsViewModel(_userRepository, _tourRatingRepository, _tourReservationRepository, _checkpointService, ConvertToTour(SelectedRatedTourDTO));
+            RatingsViewModel ratingsViewModel = new RatingsViewModel(_userRepository, _tourRatingService, _tourReservationService, _checkpointService, ConvertToTour(SelectedRatedTourDTO));
             Ratings ratings = new Ratings(ratingsViewModel);
             ratings.Show();
         }
@@ -348,7 +348,7 @@ namespace InitialProject.View.Guide
             if (selectedTour.IsActive)
             {
                 ActiveTour = ConvertToDTO(selectedTour);
-                ShowCheckpoints showCheckpoints = new ShowCheckpoints(selectedTour, _checkpointService, _tourService, _tourReservationRepository, _userRepository, _tourRatingRepository);
+                ShowCheckpoints showCheckpoints = new ShowCheckpoints(selectedTour, _checkpointService, _tourService, _tourReservationService, _userRepository, _tourRatingService);
                 showCheckpoints.ShowDialog();
             }
             else if (TourActive)
@@ -390,7 +390,7 @@ namespace InitialProject.View.Guide
         }
         private void ShowCheckpointsForTour(Tour tour)
         {
-            ShowCheckpoints showCheckpoints = new ShowCheckpoints(tour, _checkpointService, _tourService, _tourReservationRepository, _userRepository, _tourRatingRepository);
+            ShowCheckpoints showCheckpoints = new ShowCheckpoints(tour, _checkpointService, _tourService, _tourReservationService, _userRepository, _tourRatingService);
             showCheckpoints.ShowDialog();
         }   
         private void LogOut_Click(object sender, RoutedEventArgs e)

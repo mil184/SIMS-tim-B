@@ -64,7 +64,6 @@ namespace InitialProject.View.Guest1
 
         private readonly AccommodationService _accommodationService;
         private readonly AccommodationReservationService _accommodationReservationService;
-        private readonly LocationService _locationService;
 
         private string searchName;
         public string SearchName

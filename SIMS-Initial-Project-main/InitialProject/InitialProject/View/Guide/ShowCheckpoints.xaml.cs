@@ -50,7 +50,7 @@ namespace InitialProject.View.Guide
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public ShowCheckpoints(Tour tour, CheckpointService checkpointService, TourService tourService, TourReservationRepository tourReservationRepository, UserRepository userRepository, TourRatingRepository tourRatingRepository)
+        public ShowCheckpoints(Tour tour, CheckpointService checkpointService, TourService tourService, TourReservationService tourReservationService, UserRepository userRepository, TourRatingService tourRatingService)
         {
             InitializeComponent();
             DataContext = this;
@@ -118,7 +118,7 @@ namespace InitialProject.View.Guide
             }
             else 
             {
-                checkpointName = _repository.GetById(_tourReservationService.GetReservationByGuestIdAndTourId(user.Id, SelectedTour.Id).CheckpointArrivalId).Name;
+                checkpointName = _checkpointService.GetById(_tourReservationService.GetReservationByGuestIdAndTourId(user.Id, SelectedTour.Id).CheckpointArrivalId).Name;
             }
             return new UserDTO(
                 user.Id,
