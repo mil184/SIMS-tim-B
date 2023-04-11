@@ -18,7 +18,7 @@ namespace InitialProject.ViewModel.Guide
     {
         private readonly UserRepository _userRepository;
         private readonly TourRatingService _tourRatingService;
-        private readonly TourReservationRepository _tourReservationRepository;
+        private readonly TourReservationService _tourReservationService;
         private readonly CheckpointRepository _checkpointRepository;
         private readonly Tour _finishedTour;
 
@@ -44,11 +44,11 @@ namespace InitialProject.ViewModel.Guide
             }
         }
 
-        public RatingsViewModel(UserRepository userRepository, TourRatingService tourRatingService, TourReservationRepository tourReservationRepository, CheckpointRepository checkpointRepository, Tour finishedTour)
+        public RatingsViewModel(UserRepository userRepository, TourRatingService tourRatingService, TourReservationService tourReservationService, CheckpointRepository checkpointRepository, Tour finishedTour)
         {
             _userRepository = userRepository;
             _tourRatingService = tourRatingService;
-            _tourReservationRepository = tourReservationRepository;
+            _tourReservationService = tourReservationService;
             _checkpointRepository = checkpointRepository;
             _finishedTour = finishedTour;
 
@@ -71,7 +71,7 @@ namespace InitialProject.ViewModel.Guide
 
         private string GetCheckpointName(int userId, int tourId)
         {
-            var reservation = _tourReservationRepository.GetReservationByGuestIdAndTourId(userId, tourId);
+            var reservation = _tourReservationService.GetReservationByGuestIdAndTourId(userId, tourId);
             if (reservation.CheckpointArrivalId == -1)
             {
                 return "Did not arrive";

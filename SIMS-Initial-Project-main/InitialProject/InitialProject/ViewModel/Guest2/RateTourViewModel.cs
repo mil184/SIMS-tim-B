@@ -1,16 +1,10 @@
 ﻿using InitialProject.Model;
 using InitialProject.Model.DTO;
 using InitialProject.Repository;
-using InitialProject.Resources.Observer;
 using InitialProject.Service;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace InitialProject.ViewModel.Guest2
@@ -21,7 +15,7 @@ namespace InitialProject.ViewModel.Guest2
         public Guest2TourDTO SelectedTour { get; set; }
 
         private readonly TourRatingService _tourRatingService;
-        private readonly TourReservationRepository _tourReservationRepository;
+        private readonly TourReservationService _tourReservationService;
         private readonly TourService _tourService;
         private readonly ImageRepository _imageRepository;
 
@@ -97,13 +91,13 @@ namespace InitialProject.ViewModel.Guest2
 
         private ObservableCollection<int> _imageIds = new ObservableCollection<int>();
 
-        public RateTourViewModel(Guest2TourDTO selectedTour, Model.User user, TourRatingService tourRatingService, TourReservationRepository tourReservationRepository, TourService tourService, ImageRepository imageRepository)
+        public RateTourViewModel(Guest2TourDTO selectedTour, Model.User user, TourRatingService tourRatingService, TourReservationService tourReservationService, TourService tourService, ImageRepository imageRepository)
         {
             SelectedTour = selectedTour;
             LoggedInUser = user;
 
             _tourRatingService = tourRatingService;
-            _tourReservationRepository = tourReservationRepository;
+            _tourReservationService = tourReservationService;
             _tourService = tourService;
             _imageRepository = imageRepository;
         }
@@ -137,9 +131,9 @@ namespace InitialProject.ViewModel.Guest2
             tour.IsRated = true;
             _tourService.Update(tour);
 
-            TourReservation tourReservation = _tourReservationRepository.GetReservationByGuestIdAndTourId(LoggedInUser.Id, SelectedTour.TourId);
+            TourReservation tourReservation = _tourReservationService.GetReservationByGuestIdAndTourId(LoggedInUser.Id, SelectedTour.TourId);
             tourReservation.IsRated = true;
-            _tourReservationRepository.Update(tourReservation);
+            _tourReservationService.Update(tourReservation);
 
             _tourRatingService.Save(tourRating);
         }

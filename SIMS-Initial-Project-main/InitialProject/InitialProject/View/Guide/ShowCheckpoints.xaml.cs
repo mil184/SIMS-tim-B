@@ -26,7 +26,7 @@ namespace InitialProject.View.Guide
 
         private readonly CheckpointRepository _repository;
         private readonly TourService _tourService;
-        private readonly TourReservationRepository _tourReservationRepository;
+        private readonly TourReservationService _tourReservationService;
         private readonly UserRepository _userRepository;
         public ObservableCollection<Checkpoint> Checkpoints { get; set; }
 
@@ -50,7 +50,7 @@ namespace InitialProject.View.Guide
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public ShowCheckpoints(Tour tour, CheckpointRepository checkpointRepository, TourService tourService, TourReservationRepository tourReservationRepository, UserRepository userRepository, TourRatingService tourRatingService)
+        public ShowCheckpoints(Tour tour, CheckpointRepository checkpointRepository, TourService tourService, TourReservationService tourReservationService, UserRepository userRepository, TourRatingService tourRatingService)
         {
             InitializeComponent();
             DataContext = this;
@@ -58,7 +58,7 @@ namespace InitialProject.View.Guide
             SelectedTour = tour;
             _repository = checkpointRepository;
             _tourService = tourService;
-            _tourReservationRepository = tourReservationRepository;
+            _tourReservationService = tourReservationService;
             _userRepository = userRepository;
 
 
@@ -76,7 +76,7 @@ namespace InitialProject.View.Guide
         }
         private void LoadUnmarkedGuests()
         {
-            List<int> unmarkedGuestsId = _tourReservationRepository.GetUserIdsByTour(SelectedTour);
+            List<int> unmarkedGuestsId = _tourReservationService.GetUserIdsByTour(SelectedTour);
 
             foreach (int id in unmarkedGuestsId)
             {
@@ -110,7 +110,7 @@ namespace InitialProject.View.Guide
         }
         public UserDTO ConvertUserToDTO(User user) 
         {
-            int checkpointId = _tourReservationRepository.GetReservationByGuestIdAndTourId(user.Id, SelectedTour.Id).CheckpointArrivalId;
+            int checkpointId = _tourReservationService.GetReservationByGuestIdAndTourId(user.Id, SelectedTour.Id).CheckpointArrivalId;
             String checkpointName;
             if(checkpointId == -1) 
             {
@@ -118,7 +118,7 @@ namespace InitialProject.View.Guide
             }
             else 
             {
-                checkpointName = _repository.GetById(_tourReservationRepository.GetReservationByGuestIdAndTourId(user.Id, SelectedTour.Id).CheckpointArrivalId).Name;
+                checkpointName = _repository.GetById(_tourReservationService.GetReservationByGuestIdAndTourId(user.Id, SelectedTour.Id).CheckpointArrivalId).Name;
             }
             return new UserDTO(
                 user.Id,
@@ -336,12 +336,12 @@ namespace InitialProject.View.Guide
         }
         private TourReservation GetReservationByGuestIdAndTourId(int guestId, int tourId)
         {
-            return _tourReservationRepository.GetReservationByGuestIdAndTourId(guestId, tourId);
+            return _tourReservationService.GetReservationByGuestIdAndTourId(guestId, tourId);
         }
         private void UpdateReservationCheckpointArrival(TourReservation reservation, int checkpointId)
         {
             reservation.CheckpointArrivalId = checkpointId;
-            _tourReservationRepository.Update(reservation);
+            _tourReservationService.Update(reservation);
         }
         private void UpdateGuestCheckpointArrivalNameInUnmarkedGuests()
         {
@@ -363,9 +363,9 @@ namespace InitialProject.View.Guide
                 if (guest.UserId == guestId)
                 {
                     guest.CheckpointArrivalName = checkpointName;
-                    TourReservation reservation = _tourReservationRepository.GetReservationByGuestIdAndTourId(guestId, SelectedTour.Id);
+                    TourReservation reservation = _tourReservationService.GetReservationByGuestIdAndTourId(guestId, SelectedTour.Id);
                     reservation.GuestChecked = true;
-                    _tourReservationRepository.Update(reservation);
+                    _tourReservationService.Update(reservation);
                 }
             }
         }
@@ -377,7 +377,7 @@ namespace InitialProject.View.Guide
         {
             UnmarkedGuests.Clear();
 
-            foreach (int id in _tourReservationRepository.GetUserIdsByTour(SelectedTour))
+            foreach (int id in _tourReservationService.GetUserIdsByTour(SelectedTour))
             {
                 if (!UnmarkedGuests.Contains(ConvertUserToDTO(_userRepository.GetById(id))))
                     UnmarkedGuests.Add(ConvertUserToDTO(_userRepository.GetById(id)));

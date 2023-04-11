@@ -44,7 +44,7 @@ namespace InitialProject.View.Guest2
                 }
             }
         }
-        private readonly TourReservationRepository _tourReservationRepository;
+        private readonly TourReservationService _tourReservationService;
         private readonly TourService _tourService;
 
         private readonly VoucherRepository _voucherRepository;
@@ -57,7 +57,7 @@ namespace InitialProject.View.Guest2
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public ReserveTour(Guest2TourDTO selectedTour, User user, TourService tourService, TourReservationRepository tourReservationRepository)
+        public ReserveTour(Guest2TourDTO selectedTour, User user, TourService tourService, TourReservationService tourReservationService)
         {
             InitializeComponent();
             DataContext = this;
@@ -65,7 +65,7 @@ namespace InitialProject.View.Guest2
             SelectedTour = selectedTour;
             LoggedInUser = user;
 
-            _tourReservationRepository = tourReservationRepository;
+            _tourReservationService = tourReservationService;
             _tourService = tourService;
 
             _voucherRepository = new VoucherRepository();
@@ -124,14 +124,14 @@ namespace InitialProject.View.Guest2
 
                         if (CheckIfReservationAlreadyExists(tourReservation))
                         {
-                            tourReservation.Id = _tourReservationRepository.GetReservationByGuestIdAndTourId(LoggedInUser.Id, SelectedTour.TourId).Id;
-                            int currentPersonCount = _tourReservationRepository.GetReservationByGuestIdAndTourId(LoggedInUser.Id, SelectedTour.TourId).PersonCount;
+                            tourReservation.Id = _tourReservationService.GetReservationByGuestIdAndTourId(LoggedInUser.Id, SelectedTour.TourId).Id;
+                            int currentPersonCount = _tourReservationService.GetReservationByGuestIdAndTourId(LoggedInUser.Id, SelectedTour.TourId).PersonCount;
                             currentPersonCount += personCount;
 
-                            double currentAverageAge = _tourReservationRepository.GetReservationByGuestIdAndTourId(LoggedInUser.Id, SelectedTour.TourId).AverageAge;
+                            double currentAverageAge = _tourReservationService.GetReservationByGuestIdAndTourId(LoggedInUser.Id, SelectedTour.TourId).AverageAge;
                             currentAverageAge = (currentAverageAge + double.Parse(AverageAge)) / 2;
 
-                            int currentVoucherId = _tourReservationRepository.GetReservationByGuestIdAndTourId(LoggedInUser.Id, SelectedTour.TourId).UsedVoucherId;
+                            int currentVoucherId = _tourReservationService.GetReservationByGuestIdAndTourId(LoggedInUser.Id, SelectedTour.TourId).UsedVoucherId;
 
                             if (currentVoucherId == -1)
                             {
@@ -146,11 +146,11 @@ namespace InitialProject.View.Guest2
                             tourReservation.PersonCount = currentPersonCount;
                             tourReservation.AverageAge = currentAverageAge;
 
-                            _tourReservationRepository.Update(tourReservation);
+                            _tourReservationService.Update(tourReservation);
                         }
                         else
                         {
-                            _tourReservationRepository.Save(tourReservation);
+                            _tourReservationService.Save(tourReservation);
                         }
                         selectedTour.CurrentGuestCount += personCount;
                         _tourService.Update(selectedTour);
@@ -163,7 +163,7 @@ namespace InitialProject.View.Guest2
 
         public bool CheckIfReservationAlreadyExists(TourReservation tourReservation)
         {
-            foreach (TourReservation reservation in _tourReservationRepository.GetAll())
+            foreach (TourReservation reservation in _tourReservationService.GetAll())
             {
                 if (reservation.TourId == tourReservation.TourId && reservation.UserId == tourReservation.UserId)
                 {
