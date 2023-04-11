@@ -22,6 +22,8 @@ using InitialProject.Model.DTO;
 using InitialProject.Resources.Enums;
 using InitialProject.Service;
 using System.Diagnostics.Metrics;
+using InitialProject.View.Guest2;
+using InitialProject.ViewModel.Guest1;
 
 namespace InitialProject.View.Guest1
 {
@@ -49,21 +51,16 @@ namespace InitialProject.View.Guest1
         public ObservableCollection<RescheduleRequest> AllReschedules { get; set; }
 
 
-      //  private readonly AccommodationRepository _accommodationRepository;
-
-        private readonly LocationRepository _locationRepository;
-
         private readonly UserRepository _userRepository;
 
         private readonly ImageRepository _imageRepository;
 
-        private readonly AccommodationReservationRepository _accommodationReservationRepository;
-
         private readonly AccommodationRatingsRepository _accommodationRatingsRepository;
         private readonly RescheduleRequestRepository _rescheduleRequestRepository;
+
         private readonly AccommodationService _accommodationService;
         private readonly AccommodationReservationService _accommodationReservationService;
-
+        private readonly LocationService _locationService;
 
         private string searchName;
         public string SearchName
@@ -125,6 +122,18 @@ namespace InitialProject.View.Guest1
             }
         }
 
+        private string searchType;
+        public string SearchType
+        {
+            get { return searchType; }
+            set
+            {
+                searchType = value;
+
+                OnPropertyChanged(nameof(SearchType));
+            }
+        }
+
         private ObservableCollection<AccommodationRatingsDTO> _unratedAccommodations;
         public ObservableCollection<AccommodationRatingsDTO> UnratedAccommodations
         {
@@ -146,14 +155,15 @@ namespace InitialProject.View.Guest1
             DataContext = this;
             LoggedInUser = user;
 
-          //  _accommodationRepository = new AccommodationRepository();
-           // _accommodationRepository.Subscribe(this);
+            _accommodationService = new AccommodationService();
+            _accommodationService.Subscribe(this);
 
-            _accommodationReservationRepository = new AccommodationReservationRepository();
-            _accommodationReservationRepository.Subscribe(this);
+            _accommodationReservationService = new AccommodationReservationService();
+            _accommodationReservationService.Subscribe(this);
 
-            _locationRepository = new LocationRepository();
-            _locationRepository.Subscribe(this);
+            _locationService = new LocationService();
+            _locationService.Subscribe(this);
+
 
             _userRepository = new UserRepository();
             _userRepository.Subscribe(this);
@@ -167,11 +177,6 @@ namespace InitialProject.View.Guest1
             _rescheduleRequestRepository = new RescheduleRequestRepository();
             _rescheduleRequestRepository.Subscribe(this);
 
-            _accommodationService = new AccommodationService();
-            _accommodationService.Subscribe(this);
-
-            _accommodationReservationService = new AccommodationReservationService();
-            _accommodationReservationService.Subscribe(this);
 
             AllAccommodations = new ObservableCollection<Accommodation>(_accommodationService.GetAll());
             PresentableAccommodations = ConvertToDTO(new List<Accommodation>(AllAccommodations));
@@ -226,6 +231,13 @@ namespace InitialProject.View.Guest1
             {
                 result = result.Intersect(_accommodationService.GetByMinDays(int.Parse(SearchDays))).ToList();
             }
+            if (!string.IsNullOrEmpty(SearchType))
+            {
+                if (SearchType.Split(':')[1].Trim() != "-")
+                {
+                    result = result.Intersect(_accommodationService.GetByType(SearchType.Split(':')[1].Trim())).ToList();
+                }
+            }
 
             ObservableCollection<GuestAccommodationDTO> searchResults = ConvertToDTO(result);
             foreach (GuestAccommodationDTO dto in searchResults)
@@ -257,8 +269,8 @@ namespace InitialProject.View.Guest1
             foreach (Accommodation accommodation in accommodations)
             {
                 dto.Add(new GuestAccommodationDTO(accommodation.Id, accommodation.Name,
-                    _locationRepository.GetById(accommodation.LocationId).Country,
-                     _locationRepository.GetById(accommodation.LocationId).City,
+                    _locationService.GetById(accommodation.LocationId).Country,
+                     _locationService.GetById(accommodation.LocationId).City,
                      accommodation.Type, accommodation.MaxGuests, accommodation.MinReservationDays, accommodation.CancellationPeriod, accommodation.OwnerId));
             }
             return dto;
@@ -266,8 +278,8 @@ namespace InitialProject.View.Guest1
         public GuestAccommodationDTO ConvertToDTO(Accommodation accommodation)
         {
             return new GuestAccommodationDTO(accommodation.Id, accommodation.Name,
-                  _locationRepository.GetById(accommodation.LocationId).Country,
-                   _locationRepository.GetById(accommodation.LocationId).City,
+                  _locationService.GetById(accommodation.LocationId).Country,
+                   _locationService.GetById(accommodation.LocationId).City,
                    accommodation.Type, accommodation.MaxGuests, accommodation.MinReservationDays, accommodation.CancellationPeriod, accommodation.OwnerId);
 
         }
@@ -346,7 +358,7 @@ namespace InitialProject.View.Guest1
         {
             if (SelectedUnratedAccommodation != null)
             {
-                Evaluate evaluateAccommodation = new Evaluate(SelectedUnratedAccommodation, _accommodationRatingsRepository, _accommodationReservationRepository, _imageRepository);
+                Evaluate evaluateAccommodation = new Evaluate(SelectedUnratedAccommodation, _accommodationRatingsRepository, _accommodationReservationService, _imageRepository);
                 evaluateAccommodation.ShowDialog();
             }
         }
@@ -372,7 +384,7 @@ namespace InitialProject.View.Guest1
                         return;
                     }
 
-                    _accommodationReservationRepository.Remove(SelectedReservation);
+                    _accommodationReservationService.Remove(SelectedReservation);
                     MessageBox.Show("Reservation canceled successfully.");
 
                     RefreshPresentableReservations();
@@ -383,7 +395,7 @@ namespace InitialProject.View.Guest1
         public void RefreshPresentableReservations()
         {
             PresentableReservations.Clear();
-            var reservations = _accommodationReservationRepository.GetAll();
+            var reservations = _accommodationReservationService.GetAll();
             foreach (var reservation in reservations)
             {
                 PresentableReservations.Add(reservation);
@@ -393,7 +405,8 @@ namespace InitialProject.View.Guest1
         {
             if (SelectedReservation != null)
             {
-                SendRequest sendRequest = new SendRequest(SelectedReservation, _rescheduleRequestRepository);
+                SendRequestViewModel sendRequestViewModel = new SendRequestViewModel(SelectedReservation, _rescheduleRequestRepository);
+                SendRequest sendRequest = new SendRequest(sendRequestViewModel);
                 sendRequest.ShowDialog();
             }
         }

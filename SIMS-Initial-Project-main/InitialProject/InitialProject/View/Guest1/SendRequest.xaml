@@ -15,12 +15,12 @@
 
         <StackPanel Orientation="Horizontal" Margin="10,60,0,0" Height="90">
             <TextBlock Text="New Start Date:" Margin="10,0,0,0" Width="130" Height="30" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-            <DatePicker x:Name="NewStartDatePicker" Width="150" Height="40" Margin="10,0,10,0" FontSize="16"/>
+            <DatePicker x:Name="NewStartDatePicker" SelectedDate="{Binding NewStartDate}"  Width="150" Height="40" Margin="10,0,10,0" FontSize="16"/>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Margin="10,10,0,0" Height="90" Grid.Row="1">
             <TextBlock Text="New End Date:" Width="130" Height="30" VerticalAlignment="Center" Margin="10,0,0,0" HorizontalAlignment="Left" FontSize="16" />
-            <DatePicker x:Name="NewEndDatePicker" Width="150" Height="40" Margin="10,0,10,0" FontSize="16"/>
+            <DatePicker x:Name="NewEndDatePicker" SelectedDate="{Binding NewEndDate}"  Width="150" Height="40" Margin="10,0,10,0" FontSize="16"/>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Margin="0,60,0,0" Grid.Row="2">

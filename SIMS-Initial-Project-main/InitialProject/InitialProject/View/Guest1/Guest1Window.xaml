@@ -65,7 +65,7 @@
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="10,0,0,10">
                                     <Label Content="Country:"/>
-                                    <TextBox Name="searchBox2" Text="{Binding Path=SearchConutry}" Width="150" Height="30" Margin="0,0,5,0"/>
+                                    <TextBox Name="searchBox2" Text="{Binding Path=SearchCountry}" Width="150" Height="30" Margin="0,0,5,0"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="10,0,0,10">
                                     <Label Content="City:"/>
@@ -74,7 +74,8 @@
                             </StackPanel>
                             <StackPanel Grid.Column="1" Orientation="Horizontal"  VerticalAlignment="Center" Margin="40,0,0,80">
                                 <Label Content="Type:"/>
-                                <ComboBox x:Name="searchParamComboBox" Width="150" Height="30" Margin="0,0,5,0">
+                                <ComboBox x:Name="searchParamComboBox" Width="150" Height="30" Margin="0,0,5,0" SelectedItem="{Binding Path=SearchType}">
+                                    <ComboBoxItem Content="-"/>
                                     <ComboBoxItem Content="Apartment"/>
                                     <ComboBoxItem Content="House"/>
                                     <ComboBoxItem Content="Hut"/>

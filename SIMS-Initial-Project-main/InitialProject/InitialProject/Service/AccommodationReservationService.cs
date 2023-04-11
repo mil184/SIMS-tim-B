@@ -81,6 +81,15 @@ namespace InitialProject.Service
         {
             return _accommodationReservationRepository.Save(reservation);
         }
+        public void Update(AccommodationReservation reservation)
+        {
+            _accommodationReservationRepository.Update(reservation);
+        }
+
+        public void Remove(AccommodationReservation reservation)
+        {
+            _accommodationReservationRepository.Remove(reservation);
+        }
 
         internal List<AccommodationReservation> GetAll()
         {
