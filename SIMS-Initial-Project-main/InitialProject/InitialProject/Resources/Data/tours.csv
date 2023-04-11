@@ -5,3 +5,5 @@
 5|danas|142|1213|11|11|4|10-Apr-23 11:59:00 PM|11|3|60|49,50,51|50|False|True|False|True
 6|ne prijavljuj|142|f|f|12|3|10-Apr-23 11:59:00 PM|12|3|61|52,53|52|True|False|False|False
 7|test|142|t|t|12|1|11-Apr-23 11:59:00 PM|12|3|63|54,55|54|False|True|False|True
+8|testic1|142|prijavi|h|10|10|11-Apr-23 11:59:00 PM|10|3|67|56,57|-1|False|False|False|False
+9|testic2|142|ne|g|10|10|11-Apr-23 11:59:00 PM|10|3|68|58,59|-1|False|False|False|False
