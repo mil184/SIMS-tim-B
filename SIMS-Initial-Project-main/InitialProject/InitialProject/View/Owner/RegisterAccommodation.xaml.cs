@@ -22,8 +22,6 @@ namespace InitialProject.View.Owner
 
         public User LoggedInUser { get; set; }
 
-        public int LastImageId { get; set; }
-
         private string _accommodationName;
         public string AccommodationName
         {
@@ -181,7 +179,7 @@ namespace InitialProject.View.Owner
             if (IsValid)
             {
                 Location AccommodationLocation = _locationService.GetLocation(Country, City);
-                Accommodation Accommodation = new Accommodation(AccommodationName, LoggedInUser.Id, AccommodationLocation.Id, Enum.Parse<AccommodationType>(Type), int.Parse(MaxGuests), int.Parse(CancellationPeriod), int.Parse(CancellationPeriod), _imageIds);
+                Accommodation Accommodation = new Accommodation(AccommodationName, LoggedInUser.Id, AccommodationLocation.Id, Enum.Parse<AccommodationType>(Type), int.Parse(MaxGuests), int.Parse(MinReservationDays), int.Parse(CancellationPeriod), _imageIds);
                 _repository.Save(Accommodation);
                 Close();
             }
