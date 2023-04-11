@@ -1,5 +1,7 @@
 ﻿using InitialProject.Model;
 using InitialProject.Repository;
+using InitialProject.Repository.Interfaces;
+using InitialProject.Resources.Injector;
 using InitialProject.Resources.Observer;
 using InitialProject.Serializer;
 using System;
@@ -12,11 +14,11 @@ namespace InitialProject.Service
 {
     public class LocationService: ISubject
     {
-        private readonly LocationRepository _locationRepository;
+        private readonly ILocationRepository _locationRepository;
 
         public LocationService()
         {
-           _locationRepository = new LocationRepository();
+           _locationRepository = Injector.CreateInstance<ILocationRepository>();    
         }
         public List<string> GetCountries()
         {

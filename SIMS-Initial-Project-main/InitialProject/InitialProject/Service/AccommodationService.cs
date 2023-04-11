@@ -13,12 +13,12 @@ namespace InitialProject.Service
     public class AccommodationService
     {
         private readonly AccommodationRepository _accommodationRepository;
-        private readonly LocationRepository _locationRepository;
+        private readonly LocationService _locationService;
 
         public AccommodationService()
         {
             _accommodationRepository = new AccommodationRepository();
-            _locationRepository = new LocationRepository();
+            _locationService = new LocationService();
         }
 
         public List<Accommodation> GetByName(string name)
@@ -41,7 +41,7 @@ namespace InitialProject.Service
 
             foreach (var accommodation in _accommodationRepository.GetAll())
             {
-                if (_locationRepository.GetById(accommodation.LocationId).City == city)
+                if (_locationService.GetById(accommodation.LocationId).City == city)
                 {
                     accommodationsByCityName.Add(accommodation);
                 }
@@ -55,7 +55,7 @@ namespace InitialProject.Service
 
             foreach (var accommodation in _accommodationRepository.GetAll())
             {
-                if (_locationRepository.GetById(accommodation.LocationId).Country == country)
+                if (_locationService.GetById(accommodation.LocationId).Country == country)
                 {
                     accommodations.Add(accommodation);
                 }

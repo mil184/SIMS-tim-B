@@ -1,13 +1,16 @@
 ﻿using InitialProject.Model;
-using InitialProject.Model.DTO;
+using InitialProject.Repository.Interfaces;
 using InitialProject.Resources.Observer;
 using InitialProject.Serializer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace InitialProject.Repository
+namespace InitialProject.Repository.Implementations
 {
-    public class TourRepository : ISubject
+    public class TourCSVRepository : ITourRepository
     {
         private const string _filePath = "../../../Resources/Data/tours.csv";
 
@@ -16,7 +19,7 @@ namespace InitialProject.Repository
 
         private List<Tour> _tours;
 
-        public TourRepository()
+        public TourCSVRepository()
         {
             _serializer = new Serializer<Tour>();
             _tours = _serializer.FromCSV(_filePath);
@@ -49,7 +52,7 @@ namespace InitialProject.Repository
             Tour current = _tours.Find(c => c.Id == tour.Id);
             int index = _tours.IndexOf(current);
             _tours.Remove(current);
-            _tours.Insert(index, tour);       // keep ascending order of ids in file 
+            _tours.Insert(index, tour);       
             _serializer.ToCSV(_filePath, _tours);
             NotifyObservers();
             return tour;
@@ -82,6 +85,5 @@ namespace InitialProject.Repository
                 observer.Update();
             }
         }
-
     }
 }

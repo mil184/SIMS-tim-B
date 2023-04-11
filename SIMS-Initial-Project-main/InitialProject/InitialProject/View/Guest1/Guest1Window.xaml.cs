@@ -51,7 +51,7 @@ namespace InitialProject.View.Guest1
 
       //  private readonly AccommodationRepository _accommodationRepository;
 
-        private readonly LocationRepository _locationRepository;
+        private readonly LocationService _locationService;
 
         private readonly UserRepository _userRepository;
 
@@ -152,8 +152,8 @@ namespace InitialProject.View.Guest1
             _accommodationReservationRepository = new AccommodationReservationRepository();
             _accommodationReservationRepository.Subscribe(this);
 
-            _locationRepository = new LocationRepository();
-            _locationRepository.Subscribe(this);
+            _locationService = new LocationService();
+            _locationService.Subscribe(this);
 
             _userRepository = new UserRepository();
             _userRepository.Subscribe(this);
@@ -257,8 +257,8 @@ namespace InitialProject.View.Guest1
             foreach (Accommodation accommodation in accommodations)
             {
                 dto.Add(new GuestAccommodationDTO(accommodation.Id, accommodation.Name,
-                    _locationRepository.GetById(accommodation.LocationId).Country,
-                     _locationRepository.GetById(accommodation.LocationId).City,
+                    _locationService.GetById(accommodation.LocationId).Country,
+                     _locationService.GetById(accommodation.LocationId).City,
                      accommodation.Type, accommodation.MaxGuests, accommodation.MinReservationDays, accommodation.CancellationPeriod, accommodation.OwnerId));
             }
             return dto;
@@ -266,8 +266,8 @@ namespace InitialProject.View.Guest1
         public GuestAccommodationDTO ConvertToDTO(Accommodation accommodation)
         {
             return new GuestAccommodationDTO(accommodation.Id, accommodation.Name,
-                  _locationRepository.GetById(accommodation.LocationId).Country,
-                   _locationRepository.GetById(accommodation.LocationId).City,
+                   _locationService.GetById(accommodation.LocationId).Country,
+                   _locationService.GetById(accommodation.LocationId).City,
                    accommodation.Type, accommodation.MaxGuests, accommodation.MinReservationDays, accommodation.CancellationPeriod, accommodation.OwnerId);
 
         }

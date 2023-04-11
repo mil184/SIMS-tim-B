@@ -1,25 +1,25 @@
-﻿using System;
+﻿using InitialProject.Model;
+using InitialProject.Repository.Interfaces;
+using InitialProject.Resources.Observer;
+using InitialProject.Serializer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Linq;
-using InitialProject.Model;
-using InitialProject.Resources.Observer;
-using InitialProject.Serializer;
 
-namespace InitialProject.Repository
+namespace InitialProject.Repository.Implementations
 {
-    public class LocationRepository : ISubject
+    public class LocationCSVRepository : ILocationRepository
     {
         private const string _filepath = "../../../Resources/Data/locations.csv";
-        
+
         private readonly Serializer<Location> _serializer;
         private readonly List<IObserver> _observers;
 
         private List<Location> _locations;
 
-        public LocationRepository()
+        public LocationCSVRepository()
         {
             _serializer = new Serializer<Location>();
             _locations = _serializer.FromCSV(_filepath);
@@ -47,7 +47,7 @@ namespace InitialProject.Repository
 
             return location;
         }
-        public List<Location> GetAll() 
+        public List<Location> GetAll()
         {
             return _locations;
         }

@@ -1,4 +1,5 @@
 ﻿using InitialProject.Model;
+using InitialProject.Repository.Interfaces;
 using InitialProject.Resources.Observer;
 using InitialProject.Serializer;
 using System;
@@ -6,28 +7,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
-namespace InitialProject.Repository
+namespace InitialProject.Repository.Implementations
 {
-    public class CheckpointRepository: ISubject
+    public class CheckpointCSVRepository : ICheckpointRepository
     {
         private const string _filepath = "../../../Resources/Data/checkpoints.csv";
 
         private readonly Serializer<Checkpoint> _serializer;
-
         private readonly List<IObserver> _observers;
-        private readonly TourRepository _tourRepository;
 
         private List<Checkpoint> _checkpoints;
-        public CheckpointRepository()
+        public CheckpointCSVRepository()
         {
             _serializer = new Serializer<Checkpoint>();
             _checkpoints = _serializer.FromCSV(_filepath);
-            _tourRepository = new TourRepository();
             _observers = new List<IObserver>();
         }
-
         public int NextId()
         {
             _checkpoints = _serializer.FromCSV(_filepath);
@@ -37,7 +33,6 @@ namespace InitialProject.Repository
             }
             return _checkpoints.Max(c => c.Id) + 1;
         }
-
         public Checkpoint Save(Checkpoint checkpoint)
         {
             checkpoint.Id = NextId();
@@ -59,7 +54,6 @@ namespace InitialProject.Repository
             NotifyObservers();
             return checkpoint;
         }
-
         public Checkpoint GetById(int id)
         {
             _checkpoints = _serializer.FromCSV(_filepath);
@@ -69,18 +63,20 @@ namespace InitialProject.Repository
         {
             _observers.Add(observer);
         }
-
         public void Unsubscribe(IObserver observer)
         {
             _observers.Remove(observer);
         }
-
         public void NotifyObservers()
         {
             foreach (var observer in _observers)
             {
                 observer.Update();
             }
+        }
+        public List<Checkpoint> GetAll()
+        {
+            return _checkpoints;
         }
     }
 }

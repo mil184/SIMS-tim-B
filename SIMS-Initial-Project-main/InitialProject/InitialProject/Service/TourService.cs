@@ -1,5 +1,8 @@
 ﻿using InitialProject.Model;
 using InitialProject.Repository;
+using InitialProject.Repository.Implementations;
+using InitialProject.Repository.Interfaces;
+using InitialProject.Resources.Injector;
 using InitialProject.Resources.Observer;
 using System;
 using System.Collections.Generic;
@@ -12,14 +15,14 @@ namespace InitialProject.Service
 {
     public class TourService : ISubject
     {
-        private readonly TourRepository _tourRepository;
-        private readonly LocationRepository _locationRepository;
+        private readonly ITourRepository _tourRepository;
+        private readonly LocationService _locationService;
         private readonly TourReservationRepository _tourReservationRepository;
 
         public TourService()
         {
-            _tourRepository = new TourRepository();
-            _locationRepository = new LocationRepository();
+            _tourRepository = Injector.CreateInstance<ITourRepository>();
+            _locationService = new LocationService();
             _tourReservationRepository = new TourReservationRepository();
         }
 
@@ -135,7 +138,7 @@ namespace InitialProject.Service
 
             foreach (var tour in GetReservableTours())
             {
-                if (_locationRepository.GetById(tour.LocationId).City == city)
+                if (_locationService.GetById(tour.LocationId).City == city)
                 {
                     toursByCityName.Add(tour);
                 }
@@ -149,7 +152,7 @@ namespace InitialProject.Service
 
             foreach (var tour in GetReservableTours())
             {
-                if (_locationRepository.GetById(tour.LocationId).Country == country)
+                if (_locationService.GetById(tour.LocationId).Country == country)
                 {
                     tours.Add(tour);
                 }

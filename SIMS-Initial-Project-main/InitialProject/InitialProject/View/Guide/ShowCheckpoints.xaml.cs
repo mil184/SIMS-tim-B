@@ -24,7 +24,7 @@ namespace InitialProject.View.Guide
     {
         private readonly Tour SelectedTour;
 
-        private readonly CheckpointRepository _repository;
+        private readonly CheckpointService _checkpointService;
         private readonly TourService _tourService;
         private readonly TourReservationRepository _tourReservationRepository;
         private readonly UserRepository _userRepository;
@@ -50,13 +50,13 @@ namespace InitialProject.View.Guide
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public ShowCheckpoints(Tour tour, CheckpointRepository checkpointRepository, TourService tourService, TourReservationRepository tourReservationRepository, UserRepository userRepository, TourRatingRepository tourRatingRepository)
+        public ShowCheckpoints(Tour tour, CheckpointService checkpointService, TourService tourService, TourReservationRepository tourReservationRepository, UserRepository userRepository, TourRatingRepository tourRatingRepository)
         {
             InitializeComponent();
             DataContext = this;
 
             SelectedTour = tour;
-            _repository = checkpointRepository;
+            _checkpointService = checkpointService;
             _tourService = tourService;
             _tourReservationRepository = tourReservationRepository;
             _userRepository = userRepository;
@@ -103,7 +103,7 @@ namespace InitialProject.View.Guide
         {
             foreach (int id in SelectedTour.CheckpointIds)
             {
-                Checkpoint checkpoint = _repository.GetById(id);
+                Checkpoint checkpoint = _checkpointService.GetById(id);
                 Checkpoints.Add(checkpoint);
             }
             Checkpoints.OrderBy(c => c.Order);
@@ -118,7 +118,7 @@ namespace InitialProject.View.Guide
             }
             else 
             {
-                checkpointName = _repository.GetById(_tourReservationRepository.GetReservationByGuestIdAndTourId(user.Id, SelectedTour.Id).CheckpointArrivalId).Name;
+                checkpointName = _checkpointService.GetById(_tourReservationRepository.GetReservationByGuestIdAndTourId(user.Id, SelectedTour.Id).CheckpointArrivalId).Name;
             }
             return new UserDTO(
                 user.Id,
@@ -354,7 +354,7 @@ namespace InitialProject.View.Guide
         }
         private string GetCheckpointNameById(int checkpointId)
         {
-            return _repository.GetById(checkpointId).Name;
+            return _checkpointService.GetById(checkpointId).Name;
         }
         private void UpdateGuestCheckpointArrivalName(int guestId, string checkpointName)
         {

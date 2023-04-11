@@ -10,6 +10,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using InitialProject.Service;
 
 namespace InitialProject.ViewModel.Guide
 {
@@ -18,7 +19,7 @@ namespace InitialProject.ViewModel.Guide
         private readonly UserRepository _userRepository;
         private readonly TourRatingRepository _tourRatingRepository;
         private readonly TourReservationRepository _tourReservationRepository;
-        private readonly CheckpointRepository _checkpointRepository;
+        private readonly CheckpointService _checkpointService;
         private readonly Tour _finishedTour;
 
         private ObservableCollection<GuideRatingDTO> _guestRatings;
@@ -43,12 +44,12 @@ namespace InitialProject.ViewModel.Guide
             }
         }
 
-        public RatingsViewModel(UserRepository userRepository, TourRatingRepository tourRatingRepository, TourReservationRepository tourReservationRepository, CheckpointRepository checkpointRepository, Tour finishedTour)
+        public RatingsViewModel(UserRepository userRepository, TourRatingRepository tourRatingRepository, TourReservationRepository tourReservationRepository, CheckpointService checkpointService, Tour finishedTour)
         {
             _userRepository = userRepository;
             _tourRatingRepository = tourRatingRepository;
             _tourReservationRepository = tourReservationRepository;
-            _checkpointRepository = checkpointRepository;
+            _checkpointService = checkpointService;
             _finishedTour = finishedTour;
 
             _tourRatingRepository.Subscribe(this);
@@ -77,7 +78,7 @@ namespace InitialProject.ViewModel.Guide
             }
             else
             {
-                var checkpoint = _checkpointRepository.GetById(reservation.CheckpointArrivalId);
+                var checkpoint = _checkpointService.GetById(reservation.CheckpointArrivalId);
                 return BuildCheckpointName(checkpoint.Order, checkpoint.Name);
             }
         }

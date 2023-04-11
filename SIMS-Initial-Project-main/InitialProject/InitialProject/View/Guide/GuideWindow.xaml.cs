@@ -24,7 +24,7 @@ namespace InitialProject.View.Guide
         private readonly TourRatingRepository _tourRatingRepository;
         private readonly LocationService _locationService;
         private readonly ImageRepository _imageRepository;
-        private readonly CheckpointRepository _checkpointRepository;
+        private readonly CheckpointService _checkpointService;
         private readonly UserRepository _userRepository;
         private readonly VoucherRepository _voucherRepository;
         public User CurrentUser { get; set; }
@@ -94,8 +94,8 @@ namespace InitialProject.View.Guide
             _locationService = new LocationService();
             _locationService.Subscribe(this);
 
-            _checkpointRepository = new CheckpointRepository();
-            _checkpointRepository.Subscribe(this);
+            _checkpointService = new CheckpointService();
+            _checkpointService.Subscribe(this);
 
             _tourReservationRepository = new TourReservationRepository();
             _tourReservationRepository.Subscribe(this);
@@ -185,7 +185,7 @@ namespace InitialProject.View.Guide
 
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
-            CreateTour createTour = new CreateTour(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointRepository);
+            CreateTour createTour = new CreateTour(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService);
             createTour.Show();
         }
 
@@ -323,7 +323,7 @@ namespace InitialProject.View.Guide
         }
         private void RatedToursDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            RatingsViewModel ratingsViewModel = new RatingsViewModel(_userRepository, _tourRatingRepository, _tourReservationRepository, _checkpointRepository, ConvertToTour(SelectedRatedTourDTO));
+            RatingsViewModel ratingsViewModel = new RatingsViewModel(_userRepository, _tourRatingRepository, _tourReservationRepository, _checkpointService, ConvertToTour(SelectedRatedTourDTO));
             Ratings ratings = new Ratings(ratingsViewModel);
             ratings.Show();
         }
@@ -347,7 +347,7 @@ namespace InitialProject.View.Guide
             if (selectedTour.IsActive)
             {
                 ActiveTour = ConvertToDTO(selectedTour);
-                ShowCheckpoints showCheckpoints = new ShowCheckpoints(selectedTour, _checkpointRepository, _tourService, _tourReservationRepository, _userRepository, _tourRatingRepository);
+                ShowCheckpoints showCheckpoints = new ShowCheckpoints(selectedTour, _checkpointService, _tourService, _tourReservationRepository, _userRepository, _tourRatingRepository);
                 showCheckpoints.ShowDialog();
             }
             else if (TourActive)
@@ -389,9 +389,9 @@ namespace InitialProject.View.Guide
         }
         private void ShowCheckpointsForTour(Tour tour)
         {
-            ShowCheckpoints showCheckpoints = new ShowCheckpoints(tour, _checkpointRepository, _tourService, _tourReservationRepository, _userRepository, _tourRatingRepository);
+            ShowCheckpoints showCheckpoints = new ShowCheckpoints(tour, _checkpointService, _tourService, _tourReservationRepository, _userRepository, _tourRatingRepository);
             showCheckpoints.ShowDialog();
-        }
+        }   
         private void LogOut_Click(object sender, RoutedEventArgs e)
         {         
             SignInForm signInForm = new SignInForm();

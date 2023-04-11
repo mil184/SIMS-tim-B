@@ -20,7 +20,7 @@ namespace InitialProject.View.Guide
         private readonly TourService _tourService;
         private readonly LocationService _locationService;
         private readonly ImageRepository _imageRepository;
-        private readonly CheckpointRepository _checkpointRepository;
+        private readonly CheckpointService _checkpointService;
 
         private ObservableCollection<int> ImageIds;
         private ObservableCollection<int> CheckpointIds;
@@ -192,7 +192,7 @@ namespace InitialProject.View.Guide
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        public CreateTour(User user, TourService tourService, LocationService locationService, ImageRepository imageRepository, CheckpointRepository checkpointRepository)
+        public CreateTour(User user, TourService tourService, LocationService locationService, ImageRepository imageRepository, CheckpointService checkpointService)
         {
             InitializeComponent();
             DataContext = this;
@@ -200,7 +200,7 @@ namespace InitialProject.View.Guide
             _tourService = tourService;
             _locationService = locationService;
             _imageRepository = imageRepository;
-            _checkpointRepository = checkpointRepository;
+            _checkpointService = checkpointService;
 
             LoggedInUser = user;
             OrderCounter = 1;
@@ -326,27 +326,27 @@ namespace InitialProject.View.Guide
         private List<int> SaveCheckpoints()
         {
             List<int> checkpointIds = new List<int>();
-            checkpointIds.Add(_checkpointRepository.Save(StartCheckpoint).Id);
+            checkpointIds.Add(_checkpointService.Save(StartCheckpoint).Id);
             foreach (Checkpoint checkpoint in MiddleCheckpoints)
             {
-                checkpointIds.Add(_checkpointRepository.Save(checkpoint).Id);
+                checkpointIds.Add(_checkpointService.Save(checkpoint).Id);
             }
-            checkpointIds.Add(_checkpointRepository.Save(EndCheckpoint).Id);
+            checkpointIds.Add(_checkpointService.Save(EndCheckpoint).Id);
             return checkpointIds;
         }
         private void UpdateCheckpointsTourId(int tourId)
         {
             StartCheckpoint.TourId = tourId;
-            _checkpointRepository.Update(StartCheckpoint);
+            _checkpointService.Update(StartCheckpoint);
 
             foreach (Checkpoint checkpoint in MiddleCheckpoints)
             {
                 checkpoint.TourId = tourId;
-                _checkpointRepository.Update(checkpoint);
+                _checkpointService.Update(checkpoint);
             }
 
             EndCheckpoint.TourId = tourId;
-            _checkpointRepository.Update(EndCheckpoint);
+            _checkpointService.Update(EndCheckpoint);
         }
         private void Hours_cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

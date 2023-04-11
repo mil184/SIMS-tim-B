@@ -23,9 +23,9 @@ namespace InitialProject.View.Guest2
         public ObservableCollection<Guest2TourDTO> Tours { get; set; }
 
         private readonly TourService _tourService;
-        private readonly LocationRepository _locationRepository;
+        private readonly LocationService _locationService;
         private readonly ImageRepository _imageRepository;
-        private readonly CheckpointRepository _checkpointRepository;
+        private readonly CheckpointService _checkpointService;
         private readonly UserRepository _userRepository; 
         private readonly TourReservationRepository _tourReservationRepository; 
 
@@ -45,11 +45,11 @@ namespace InitialProject.View.Guest2
             _imageRepository = new ImageRepository();
             _imageRepository.Subscribe(this);
 
-            _locationRepository = new LocationRepository();
-            _locationRepository.Subscribe(this);
+            _locationService = new LocationService();
+            _locationService.Subscribe(this);
 
-            _checkpointRepository = new CheckpointRepository();
-            _checkpointRepository.Subscribe(this);
+            _checkpointService = new CheckpointService();
+            _checkpointService.Subscribe(this);
 
             _userRepository = new UserRepository();
             _userRepository.Subscribe(this);
@@ -94,8 +94,8 @@ namespace InitialProject.View.Guest2
                 dtoList.Add(new Guest2TourDTO(
                     tour.Id,
                     tour.Name,
-                _locationRepository.GetById(tour.LocationId).Country,
-                _locationRepository.GetById(tour.LocationId).City,
+                _locationService.GetById(tour.LocationId).Country,
+                _locationService.GetById(tour.LocationId).City,
                 tour.Description,
                 tour.Language,
                 tour.MaxGuests,
@@ -112,8 +112,8 @@ namespace InitialProject.View.Guest2
             return new Guest2TourDTO(
                 tour.Id,
                 tour.Name,
-                _locationRepository.GetById(tour.LocationId).Country,
-                _locationRepository.GetById(tour.LocationId).City,
+                _locationService.GetById(tour.LocationId).Country,
+                _locationService.GetById(tour.LocationId).City,
                 tour.Description,
                 tour.Language,
                 tour.MaxGuests,

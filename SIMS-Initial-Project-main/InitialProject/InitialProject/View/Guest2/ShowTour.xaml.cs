@@ -2,6 +2,7 @@
 using InitialProject.Model.DTO;
 using InitialProject.Repository;
 using InitialProject.Resources.Observer;
+using InitialProject.Service;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -13,7 +14,7 @@ namespace InitialProject.View.Guest2
     {
         public Guest2TourDTO tourDTO { get; set; }
 
-        private readonly TourRepository _tourRepository;
+        private readonly TourService _tourService;
         private readonly ImageRepository _imageRepository;
 
         public ShowTour(Guest2TourDTO tourDTO)
@@ -21,8 +22,8 @@ namespace InitialProject.View.Guest2
             InitializeComponent();
             DataContext = this;
 
-            _tourRepository = new TourRepository();
-            _tourRepository.Subscribe(this);
+            _tourService = new TourService();
+            _tourService.Subscribe(this);
 
             _imageRepository = new ImageRepository();
             _imageRepository.Subscribe(this);
@@ -53,7 +54,7 @@ namespace InitialProject.View.Guest2
 
         public Tour ConvertToTour(Guest2TourDTO dto)
         {
-            return _tourRepository.GetById(dto.TourId);
+            return _tourService.GetById(dto.TourId);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
