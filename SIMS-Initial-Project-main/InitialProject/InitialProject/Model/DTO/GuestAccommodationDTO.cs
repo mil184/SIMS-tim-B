@@ -17,12 +17,12 @@ namespace InitialProject.Model.DTO
         public int MaxGuests { get; set; }
         public int MinReservationDays { get; set; }
         public int CancellationPeriod { get; set; }
-
+        public int OwnerId { get; set; }
         public GuestAccommodationDTO()
         {
 
         }
-        public GuestAccommodationDTO(int id, string name, string country, string city, AccommodationType type, int maxGuests, int minReservationDays, int cancellationPeriod)
+        public GuestAccommodationDTO(int id, string name, string country, string city, AccommodationType type, int maxGuests, int minReservationDays, int cancellationPeriod, int ownerId)
         {
             Id = id;
             Name = name;
@@ -32,6 +32,7 @@ namespace InitialProject.Model.DTO
             MaxGuests = maxGuests;
             MinReservationDays = minReservationDays;
             CancellationPeriod = cancellationPeriod;
+            OwnerId = ownerId;
         }
     }
 }

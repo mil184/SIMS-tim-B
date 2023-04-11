@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using InitialProject.Service;
 
 namespace InitialProject.View.Guest1
 {
@@ -25,8 +26,8 @@ namespace InitialProject.View.Guest1
     /// </summary>
     public partial class ReserveAccommodation : Window
     {
-        private readonly AccommodationReservationRepository _accommodationReservationRepository;
-        private readonly AccommodationRepository _accommodationRepository;
+        private readonly AccommodationReservationService _accommodationReservationService;
+        private readonly AccommodationService _accommodationService;
 
         private AccommodationReservation _reservation;
         public AccommodationReservation Reservation
@@ -166,7 +167,7 @@ namespace InitialProject.View.Guest1
                 }
             }
         }
-        public ReserveAccommodation(GuestAccommodationDTO selectedAccommodation, User user, AccommodationRepository accommodationRepository, AccommodationReservationRepository accommodationReservationRepository)
+        public ReserveAccommodation(GuestAccommodationDTO selectedAccommodation, User user, AccommodationService accommodationService, AccommodationReservationService accommodationReservationService)
         {
             InitializeComponent();
             DataContext = this;
@@ -178,64 +179,68 @@ namespace InitialProject.View.Guest1
             Reservation.AccommodationId = selectedAccommodation.Id;
 
 
-            _accommodationRepository = accommodationRepository;
-            _accommodationReservationRepository = accommodationReservationRepository;
+            _accommodationService = accommodationService;
+            _accommodationReservationService = accommodationReservationService;
 
             DateIntervals = new ObservableCollection<DatesDTO>();
         }
+
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
             DateIntervals.Clear();
 
-            if (!ValidateDates()) return;
-            if (!ValidateNumberOfDays()) return;
-            if (!ValidateNumberOfGuests()) return;
+            if (!ValidateInput()) return;
 
-            ObservableCollection<DateTime> allFreeDates = GetAllFreeDates();
-
+            var allFreeDates = GetAllFreeDates();
             AddDateRanges(FindDateRanges(allFreeDates));
 
             if (DateIntervals.Count == 0)
             {
-                var messageBoxResult = MessageBox.Show($"There are no available dates to reserve right now, would you like to see suggested dates?", "Suggested Accomodation Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
-
-                if (messageBoxResult == MessageBoxResult.Yes)
+                if (ShowSuggestedDatesDialog())
                 {
-
-                    int DaysToAdd = 25;
-
-                    if (DaysToAdd > 0)
-                    {
-                        DateTime newStartDate = StartDate.AddDays(-DaysToAdd);
-                        if (newStartDate >= DateTime.Today)
-                        {
-                            StartDate = newStartDate.Date;
-                        }
-                        else
-                        {
-                            StartDate = DateTime.Today.Date;
-                        }
-                    }
-
-                    EndDate = EndDate.Date.AddDays(DaysToAdd);
+                    var suggestedDateRange = GetSuggestedDateRange();
+                    StartDate = suggestedDateRange.startDate;
+                    EndDate = suggestedDateRange.endDate;
 
                     allFreeDates = GetAllFreeDates();
-
                     AddDateRanges(FindDateRanges(allFreeDates));
                 }
-
-                return;
-
             }
-
         }
+
+        private bool ValidateInput()
+        {
+            if (!ValidateDates()) return false;
+            if (!ValidateNumberOfDays()) return false;
+            if (!ValidateNumberOfGuests()) return false;
+            return true;
+        }
+
+        private bool ShowSuggestedDatesDialog()
+        {
+            var messageBoxResult = MessageBox.Show($"There are no available dates to reserve right now, would you like to see suggested dates?", "Suggested Accomodation Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            return messageBoxResult == MessageBoxResult.Yes;
+        }
+
+        private (DateTime startDate, DateTime endDate) GetSuggestedDateRange()
+        {
+            const int daysToAdd = 25;
+            var newStartDate = StartDate.AddDays(-daysToAdd);
+
+            if (newStartDate < DateTime.Today)
+                newStartDate = DateTime.Today;
+
+            var newEndDate = EndDate.AddDays(daysToAdd);
+            return (newStartDate.Date, newEndDate.Date);
+        }
+
         private ObservableCollection<DateTime> GetAllFreeDates()
         {
             int accommodationId = Reservation.AccommodationId;
             DateTime startDate = StartDate;
             DateTime endDate = EndDate;
 
-            return new ObservableCollection<DateTime>(_accommodationReservationRepository.GetAvailableDates(accommodationId, startDate, endDate));
+            return new ObservableCollection<DateTime>(_accommodationReservationService.GetAvailableDates(accommodationId, startDate, endDate));
         }
 
         private void AddDateRanges(List<DatesDTO> dateRanges)
@@ -360,8 +365,8 @@ namespace InitialProject.View.Guest1
 
                 if (messageBoxResult == MessageBoxResult.Yes)
                 {
-                    var reservation = new AccommodationReservation(LoggedInUser.Id, SelectedAccommodation.Id, selectedItem.StartDate, selectedItem.EndDate, NumberOfDays, MaxGuests, OwnerId, false, CancellationPeriod);
-                    _accommodationReservationRepository.Save(reservation);
+                    var reservation = new AccommodationReservation(LoggedInUser.Id, SelectedAccommodation.Id, selectedItem.StartDate, selectedItem.EndDate, NumberOfDays, MaxGuests, SelectedAccommodation.OwnerId, false, SelectedAccommodation.CancellationPeriod);
+                    _accommodationReservationService.Save(reservation);
 
                     MessageBox.Show("Reservation created successfully.");
                     Close();

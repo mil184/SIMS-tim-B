@@ -57,43 +57,6 @@ namespace InitialProject.Repository
             return _accommodationReservations.FirstOrDefault(u => u.Id == id);
         }
 
-        public List<DateTime> GetAvailableDates(int accommodationId, DateTime startDate, DateTime endDate)
-        {
-            List<DateTime> reservedDates = new List<DateTime>();
-            foreach (AccommodationReservation reservation in _accommodationReservations)
-            {
-                if (reservation.AccommodationId == accommodationId && reservation.StartDate >= startDate && reservation.StartDate <= endDate)
-                {
-                    for (DateTime date = reservation.StartDate; date <= reservation.EndDate; date = date.AddDays(1))
-                    {
-                        reservedDates.Add(date);
-                    }
-                }
-            }
-            List<DateTime> availableDates = new List<DateTime>();
-            for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
-            {
-                if (!reservedDates.Contains(date))
-                {
-                    availableDates.Add(date);
-                }
-            }
-            return availableDates;
-        }
-
-        public List<AccommodationReservation> GetUnratedAccommodations()
-        {
-            List<AccommodationReservation> unratedAccommodations = new List<AccommodationReservation>();
-
-            foreach (AccommodationReservation reservation in _accommodationReservations)
-            {
-                if (!reservation.IsRated)
-                {
-                    unratedAccommodations.Add(reservation);
-                }
-            }
-            return unratedAccommodations;
-        }
         public AccommodationReservation Update(AccommodationReservation accommodationReservation)
         {
             _accommodationReservations = _serializer.FromCSV(FilePath);

@@ -64,7 +64,7 @@ namespace InitialProject.View.Guest1
 
         private void Send_Click(object sender, RoutedEventArgs e)
         {
-            var messageBoxResult = MessageBox.Show($"Are you sure you want to reserve another date: {NewStartDatePicker:d} - {NewEndDatePicker:d}?", "Reschedule Request Confirmation", MessageBoxButton.YesNo);
+            var messageBoxResult = MessageBox.Show($"Are you sure you want to reserve another date: {NewStartDatePicker:d} - {NewEndDatePicker:d}?", "Reschedule Request Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
             if (messageBoxResult == MessageBoxResult.Yes)
             {
@@ -85,17 +85,17 @@ namespace InitialProject.View.Guest1
 
             if (NewStartDate < DateTime.Today)
             {
-                MessageBox.Show("The new start date must not be earlier than today's date.", "Reschedule Request Error", MessageBoxButton.OK);
+                ShowStartDateError();
                 return false;
             }
             else if (NewStartDate == selectedReservation.StartDate && NewEndDate == selectedReservation.EndDate)
             {
-                MessageBox.Show("Selected dates are the same as the existing reservation dates. Please select different dates.", "Reschedule Request Error", MessageBoxButton.OK);
+                ShowSameDateError();
                 return false;
             }
             else if (NewEndDate < NewStartDate)
             {
-                MessageBox.Show("The new end date must not be earlier than the new start date.", "Reschedule Request Error", MessageBoxButton.OK);
+                ShowEndDateError();
                 return false;
             }
             return true;
@@ -119,6 +119,19 @@ namespace InitialProject.View.Guest1
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void ShowStartDateError()
+        {
+            MessageBox.Show("The new start date must not be earlier than today's date.", "Reschedule Request Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        private void ShowSameDateError()
+        {
+            MessageBox.Show("Selected dates are the same as the existing reservation dates. Please select different dates.", "Reschedule Request Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        private void ShowEndDateError()
+        {
+            MessageBox.Show("The new end date must not be earlier than the new start date.", "Reschedule Request Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

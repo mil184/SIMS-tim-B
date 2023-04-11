@@ -49,7 +49,7 @@ namespace InitialProject.View.Guest1
         public ObservableCollection<RescheduleRequest> AllReschedules { get; set; }
 
 
-        private readonly AccommodationRepository _accommodationRepository;
+      //  private readonly AccommodationRepository _accommodationRepository;
 
         private readonly LocationRepository _locationRepository;
 
@@ -62,6 +62,7 @@ namespace InitialProject.View.Guest1
         private readonly AccommodationRatingsRepository _accommodationRatingsRepository;
         private readonly RescheduleRequestRepository _rescheduleRequestRepository;
         private readonly AccommodationService _accommodationService;
+        private readonly AccommodationReservationService _accommodationReservationService;
 
 
         private string searchName;
@@ -145,8 +146,8 @@ namespace InitialProject.View.Guest1
             DataContext = this;
             LoggedInUser = user;
 
-            _accommodationRepository = new AccommodationRepository();
-            _accommodationRepository.Subscribe(this);
+          //  _accommodationRepository = new AccommodationRepository();
+           // _accommodationRepository.Subscribe(this);
 
             _accommodationReservationRepository = new AccommodationReservationRepository();
             _accommodationReservationRepository.Subscribe(this);
@@ -169,6 +170,9 @@ namespace InitialProject.View.Guest1
             _accommodationService = new AccommodationService();
             _accommodationService.Subscribe(this);
 
+            _accommodationReservationService = new AccommodationReservationService();
+            _accommodationReservationService.Subscribe(this);
+
             AllAccommodations = new ObservableCollection<Accommodation>(_accommodationService.GetAll());
             PresentableAccommodations = ConvertToDTO(new List<Accommodation>(AllAccommodations));
 
@@ -176,7 +180,7 @@ namespace InitialProject.View.Guest1
             FormUnratedReservation();
             UnratedReservations = new ObservableCollection<AccommodationReservation>();
 
-            PresentableReservations = new ObservableCollection<AccommodationReservation>(_accommodationReservationRepository.GetAll());
+            PresentableReservations = new ObservableCollection<AccommodationReservation>(_accommodationReservationService.GetAll());
             AllReschedules = new ObservableCollection<RescheduleRequest>(_rescheduleRequestRepository.GetAll());
 
         }
@@ -185,7 +189,7 @@ namespace InitialProject.View.Guest1
         {
             if (SelectedAccommodation != null)
             {
-                ReserveAccommodation reservationForm = new ReserveAccommodation(SelectedAccommodation, LoggedInUser, _accommodationRepository, _accommodationReservationRepository);
+                ReserveAccommodation reservationForm = new ReserveAccommodation(SelectedAccommodation, LoggedInUser, _accommodationService, _accommodationReservationService);
                 reservationForm.Show();
             }
         }
@@ -255,7 +259,7 @@ namespace InitialProject.View.Guest1
                 dto.Add(new GuestAccommodationDTO(accommodation.Id, accommodation.Name,
                     _locationRepository.GetById(accommodation.LocationId).Country,
                      _locationRepository.GetById(accommodation.LocationId).City,
-                     accommodation.Type, accommodation.MaxGuests, accommodation.MinReservationDays, accommodation.CancellationPeriod));
+                     accommodation.Type, accommodation.MaxGuests, accommodation.MinReservationDays, accommodation.CancellationPeriod, accommodation.OwnerId));
             }
             return dto;
         }
@@ -264,7 +268,7 @@ namespace InitialProject.View.Guest1
             return new GuestAccommodationDTO(accommodation.Id, accommodation.Name,
                   _locationRepository.GetById(accommodation.LocationId).Country,
                    _locationRepository.GetById(accommodation.LocationId).City,
-                   accommodation.Type, accommodation.MaxGuests, accommodation.MinReservationDays, accommodation.CancellationPeriod);
+                   accommodation.Type, accommodation.MaxGuests, accommodation.MinReservationDays, accommodation.CancellationPeriod, accommodation.OwnerId);
 
         }
 
@@ -272,7 +276,7 @@ namespace InitialProject.View.Guest1
         {
             return new AccommodationRatingsDTO(reservation.Id,
                 _userRepository.GetById(reservation.OwnerId).Username,
-                _accommodationRepository.GetById(reservation.AccommodationId).Name);
+                _accommodationService.GetById(reservation.AccommodationId).Name);
 
         }
         public ObservableCollection<AccommodationRatingsDTO> ConvertToDTO(ObservableCollection<AccommodationReservation> reservations)
@@ -307,7 +311,7 @@ namespace InitialProject.View.Guest1
         }
         public Accommodation ConvertToAccomodation(GuestAccommodationDTO dto)
         {
-            return _accommodationRepository.GetById(dto.Id);
+            return _accommodationService.GetById(dto.Id);
         }
 
         private void LogOut_Click(object sender, RoutedEventArgs e)
@@ -326,7 +330,7 @@ namespace InitialProject.View.Guest1
         public void FormUnratedReservation()
         {
             UnratedAccommodations.Clear();
-            var reservations = _accommodationReservationRepository.GetUnratedAccommodations().Where(r => RecentlyEnded(r)); 
+            var reservations = _accommodationReservationService.GetUnratedAccommodations().Where(r => RecentlyEnded(r)); 
             UnratedAccommodations = ConvertToDTO(new ObservableCollection<AccommodationReservation>(reservations));
         }
 
