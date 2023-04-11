@@ -155,8 +155,6 @@ namespace InitialProject.ViewModel.Guest2
                 _imageRepository.Save(image);
                 _imageIds.Add(image.Id);
             }
-
-            urlTextBox = string.Empty;
         }
     }
 }

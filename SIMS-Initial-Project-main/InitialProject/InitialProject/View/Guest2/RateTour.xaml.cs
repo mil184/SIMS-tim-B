@@ -78,6 +78,7 @@ namespace InitialProject.View.Guest2
         private void AddImage_Click(object sender, RoutedEventArgs e)
         {
             _viewModel.AddImage(UrlTextBox.Text);
+            UrlTextBox.Text = string.Empty;
         }
     }
 }
