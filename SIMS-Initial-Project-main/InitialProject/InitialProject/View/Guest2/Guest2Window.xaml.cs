@@ -3,6 +3,7 @@ using InitialProject.Model.DTO;
 using InitialProject.Repository;
 using InitialProject.Resources.Observer;
 using InitialProject.Service;
+using InitialProject.ViewModel.Guest2;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -296,7 +297,8 @@ namespace InitialProject.View.Guest2
         {
             if (SelectedGuest2TourDTO != null)
             {
-                RateTour rateTour = new RateTour(SelectedGuest2TourDTO, LoggedInUser, _tourRatingRepository, _tourReservationRepository, _tourService, _imageRepository);
+                RateTourViewModel rateTourViewModel = new RateTourViewModel(SelectedGuest2TourDTO, LoggedInUser, _tourRatingRepository, _tourReservationRepository, _tourService, _imageRepository);
+                RateTour rateTour = new RateTour(rateTourViewModel);
                 rateTour.Show();
             }
         }
