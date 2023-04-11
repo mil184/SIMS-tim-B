@@ -16,21 +16,6 @@ namespace InitialProject.Service
             _imageRepository = new ImageRepository();
         }
 
-        public List<TourRating> GetTourRatings1(Tour tour)
-        {
-            List<TourRating> ratings = new List<TourRating>();
-            List<TourRating> _tourRatings = _tourRatingRepository.GetAll();
-
-            foreach (TourRating rating in _tourRatings)
-            {
-                if (rating.TourId == tour.Id)
-                {
-                    ratings.Add(rating);
-                }
-            }
-            return ratings;
-        }
-
         public List<TourRating> GetTourRatings(Tour tour)
         {
             List<TourRating> tourRatings = _tourRatingRepository.GetAll();
