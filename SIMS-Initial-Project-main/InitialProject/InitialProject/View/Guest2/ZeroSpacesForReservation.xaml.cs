@@ -27,7 +27,7 @@ namespace InitialProject.View.Guest2
         private readonly ImageRepository _imageRepository;
         private readonly CheckpointRepository _checkpointRepository;
         private readonly UserRepository _userRepository; 
-        private readonly TourReservationRepository _tourReservationRepository; 
+        private readonly TourReservationService _tourRatingService; 
 
         public ZeroSpacesForReservation(Guest2TourDTO selectedTour, User user, TourService tourService)
         {
@@ -39,8 +39,8 @@ namespace InitialProject.View.Guest2
 
             _tourService = tourService;
 
-            _tourReservationRepository = new TourReservationRepository();
-            _tourReservationRepository.Subscribe(this);
+            _tourRatingService = new TourReservationService();
+            _tourRatingService.Subscribe(this);
 
             _imageRepository = new ImageRepository();
             _imageRepository.Subscribe(this);
@@ -79,7 +79,7 @@ namespace InitialProject.View.Guest2
         {
             if (NewSelectedTour != null)
             {
-                ReserveTour reserveTourForm = new ReserveTour(NewSelectedTour, LoggedInUser, _tourService, _tourReservationRepository);
+                ReserveTour reserveTourForm = new ReserveTour(NewSelectedTour, LoggedInUser, _tourService, _tourRatingService);
                 reserveTourForm.ShowDialog();
             }
             Close();
@@ -94,15 +94,15 @@ namespace InitialProject.View.Guest2
                 dtoList.Add(new Guest2TourDTO(
                     tour.Id,
                     tour.Name,
-                _locationRepository.GetById(tour.LocationId).Country,
-                _locationRepository.GetById(tour.LocationId).City,
-                tour.Description,
-                tour.Language,
-                tour.MaxGuests,
-                tour.CurrentGuestCount,
-                tour.StartTime,
-                tour.Duration,
-                _userRepository.GetById(tour.GuideId).Username));
+                    _locationRepository.GetById(tour.LocationId).Country,
+                    _locationRepository.GetById(tour.LocationId).City,
+                    tour.Description,
+                    tour.Language,
+                    tour.MaxGuests,
+                    tour.CurrentGuestCount,
+                    tour.StartTime,
+                    tour.Duration,
+                    _userRepository.GetById(tour.GuideId).Username));
             }
 
             return dtoList;

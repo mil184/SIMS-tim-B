@@ -3,6 +3,7 @@ using InitialProject.Model.DTO;
 using InitialProject.Repository;
 using InitialProject.Resources.Observer;
 using InitialProject.Service;
+using InitialProject.ViewModel.Guest2;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -38,8 +39,8 @@ namespace InitialProject.View.Guest2
         private readonly ImageRepository _imageRepository;
         private readonly CheckpointRepository _checkpointRepository;
         private readonly UserRepository _userRepository;
-        private readonly TourReservationRepository _tourReservationRepository;
-        private readonly TourRatingRepository _tourRatingRepository;
+        private readonly TourReservationService _tourReservationService;
+        private readonly TourRatingService _tourRatingService;
         private readonly VoucherService _voucherService;
 
 
@@ -120,11 +121,11 @@ namespace InitialProject.View.Guest2
             _userRepository = new UserRepository();
             _userRepository.Subscribe(this);
 
-            _tourReservationRepository = new TourReservationRepository();
-            _tourReservationRepository.Subscribe(this);
+            _tourReservationService = new TourReservationService();
+            _tourReservationService.Subscribe(this);
 
-            _tourRatingRepository = new TourRatingRepository();
-            _tourRatingRepository.Subscribe(this);
+            _tourRatingService = new TourRatingService();
+            _tourRatingService.Subscribe(this);
 
             _voucherService = new VoucherService();
             _voucherService.Subscribe(this);
@@ -136,7 +137,7 @@ namespace InitialProject.View.Guest2
             Vouchers = new ObservableCollection<Voucher>(_voucherService.GetActiveVouchers(UserVouchers));
 
             CheckedTours = new List<Tour>();
-            foreach (int id in _tourReservationRepository.GetCheckedTourIds(LoggedInUser))
+            foreach (int id in _tourReservationService.GetCheckedTourIds(LoggedInUser))
             {
                 CheckedTours.Add(_tourService.GetById(id));
             }
@@ -150,6 +151,8 @@ namespace InitialProject.View.Guest2
             List<Tour> UserTours = new List<Tour>(_tourService.GetUserTours(LoggedInUser));
             FinishedTours = _tourService.GetFinishedTours(UserTours);
             FinishedTourDTOs = ConvertToDTO(FinishedTours);
+
+            ConfirmArrival();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -166,6 +169,29 @@ namespace InitialProject.View.Guest2
             FormFinishedTours();
         }
 
+        public void ConfirmArrival()
+        {
+
+            if (CheckedTours.Count != 0)
+            {
+                TourReservation tourReservation = _tourReservationService.GetReservationByGuestIdAndTourId(LoggedInUser.Id, CheckedTours[0].Id);
+
+                if (tourReservation.MessageBoxShown)
+                {
+                    return;
+                }
+
+                MessageBox.Show("Please confirm your arrival at " + CheckedTours[0].Name, "ArrivalConfirmation", MessageBoxButton.YesNo, MessageBoxImage.Information);
+
+                if (MessageBoxResult.Yes == MessageBoxResult.Yes)
+                {
+                    tourReservation.GuestArrived = true;
+                    tourReservation.MessageBoxShown = true;
+                    _tourReservationService.Update(tourReservation);
+                }
+            }
+        }
+
         public void FormTours()
         {
             foreach (Tour tour in _tourService.GetReservableTours())
@@ -178,7 +204,7 @@ namespace InitialProject.View.Guest2
         {
             foreach (Tour userTour in _tourService.GetUserTours(LoggedInUser))
             {
-                if (userTour.IsFinished && !_tourReservationRepository.GetByTourId(userTour.Id).IsRated)
+                if (userTour.IsFinished && !_tourReservationService.GetByTourId(userTour.Id).IsRated)
                 {
                     FinishedTourDTOs.Add(ConvertToDTO(userTour));
                 }
@@ -227,7 +253,7 @@ namespace InitialProject.View.Guest2
         {
             if (SelectedGuest2TourDTO != null)
             {
-                ReserveTour reserveTourForm = new ReserveTour(SelectedGuest2TourDTO, LoggedInUser, _tourService, _tourReservationRepository);
+                ReserveTour reserveTourForm = new ReserveTour(SelectedGuest2TourDTO, LoggedInUser, _tourService, _tourReservationService);
                 reserveTourForm.ShowDialog();
             }
         }
@@ -296,7 +322,8 @@ namespace InitialProject.View.Guest2
         {
             if (SelectedGuest2TourDTO != null)
             {
-                RateTour rateTour = new RateTour(SelectedGuest2TourDTO, LoggedInUser, _tourRatingRepository, _tourReservationRepository, _tourService, _imageRepository);
+                RateTourViewModel rateTourViewModel = new RateTourViewModel(SelectedGuest2TourDTO, LoggedInUser, _tourRatingService, _tourReservationService, _tourService, _imageRepository);
+                RateTour rateTour = new RateTour(rateTourViewModel);
                 rateTour.Show();
             }
         }
