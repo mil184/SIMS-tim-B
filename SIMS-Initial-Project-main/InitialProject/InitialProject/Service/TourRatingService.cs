@@ -49,6 +49,11 @@ namespace InitialProject.Service
             return urls;
         }
 
+        public TourRating Save(TourRating tourRating)
+        {
+            return _tourRatingRepository.Save(tourRating);
+        }
+
         public TourRating GetById(int id)
         {
             return _tourRatingRepository.GetById(id);

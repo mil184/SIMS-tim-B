@@ -20,7 +20,7 @@ namespace InitialProject.ViewModel.Guest2
         public User LoggedInUser { get; set; }
         public Guest2TourDTO SelectedTour { get; set; }
 
-        private readonly TourRatingRepository _tourRatingRepository;
+        private readonly TourRatingService _tourRatingService;
         private readonly TourReservationRepository _tourReservationRepository;
         private readonly TourService _tourService;
         private readonly ImageRepository _imageRepository;
@@ -97,12 +97,12 @@ namespace InitialProject.ViewModel.Guest2
 
         private ObservableCollection<int> _imageIds = new ObservableCollection<int>();
 
-        public RateTourViewModel(Guest2TourDTO selectedTour, Model.User user, TourRatingRepository tourRatingRepository, TourReservationRepository tourReservationRepository, TourService tourService, ImageRepository imageRepository)
+        public RateTourViewModel(Guest2TourDTO selectedTour, Model.User user, TourRatingService tourRatingService, TourReservationRepository tourReservationRepository, TourService tourService, ImageRepository imageRepository)
         {
             SelectedTour = selectedTour;
             LoggedInUser = user;
 
-            _tourRatingRepository = tourRatingRepository;
+            _tourRatingService = tourRatingService;
             _tourReservationRepository = tourReservationRepository;
             _tourService = tourService;
             _imageRepository = imageRepository;
@@ -141,7 +141,7 @@ namespace InitialProject.ViewModel.Guest2
             tourReservation.IsRated = true;
             _tourReservationRepository.Update(tourReservation);
 
-            _tourRatingRepository.Save(tourRating);
+            _tourRatingService.Save(tourRating);
         }
 
         public void AddImage(string urlTextBox)
