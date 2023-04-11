@@ -151,6 +151,8 @@ namespace InitialProject.View.Guest2
             List<Tour> UserTours = new List<Tour>(_tourService.GetUserTours(LoggedInUser));
             FinishedTours = _tourService.GetFinishedTours(UserTours);
             FinishedTourDTOs = ConvertToDTO(FinishedTours);
+
+            ConfirmArrival();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -165,6 +167,29 @@ namespace InitialProject.View.Guest2
 
             FinishedTourDTOs.Clear();
             FormFinishedTours();
+        }
+
+        public void ConfirmArrival()
+        {
+
+            if (CheckedTours.Count != 0)
+            {
+                TourReservation tourReservation = _tourReservationService.GetReservationByGuestIdAndTourId(LoggedInUser.Id, CheckedTours[0].Id);
+
+                if (tourReservation.MessageBoxShown)
+                {
+                    return;
+                }
+
+                MessageBox.Show("Please confirm your arrival at " + CheckedTours[0].Name, "ArrivalConfirmation", MessageBoxButton.YesNo, MessageBoxImage.Information);
+
+                if (MessageBoxResult.Yes == MessageBoxResult.Yes)
+                {
+                    tourReservation.GuestArrived = true;
+                    tourReservation.MessageBoxShown = true;
+                    _tourReservationService.Update(tourReservation);
+                }
+            }
         }
 
         public void FormTours()
