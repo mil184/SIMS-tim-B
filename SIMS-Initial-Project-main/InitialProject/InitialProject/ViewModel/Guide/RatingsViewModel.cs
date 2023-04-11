@@ -17,9 +17,9 @@ namespace InitialProject.ViewModel.Guide
     public class RatingsViewModel : INotifyPropertyChanged, IObserver
     {
         private readonly UserRepository _userRepository;
-        private readonly TourRatingRepository _tourRatingRepository;
-        private readonly TourReservationRepository _tourReservationRepository;
         private readonly CheckpointService _checkpointService;
+        private readonly TourRatingService _tourRatingService;
+        private readonly TourReservationService _tourReservationService;
         private readonly Tour _finishedTour;
 
         private ObservableCollection<GuideRatingDTO> _guestRatings;
@@ -43,18 +43,17 @@ namespace InitialProject.ViewModel.Guide
                 OnPropertyChanged();
             }
         }
-
-        public RatingsViewModel(UserRepository userRepository, TourRatingRepository tourRatingRepository, TourReservationRepository tourReservationRepository, CheckpointService checkpointService, Tour finishedTour)
+        public RatingsViewModel(UserRepository userRepository, TourRatingService tourRatingService, TourReservationService tourReservationService, CheckpointRepository checkpointRepository, Tour finishedTour)
         {
             _userRepository = userRepository;
-            _tourRatingRepository = tourRatingRepository;
-            _tourReservationRepository = tourReservationRepository;
+            _tourRatingService = tourRatingService;
+            _tourReservationService = tourReservationService;
             _checkpointService = checkpointService;
             _finishedTour = finishedTour;
 
-            _tourRatingRepository.Subscribe(this);
+            _tourRatingService.Subscribe(this);
 
-            GuestRatings = new ObservableCollection<GuideRatingDTO>(ConvertToDTO(_tourRatingRepository.GetTourRatings(_finishedTour)));
+            GuestRatings = new ObservableCollection<GuideRatingDTO>(ConvertToDTO(_tourRatingService.GetTourRatings(_finishedTour)));
         }
 
         public GuideRatingDTO ConvertToDTO(TourRating rating)
@@ -71,7 +70,7 @@ namespace InitialProject.ViewModel.Guide
 
         private string GetCheckpointName(int userId, int tourId)
         {
-            var reservation = _tourReservationRepository.GetReservationByGuestIdAndTourId(userId, tourId);
+            var reservation = _tourReservationService.GetReservationByGuestIdAndTourId(userId, tourId);
             if (reservation.CheckpointArrivalId == -1)
             {
                 return "Did not arrive";
@@ -96,7 +95,7 @@ namespace InitialProject.ViewModel.Guide
 
         private List<string> GetRatingUrls(TourRating rating)
         {
-            return _tourRatingRepository.FindRatingUrls(rating);
+            return _tourRatingService.FindRatingUrls(rating);
         }
 
         private GuideRatingDTO BuildGuideRatingDTO(TourRating rating, string checkpointName, string username, List<string> ratingUrls)
@@ -128,14 +127,14 @@ namespace InitialProject.ViewModel.Guide
         public TourRating ConvertToRating(GuideRatingDTO dto)
         {
             if (dto != null)
-                return _tourRatingRepository.GetById(dto.Id);
+                return _tourRatingService.GetById(dto.Id);
             return null;
         }
 
         public void Update()
         {
             GuestRatings.Clear();
-            GuestRatings = new ObservableCollection<GuideRatingDTO>(ConvertToDTO(_tourRatingRepository.GetTourRatings(_finishedTour)));
+            GuestRatings = new ObservableCollection<GuideRatingDTO>(ConvertToDTO(_tourRatingService.GetTourRatings(_finishedTour)));
         }
 
         public void ReportTourRating()
@@ -145,7 +144,7 @@ namespace InitialProject.ViewModel.Guide
 
             TourRating rating = ConvertToRating(SelectedRatingDTO);
             rating.isValid = false;
-            _tourRatingRepository.Update(rating);
+            _tourRatingService.Update(rating);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

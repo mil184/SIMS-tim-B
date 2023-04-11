@@ -93,6 +93,21 @@ namespace InitialProject.Service
             return accommodations;
         }
 
+        public List<Accommodation> GetByType(string type)
+        {
+            var accommodations = new List<Accommodation>();
+
+            foreach (var accommodation in _accommodationRepository.GetAll())
+            {
+                if (accommodation.Type.ToString() == type)
+                {
+                    accommodations.Add(accommodation);
+                }
+            }
+
+            return accommodations;
+        }
+
         public Accommodation GetById(int id)
         {
             return _accommodationRepository.GetById(id);

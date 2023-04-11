@@ -60,8 +60,8 @@
                                   Width="700" Height="200">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Reservation Id" Binding="{Binding ReservationId}" Width="*"></DataGridTextColumn>
-                                <DataGridTextColumn Header="New Start Date" Binding="{Binding NewStartDate}" Width="2*"></DataGridTextColumn>
-                                <DataGridTextColumn Header="New End Date" Binding="{Binding NewEndDate}" Width="2*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="New Start Date" Binding="{Binding NewStartDate, StringFormat=\{0:dd.MM.yy\}}" Width="2*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="New End Date" Binding="{Binding NewEndDate, StringFormat=\{0:dd.MM.yy\}}" Width="2*"></DataGridTextColumn>
                             </DataGrid.Columns>
                         </DataGrid>
                     </StackPanel>

@@ -1,4 +1,4 @@
-﻿using InitialProject.Model;
+using InitialProject.Model;
 using InitialProject.Model.DTO;
 using InitialProject.Repository;
 using InitialProject.Resources.Observer;
@@ -20,13 +20,14 @@ namespace InitialProject.View.Guide
     public partial class GuideWindow : Window, INotifyPropertyChanged, IObserver
     {
         private readonly TourService _tourService;
-        private readonly TourReservationRepository _tourReservationRepository;
-        private readonly TourRatingRepository _tourRatingRepository;
+        private readonly TourReservationService _tourReservationService;
+        private readonly TourRatingService _tourRatingService;
         private readonly LocationService _locationService;
         private readonly ImageRepository _imageRepository;
         private readonly CheckpointService _checkpointService;
         private readonly UserRepository _userRepository;
         private readonly VoucherRepository _voucherRepository;
+
         public User CurrentUser { get; set; }
         public ObservableCollection<GuideTourDTO> CurrentTours { get; set; }
         public ObservableCollection<GuideTourDTO> UpcomingTours { get; set; }
@@ -97,8 +98,8 @@ namespace InitialProject.View.Guide
             _checkpointService = new CheckpointService();
             _checkpointService.Subscribe(this);
 
-            _tourReservationRepository = new TourReservationRepository();
-            _tourReservationRepository.Subscribe(this);
+            _tourReservationService = new TourReservationService();
+            _tourReservationService.Subscribe(this);
 
             _userRepository = new UserRepository();
             _userRepository.Subscribe(this);
@@ -106,8 +107,8 @@ namespace InitialProject.View.Guide
             _voucherRepository = new VoucherRepository();
             _voucherRepository.Subscribe(this);
 
-            _tourRatingRepository = new TourRatingRepository();
-            _tourRatingRepository.Subscribe(this);
+            _tourRatingService = new TourRatingService();
+            _tourRatingService.Subscribe(this);
 
             InitializeCollections();
             InitializeStartingSearchValues();
@@ -289,7 +290,7 @@ namespace InitialProject.View.Guide
             Tour selectedTour = ConvertToTour(SelectedFinishedTourDTO);
             if (selectedTour != null)
             {
-                StatisticsViewModel statisticsViewModel = new StatisticsViewModel(selectedTour, _tourReservationRepository);
+                StatisticsViewModel statisticsViewModel = new StatisticsViewModel(selectedTour, _tourReservationService);
                 Statistics statistics = new Statistics(statisticsViewModel);
                 statistics.Show();
             }
@@ -307,7 +308,7 @@ namespace InitialProject.View.Guide
 
             if (ConfirmAbortTour(ConvertToTour(SelectedUpcomingTourDTO)))
             {
-                foreach (int userId in _tourReservationRepository.GetUserIdsByTour(ConvertToTour(SelectedUpcomingTourDTO)))
+                foreach (int userId in _tourReservationService.GetUserIdsByTour(ConvertToTour(SelectedUpcomingTourDTO)))
                 {
                     if (!vouchersAdded.Contains(userId))
                     {

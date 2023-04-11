@@ -16,29 +16,29 @@
 
         <Label Margin="0,10,0,0" Content ="1. How would you rate your tour guide's knowledge?*" />
         <StackPanel Orientation="Horizontal" Margin="10,40,0,0">
-            <RadioButton Name="knowledge1"  Content="1" IsChecked="{Binding GuideKnowledge, UpdateSourceTrigger=PropertyChanged}"/>
-            <RadioButton Name="knowledge2" Content="2" IsChecked="{Binding GuideKnowledge, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
-            <RadioButton Name="knowledge3" Content="3" IsChecked="{Binding GuideKnowledge, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
-            <RadioButton Name="knowledge4" Content="4" IsChecked="{Binding GuideKnowledge, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
-            <RadioButton Name="knowledge5" Content="5" IsChecked="{Binding GuideKnowledge, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
+            <RadioButton Name="knowledge1" Content="1" Checked="SetRatingForGuideKnowledge"/>
+            <RadioButton Name="knowledge2" Content="2" Checked="SetRatingForGuideKnowledge" Margin="10,0,0,0"/>
+            <RadioButton Name="knowledge3" Content="3" Checked="SetRatingForGuideKnowledge" Margin="10,0,0,0"/>
+            <RadioButton Name="knowledge4" Content="4" Checked="SetRatingForGuideKnowledge" Margin="10,0,0,0"/>
+            <RadioButton Name="knowledge5" Content="5" Checked="SetRatingForGuideKnowledge" Margin="10,0,0,0"/>
         </StackPanel>
 
         <Label Margin="0,70,0,0" Content="2. How interesting was this tour?*" />
         <StackPanel Orientation="Horizontal" Margin="10,100,0,0">
-            <RadioButton Name="interestingness1" Content="1" IsChecked="{Binding Interestingness, UpdateSourceTrigger=PropertyChanged}"/>
-            <RadioButton Name="interestingness2" Content="2" IsChecked="{Binding Interestingness, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
-            <RadioButton Name="interestingness3" Content="3" IsChecked="{Binding Interestingness, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
-            <RadioButton Name="interestingness4" Content="4" IsChecked="{Binding Interestingness, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
-            <RadioButton Name="interestingness5" Content="5" IsChecked="{Binding Interestingness, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
+            <RadioButton Name="interestingness1" Content="1" Checked="SetRatingForInterestingness"/>
+            <RadioButton Name="interestingness2" Content="2" Checked="SetRatingForInterestingness" Margin="10,0,0,0"/>
+            <RadioButton Name="interestingness3" Content="3" Checked="SetRatingForInterestingness" Margin="10,0,0,0"/>
+            <RadioButton Name="interestingness4" Content="4" Checked="SetRatingForInterestingness" Margin="10,0,0,0"/>
+            <RadioButton Name="interestingness5" Content="5" Checked="SetRatingForInterestingness" Margin="10,0,0,0"/>
         </StackPanel>
 
         <Label Margin="0,150,0,0" Content="3. How would you rate your tour guide's language?*" />
         <StackPanel Orientation="Horizontal" Margin="10,180,0,0">
-            <RadioButton Name="language1" Content="1" IsChecked="{Binding GuideLanguage, UpdateSourceTrigger=PropertyChanged}"/>
-            <RadioButton Name="language2" Content="2" IsChecked="{Binding GuideLanguage, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
-            <RadioButton Name="language3" Content="3" IsChecked="{Binding GuideLanguage, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
-            <RadioButton Name="language4" Content="4" IsChecked="{Binding GuideLanguage, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
-            <RadioButton Name="language5" Content="5" IsChecked="{Binding GuideLanguage, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
+            <RadioButton Name="language1" Content="1" Checked="SetRatingForGuideLanguage"/>
+            <RadioButton Name="language2" Content="2" Checked="SetRatingForGuideLanguage" Margin="10,0,0,0"/>
+            <RadioButton Name="language3" Content="3" Checked="SetRatingForGuideLanguage" Margin="10,0,0,0"/>
+            <RadioButton Name="language4" Content="4" Checked="SetRatingForGuideLanguage" Margin="10,0,0,0"/>
+            <RadioButton Name="language5" Content="5" Checked="SetRatingForGuideLanguage" Margin="10,0,0,0"/>
         </StackPanel>
 
         <Label Margin="0,210,0,0" Content="4. Write a comment (optional):" />

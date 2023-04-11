@@ -1,4 +1,4 @@
-﻿using InitialProject.Model;
+using InitialProject.Model;
 using InitialProject.Model.DTO;
 using InitialProject.Repository;
 using InitialProject.Resources.Observer;
@@ -27,7 +27,7 @@ namespace InitialProject.View.Guest2
         private readonly ImageRepository _imageRepository;
         private readonly CheckpointService _checkpointService;
         private readonly UserRepository _userRepository; 
-        private readonly TourReservationRepository _tourReservationRepository; 
+        private readonly TourReservationService _tourRatingService; 
 
         public ZeroSpacesForReservation(Guest2TourDTO selectedTour, User user, TourService tourService)
         {
@@ -39,8 +39,8 @@ namespace InitialProject.View.Guest2
 
             _tourService = tourService;
 
-            _tourReservationRepository = new TourReservationRepository();
-            _tourReservationRepository.Subscribe(this);
+            _tourRatingService = new TourReservationService();
+            _tourRatingService.Subscribe(this);
 
             _imageRepository = new ImageRepository();
             _imageRepository.Subscribe(this);
@@ -79,7 +79,7 @@ namespace InitialProject.View.Guest2
         {
             if (NewSelectedTour != null)
             {
-                ReserveTour reserveTourForm = new ReserveTour(NewSelectedTour, LoggedInUser, _tourService, _tourReservationRepository);
+                ReserveTour reserveTourForm = new ReserveTour(NewSelectedTour, LoggedInUser, _tourService, _tourRatingService);
                 reserveTourForm.ShowDialog();
             }
             Close();

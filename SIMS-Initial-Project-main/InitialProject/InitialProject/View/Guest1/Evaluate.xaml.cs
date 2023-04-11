@@ -1,6 +1,7 @@
 ﻿using InitialProject.Model;
 using InitialProject.Model.DTO;
 using InitialProject.Repository;
+using InitialProject.Service;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -27,7 +28,7 @@ namespace InitialProject.View.Guest1
     public partial class Evaluate : Window
     {
         private readonly AccommodationRatingsRepository _accommodationRatingsRepository;
-        private readonly AccommodationReservationRepository _accommodationReservationRepository;
+        private readonly AccommodationReservationService _accommodationReservationService;
         private readonly AccommodationRatingsDTO SelectedUnratedAccommodation;
         private readonly ImageRepository _imageRepository;
         private readonly UserRepository _userRepository;
@@ -92,18 +93,18 @@ namespace InitialProject.View.Guest1
 
         private ObservableCollection<int> _imageIds = new ObservableCollection<int>();
 
-        public Evaluate(AccommodationRatingsDTO selectedUnratedAccommodation, AccommodationRatingsRepository accommodationRatingsRepository, AccommodationReservationRepository accommodationReservationRepository, ImageRepository imageRepository)
+        public Evaluate(AccommodationRatingsDTO selectedUnratedAccommodation, AccommodationRatingsRepository accommodationRatingsRepository, AccommodationReservationService accommodationReservationService, ImageRepository imageRepository)
         {
             InitializeComponent();
             DataContext = this;
 
             SelectedUnratedAccommodation = selectedUnratedAccommodation;
             _accommodationRatingsRepository = accommodationRatingsRepository;
-            _accommodationReservationRepository = accommodationReservationRepository;
+            _accommodationReservationService = accommodationReservationService;
             _imageRepository = imageRepository;
             _userRepository = new UserRepository();
 
-            Reservation = _accommodationReservationRepository.GetById(SelectedUnratedAccommodation.ReservationId);
+            Reservation = _accommodationReservationService.GetById(SelectedUnratedAccommodation.ReservationId);
         }
 
         private void SetRatingsForCleanlinees()
@@ -163,9 +164,9 @@ namespace InitialProject.View.Guest1
                     SetRatingsForCleanlinees();
                     SetRatingsForCorrectness();
                     AccommodationRatings accommodationRatings = new AccommodationRatings(Reservation.Id, Reservation.AccommodationId, Reservation.OwnerId, Reservation.GuestId, Cleanliness, Correctness, Comment, _imageIds);
-                    AccommodationReservation reservation = _accommodationReservationRepository.GetById(Reservation.Id);
+                    AccommodationReservation reservation = _accommodationReservationService.GetById(Reservation.Id);
                     reservation.IsRated = true;
-                    _accommodationReservationRepository.Update(reservation);
+                    _accommodationReservationService.Update(reservation);
                     _accommodationRatingsRepository.Save(accommodationRatings);
                     MessageBox.Show("Rating saved successfully.");
                     CheckForSuperOwnerPrivileges(Reservation.OwnerId);
