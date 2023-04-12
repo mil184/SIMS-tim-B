@@ -143,24 +143,36 @@ namespace InitialProject.View.Guide
         {
             if (Years_cb.SelectedItem != null)
             {
-                if (int.TryParse(Years_cb.SelectedItem.ToString(), out int year))
-                {
-                    List<Tour> toursByYear = _tourService.GetToursByYear(year);
-                    if (toursByYear.Count == 0)
-                    {
-                        MostVisited = new GuideTourDTO { Name = "No information", Location = "", NumberOfGuestsMessage = "" };
-                    }
-                    else
-                    {
-                        MostVisited = ConvertToDTO(_tourService.GetMostVisitedTour(toursByYear));
-                    }
-                }
-                else if(Years_cb.SelectedItem.ToString() == "Alltime") 
-                {
-                    MostVisited = ConvertToDTO(_tourService.GetMostVisitedTour(_tourService.GetFinishedTours()));
-                }
-
+                HandleSelection();
             }
+        }
+
+        public void HandleSelection() 
+        {
+            if (int.TryParse(Years_cb.SelectedItem.ToString(), out int year))
+            {
+                HandleYearSelection(year);
+            }
+            else if (Years_cb.SelectedItem.ToString() == "Alltime")
+            {
+                HandleAllTimeSelection();
+            }
+        }
+        private void HandleYearSelection(int year)
+        {
+            List<Tour> toursByYear = _tourService.GetToursByYear(year);
+            if (toursByYear.Count == 0)
+            {
+                MostVisited = new GuideTourDTO { Name = "No information", Location = "", NumberOfGuestsMessage = "" };
+            }
+            else
+            {
+                MostVisited = ConvertToDTO(_tourService.GetMostVisitedTour(toursByYear));
+            }
+        }
+        private void HandleAllTimeSelection()
+        {
+            MostVisited = ConvertToDTO(_tourService.GetMostVisitedTour(_tourService.GetFinishedTours()));
         }
 
 
@@ -300,27 +312,36 @@ namespace InitialProject.View.Guide
             List<int> vouchersAdded = new List<int>();
             Tour tour = ConvertToTour(SelectedUpcomingTourDTO);
 
-            if (!_tourService.CheckIfTourCanBeAborted(tour)) 
+            if (!_tourService.CheckIfTourCanBeAborted(tour))
             {
                 ShowAbortTourWarning();
                 return;
             }
 
-            if (ConfirmAbortTour(ConvertToTour(SelectedUpcomingTourDTO)))
+            if (ConfirmAbortTour(tour))
             {
-                foreach (int userId in _tourReservationService.GetUserIdsByTour(ConvertToTour(SelectedUpcomingTourDTO)))
-                {
-                    if (!vouchersAdded.Contains(userId))
-                    {
-                        vouchersAdded.Add(userId);
-                        Voucher voucher = new Voucher(SelectedUpcomingTourDTO.Name, DateTime.Now, DateTime.Now.AddYears(1), userId);
-                        _voucherRepository.Save(voucher);
-                    }
-                }
-                tour.IsAborted = true;
-                _tourService.Update(tour);
+                AddVouchersToUsers(tour, vouchersAdded);
+                AbortTour(tour);
             }
         }
+        private void AddVouchersToUsers(Tour tour, List<int> vouchersAdded)
+        {
+            foreach (int userId in _tourReservationService.GetUserIdsByTour(tour))
+            {
+                if (!vouchersAdded.Contains(userId))
+                {
+                    vouchersAdded.Add(userId);
+                    Voucher voucher = new Voucher(tour.Name, DateTime.Now, DateTime.Now.AddYears(1), userId);
+                    _voucherRepository.Save(voucher);
+                }
+            }
+        }
+        private void AbortTour(Tour tour)
+        {
+            tour.IsAborted = true;
+            _tourService.Update(tour);
+        }
+
         private void RatedToursDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             RatingsViewModel ratingsViewModel = new RatingsViewModel(_userRepository, _tourRatingService, _tourReservationService, _checkpointService, ConvertToTour(SelectedRatedTourDTO));
