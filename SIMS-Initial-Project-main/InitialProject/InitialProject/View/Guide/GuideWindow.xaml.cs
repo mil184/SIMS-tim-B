@@ -315,11 +315,10 @@ namespace InitialProject.View.Guide
                         vouchersAdded.Add(userId);
                         Voucher voucher = new Voucher(SelectedUpcomingTourDTO.Name, DateTime.Now, DateTime.Now.AddYears(1), userId);
                         _voucherRepository.Save(voucher);
-                       
-                        tour.IsAborted = true;
-                        _tourService.Update(tour);
                     }
                 }
+                tour.IsAborted = true;
+                _tourService.Update(tour);
             }
         }
         private void RatedToursDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)

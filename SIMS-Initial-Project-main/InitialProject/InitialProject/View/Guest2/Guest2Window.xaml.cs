@@ -27,7 +27,6 @@ namespace InitialProject.View.Guest2
         public List<Tour> CheckedTours { get; set; }
         public Tour CurrentlyActiveTour { get; set; }
         public Checkpoint CurrentlyActiveCheckpoint { get; set; }
-
         public ObservableCollection<Voucher> Vouchers { get; set; }
 
         public ObservableCollection<Location> Locations;
@@ -35,7 +34,7 @@ namespace InitialProject.View.Guest2
         public ObservableCollection<Guest2TourDTO> NonReservedTours { get; set; }
 
         private readonly TourService _tourService;
-        private readonly LocationRepository _locationRepository;
+        private readonly LocationService _locationService;
         private readonly ImageRepository _imageRepository;
         private readonly CheckpointRepository _checkpointRepository;
         private readonly UserRepository _userRepository;
@@ -112,8 +111,8 @@ namespace InitialProject.View.Guest2
             _imageRepository = new ImageRepository();
             _imageRepository.Subscribe(this);
 
-            _locationRepository = new LocationRepository();
-            _locationRepository.Subscribe(this);
+            _locationService = new LocationService();
+            _locationService.Subscribe(this);
 
             _checkpointRepository = new CheckpointRepository();
             _checkpointRepository.Subscribe(this);
@@ -167,6 +166,9 @@ namespace InitialProject.View.Guest2
 
             FinishedTourDTOs.Clear();
             FormFinishedTours();
+
+            Vouchers.Clear();
+            FormVouchers();
         }
 
         public void ConfirmArrival()
@@ -210,6 +212,15 @@ namespace InitialProject.View.Guest2
                 }
             }
         }
+        public void FormVouchers()
+        {
+            List<Voucher> UserVouchers = _voucherService.GetUserVouchers(LoggedInUser);
+
+            foreach (Voucher voucher in _voucherService.GetActiveVouchers(UserVouchers))
+            {
+                Vouchers.Add(voucher);
+            }
+        }
 
         public ObservableCollection<Guest2TourDTO> ConvertToDTO(List<Tour> tours)
         {
@@ -220,8 +231,8 @@ namespace InitialProject.View.Guest2
                 dto.Add(new Guest2TourDTO(
                     tour.Id,
                     tour.Name,
-                    _locationRepository.GetById(tour.LocationId).Country,
-                    _locationRepository.GetById(tour.LocationId).City,
+                    _locationService.GetById(tour.LocationId).Country,
+                    _locationService.GetById(tour.LocationId).City,
                     tour.Description,
                     tour.Language,
                     tour.MaxGuests,
@@ -238,8 +249,8 @@ namespace InitialProject.View.Guest2
             return new Guest2TourDTO(
                 tour.Id,
                 tour.Name,
-                _locationRepository.GetById(tour.LocationId).Country,
-                _locationRepository.GetById(tour.LocationId).City,
+                _locationService.GetById(tour.LocationId).Country,
+                _locationService.GetById(tour.LocationId).City,
                 tour.Description,
                 tour.Language,
                 tour.MaxGuests,
@@ -253,7 +264,7 @@ namespace InitialProject.View.Guest2
         {
             if (SelectedGuest2TourDTO != null)
             {
-                ReserveTour reserveTourForm = new ReserveTour(SelectedGuest2TourDTO, LoggedInUser, _tourService, _tourReservationService);
+                ReserveTour reserveTourForm = new ReserveTour(SelectedGuest2TourDTO, LoggedInUser, _tourService, _tourReservationService, _voucherService, _locationService, _userRepository);
                 reserveTourForm.ShowDialog();
             }
         }
