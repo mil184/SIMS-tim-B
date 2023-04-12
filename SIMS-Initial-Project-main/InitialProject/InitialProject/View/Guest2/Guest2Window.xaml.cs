@@ -27,7 +27,6 @@ namespace InitialProject.View.Guest2
         public List<Tour> CheckedTours { get; set; }
         public Tour CurrentlyActiveTour { get; set; }
         public Checkpoint CurrentlyActiveCheckpoint { get; set; }
-
         public ObservableCollection<Voucher> Vouchers { get; set; }
 
         public ObservableCollection<Location> Locations;
@@ -167,6 +166,9 @@ namespace InitialProject.View.Guest2
 
             FinishedTourDTOs.Clear();
             FormFinishedTours();
+
+            Vouchers.Clear();
+            FormVouchers();
         }
 
         public void ConfirmArrival()
@@ -208,6 +210,15 @@ namespace InitialProject.View.Guest2
                 {
                     FinishedTourDTOs.Add(ConvertToDTO(userTour));
                 }
+            }
+        }
+        public void FormVouchers()
+        {
+            List<Voucher> UserVouchers = _voucherService.GetUserVouchers(LoggedInUser);
+
+            foreach (Voucher voucher in _voucherService.GetActiveVouchers(UserVouchers))
+            {
+                Vouchers.Add(voucher);
             }
         }
 
@@ -253,7 +264,7 @@ namespace InitialProject.View.Guest2
         {
             if (SelectedGuest2TourDTO != null)
             {
-                ReserveTour reserveTourForm = new ReserveTour(SelectedGuest2TourDTO, LoggedInUser, _tourService, _tourReservationService);
+                ReserveTour reserveTourForm = new ReserveTour(SelectedGuest2TourDTO, LoggedInUser, _tourService, _tourReservationService, _voucherService, _locationService, _userRepository);
                 reserveTourForm.ShowDialog();
             }
         }

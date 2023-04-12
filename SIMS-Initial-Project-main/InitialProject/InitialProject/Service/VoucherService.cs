@@ -42,5 +42,17 @@ namespace InitialProject.Service
         {
             _voucherRepository.NotifyObservers();
         }
+        public Voucher GetById(int id)
+        {
+           return _voucherRepository.GetById(id);
+        }
+        public Voucher Save(Voucher voucher) 
+        {
+            return _voucherRepository.Save(voucher);
+        }
+        public Voucher Update(Voucher voucher)
+        {
+            return _voucherRepository.Update(voucher);
+        }
     }
 }

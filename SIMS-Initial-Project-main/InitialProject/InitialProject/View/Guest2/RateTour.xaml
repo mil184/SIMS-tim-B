@@ -41,11 +41,11 @@
             <RadioButton Name="language5" Content="5" Checked="SetRatingForGuideLanguage" Margin="10,0,0,0"/>
         </StackPanel>
 
-        <Label Margin="0,210,0,0" Content="4. Write a comment (optional):" />
+        <Label Margin="0,210,0,0" Content="4. Write a comment:" />
         <TextBox x:Name="commentTextBox" Width="350" Height="100" Margin="10,235,440,27"  Text="{Binding Path=Comment, UpdateSourceTrigger=PropertyChanged}"/>
 
         <StackPanel Orientation="Horizontal" Margin="0,10" Grid.Row="3">
-            <Label Content="5. Add one or more images (optional):" Margin="0,5,0,0"/>
+            <Label Content="5. Add one or more images:" Margin="0,5,0,0"/>
             <TextBox x:Name="UrlTextBox" Width="150" Height="20" Margin="0,0,0,110" />
             <Button Click="AddImage_Click" Width="30" Height="20" Margin="5,0,0,110">
                 <Image Source="/Resources/Images/upload.png" Height="15" Width="30" />

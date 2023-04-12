@@ -24,12 +24,11 @@ namespace InitialProject.View.Guest2
 
         private readonly TourService _tourService;
         private readonly LocationService _locationService;
-        private readonly ImageRepository _imageRepository;
-        private readonly CheckpointService _checkpointService;
-        private readonly UserRepository _userRepository; 
-        private readonly TourReservationService _tourRatingService; 
+        private readonly UserRepository _userRepository;
+        private readonly VoucherService _voucherService;
+        private readonly TourReservationService _tourReservationService;
 
-        public ZeroSpacesForReservation(Guest2TourDTO selectedTour, User user, TourService tourService)
+        public ZeroSpacesForReservation(Guest2TourDTO selectedTour, User user, TourService tourService, LocationService locationService, UserRepository userRepository, VoucherService voucherService)
         {
             InitializeComponent();
             DataContext = this;
@@ -38,21 +37,9 @@ namespace InitialProject.View.Guest2
             LoggedInUser = user;
 
             _tourService = tourService;
-
-            _tourRatingService = new TourReservationService();
-            _tourRatingService.Subscribe(this);
-
-            _imageRepository = new ImageRepository();
-            _imageRepository.Subscribe(this);
-
-            _locationService = new LocationService();
-            _locationService.Subscribe(this);
-
-            _checkpointService = new CheckpointService();
-            _checkpointService.Subscribe(this);
-
-            _userRepository = new UserRepository();
-            _userRepository.Subscribe(this);
+            _locationService = locationService;
+            _userRepository = userRepository;
+            _voucherService = voucherService;
 
             ToursByCity = _tourService.GetByCityName(selectedTour.City);
             ToursByCityWithoutSelected = _tourService.RemoveFromListById(ToursByCity, selectedTour.TourId);
@@ -79,7 +66,7 @@ namespace InitialProject.View.Guest2
         {
             if (NewSelectedTour != null)
             {
-                ReserveTour reserveTourForm = new ReserveTour(NewSelectedTour, LoggedInUser, _tourService, _tourRatingService);
+                ReserveTour reserveTourForm = new ReserveTour(NewSelectedTour, LoggedInUser, _tourService, _tourReservationService, _voucherService, _locationService, _userRepository);
                 reserveTourForm.ShowDialog();
             }
             Close();
@@ -94,15 +81,15 @@ namespace InitialProject.View.Guest2
                 dtoList.Add(new Guest2TourDTO(
                     tour.Id,
                     tour.Name,
-                _locationService.GetById(tour.LocationId).Country,
-                _locationService.GetById(tour.LocationId).City,
-                tour.Description,
-                tour.Language,
-                tour.MaxGuests,
-                tour.CurrentGuestCount,
-                tour.StartTime,
-                tour.Duration,
-                _userRepository.GetById(tour.GuideId).Username));
+                    _locationService.GetById(tour.LocationId).Country,
+                    _locationService.GetById(tour.LocationId).City,
+                    tour.Description,
+                    tour.Language,
+                    tour.MaxGuests,
+                    tour.CurrentGuestCount,
+                    tour.StartTime,
+                    tour.Duration,
+                    _userRepository.GetById(tour.GuideId).Username));
             }
 
             return dtoList;
