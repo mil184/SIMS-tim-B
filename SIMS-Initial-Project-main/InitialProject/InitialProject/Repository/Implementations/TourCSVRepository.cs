@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace InitialProject.Repository.Implementations
 {
-    public class TourRepository
+    public class TourCSVRepository : ITourRepository
     {
         private const string _filePath = "../../../Resources/Data/tours.csv";
 
