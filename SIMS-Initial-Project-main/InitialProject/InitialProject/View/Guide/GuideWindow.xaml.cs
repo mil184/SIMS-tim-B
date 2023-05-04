@@ -2,6 +2,7 @@ using InitialProject.Model;
 using InitialProject.Model.DTO;
 using InitialProject.Repository;
 using InitialProject.Resources.Observer;
+using InitialProject.Resources.UIHelper;
 using InitialProject.Service;
 using InitialProject.ViewModel.Guide;
 using System;
@@ -12,6 +13,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 
@@ -113,6 +115,7 @@ namespace InitialProject.View.Guide
             InitializeCollections();
             InitializeStartingSearchValues();
             InitializeComboBoxes();
+            InitializeShortcuts();
             FindActiveTour();
             SortTours();
 
@@ -138,6 +141,11 @@ namespace InitialProject.View.Guide
         private void InitializeStartingSearchValues()
         {
             MostVisited = ConvertToDTO(_tourService.GetMostVisitedTour(_tourService.GetFinishedTours()));
+        }
+        private void InitializeShortcuts() 
+        {
+            PreviewKeyDown += CreateTour_PreviewKeyDown;
+            PreviewKeyDown += LogOut_PreviewKeyDown;
         }
         private void Years_cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -199,7 +207,7 @@ namespace InitialProject.View.Guide
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
             CreateTour createTour = new CreateTour(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService);
-            createTour.Show();
+            createTour.ShowDialog();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -418,6 +426,25 @@ namespace InitialProject.View.Guide
             SignInForm signInForm = new SignInForm();
             signInForm.Show();
             Close();
+
+        }
+        private void LogOut_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.SystemKey == Key.F4 && e.KeyboardDevice.Modifiers == ModifierKeys.Alt)
+            {
+                SignInForm signInForm = new SignInForm();
+                signInForm.Show();
+                Close();
+            }
+        }
+        private void CreateTour_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.A)
+            {
+                e.Handled = true;
+                Window createTour = new CreateTour(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService);
+                createTour.ShowDialog();
+            }
         }
         private void ShowActiveTourWarning()
         {

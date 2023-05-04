@@ -141,10 +141,8 @@
 
         </Grid>
 
-
-
         <!-- Tabs section -->
-        <TabControl Grid.Row="1">
+        <TabControl Grid.Row="1" Name="tabControl">
             <TabControl.Template>
                 <ControlTemplate TargetType="{x:Type TabControl}">
                     <Grid>

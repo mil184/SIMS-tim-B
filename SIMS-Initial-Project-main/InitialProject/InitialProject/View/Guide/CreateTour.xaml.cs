@@ -9,6 +9,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using Image = InitialProject.Model.Image;
 
 namespace InitialProject.View.Guide
@@ -208,6 +209,7 @@ namespace InitialProject.View.Guide
             InitializeCollections();
             InitializeComboBoxes();
             InitializeCountryDropdown();
+            InitializeShortcuts();
             DisableCheckpointButtons();
         }
         private void InitializeCollections()
@@ -241,12 +243,18 @@ namespace InitialProject.View.Guide
                 cbCountry.Items.Add(country);
             }
         }
+        private void InitializeShortcuts()
+        {
+            PreviewKeyDown += Escape_PreviewKeyDown;
+            PreviewKeyDown += Enter_PreviewKeyDown;
+        }
         private void DisableCheckpointButtons()
         {
             AddFinalCheckpointButton.IsEnabled = false;
             AddMiddleCheckpointButton.IsEnabled = false;
         }
-        private void btnCreateTour_Click(object sender, RoutedEventArgs e)
+
+        private void TourCreation() 
         {
             if (!IsValid)
             {
@@ -289,6 +297,10 @@ namespace InitialProject.View.Guide
             SaveTour();
 
             Close();
+        }
+        private void btnCreateTour_Click(object sender, RoutedEventArgs e)
+        {
+            TourCreation();
         }
         private void SaveTour()
         {
@@ -562,6 +574,20 @@ namespace InitialProject.View.Guide
                 }
 
                 return true;
+            }
+        }
+        private void Escape_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                this.Close();
+            }
+        }
+        private void Enter_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                TourCreation();
             }
         }
         private void ShowInvalidInfoWarning()
