@@ -146,7 +146,7 @@ namespace InitialProject.View.Guest2
                 SelectedTour.TourId,
                 personCount,
                 double.Parse(AverageAge),
-                voucherId );
+                voucherId);
 
             if (CheckIfReservationAlreadyExists(tourReservation))
             {
