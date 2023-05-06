@@ -12,12 +12,56 @@
 
 
         <Grid.RowDefinitions>
+            <RowDefinition Height="120"/>
             <RowDefinition Height="85*"/>
             <RowDefinition Height="15*"/>
         </Grid.RowDefinitions>
 
+        <!-- User information section -->
+        <Grid Grid.Row="0" Background="White">
+
+
+            <Border BorderBrush="#DDDDDD" BorderThickness="2" Margin="3">
+                <Grid Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="7*"/>
+                        <ColumnDefinition Width="3*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Resources/Images/favicon.ico" Margin="10" HorizontalAlignment="Left"/>
+                        <TextBlock FontSize="78" FontFamily="Bernard MT" FontWeight="Bold" VerticalAlignment="Center">
+                            DMJM Tours
+                        </TextBlock>
+                    </StackPanel>
+
+
+
+                    <StackPanel Grid.Column="1" Margin="10">
+                        <Button FontSize="20" Margin="0,0,0,20" Height="35" HorizontalAlignment="Stretch">
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/Resources/Images/theme.png" Margin="0"/>
+                                    <TextBlock Text="Dark Theme"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+
+                        <Button FontSize="20" Height="35" HorizontalAlignment="Stretch">
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/Resources/Images/language.png" Width="Auto" Margin="5"/>
+                                    <TextBlock Text="Show in Serbian"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+
         <!-- Tour Details Section -->
-        <GroupBox FontSize="20" Margin="10" Grid.Row="0">
+        <GroupBox FontSize="20" Margin="10" Grid.Row="1">
             <GroupBox.Header>
                 <Label FontSize="25" FontWeight="Bold">Tour Details</Label>
             </GroupBox.Header>

@@ -8,54 +8,108 @@
         Title="RateTour" Height="768" Width="600">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="90" />
+            <RowDefinition Height="90" />
+            <RowDefinition Height="90" />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition Height="70"/>
         </Grid.RowDefinitions>
 
-        <Label Margin="0,10,0,0" Content ="1. How would you rate your tour guide's knowledge?*" />
-        <StackPanel Orientation="Horizontal" Margin="10,40,0,0">
-            <RadioButton Name="knowledge1" Content="1" Checked="SetRatingForGuideKnowledge"/>
-            <RadioButton Name="knowledge2" Content="2" Checked="SetRatingForGuideKnowledge" Margin="10,0,0,0"/>
-            <RadioButton Name="knowledge3" Content="3" Checked="SetRatingForGuideKnowledge" Margin="10,0,0,0"/>
-            <RadioButton Name="knowledge4" Content="4" Checked="SetRatingForGuideKnowledge" Margin="10,0,0,0"/>
-            <RadioButton Name="knowledge5" Content="5" Checked="SetRatingForGuideKnowledge" Margin="10,0,0,0"/>
+        <!-- User information section -->
+        <Grid Background="White">
+
+            
+
+            <Border BorderBrush="#DDDDDD" BorderThickness="2" Margin="3">
+                <Grid Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="7*"/>
+                        <ColumnDefinition Width="3*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Resources/Images/favicon.ico" Margin="10" HorizontalAlignment="Left"/>
+                        <TextBlock FontSize="60" FontFamily="Bernard MT" FontWeight="Bold" VerticalAlignment="Center">
+                            DMJM Tours
+                        </TextBlock>
+                    </StackPanel>
+
+
+
+                    <StackPanel Grid.Column="1" Margin="10">
+                        <Button FontSize="18" Margin="0,0,0,5" Height="35" HorizontalAlignment="Stretch">
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/Resources/Images/theme.png" Margin="0"/>
+                                    <TextBlock Text="Dark Theme"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+
+                        <Button FontSize="18" Height="35" HorizontalAlignment="Stretch">
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/Resources/Images/language.png" Width="Auto" Margin="5"/>
+                                    <TextBlock Text="Show in Serbian"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            
+        </Grid>
+
+
+        <Label Grid.Row="1" FontSize="20" Margin="10" Content ="1. How would you rate your tour guide's knowledge?" />
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10,40,0,0">
+            <RadioButton Name="knowledge1" Content="1" Checked="SetRatingForGuideKnowledge" FontSize="20" Margin="10"/>
+            <RadioButton Name="knowledge2" Content="2" Checked="SetRatingForGuideKnowledge" FontSize="20" Margin="10"/>
+            <RadioButton Name="knowledge3" Content="3" Checked="SetRatingForGuideKnowledge" FontSize="20" Margin="10"/>
+            <RadioButton Name="knowledge4" Content="4" Checked="SetRatingForGuideKnowledge" FontSize="20" Margin="10"/>
+            <RadioButton Name="knowledge5" Content="5" Checked="SetRatingForGuideKnowledge" FontSize="20" Margin="10"/>
         </StackPanel>
 
-        <Label Margin="0,70,0,0" Content="2. How interesting was this tour?*" />
-        <StackPanel Orientation="Horizontal" Margin="10,100,0,0">
-            <RadioButton Name="interestingness1" Content="1" Checked="SetRatingForInterestingness"/>
-            <RadioButton Name="interestingness2" Content="2" Checked="SetRatingForInterestingness" Margin="10,0,0,0"/>
-            <RadioButton Name="interestingness3" Content="3" Checked="SetRatingForInterestingness" Margin="10,0,0,0"/>
-            <RadioButton Name="interestingness4" Content="4" Checked="SetRatingForInterestingness" Margin="10,0,0,0"/>
-            <RadioButton Name="interestingness5" Content="5" Checked="SetRatingForInterestingness" Margin="10,0,0,0"/>
+        <Label Grid.Row="2" FontSize="20" Margin="10" Content="2. How interesting was this tour?" />
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="10,40,0,0">
+            <RadioButton Name="interestingness1" Content="1" Checked="SetRatingForInterestingness" FontSize="20" Margin="10"/>
+            <RadioButton Name="interestingness2" Content="2" Checked="SetRatingForInterestingness" FontSize="20" Margin="10"/>
+            <RadioButton Name="interestingness3" Content="3" Checked="SetRatingForInterestingness" FontSize="20" Margin="10"/>
+            <RadioButton Name="interestingness4" Content="4" Checked="SetRatingForInterestingness" FontSize="20" Margin="10"/>
+            <RadioButton Name="interestingness5" Content="5" Checked="SetRatingForInterestingness" FontSize="20" Margin="10"/>
         </StackPanel>
 
-        <Label Margin="0,150,0,0" Content="3. How would you rate your tour guide's language?*" />
-        <StackPanel Orientation="Horizontal" Margin="10,180,0,0">
-            <RadioButton Name="language1" Content="1" Checked="SetRatingForGuideLanguage"/>
-            <RadioButton Name="language2" Content="2" Checked="SetRatingForGuideLanguage" Margin="10,0,0,0"/>
-            <RadioButton Name="language3" Content="3" Checked="SetRatingForGuideLanguage" Margin="10,0,0,0"/>
-            <RadioButton Name="language4" Content="4" Checked="SetRatingForGuideLanguage" Margin="10,0,0,0"/>
-            <RadioButton Name="language5" Content="5" Checked="SetRatingForGuideLanguage" Margin="10,0,0,0"/>
+        <Label Grid.Row="3" FontSize="20" Margin="10" Content="3. How would you rate your tour guide's language?" />
+        <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="10,40,0,0">
+            <RadioButton Name="language1" Content="1" Checked="SetRatingForGuideLanguage" FontSize="20" Margin="10"/>
+            <RadioButton Name="language2" Content="2" Checked="SetRatingForGuideLanguage" FontSize="20" Margin="10"/>
+            <RadioButton Name="language3" Content="3" Checked="SetRatingForGuideLanguage" FontSize="20" Margin="10"/>
+            <RadioButton Name="language4" Content="4" Checked="SetRatingForGuideLanguage" FontSize="20" Margin="10"/>
+            <RadioButton Name="language5" Content="5" Checked="SetRatingForGuideLanguage" FontSize="20" Margin="10"/>
         </StackPanel>
 
-        <Label Margin="0,210,0,0" Content="4. Write a comment:" />
-        <TextBox x:Name="commentTextBox" Width="350" Height="100" Margin="10,235,440,27"  Text="{Binding Path=Comment, UpdateSourceTrigger=PropertyChanged}"/>
-
-        <StackPanel Orientation="Horizontal" Margin="0,10" Grid.Row="3">
-            <Label Content="5. Add one or more images:" Margin="0,5,0,0"/>
-            <TextBox x:Name="UrlTextBox" Width="150" Height="20" Margin="0,0,0,110" />
-            <Button Click="AddImage_Click" Width="30" Height="20" Margin="5,0,0,110">
-                <Image Source="/Resources/Images/upload.png" Height="15" Width="30" />
-            </Button>
-            <ListBox x:Name="UrlListBox" Width="220" Height="40" Margin="10,5,0,110" ItemsSource="{Binding ImageUrls}" />
+        <StackPanel Grid.Row="4">
+            <Label  FontSize="20" Margin="10" Content="4. Write a comment:" />
+            <TextBox  x:Name="commentTextBox" Width="350" Height="90" Margin="10, 5, 5, 5" HorizontalAlignment="Left" Text="{Binding Path=Comment, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+        
+        <StackPanel Grid.Row="5"  Margin="10" Orientation="Vertical" >
+            <StackPanel Orientation="Horizontal" Height="40" VerticalAlignment="Top">
+                <Label FontSize="20" Content="5. Add one or more images:" />
+                <TextBox x:Name="UrlTextBox" Width="160" Height="30" Margin="10, 0, 0, 0" />
+                <Button Click="AddImage_Click" Width="30" Height="30" Margin="5,5,0,5">
+                    <Image Source="/Resources/Images/upload.png" Height="15" Width="30" />
+                </Button>
+            </StackPanel>
+            <ListBox x:Name="UrlListBox" Width="350" Height="60" Margin="10, 5, 5, 5" HorizontalAlignment="Left" ItemsSource="{Binding ImageUrls}" />
         </StackPanel>
 
-        <StackPanel Orientation="Horizontal" Margin="0,10,0,0" Grid.Row="4">
-            <Button Content="Submit Review" Click="Submit_Click" Height="30" Width="110" Margin="60,0,40,0"/>
-            <Button Content="Cancel" Click="Cancel_Click" Height="30" Width="110" Margin="60,0,40,0" />
+        <StackPanel Grid.Row="6" Margin="10" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="Submit Review" Click="Submit_Click" FontSize="20" Height="40" Width="150" Margin="5, 5, 10, 5"/>
+            <Button Content="Cancel" Click="Cancel_Click" FontSize="20" Height="40" Width="150" Margin="5, 5, 10, 5"/>
         </StackPanel>
 
     </Grid>
