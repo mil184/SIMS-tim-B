@@ -227,8 +227,8 @@
                         <GroupBox Grid.Row="3" Header="Your Vouchers" Margin="10 20 10 10">
                             <ScrollViewer VerticalScrollBarVisibility="Auto">
                                 <DataGrid ItemsSource="{Binding Vouchers}" 
-                      SelectedItem="{Binding Path=SelectedVoucher}"
-                      AutoGenerateColumns="False" IsReadOnly="True">
+                                        SelectedItem="{Binding Path=SelectedVoucher}"
+                                        AutoGenerateColumns="False" IsReadOnly="True">
                                     <DataGrid.Columns>
                                         <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" />
                                         <DataGridTextColumn Header="Start Date" Binding="{Binding StartDateTime}" Width="*" />
@@ -278,11 +278,15 @@
                 <StackPanel Margin="10">
 
                     <!-- Tour overview section -->
-                    <GroupBox Grid.Row="1" Header="Finished Tours" Margin="0 0 0 10" Height="221" Width="532">
+                    <GroupBox Margin="20" FontSize="20">
+                        <GroupBox.Header>
+                            <Label FontSize="25" FontWeight="Bold">Finished tours</Label>
+                        </GroupBox.Header>
+
                         <ScrollViewer VerticalScrollBarVisibility="Auto">
                             <DataGrid ItemsSource="{Binding FinishedTourDTOs}" 
                                       SelectedItem="{Binding Path=SelectedGuest2TourDTO}"
-                                      AutoGenerateColumns="False" IsReadOnly="True" Height="200" Width="500">
+                                      AutoGenerateColumns="False" IsReadOnly="True" Height="300" Margin="5">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
                                     <DataGridTextColumn Header="Country" Binding="{Binding Country}" Width="*"/>
@@ -298,14 +302,19 @@
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
                                 </DataGrid.Columns>
+                                <DataGrid.ColumnHeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                    </Style>
+                                </DataGrid.ColumnHeaderStyle>
                             </DataGrid>
                         </ScrollViewer>
                     </GroupBox>
 
                     <!-- Rate Tour -->
-                    <StackPanel Orientation="Horizontal" Margin="0, 10,0,0">
-                        <Button Content="Rate This Tour" Width="100" Height="40" HorizontalAlignment="Center" Margin="300,0,40,0" Click="RateButton_Click"/>
-                    </StackPanel>
+                    
+                        <Button Margin="20" Content="Rate This Tour" Width="200" Height="40" HorizontalAlignment="Center" Click="RateButton_Click"/>
+                    
                 </StackPanel>
             </TabItem>
 
@@ -319,18 +328,61 @@
 
             <!-- Vouchers tab -->
             <TabItem Header="Vouchers" FontSize="20">
-                <GroupBox Grid.Row="3" Header="Your Vouchers" Margin="50 20 50 10">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <DataGrid ItemsSource="{Binding Vouchers}" 
-                                  AutoGenerateColumns="False" IsReadOnly="True">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" />
-                                <DataGridTextColumn Header="Start Date" Binding="{Binding StartDateTime}" Width="*" />
-                                <DataGridTextColumn Header="Expiration Date" Binding="{Binding ExpirationDateTime}" Width="*" />
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </ScrollViewer>
-                </GroupBox>
+                <StackPanel Margin="20">
+                    <GroupBox FontSize="20">
+                        <GroupBox.Header>
+                            <Label FontSize="25" FontWeight="Bold">Your Vouchers</Label>
+                        </GroupBox.Header>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <DataGrid ItemsSource="{Binding Vouchers}" 
+                                  AutoGenerateColumns="False" IsReadOnly="True" Margin="5" Height="200">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" />
+                                    <DataGridTextColumn Header="Start Date" Binding="{Binding StartDateTime}" Width="*" />
+                                    <DataGridTextColumn Header="Expiration Date" Binding="{Binding ExpirationDateTime}" Width="*" />
+                                </DataGrid.Columns>
+                                <DataGrid.ColumnHeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                    </Style>
+                                </DataGrid.ColumnHeaderStyle>
+                            </DataGrid>
+                        </ScrollViewer>
+                    </GroupBox>
+                    <GroupBox FontSize="20">
+                        <GroupBox.Header>
+                            <Label FontSize="25" FontWeight="Bold">What are vouchers?</Label>
+                        </GroupBox.Header>
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="5, 0, 0, 0">
+                                <Image Source="/Resources/Images/gift.png" Height="20"/>
+                                <Label>Vouchers can be used to reserve a tour.</Label>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="5, 0, 0, 0">
+                                <Image Source="/Resources/Images/gift.png" Height="20"/>
+                                <Label>Vouchers can be obtained in several ways:</Label>
+                            </StackPanel>
+                            <StackPanel Margin="15, 0, 0, 0">
+                                <StackPanel Orientation="Horizontal" Margin="5, 0, 5, 0" Height="50" HorizontalAlignment="Left">
+                                    <Image Source="/Resources/Images/gift.png" Height="20"/>
+                                    <TextBlock TextWrapping="Wrap" Width="800" Margin="5, 0, 0, 0">By attending any 5 tours in one year. These vouchers expire in 6 months and can be used for any tour. </TextBlock>
+                                
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="5, 0, 0, 0">
+                                    <Image Source="/Resources/Images/gift.png" Height="20"/>
+                                    <Label>When a tour guide quits or cancels a tour you reserved.</Label>
+
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="5, 0, 0, 0">
+                                <Image Source="/Resources/Images/gift.png" Height="20"/>
+                                <Label>Used or expired vouchers will no longer be visible.</Label>
+                            </StackPanel>
+                        </StackPanel>
+                        
+                    </GroupBox>
+                </StackPanel>
+                
             </TabItem>
         </TabControl>
     </Grid>
