@@ -16,51 +16,19 @@ namespace InitialProject.View.Guide
 {
     public partial class CreateTour : Window,INotifyPropertyChanged,IDataErrorInfo
     {
-        const int NO_TOUR_ASSIGNED = -1;
 
         private readonly TourService _tourService;
         private readonly LocationService _locationService;
         private readonly ImageRepository _imageRepository;
         private readonly CheckpointService _checkpointService;
 
-        private ObservableCollection<int> ImageIds;
-        private ObservableCollection<int> CheckpointIds;
         private User LoggedInUser;
-        public ObservableCollection<Checkpoint> MiddleCheckpoints { get; set; }
+        public ObservableCollection<Checkpoint> Checkpoints { get; set; }
         public ObservableCollection<string> ImageUrls { get; set; }
         public ObservableCollection<DateTime> DateTimes { get; set; }
         public Location TourLocation { get; set; }
 
         public int OrderCounter { get; set; }
-
-        private Checkpoint _startCheckpoint;
-        public Checkpoint StartCheckpoint
-
-        {
-            get { return _startCheckpoint; }
-            set
-            {
-                if (_startCheckpoint != value)
-                {
-                    _startCheckpoint = value;
-                    OnPropertyChanged(nameof(StartCheckpoint));
-                }
-            }
-        }
-
-        private Checkpoint _endCheckpoint;
-        public Checkpoint EndCheckpoint
-        {
-            get { return _endCheckpoint; }
-            set
-            {
-                if (_endCheckpoint != value)
-                {
-                    _endCheckpoint = value;
-                    OnPropertyChanged(nameof(EndCheckpoint));
-                }
-            }
-        }
 
         private string _name;
         public string TourName
@@ -210,17 +178,12 @@ namespace InitialProject.View.Guide
             InitializeComboBoxes();
             InitializeCountryDropdown();
             InitializeShortcuts();
-            DisableCheckpointButtons();
         }
         private void InitializeCollections()
         {
-            ImageIds = new ObservableCollection<int>();
-            CheckpointIds = new ObservableCollection<int>();
-            MiddleCheckpoints = new ObservableCollection<Checkpoint>();
+            Checkpoints = new ObservableCollection<Checkpoint>();
             ImageUrls = new ObservableCollection<string>();
             DateTimes = new ObservableCollection<DateTime>();
-            StartCheckpoint = null;
-            EndCheckpoint = null;
         }
         private void InitializeComboBoxes()
         {
@@ -248,11 +211,6 @@ namespace InitialProject.View.Guide
             PreviewKeyDown += Escape_PreviewKeyDown;
             PreviewKeyDown += Enter_PreviewKeyDown;
         }
-        private void DisableCheckpointButtons()
-        {
-            AddFinalCheckpointButton.IsEnabled = false;
-            AddMiddleCheckpointButton.IsEnabled = false;
-        }
 
         private void TourCreation() 
         {
@@ -268,21 +226,15 @@ namespace InitialProject.View.Guide
                 return;
             }
 
+            if (Checkpoints.Count() < 2)
+            {
+                ShowCheckpointWarning();
+                return;
+            }
+
             if (DateTimes.Count() < 1)
             {
                 ShowNoDateTimeWarning();
-                return;
-            }
-
-            if (StartCheckpoint == null)
-            {
-                ShowStartCheckpointWarning();
-                return;
-            }
-
-            if (EndCheckpoint == null)
-            {
-                ShowEndCheckpointWarning();
                 return;
             }
 
@@ -338,27 +290,19 @@ namespace InitialProject.View.Guide
         private List<int> SaveCheckpoints()
         {
             List<int> checkpointIds = new List<int>();
-            checkpointIds.Add(_checkpointService.Save(StartCheckpoint).Id);
-            foreach (Checkpoint checkpoint in MiddleCheckpoints)
+            foreach (Checkpoint checkpoint in Checkpoints)
             {
                 checkpointIds.Add(_checkpointService.Save(checkpoint).Id);
             }
-            checkpointIds.Add(_checkpointService.Save(EndCheckpoint).Id);
             return checkpointIds;
         }
         private void UpdateCheckpointsTourId(int tourId)
         {
-            StartCheckpoint.TourId = tourId;
-            _checkpointService.Update(StartCheckpoint);
-
-            foreach (Checkpoint checkpoint in MiddleCheckpoints)
+            foreach (Checkpoint checkpoint in Checkpoints)
             {
                 checkpoint.TourId = tourId;
                 _checkpointService.Update(checkpoint);
             }
-
-            EndCheckpoint.TourId = tourId;
-            _checkpointService.Update(EndCheckpoint);
         }
         private void Hours_cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -381,63 +325,20 @@ namespace InitialProject.View.Guide
         {
             Close();
         }
-        private void AddStartingCheckpoint_Click(object sender, RoutedEventArgs e)
+
+        private void AddCheckpoint_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(StartingCheckpointName.Text))
+            if (string.IsNullOrEmpty(CheckpointTextBox.Text))
                 return;
 
-            StartCheckpoint = CreateCheckpoint(StartingCheckpointName.Text, 1);
-
-            SetCheckpointButtonsState(false, true, false);
-            SetCheckpointInputsState(false, true);
-
-            StartingCheckpointName.Text = string.Empty;
-        }
-
-        private void AddFinalCheckpoint_Click(object sender, RoutedEventArgs e)
-        {
-            if (string.IsNullOrEmpty(FinalCheckpointName.Text))
-                return;
-
-            EndCheckpoint = CreateCheckpoint(FinalCheckpointName.Text, 2);
-
-            SetCheckpointButtonsState(false, false, true);
-            SetCheckpointInputsState(true, true);
-
-            FinalCheckpointName.Text = string.Empty;
-        }
-
-        private void AddMiddleCheckpoint_Click(object sender, RoutedEventArgs e)
-        {
-            if (string.IsNullOrEmpty(MiddleCheckpointName.Text))
-                return;
-
-            Checkpoint checkpoint = CreateCheckpoint(MiddleCheckpointName.Text, ++OrderCounter);
-            MiddleCheckpoints.Add(checkpoint);
-
-            EndCheckpoint.Order = MiddleCheckpoints.Count() + 2;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EndCheckpoint)));
-
-            MiddleCheckpointName.Text = string.Empty;
-
-            SetCheckpointButtonsState(false, false, true);
+            Checkpoint checkpoint = CreateCheckpoint(CheckpointTextBox.Text, ++OrderCounter);
+            Checkpoints.Add(checkpoint);
+ 
         }
 
         private Checkpoint CreateCheckpoint(string name, int order)
         {
-            return new Checkpoint(name, order, false, NO_TOUR_ASSIGNED);
-        }
-        private void SetCheckpointButtonsState(bool starting, bool final, bool middle)
-        {
-            AddStartingCheckpointButton.IsEnabled = starting;
-            AddFinalCheckpointButton.IsEnabled = final;
-            AddMiddleCheckpointButton.IsEnabled = middle;
-        }
-        private void SetCheckpointInputsState(bool starting, bool middle)
-        {
-            StartingCheckpointName.IsEnabled = starting;
-            FinalCheckpointName.IsEnabled = true;
-            MiddleCheckpointName.IsEnabled = middle;
+            return new Checkpoint(name, order);
         }
 
         private void CbCountry_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -606,13 +507,9 @@ namespace InitialProject.View.Guide
         {
             MessageBox.Show("Please choose a valid date and time.", "Date and time warning", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
-        private void ShowStartCheckpointWarning()
+        private void ShowCheckpointWarning()
         {
-            MessageBox.Show("Please enter the starting checkpoint.", "Start checkpoint warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-        }
-        private void ShowEndCheckpointWarning()
-        {
-            MessageBox.Show("Please enter the ending checkpoint.", "End checkpoint warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show("Please enter at least two checkpoints.", "Checkpoint warning", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
         private void ShowLocationWarning()
         {

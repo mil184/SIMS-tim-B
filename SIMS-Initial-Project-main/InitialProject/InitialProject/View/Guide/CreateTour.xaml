@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InitialProject.View.Guide"
         mc:Ignorable="d"
-        Title="DMJM-Tours" Height="850" Width="520"
+        Title="DMJM-Tours" Height="800" Width="530"
         Icon ="/Resources/Images/favicon.ico">
     <Window.Resources>
         <ControlTemplate x:Key="ValidationErrorTemplate">
@@ -13,7 +13,8 @@
                 <Border BorderBrush="Red" BorderThickness="1">
                     <AdornedElementPlaceholder />
                 </Border>
-                <TextBlock Foreground="Red" Text="{Binding [0].ErrorContent}" Margin="5,0,0,0" />
+                <!--<TextBlock Foreground="Red" Text="{Binding [0].ErrorContent}" Margin="5,0,0,0" />-->
+                <TextBlock Foreground="Red" Margin="5,0,0,0" />
             </DockPanel>
         </ControlTemplate>
         <Style TargetType="{x:Type TextBox}">
@@ -26,180 +27,191 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
         <!-- Tour Details Section -->
-        <GroupBox Header="Tour Details" Margin="10" Grid.Row="0">
+
+        <TextBlock Text="Tour Name:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" FontSize="16" Margin="10 10 10 10" />
+        <TextBox Name="txtTourName" Margin="10 10 10 10" 
+                         
+                 Text="{Binding Path=TourName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                 Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Width="300">
+        </TextBox>
+
+        <TextBlock Text="Tour Description:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" FontSize="16" Margin="10 10 10 10" />
+        <TextBox Name="txtTourDescription" Margin="10 10 10 10"  Height="100" Text="{Binding Path=Description, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Grid.Row="1" Grid.Column="1" 
+                         HorizontalAlignment="Left" Width="300" TextWrapping="Wrap" />
+
+        <TextBlock Text="Language:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" FontSize="16" Margin="10 10 10 10" />
+        <TextBox Name="txtLanguage" Margin="10 10 10 10"  Text="{Binding Path=TourLanguage, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Grid.Row="2" Grid.Column="1"
+                         HorizontalAlignment="Left" Width="300"/>
+        <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+            <TextBlock Text="Maximum Guests:" VerticalAlignment="Center" FontSize="16" Margin="10 10 10 10"/>
+            <TextBox Name="txtMaxGuests" Text="{Binding Path=MaxGuests, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+             Margin="10 10 10 10" Width="70"/>
+
+            <TextBlock Text="Duration (hours):" VerticalAlignment="Center" FontSize="16" Margin="10 10 10 10"/>
+            <TextBox Name="txtDuration" Text="{Binding Path=Duration, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+             Margin="10 10 10 10" Width="70"/>
+        </StackPanel>
+
+
+        <TextBlock Text="Country:" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" FontSize="16" Margin="10 10 10 10" />
+        <ComboBox Name="cbCountry" Margin="10 10 10 10"  SelectionChanged="CbCountry_SelectionChanged" Grid.Row="4" Grid.Column="1"
+                          HorizontalAlignment="Left" Width="330">
+            <ComboBoxItem IsSelected="True"/>
+        </ComboBox>
+
+        <TextBlock Text="City:" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" FontSize="16" Margin="10 10 10 10" />
+        <ComboBox Name="cbCity" Margin="10 10 10 10"  SelectionChanged="CbCity_SelectionChanged" IsEnabled="False" Grid.Row="5" Grid.Column="1"
+                          HorizontalAlignment="Left" Width="330">
+            <ComboBoxItem IsSelected="True"/>
+        </ComboBox>
+
+        <TextBlock Text="Date and Time:" Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" FontSize="16" Margin="10 10 10 10"/>
+        <StackPanel Orientation="Horizontal" Margin="10 10 10 10" Grid.Row="7" Grid.Column="1" Height="Auto">
+            <DatePicker Name="dpDate" Width="150" VerticalAlignment="Center" Height="25"/>
+            <ComboBox Name="Hours_cb" SelectionChanged="Hours_cb_SelectionChanged" Width="75" Margin="10 10 10 10"  VerticalAlignment="Center" Height="25">
+                <ComboBox.Effect>
+                    <DropShadowEffect />
+                </ComboBox.Effect>
+            </ComboBox>
+            <ComboBox Name="Minutes_cb" SelectionChanged="Minutes_cb_SelectionChanged" Width="75" Margin="10 10 10 10"  VerticalAlignment="Center" Height="25">
+                <ComboBox.Effect>
+                    <DropShadowEffect />
+                </ComboBox.Effect>
+            </ComboBox>
+            <Button Name="AddButton" Content="Add" Margin="5" VerticalAlignment="Center" Click="addDateButton_Click"/>
+        </StackPanel>
+        <StackPanel Orientation="Vertical" Grid.Row="8" Grid.Column="1">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ListBox Name="SelectedTimesListBox" Grid.Row="8" ItemsSource="{Binding DateTimes}" Height="80" Margin="10 0 10 0" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding StringFormat={}{0:dd.MM.yyyy. HH:mm}}" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </ScrollViewer>
+        </StackPanel>
+        <TextBlock Text="Images:" VerticalAlignment="Top" FontSize="20" Margin="10 10 10 10" Grid.Row="9" Grid.Column="0"/>
+        <StackPanel Grid.Row="9" Grid.Column="1">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-
-                <TextBlock Text="Tour Name:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" />
-                <TextBox Name="txtTourName" Margin="5" 
-                         
-                 Text="{Binding Path=TourName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                 Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Width="200">
-                </TextBox>
-
-                <TextBlock Text="Tour Description:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" />
-                <TextBox Name="txtTourDescription" Margin="5" Height="100" Text="{Binding Path=Description, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Grid.Row="1" Grid.Column="1" 
-                         HorizontalAlignment="Left" Width="200" TextWrapping="Wrap"/>
-
-                <TextBlock Text="Country:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" />
-                <ComboBox Name="cbCountry" Margin="5" SelectionChanged="CbCountry_SelectionChanged" Grid.Row="2" Grid.Column="1"
-                          HorizontalAlignment="Left" Width="200">
-                    <ComboBoxItem IsSelected="True"/>
-                </ComboBox>
-
-                <TextBlock Text="City:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" />
-                <ComboBox Name="cbCity" Margin="5" SelectionChanged="CbCity_SelectionChanged" IsEnabled="False" Grid.Row="3" Grid.Column="1"
-                          HorizontalAlignment="Left" Width="200">
-                    <ComboBoxItem IsSelected="True"/>
-                </ComboBox>
-
-
-                <TextBlock Text="Language:" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" />
-                <TextBox Name="txtLanguage" Margin="5" Text="{Binding Path=TourLanguage, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Grid.Row="4" Grid.Column="1"
-                         HorizontalAlignment="Left" Width="200"/>
-
-                <TextBlock Text="Maximum Guests:" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" />
-                <TextBox Name="txtMaxGuests" Margin="5" Text="{Binding Path=MaxGuests, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Grid.Row="5" Grid.Column="1"
-                         HorizontalAlignment="Left" Width="200"/>
-
-                <TextBlock Text="Duration (hours):" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" />
-                <TextBox Name="txtDuration" Margin="5" Text="{Binding Path=Duration, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Grid.Row="6" Grid.Column="1"
-                         HorizontalAlignment="Left" Width="200"/>
-                
-                <TextBlock Text="Date and Time:" Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" />
-                <StackPanel Orientation="Horizontal" Margin="5" Grid.Row="7" Grid.Column="1">
-                    <DatePicker Name="dpDate" Width="150" VerticalAlignment="Center" />
-                    <ComboBox Name="Hours_cb" SelectionChanged="Hours_cb_SelectionChanged" Width="75" Margin="5" VerticalAlignment="Center">
-                        <ComboBox.Effect>
-                            <DropShadowEffect />
-                        </ComboBox.Effect>
-                    </ComboBox>
-                    <ComboBox Name="Minutes_cb" SelectionChanged="Minutes_cb_SelectionChanged" Width="75" Margin="5" VerticalAlignment="Center">
-                        <ComboBox.Effect>
-                            <DropShadowEffect />
-                        </ComboBox.Effect>
-                    </ComboBox>
-                    <Button Name="AddButton" Content="Add" Margin="5" VerticalAlignment="Center" Click="addDateButton_Click"/>
-                </StackPanel>
-                <StackPanel Orientation="Vertical" Grid.Row="8" Grid.Column="1">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <ListBox Name="SelectedTimesListBox" Grid.Row="8" ItemsSource="{Binding DateTimes}" Height="60">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding StringFormat={}{0:dd.MM.yyyy. HH:mm}}" />
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                    </ScrollViewer>
-                </StackPanel>
+                <TextBox x:Name="UrlTextBox" Width="270" Height="25" Margin="10 10 10 10" Grid.Row="0" Grid.Column="0" />
+                <Button Width ="40" Name="AddImageButton" Content="Add" Margin="5" Grid.Row="0" Grid.Column="1" Click="AddImageButton_Click" />
             </Grid>
-        </GroupBox>
-        <GroupBox Header="Image URLs" Grid.Row="1">
-            <StackPanel>
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <TextBox x:Name="UrlTextBox" Width="200" Margin="5" Grid.Row="0" Grid.Column="0" />
-                    <Button Name="AddImageButton" Content="Add" Margin="5" Grid.Row="0" Grid.Column="1" Click="AddImageButton_Click" />
-                </Grid>
-                <ListBox x:Name="UrlListBox" Width="Auto" Height="60" Margin="5" ItemsSource="{Binding ImageUrls}" ScrollViewer.VerticalScrollBarVisibility="Visible" />
-            </StackPanel>
-        </GroupBox>
-        <Grid Grid.Row="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <GroupBox Header="Checkpoints" Grid.Row="2" Grid.ColumnSpan="2">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <StackPanel Grid.Row="0" Grid.Column="0" Margin="5">
-                        <TextBlock Text="Starting Checkpoint"/>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBox x:Name="StartingCheckpointName" Width="200" Margin="0,0,10,0"/>
-                            <Button Name="AddStartingCheckpointButton" Content="Add" Click="AddStartingCheckpoint_Click"/>
-                        </StackPanel>
-                    </StackPanel>
-                    <StackPanel Grid.Row="0" Grid.Column="1" Margin="5">
-                        <TextBlock FontWeight="Bold" Text="{Binding Path=StartCheckpoint.Order}"/>
-                        <TextBlock Text="{Binding Path=StartCheckpoint.Name}"/>
-                    </StackPanel>
-
-                    <StackPanel Grid.Row="1" Grid.Column="0" Margin="5">
-                        <TextBlock Text="Middle Checkpoints"/>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBox x:Name="MiddleCheckpointName" Width="200" Margin="0,0,10,0" IsEnabled="False"/>
-                            <Button Name="AddMiddleCheckpointButton" Content="Add" Click="AddMiddleCheckpoint_Click" IsEnabled="False"/>
-                        </StackPanel>
-                    </StackPanel>
-                    <ScrollViewer Grid.Row="1" Grid.Column="1" Height="60" VerticalScrollBarVisibility="Auto">
-                        <ListBox ItemsSource="{Binding MiddleCheckpoints , UpdateSourceTrigger=PropertyChanged}">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Vertical">
-                                        <TextBlock FontWeight="Bold" Text="{Binding Order, UpdateSourceTrigger=PropertyChanged}"/>
-                                        <TextBlock Text="{Binding Name}"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                    </ScrollViewer>
-
-                    <StackPanel Grid.Row="2" Grid.Column="0" Margin="5">
-                        <TextBlock Text="Final Checkpoint"/>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBox x:Name="FinalCheckpointName" Width="200" Margin="0,0,10,0" IsEnabled="False"/>
-                            <Button Name="AddFinalCheckpointButton" Content="Add" Click="AddFinalCheckpoint_Click" IsEnabled="False"/>
-                        </StackPanel>
-                    </StackPanel>
-                    <StackPanel Grid.Row="2" Grid.Column="1" Margin="5">
-                        <TextBlock FontWeight="Bold" Text="{Binding Path=EndCheckpoint.Order,UpdateSourceTrigger=PropertyChanged }"/>
-                        <TextBlock Text="{Binding Path=EndCheckpoint.Name}"/>
-                    </StackPanel>
-                </Grid>
-            </GroupBox>
-        </Grid>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="3">
-            <Button Content="Save" Margin="10" Click="btnCreateTour_Click" Width="100" Height="30"/>
-            <Button Content="Cancel" Margin="10" Click ="CancelButton_Click" Width="100" Height="30"/>
+            <ListBox x:Name="UrlListBox" Width="Auto" Height="80" Margin="10 10 10 10" ItemsSource="{Binding ImageUrls}" ScrollViewer.VerticalScrollBarVisibility="Visible" />
+        </StackPanel>
+        <TextBlock Text="Checkpoints:" VerticalAlignment="Top" FontSize="20" Margin="10 10 10 10" Grid.Row="10" Grid.Column="0"/>
+        <StackPanel Grid.Row="10" Grid.Column="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="CheckpointTextBox" Width="270" Height="25" Margin="10 10 10 10" Grid.Row="0" Grid.Column="0" />
+                <Button  Width ="40" Name="AddCheckpointButton" Content="Add" Margin="5" Grid.Row="0" Grid.Column="1" Click="AddImageButton_Click" />
+            </Grid>
+            <ListBox x:Name="CheckpointsListBox" Width="Auto" Height="80" Margin="10 10 10 10" ItemsSource="{Binding ImageUrls}" ScrollViewer.VerticalScrollBarVisibility="Visible" />
+        </StackPanel>
+        <StackPanel Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="    Save&#x0a;(CTRL + S)" Width="100" Height="60" Background="#007ACC" Foreground="White" FontSize="16" BorderThickness="0" Padding="5 0" Click="btnCreateTour_Click" Margin="10 10 10 10">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <EventTrigger RoutedEvent="Button.Click">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#005F8B" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#00415E" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <Button Content=" Most Requested&#x0a;     (CTRL + R)" Width="150" Height="60" Background="#007ACC" Foreground="White" FontSize="16" BorderThickness="0" Padding="5 0" Margin="10 10 10 10">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <EventTrigger RoutedEvent="Button.Click">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#005F8B" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#00415E" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <Button Content=" Cancel&#x0a;  (ESC)" Width="100" Height="60" Background="#007ACC" Foreground="White" FontSize="16" BorderThickness="0" Padding="5 0" Click="CancelButton_Click" Margin="10 10 10 10">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <EventTrigger RoutedEvent="Button.Click">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#005F8B" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#00415E" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
         </StackPanel>
     </Grid>
 </Window>
