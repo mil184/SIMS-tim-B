@@ -172,7 +172,7 @@ namespace InitialProject.View.Guide
             _checkpointService = checkpointService;
 
             LoggedInUser = user;
-            OrderCounter = 1;
+            OrderCounter = 0;
 
             InitializeCollections();
             InitializeComboBoxes();
@@ -184,6 +184,7 @@ namespace InitialProject.View.Guide
             Checkpoints = new ObservableCollection<Checkpoint>();
             ImageUrls = new ObservableCollection<string>();
             DateTimes = new ObservableCollection<DateTime>();
+
         }
         private void InitializeComboBoxes()
         {
@@ -209,7 +210,7 @@ namespace InitialProject.View.Guide
         private void InitializeShortcuts()
         {
             PreviewKeyDown += Escape_PreviewKeyDown;
-            PreviewKeyDown += Enter_PreviewKeyDown;
+            PreviewKeyDown += Create_PreviewKeyDown;
         }
 
         private void TourCreation() 
@@ -326,14 +327,16 @@ namespace InitialProject.View.Guide
             Close();
         }
 
-        private void AddCheckpoint_Click(object sender, RoutedEventArgs e)
+        private void AddCheckpointButton_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(CheckpointTextBox.Text))
                 return;
 
             Checkpoint checkpoint = CreateCheckpoint(CheckpointTextBox.Text, ++OrderCounter);
             Checkpoints.Add(checkpoint);
- 
+
+            CheckpointTextBox.Text = string.Empty;
+
         }
 
         private Checkpoint CreateCheckpoint(string name, int order)
@@ -484,13 +487,14 @@ namespace InitialProject.View.Guide
                 this.Close();
             }
         }
-        private void Enter_PreviewKeyDown(object sender, KeyEventArgs e)
+        private void Create_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.S)
             {
                 TourCreation();
             }
         }
+
         private void ShowInvalidInfoWarning()
         {
             MessageBox.Show("Please enter valid information.", "Info warning", MessageBoxButton.OK, MessageBoxImage.Warning);
