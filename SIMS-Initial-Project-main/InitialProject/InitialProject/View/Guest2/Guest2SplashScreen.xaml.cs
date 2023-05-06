@@ -27,5 +27,45 @@ namespace InitialProject.View.Guest2
             signInForm.Show();
             Close();
         }
+
+        private void TrackingButton_Click(object sender, RoutedEventArgs e)
+        {
+            Guest2Window guest2Window = new Guest2Window(LoggedInUser);
+            guest2Window.Show();
+            guest2Window.tab.SelectedIndex = 1;
+            Close();
+        }
+
+        private void RatingButton_Click(object sender, RoutedEventArgs e)
+        {
+            Guest2Window guest2Window = new Guest2Window(LoggedInUser);
+            guest2Window.Show();
+            guest2Window.tab.SelectedIndex = 2;
+            Close();
+        }
+
+        private void RequestingButton_Click(object sender, RoutedEventArgs e)
+        {
+            Guest2Window guest2Window = new Guest2Window(LoggedInUser);
+            guest2Window.Show();
+            guest2Window.tab.SelectedIndex = 3;
+            Close();
+        }
+
+        private void ComplexRequestingButton_Click(object sender, RoutedEventArgs e)
+        {
+            Guest2Window guest2Window = new Guest2Window(LoggedInUser);
+            guest2Window.Show();
+            guest2Window.tab.SelectedIndex = 4;
+            Close();
+        }
+
+        private void VouchersButton_Click(object sender, RoutedEventArgs e)
+        {
+            Guest2Window guest2Window = new Guest2Window(LoggedInUser);
+            guest2Window.Show();
+            guest2Window.tab.SelectedIndex = 5;
+            Close();
+        }
     }
 }

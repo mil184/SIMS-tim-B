@@ -24,10 +24,12 @@ namespace InitialProject.View.Guest2
         public ObservableCollection<Guest2TourDTO> FinishedTourDTOs { get; set; }
         public List<Tour> FinishedTours { get; set; }
 
+        public Voucher SelectedVoucher { get; set; }
+        public ObservableCollection<Voucher> Vouchers { get; set; }
+
         public List<Tour> CheckedTours { get; set; }
         public Tour CurrentlyActiveTour { get; set; }
         public Checkpoint CurrentlyActiveCheckpoint { get; set; }
-        public ObservableCollection<Voucher> Vouchers { get; set; }
 
         public ObservableCollection<Location> Locations;
 
@@ -42,6 +44,32 @@ namespace InitialProject.View.Guest2
         private readonly TourRatingService _tourRatingService;
         private readonly VoucherService _voucherService;
 
+        private string _personCount;
+        public string PersonCount
+        {
+            get => _personCount;
+            set
+            {
+                if (value != _personCount)
+                {
+                    _personCount = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private string _averageAge;
+        public string AverageAge
+        {
+            get => _averageAge;
+            set
+            {
+                if (value != _averageAge)
+                {
+                    _averageAge = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         private string country;
         public string Country
@@ -71,6 +99,20 @@ namespace InitialProject.View.Guest2
             }
         }
 
+        private string duration;
+        public string Duration
+        {
+            get => duration;
+            set
+            {
+                if (value != duration)
+                {
+                    duration = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         private string tourLanguage;
         public string TourLanguage
         {
@@ -85,15 +127,15 @@ namespace InitialProject.View.Guest2
             }
         }
 
-        private string personCount;
-        public string PersonCount
+        private string guests;
+        public string Guests
         {
-            get => personCount;
+            get => guests;
             set
             {
-                if (value != personCount)
+                if (value != guests)
                 {
-                    personCount = value;
+                    guests = value;
                     OnPropertyChanged();
                 }
             }
@@ -194,6 +236,142 @@ namespace InitialProject.View.Guest2
             }
         }
 
+        #region Reservation
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!IsInputValid())
+            {
+                return;
+            }
+
+            Tour selectedTour = _tourService.GetById(SelectedGuest2TourDTO.TourId);
+            int personCount = int.Parse(PersonCount);
+            int spacesLeft = selectedTour.MaxGuests - selectedTour.CurrentGuestCount;
+
+            if (!IsVoucherValid())
+            {
+                return;
+            }
+
+            if (personCount > spacesLeft && selectedTour.CurrentGuestCount != selectedTour.MaxGuests)
+            {
+                ShowSpacesLeftMessage(spacesLeft);
+                return;
+            }
+
+            if (selectedTour.CurrentGuestCount == selectedTour.MaxGuests)
+            {
+                HandleZeroSpacesForReservation(selectedTour);
+                return;
+            }
+
+            SaveOrUpdateReservation(selectedTour, personCount);
+            UpdateSelectedTour(selectedTour, personCount);
+
+            PersonCountTB.Text = "";
+            AverageAgeTB.Text = "";
+        }
+
+        private bool IsInputValid()
+        {
+            return PersonCount != null && AverageAge != null;
+        }
+
+        private bool IsVoucherValid()
+        {
+            return SelectedVoucher != null ^ NoVoucherBtn.IsChecked == true;
+        }
+
+        private void ShowSpacesLeftMessage(int spacesLeft)
+        {
+            if (spacesLeft == 1)
+                MessageBox.Show("You've tried adding too many guests. There is only 1 space left.");
+            else
+                MessageBox.Show("You've tried adding too many guests. There are only " + spacesLeft.ToString() + " spaces left.");
+        }
+
+        private void HandleZeroSpacesForReservation(Tour selectedTour)
+        {
+            var zeroSpacesForReservation = new ZeroSpacesForReservation(SelectedGuest2TourDTO, LoggedInUser, _tourService, _locationService, _userRepository, _voucherService);
+            zeroSpacesForReservation.ShowDialog();
+            Close();
+        }
+
+        private void SaveOrUpdateReservation(Tour selectedTour, int personCount)
+        {
+            int voucherId = -1;
+            if (SelectedVoucher != null)
+            {
+                voucherId = SelectedVoucher.Id;
+            }
+
+            TourReservation tourReservation = new TourReservation(
+                LoggedInUser.Id,
+                SelectedGuest2TourDTO.TourId,
+                personCount,
+                double.Parse(AverageAge),
+                voucherId);
+
+            if (CheckIfReservationAlreadyExists(tourReservation))
+            {
+                UpdateExistingReservation(tourReservation);
+            }
+            else
+            {
+                SaveNewReservation(tourReservation);
+            }
+        }
+
+        private void UpdateExistingReservation(TourReservation tourReservation)
+        {
+            TourReservation existingReservation = _tourReservationService.GetReservationByGuestIdAndTourId(LoggedInUser.Id, SelectedGuest2TourDTO.TourId);
+            tourReservation.Id = existingReservation.Id;
+            tourReservation.PersonCount = existingReservation.PersonCount + int.Parse(PersonCount);
+            tourReservation.AverageAge = (existingReservation.AverageAge + double.Parse(AverageAge)) / 2;
+
+            if (existingReservation.UsedVoucherId == -1 && SelectedVoucher != null)
+            {
+                tourReservation.UsedVoucherId = SelectedVoucher.Id;
+            }
+            else
+            {
+                tourReservation.UsedVoucherId = existingReservation.UsedVoucherId;
+            }
+
+            _tourReservationService.Update(tourReservation);
+        }
+
+        private void SaveNewReservation(TourReservation tourReservation)
+        {
+            _tourReservationService.Save(tourReservation);
+
+            if (tourReservation.UsedVoucherId != -1)
+            {
+                Voucher voucher = _voucherService.GetById(tourReservation.UsedVoucherId);
+                voucher.IsActive = false;
+                _voucherService.Update(voucher);
+            }
+        }
+
+        private void UpdateSelectedTour(Tour selectedTour, int personCount)
+        {
+            selectedTour.CurrentGuestCount += personCount;
+            _tourService.Update(selectedTour);
+        }
+
+        public bool CheckIfReservationAlreadyExists(TourReservation tourReservation)
+        {
+            foreach (TourReservation reservation in _tourReservationService.GetAll())
+            {
+                if (reservation.TourId == tourReservation.TourId && reservation.UserId == tourReservation.UserId)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        #endregion
+
         public void FormTours()
         {
             foreach (Tour tour in _tourService.GetReservableTours())
@@ -260,15 +438,6 @@ namespace InitialProject.View.Guest2
                 _userRepository.GetById(tour.GuideId).Username);
         }
 
-        private void ReserveButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (SelectedGuest2TourDTO != null)
-            {
-                ReserveTour reserveTourForm = new ReserveTour(SelectedGuest2TourDTO, LoggedInUser, _tourService, _tourReservationService, _voucherService, _locationService, _userRepository);
-                reserveTourForm.ShowDialog();
-            }
-        }
-
         private void Search_Click(object sender, RoutedEventArgs e)
         {
             CheckIfAllEmpty();
@@ -298,6 +467,10 @@ namespace InitialProject.View.Guest2
             {
                 result = result.Intersect(_tourService.GetByGuests(int.Parse(PersonCount))).ToList();
             }
+            if(!string.IsNullOrEmpty(Duration))
+            {
+                result = result.Intersect(_tourService.GetByDuration(int.Parse(Duration))).ToList();
+            }
 
             ObservableCollection<Guest2TourDTO> searchResults = ConvertToDTO(result);
             foreach (Guest2TourDTO dto in searchResults)
@@ -322,13 +495,6 @@ namespace InitialProject.View.Guest2
             showTour.Show();
         }
 
-        private void LogOut_Click(object sender, RoutedEventArgs e)
-        {
-            SignInForm signInForm = new SignInForm();
-            signInForm.Show();
-            Close();
-        }
-
         private void RateButton_Click(object sender, RoutedEventArgs e)
         {
             if (SelectedGuest2TourDTO != null)
@@ -337,6 +503,13 @@ namespace InitialProject.View.Guest2
                 RateTour rateTour = new RateTour(rateTourViewModel);
                 rateTour.Show();
             }
+        }
+
+        private void LogOutButton_Click(object sender, RoutedEventArgs e)
+        {
+            SignInForm signInForm = new SignInForm();
+            signInForm.Show();
+            Close();
         }
     }
 }

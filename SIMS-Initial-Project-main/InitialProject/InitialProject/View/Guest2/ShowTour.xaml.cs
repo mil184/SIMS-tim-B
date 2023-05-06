@@ -3,16 +3,23 @@ using InitialProject.Model.DTO;
 using InitialProject.Repository;
 using InitialProject.Resources.Observer;
 using InitialProject.Service;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media.Imaging;
+using Image = System.Windows.Controls.Image;
 
 namespace InitialProject.View.Guest2
 {
     public partial class ShowTour : Window, INotifyPropertyChanged, IObserver
     {
         public Guest2TourDTO tourDTO { get; set; }
+        public int imageIndex { get; set; }
+
+        public List<string> imageUrls { get; set; }
 
         private readonly TourService _tourService;
         private readonly ImageRepository _imageRepository;
@@ -29,18 +36,10 @@ namespace InitialProject.View.Guest2
             _imageRepository.Subscribe(this);
 
             this.tourDTO = tourDTO;
-        }
 
-        private void ExitButton_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-
-        private void ImagesButton_Click(object sender, RoutedEventArgs e)
-        {
             Tour selectedTour = ConvertToTour(tourDTO);
 
-            List<string> imageUrls = new List<string>();
+            imageUrls = new List<string>();
 
             foreach (int imageId in selectedTour.ImageIds)
             {
@@ -48,8 +47,23 @@ namespace InitialProject.View.Guest2
                     imageUrls.Add(_imageRepository.GetById(imageId).Url);
             }
 
-            TourImages tourImages = new TourImages(imageUrls);
-            tourImages.Show();
+            imageIndex = 0;
+
+            Image image = new Image();
+            var fullFilePath = imageUrls[imageIndex];
+
+            BitmapImage bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.UriSource = new Uri(fullFilePath, UriKind.Absolute);
+            bitmap.EndInit();
+
+            image.Source = bitmap;
+            picHolder.Source = image.Source;
+        }
+
+        private void ExitButton_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
 
         public Tour ConvertToTour(Guest2TourDTO dto)
@@ -66,6 +80,47 @@ namespace InitialProject.View.Guest2
         public void Update()
         {
             //
+        }
+
+        private void NextButton_Click(object sender, RoutedEventArgs e)
+        {
+            imageIndex++;
+            if (imageIndex > imageUrls.Count - 1)
+            {
+                imageIndex = 0;
+            }
+
+            var image = new Image();
+            var fullFilePath = imageUrls[imageIndex];
+
+            BitmapImage bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.UriSource = new Uri(fullFilePath, UriKind.Absolute);
+            bitmap.EndInit();
+
+            image.Source = bitmap;
+            picHolder.Source = image.Source;
+        }
+
+        private void PreviousButton_Click(object sender, RoutedEventArgs e)
+        {
+            imageIndex--;
+
+            if (imageIndex < 0)
+            {
+                imageIndex = imageUrls.Count - 1;
+            }
+
+            var image = new Image();
+            var fullFilePath = imageUrls[imageIndex];
+
+            BitmapImage bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.UriSource = new Uri(fullFilePath, UriKind.Absolute);
+            bitmap.EndInit();
+
+            image.Source = bitmap;
+            picHolder.Source = image.Source;
         }
     }
 }

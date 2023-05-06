@@ -34,11 +34,11 @@
         <!-- Right side of the separator -->
         <StackPanel Grid.Column="2" Margin="20" VerticalAlignment="Center" HorizontalAlignment="Center">
             <Button Content="Tour Reservation" Margin="0 0 0 20" Padding="20" FontSize="28" Click="TourReservationButtonClick"/>
-            <Button Content="Tour Tracking" Margin="0 0 0 20" Padding="20" FontSize="28"/>
-            <Button Content="Tour Reviewing" Margin="0 0 0 20" Padding="20" FontSize="28"/>
-            <Button Content="Tour Requesting" Margin="0 0 0 20" Padding="20" FontSize="28"/>
-            <Button Content="Complex Tour Requesting" Margin="0 0 0 20" Padding="20" FontSize="28"/>
-            <Button Content="Vouchers" Margin="0 0 0 20" Padding="20" FontSize="28"/>
+            <Button Content="Tour Tracking" Margin="0 0 0 20" Padding="20" FontSize="28" Click="TrackingButton_Click"/>
+            <Button Content="Tour Rating" Margin="0 0 0 20" Padding="20" FontSize="28" Click="RatingButton_Click"/>
+            <Button Content="Tour Requesting" Margin="0 0 0 20" Padding="20" FontSize="28" Click="RequestingButton_Click"/>
+            <Button Content="Complex Tour Requesting" Margin="0 0 0 20" Padding="20" FontSize="28" Click="ComplexRequestingButton_Click"/>
+            <Button Content="Vouchers" Margin="0 0 0 20" Padding="20" FontSize="28" Click="VouchersButton_Click"/>
         </StackPanel>
     </Grid>
 </Window>

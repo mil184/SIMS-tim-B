@@ -210,5 +210,6 @@ namespace InitialProject.View.Guest2
         {
             Close();
         }
+
     }
 }
