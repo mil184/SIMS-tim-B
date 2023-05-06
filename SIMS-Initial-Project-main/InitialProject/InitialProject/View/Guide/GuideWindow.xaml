@@ -525,7 +525,7 @@
                         </Button>   
                     </Grid>
                     <GroupBox Header="Rated Tours" FontSize="28" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2">
-                        <DataGrid Height ="240" ItemsSource="{Binding RatedTours}" SelectedItem="{Binding Path=SelectedRatedTourDTO}" AutoGenerateColumns="False" Name="RatingsDataGrid" IsReadOnly="true" MouseDoubleClick="RatedToursDataGrid_MouseDoubleClick" Margin="10 10 10 10">
+                        <DataGrid Height ="240" ItemsSource="{Binding RatedTours}" SelectedItem="{Binding Path=SelectedRatedTourDTO}" AutoGenerateColumns="False" Name="RatedToursDataGrid" IsReadOnly="true" MouseDoubleClick="RatedToursDataGrid_MouseDoubleClick" Margin="10 10 10 10">
                             <DataGrid.CellStyle>
                                 <Style TargetType="DataGridCell">
                                     <Setter Property="FontSize" Value="18"/>

@@ -31,11 +31,23 @@ namespace InitialProject.View.Guide
             InitializeComponent();
             _viewModel = viewModel;
             DataContext = _viewModel;
-        }
 
+            InitializeShortcuts();
+        }
+        private void InitializeShortcuts()
+        {
+            PreviewKeyDown += Escape_PreviewKeyDown;
+        }
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+        private void Escape_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                this.Close();
+            }
         }
     }
 }

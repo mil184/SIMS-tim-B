@@ -133,7 +133,7 @@ namespace InitialProject.View.Guide
         {
             Years_cb.Items.Add("Alltime");
             Years_cb.SelectedItem = Years_cb.Items[0];
-            for (int i = 2000; i <= DateTime.Now.Year ; i++)
+            for (int i = 2000; i <= DateTime.Now.Year; i++)
             {
                 Years_cb.Items.Add(i.ToString());
             }
@@ -142,10 +142,13 @@ namespace InitialProject.View.Guide
         {
             MostVisited = ConvertToDTO(_tourService.GetMostVisitedTour(_tourService.GetFinishedTours()));
         }
-        private void InitializeShortcuts() 
+        private void InitializeShortcuts()
         {
             PreviewKeyDown += CreateTour_PreviewKeyDown;
             PreviewKeyDown += LogOut_PreviewKeyDown;
+            PreviewKeyDown += Enter_PreviewKeyDown;
+            PreviewKeyDown += ArrowKeys_PreviewKeyDown;
+            PreviewKeyDown += DataGrid_PreviewKeyDown;
         }
         private void Years_cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -155,7 +158,7 @@ namespace InitialProject.View.Guide
             }
         }
 
-        public void HandleSelection() 
+        public void HandleSelection()
         {
             if (int.TryParse(Years_cb.SelectedItem.ToString(), out int year))
             {
@@ -263,7 +266,7 @@ namespace InitialProject.View.Guide
         public List<GuideTourDTO> ConvertToDTO(List<Tour> tours)
         {
             List<GuideTourDTO> dto = new List<GuideTourDTO>();
-            foreach (Tour tour in tours) 
+            foreach (Tour tour in tours)
             {
                 dto.Add(new GuideTourDTO(
                     tour.Id,
@@ -271,7 +274,7 @@ namespace InitialProject.View.Guide
                     _locationService.GetById(tour.LocationId).Country,
                     _locationService.GetById(tour.LocationId).City,
                     tour.StartTime,
-                    tour.CurrentGuestCount)); 
+                    tour.CurrentGuestCount));
             }
             return dto;
         }
@@ -287,15 +290,21 @@ namespace InitialProject.View.Guide
                     _locationService.GetById(tour.LocationId).Country,
                     _locationService.GetById(tour.LocationId).City,
                     tour.StartTime,
-                    tour.CurrentGuestCount); 
+                    tour.CurrentGuestCount);
         }
         public Tour ConvertToTour(GuideTourDTO dto)
         {
-            if(dto != null)
-            return _tourService.GetById(dto.Id);
+            if (dto != null)
+                return _tourService.GetById(dto.Id);
             return null;
         }
+
         private void CurrentToursDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            SelectTodaysTour();
+        }
+
+        private void SelectTodaysTour()
         {
             CheckIfTourIsActive();
             Tour selectedTour = ConvertToTour(SelectedCurrentTourDTO);
@@ -305,7 +314,12 @@ namespace InitialProject.View.Guide
                 HandleSelectedTour(selectedTour);
             }
         }
+
         private void FinishedToursDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            SelectFinishedTour();
+        }
+        private void SelectFinishedTour() 
         {
             Tour selectedTour = ConvertToTour(SelectedFinishedTourDTO);
             if (selectedTour != null)
@@ -316,6 +330,11 @@ namespace InitialProject.View.Guide
             }
         }
         private void UpcomingToursDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            SelectUpcomingTour();
+        }
+
+        private void SelectUpcomingTour() 
         {
             List<int> vouchersAdded = new List<int>();
             Tour tour = ConvertToTour(SelectedUpcomingTourDTO);
@@ -351,6 +370,10 @@ namespace InitialProject.View.Guide
         }
 
         private void RatedToursDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            SelectRatedTour();
+        }
+        private void SelectRatedTour() 
         {
             RatingsViewModel ratingsViewModel = new RatingsViewModel(_userRepository, _tourRatingService, _tourReservationService, _checkpointService, ConvertToTour(SelectedRatedTourDTO));
             Ratings ratings = new Ratings(ratingsViewModel);
@@ -446,6 +469,101 @@ namespace InitialProject.View.Guide
                 createTour.ShowDialog();
             }
         }
+        private void Enter_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+
+            if (e.Key == Key.Enter)
+            {
+                switch (tabControl.SelectedIndex) 
+                {
+                    case 0:
+                        if(SelectedCurrentTourDTO != null)
+                        SelectTodaysTour();
+                        break;
+                    case 1:
+                        if (SelectedUpcomingTourDTO != null)
+                            SelectUpcomingTour();
+                        break;
+                    case 2:
+                        if (SelectedFinishedTourDTO != null)
+                            SelectFinishedTour();
+                        break;
+                    case 3:
+                        if (SelectedRatedTourDTO != null)
+                            SelectRatedTour();
+                        break;
+                    default:
+                        return;
+                }
+                e.Handled = true;
+            }
+        }
+        private void ArrowKeys_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Left || e.Key == Key.Right)
+            {
+                int index = tabControl.SelectedIndex;
+                int count = tabControl.Items.Count;
+
+                if (e.Key == Key.Left)
+                {
+                    index = (index + count - 1) % count;
+                }
+                else if (e.Key == Key.Right)
+                {
+                    index = (index + 1) % count;
+                }
+
+                tabControl.SelectedIndex = index;
+                e.Handled = true;
+            }
+        }
+
+        private void DataGrid_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) && e.Key == Key.L)
+            {
+                switch (tabControl.SelectedIndex)
+                {
+                    case 0:
+                        if (CurrentToursDataGrid.Items.Count > 0)
+                        {
+                            CurrentToursDataGrid.SelectedItem = CurrentToursDataGrid.Items[0];
+                            CurrentToursDataGrid.ScrollIntoView(CurrentToursDataGrid.SelectedItem);
+                            CurrentToursDataGrid.Focus();
+                        }
+                        break;
+                    case 1:
+                        if (UpcomingToursDataGrid.Items.Count > 0)
+                        {
+                            UpcomingToursDataGrid.SelectedItem = UpcomingToursDataGrid.Items[0];
+                            UpcomingToursDataGrid.ScrollIntoView(UpcomingToursDataGrid.SelectedItem);
+                            UpcomingToursDataGrid.Focus();
+                        }
+                        break;
+                    case 2:
+                        if (FinishedToursDataGrid.Items.Count > 0)
+                        {
+                            FinishedToursDataGrid.SelectedItem = FinishedToursDataGrid.Items[0];
+                            FinishedToursDataGrid.Focus();
+                            FinishedToursDataGrid.ScrollIntoView(FinishedToursDataGrid.SelectedItem);
+                        }
+                        break;
+                    case 3:
+                        if (RatedToursDataGrid.Items.Count > 0)
+                        {
+                            RatedToursDataGrid.SelectedItem = RatedToursDataGrid.Items[0];
+                            RatedToursDataGrid.ScrollIntoView(RatedToursDataGrid.SelectedItem);
+                            RatedToursDataGrid.Focus();
+                        }
+                        break;
+                    default:
+                        return;
+                }
+                e.Handled = true;
+            }
+        }
+
         private void ShowActiveTourWarning()
         {
             MessageBox.Show("An active tour is already in progress. Please finish the current tour before starting a new one.", "Active Tour Warning", MessageBoxButton.OK, MessageBoxImage.Warning);

@@ -41,6 +41,7 @@ namespace InitialProject.View.Guide
             PreviewKeyDown += Report_PreviewKeyDown;
             PreviewKeyDown += Enter_PreviewKeyDown;
             PreviewKeyDown += Escape_PreviewKeyDown;
+            PreviewKeyDown += DataGrid_PreviewKeyDown;
         }
         private void RatingsDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -79,6 +80,19 @@ namespace InitialProject.View.Guide
                 RatingsOverviewViewModel ratingsOverviewViewModel = new RatingsOverviewViewModel(_viewModel.SelectedRatingDTO);
                 RatingsOverview overview = new RatingsOverview(ratingsOverviewViewModel);
                 overview.Show();
+            }
+        }
+        private void DataGrid_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) && e.Key == Key.L)
+            {
+                if (RatingsDataGrid.Items.Count > 0)
+                {
+                    RatingsDataGrid.SelectedItem = RatingsDataGrid.Items[0];
+                    RatingsDataGrid.ScrollIntoView(RatingsDataGrid.SelectedItem);
+                    RatingsDataGrid.Focus();
+                }
+                e.Handled = true;
             }
         }
     }
