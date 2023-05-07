@@ -117,26 +117,29 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Current guests" xml:space="preserve">
-    <value>Trenutni broj gostiju</value>
+  <data name="CurrentGuests" xml:space="preserve">
+    <value>Trenutni broj gostiju:</value>
   </data>
-  <data name="Dark Theme" xml:space="preserve">
-    <value>Tamna Tema</value>
+  <data name="Duration" xml:space="preserve">
+    <value>Trajanje (sati):</value>
   </data>
-  <data name="Duration (hours)" xml:space="preserve">
-    <value>Trajanje (sati)</value>
+  <data name="English" xml:space="preserve">
+    <value>Engleski:</value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>Izlaz</value>
   </data>
   <data name="Guide" xml:space="preserve">
-    <value>Vodic</value>
+    <value>Vodic:</value>
+  </data>
+  <data name="Images" xml:space="preserve">
+    <value>Slike ture:</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Jezik</value>
+    <value>Jezik:</value>
   </data>
-  <data name="Maximum guests" xml:space="preserve">
-    <value>Maksimalan broj gostiju</value>
+  <data name="MaxGuests" xml:space="preserve">
+    <value>Maksimalan broj gostiju:</value>
   </data>
   <data name="Next" xml:space="preserve">
     <value>Sledeca</value>
@@ -144,22 +147,22 @@
   <data name="Previous" xml:space="preserve">
     <value>Prethodna</value>
   </data>
-  <data name="Show in Serbian" xml:space="preserve">
-    <value>Prikazi na Engleskom</value>
+  <data name="Serbian" xml:space="preserve">
+    <value>Srpski</value>
   </data>
-  <data name="Tour City" xml:space="preserve">
-    <value>Grad ture</value>
+  <data name="Theme" xml:space="preserve">
+    <value>Tema:</value>
   </data>
-  <data name="Tour Country" xml:space="preserve">
-    <value>Drzava ture</value>
+  <data name="TourCity" xml:space="preserve">
+    <value>Grad ture:</value>
   </data>
-  <data name="Tour Description" xml:space="preserve">
-    <value>Opis ture</value>
+  <data name="TourCountry" xml:space="preserve">
+    <value>Drzava ture:</value>
   </data>
-  <data name="Tour Images" xml:space="preserve">
-    <value>Slike ture</value>
+  <data name="TourDesc" xml:space="preserve">
+    <value>Opis ture:</value>
   </data>
   <data name="TourName" xml:space="preserve">
-    <value>Naziv ture fejk</value>
+    <value>Naziv ture:</value>
   </data>
 </root>

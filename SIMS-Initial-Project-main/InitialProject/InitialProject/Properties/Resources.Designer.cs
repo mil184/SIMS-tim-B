@@ -61,29 +61,29 @@ namespace InitialProject.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Trenutni broj gostiju.
+        ///   Looks up a localized string similar to Trenutni broj gostiju:.
         /// </summary>
-        public static string Current_guests {
+        public static string CurrentGuests {
             get {
-                return ResourceManager.GetString("Current guests", resourceCulture);
+                return ResourceManager.GetString("CurrentGuests", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tamna Tema.
+        ///   Looks up a localized string similar to Trajanje (sati):.
         /// </summary>
-        public static string Dark_Theme {
+        public static string Duration {
             get {
-                return ResourceManager.GetString("Dark Theme", resourceCulture);
+                return ResourceManager.GetString("Duration", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Trajanje (sati).
+        ///   Looks up a localized string similar to Engleski:.
         /// </summary>
-        public static string Duration__hours_ {
+        public static string English {
             get {
-                return ResourceManager.GetString("Duration (hours)", resourceCulture);
+                return ResourceManager.GetString("English", resourceCulture);
             }
         }
         
@@ -97,7 +97,7 @@ namespace InitialProject.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vodic.
+        ///   Looks up a localized string similar to Vodic:.
         /// </summary>
         public static string Guide {
             get {
@@ -106,7 +106,16 @@ namespace InitialProject.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Jezik.
+        ///   Looks up a localized string similar to Slike ture:.
+        /// </summary>
+        public static string Images {
+            get {
+                return ResourceManager.GetString("Images", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Jezik:.
         /// </summary>
         public static string Language {
             get {
@@ -115,11 +124,11 @@ namespace InitialProject.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Maksimalan broj gostiju.
+        ///   Looks up a localized string similar to Maksimalan broj gostiju:.
         /// </summary>
-        public static string Maximum_guests {
+        public static string MaxGuests {
             get {
-                return ResourceManager.GetString("Maximum guests", resourceCulture);
+                return ResourceManager.GetString("MaxGuests", resourceCulture);
             }
         }
         
@@ -142,52 +151,52 @@ namespace InitialProject.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Prikazi na Engleskom.
+        ///   Looks up a localized string similar to Srpski.
         /// </summary>
-        public static string Show_in_Serbian {
+        public static string Serbian {
             get {
-                return ResourceManager.GetString("Show in Serbian", resourceCulture);
+                return ResourceManager.GetString("Serbian", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Grad ture.
+        ///   Looks up a localized string similar to Tema:.
         /// </summary>
-        public static string Tour_City {
+        public static string Theme {
             get {
-                return ResourceManager.GetString("Tour City", resourceCulture);
+                return ResourceManager.GetString("Theme", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Drzava ture.
+        ///   Looks up a localized string similar to Grad ture:.
         /// </summary>
-        public static string Tour_Country {
+        public static string TourCity {
             get {
-                return ResourceManager.GetString("Tour Country", resourceCulture);
+                return ResourceManager.GetString("TourCity", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Opis ture.
+        ///   Looks up a localized string similar to Drzava ture:.
         /// </summary>
-        public static string Tour_Description {
+        public static string TourCountry {
             get {
-                return ResourceManager.GetString("Tour Description", resourceCulture);
+                return ResourceManager.GetString("TourCountry", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Slike ture.
+        ///   Looks up a localized string similar to Opis ture:.
         /// </summary>
-        public static string Tour_Images {
+        public static string TourDesc {
             get {
-                return ResourceManager.GetString("Tour Images", resourceCulture);
+                return ResourceManager.GetString("TourDesc", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Naziv ture fejk.
+        ///   Looks up a localized string similar to Naziv ture:.
         /// </summary>
         public static string TourName {
             get {

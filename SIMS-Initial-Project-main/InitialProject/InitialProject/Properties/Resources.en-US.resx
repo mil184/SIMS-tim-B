@@ -117,13 +117,52 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Current guests" xml:space="preserve">
-    <value>Current guests</value>
+  <data name="CurrentGuests" xml:space="preserve">
+    <value>Current Guests:</value>
   </data>
-  <data name="Dark Theme" xml:space="preserve">
-    <value>Dark Theme</value>
+  <data name="Duration" xml:space="preserve">
+    <value>Duration (hours):</value>
+  </data>
+  <data name="English" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="Guide" xml:space="preserve">
+    <value>Guide:</value>
+  </data>
+  <data name="Images" xml:space="preserve">
+    <value>Tour Images:</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Language:</value>
+  </data>
+  <data name="MaxGuests" xml:space="preserve">
+    <value>Maximum guests:</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="Previous" xml:space="preserve">
+    <value>Previous</value>
+  </data>
+  <data name="Serbian" xml:space="preserve">
+    <value>Serbian</value>
+  </data>
+  <data name="Theme" xml:space="preserve">
+    <value>Theme</value>
+  </data>
+  <data name="TourCity" xml:space="preserve">
+    <value>Tour City:</value>
+  </data>
+  <data name="TourCountry" xml:space="preserve">
+    <value>Tour Country:</value>
+  </data>
+  <data name="TourDesc" xml:space="preserve">
+    <value>Tour Description:</value>
   </data>
   <data name="TourName" xml:space="preserve">
-    <value>Tour Name</value>
+    <value>Tour Name:</value>
   </data>
 </root>
