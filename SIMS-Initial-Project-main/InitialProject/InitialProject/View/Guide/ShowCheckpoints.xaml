@@ -5,84 +5,198 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InitialProject.View.Guide"
         mc:Ignorable="d"
-        Title="DMJM-Tours" Width="500" Height="500"
-        Icon ="/Resources/Images/favicon.ico">
+        Title="DMJM-Tours" Width="1024" Height="520"
+        Icon ="/Resources/Images/favicon.ico"
+        Background="#F2F2F2">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition />
-            </Grid.RowDefinitions>
-            <StackPanel Orientation="Horizontal" Margin="10">
-                <Image Source="/Resources/Images/info.png" Width="20" Height="20" Margin="0 0 5 0"/>
-                <TextBlock Text="To select a checkpoint, simply click the checkbox" Margin="0" FontSize="14" FontWeight="Bold"/>
-            </StackPanel>
-        </Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-        <ScrollViewer Grid.Row="1">
-            <ListBox Name="listBox" Margin="10" BorderThickness="0" ItemsSource="{Binding Checkpoints, UpdateSourceTrigger=PropertyChanged}">
-                <ListBox.ItemContainerStyle>
-                    <Style TargetType="ListBoxItem">
-                        <Setter Property="Padding" Value="0"/>
-                    </Style>
-                </ListBox.ItemContainerStyle>
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <VirtualizingStackPanel Orientation="Vertical"/>
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-                <ListBox.Template>
-                    <ControlTemplate TargetType="ListBox">
-                        <Border BorderThickness="1" BorderBrush="Gray" CornerRadius="2">
-                            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-                                <ItemsPresenter/>
-                            </ScrollViewer>
-                        </Border>
-                    </ControlTemplate>
-                </ListBox.Template>
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal" Margin="10">
-                            <CheckBox Name="checkpointCheckbox" Margin="0 0 10 0" Checked="checkpointCheckbox_Checked"  />
-                            <TextBlock Margin="0 0 10 0">
-                            <Run Text="{Binding Order}" FontWeight="Bold"/>
-                            <Run Text="."/>
-                            </TextBlock>
-                            <TextBlock Text="{Binding Name}" Margin="0 0 10 0"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </ScrollViewer>
-        <TextBlock Grid.Row="2" Text="List of guests who have not show up yet:" Margin="10,5" FontSize="14" FontWeight="Bold"/>
-        <DataGrid Grid.Row="3" 
+        <GroupBox Header="Unchecked Guests" FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" Background="#E9F1F7" BorderThickness="2" Grid.Row="0" Grid.Column="0" Margin="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+         <DataGrid Grid.Row="0"
           Name="guestsGrid" 
           Margin="10" 
           AutoGenerateColumns="False" 
           ItemsSource="{Binding UnmarkedGuests, UpdateSourceTrigger=PropertyChanged}"
+          SelectedItem="{Binding Path=SelectedUserDTO}"
           RowHeight="30"
           FontSize="14"
           IsReadOnly="True"
-          CanUserAddRows="False">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Username" Binding="{Binding Username}" Width="*" />
-                <DataGridTextColumn Header="Status" Binding="{Binding CheckpointArrivalName}" Width="*" />
-                <DataGridTemplateColumn Width="100">
-                    <DataGridTemplateColumn.CellTemplate>
+          CanUserAddRows="False"
+          Height="250">
+                <DataGrid.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="FontSize" Value="18"/>
+                        <Setter Property="Padding" Value="10"/>
+                    </Style>
+                </DataGrid.CellStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Username" Binding="{Binding Username}" Width="*" FontSize="18" />
+                        <DataGridTextColumn Header="Checkpoint" Binding="{Binding CheckpointArrivalName}" Width="*" FontSize="18">
+                            <DataGridTextColumn.CellStyle>
+                                <Style TargetType="{x:Type DataGridCell}">
+                                    <Setter Property="Foreground" Value="Black" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding CheckpointArrivalName}" Value="Not Arrived Yet">
+                                            <Setter Property="Foreground" Value="#FFA500"/>
+                                            <Setter Property="FontWeight" Value="Bold"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGridTextColumn.CellStyle>
+                        </DataGridTextColumn>
+                    </DataGrid.Columns>
+            </DataGrid>
+                <Button Content="Check Selected Guest&#x0a;          (ENTER)" Width="200" Height="60" Background="#007ACC" Foreground="White" FontSize="16" BorderThickness="0" Padding="5 0" Click="presentButton_Click" Margin="5" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <EventTrigger RoutedEvent="Button.Click">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="#005F8B" />
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="#00415E" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="Checkpoints" FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" Background="#E9F1F7" BorderThickness="2" Grid.Row="0" Grid.Column="1" Margin="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <ScrollViewer>
+                <ListBox Name="listBox" Margin="10" BorderThickness="0" ItemsSource="{Binding Checkpoints, UpdateSourceTrigger=PropertyChanged}" Height="250">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Padding" Value="0"/>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel Orientation="Vertical"/>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.Template>
+                        <ControlTemplate TargetType="ListBox">
+                            <Border BorderThickness="1" BorderBrush="Gray" CornerRadius="2">
+                                <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                                    <ItemsPresenter/>
+                                </ScrollViewer>
+                            </Border>
+                        </ControlTemplate>
+                    </ListBox.Template>
+                    <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <Button Name ="PresentButton" Content="Present" HorizontalAlignment="Stretch" Padding="5" Click="presentButton_Click"/>
+                            <StackPanel Orientation="Horizontal" Margin="10">
+                                <TextBlock Margin="0 0 10 0">
+                            <Run Text="{Binding Order}" FontWeight="Bold"/>
+                            <Run Text="."/>
+                                </TextBlock>
+                                <TextBlock Text="{Binding Name}" Margin="0 0 10 0"/>
+                            </StackPanel>
                         </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
-        <Button Grid.Row="5" Content="End Tour" Margin="10" HorizontalAlignment="Right" Height="30" Width="100" Click="endTourButton_Click"/>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </ScrollViewer>
+            <Button Content="Update Checkpoint&#x0a;       (CTRL + S)" Width="200" Height="60" Background="#007ACC" Foreground="White" FontSize="16" BorderThickness="0" Padding="5 0" Click="nextCheckpointButton_Click" Margin="5" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <EventTrigger RoutedEvent="Button.Click">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#005F8B" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#00415E" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+             </Button>
+           </Grid>
+        </GroupBox>
+        <Button Content="Close&#x0a;(ESC)" Width="100" Height="60" Background="#007ACC" Foreground="White" FontSize="16" BorderThickness="0" Padding="5 0" Click="CloseButton_Click" Margin="5" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <EventTrigger RoutedEvent="Button.Click">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#005F8B" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#00415E" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <Button Content=" End Tour&#x0a;(CTRL + E)" Width="100" Height="60" Background="#007ACC" Foreground="White" FontSize="16" BorderThickness="0" Padding="5 0" Click="endTourButton_Click" Margin="5" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <EventTrigger RoutedEvent="Button.Click">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#005F8B" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#00415E" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
     </Grid>
 </Window>

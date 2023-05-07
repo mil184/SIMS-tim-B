@@ -353,7 +353,7 @@ namespace InitialProject.View.Guide
         }
         private void AddVouchersToUsers(Tour tour, List<int> vouchersAdded)
         {
-            foreach (int userId in _tourReservationService.GetUserIdsByTour(tour))
+            foreach (int userId in _tourReservationService.GetUncheckedUserIdsByTour(tour))
             {
                 if (!vouchersAdded.Contains(userId))
                 {
