@@ -21,7 +21,7 @@ namespace InitialProject.ViewModel.Guide
         private readonly TourRatingService _tourRatingService;
         private readonly TourReservationService _tourReservationService;
         private readonly Tour _finishedTour;
-
+        public int CurrentSortIndex;
         private ObservableCollection<GuideRatingDTO> _guestRatings;
         public ObservableCollection<GuideRatingDTO> GuestRatings
         {
@@ -54,6 +54,7 @@ namespace InitialProject.ViewModel.Guide
             _tourRatingService.Subscribe(this);
 
             GuestRatings = new ObservableCollection<GuideRatingDTO>(ConvertToDTO(_tourRatingService.GetTourRatings(_finishedTour)));
+            CurrentSortIndex = 0;
         }
 
         public GuideRatingDTO ConvertToDTO(TourRating rating)

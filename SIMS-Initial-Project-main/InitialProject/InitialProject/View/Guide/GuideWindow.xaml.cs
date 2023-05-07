@@ -37,6 +37,8 @@ namespace InitialProject.View.Guide
         public ObservableCollection<GuideTourDTO> RatedTours { get; set; }
 
         public bool TourActive { get; set; }
+
+        public int CurrentSortIndex;
         public GuideTourDTO SelectedCurrentTourDTO { get; set; }
         public GuideTourDTO SelectedUpcomingTourDTO { get; set; }
         public GuideTourDTO SelectedFinishedTourDTO { get; set; }
@@ -120,6 +122,7 @@ namespace InitialProject.View.Guide
             SortTours();
 
             CurrentUser.Username = "Gorana";
+            CurrentSortIndex = 0;
 
         }
         private void InitializeCollections()
@@ -147,8 +150,11 @@ namespace InitialProject.View.Guide
             PreviewKeyDown += CreateTour_PreviewKeyDown;
             PreviewKeyDown += LogOut_PreviewKeyDown;
             PreviewKeyDown += Enter_PreviewKeyDown;
-            PreviewKeyDown += ArrowKeys_PreviewKeyDown;
+            PreviewKeyDown += LeftRightArrowKeys_PreviewKeyDown;
+            PreviewKeyDown += UpDownArrowKeys_PreviewKeyDown;
             PreviewKeyDown += DataGrid_PreviewKeyDown;
+            PreviewKeyDown += SortAsc_PreviewKeyDown;
+            PreviewKeyDown += SortDesc_PreviewKeyDown;
         }
         private void Years_cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -319,7 +325,7 @@ namespace InitialProject.View.Guide
         {
             SelectFinishedTour();
         }
-        private void SelectFinishedTour() 
+        private void SelectFinishedTour()
         {
             Tour selectedTour = ConvertToTour(SelectedFinishedTourDTO);
             if (selectedTour != null)
@@ -334,7 +340,7 @@ namespace InitialProject.View.Guide
             SelectUpcomingTour();
         }
 
-        private void SelectUpcomingTour() 
+        private void SelectUpcomingTour()
         {
             List<int> vouchersAdded = new List<int>();
             Tour tour = ConvertToTour(SelectedUpcomingTourDTO);
@@ -373,7 +379,7 @@ namespace InitialProject.View.Guide
         {
             SelectRatedTour();
         }
-        private void SelectRatedTour() 
+        private void SelectRatedTour()
         {
             RatingsViewModel ratingsViewModel = new RatingsViewModel(_userRepository, _tourRatingService, _tourReservationService, _checkpointService, ConvertToTour(SelectedRatedTourDTO));
             Ratings ratings = new Ratings(ratingsViewModel);
@@ -443,9 +449,9 @@ namespace InitialProject.View.Guide
         {
             ShowCheckpoints showCheckpoints = new ShowCheckpoints(tour, _checkpointService, _tourService, _tourReservationService, _userRepository, _tourRatingService);
             showCheckpoints.ShowDialog();
-        }   
+        }
         private void LogOut_Click(object sender, RoutedEventArgs e)
-        {         
+        {
             SignInForm signInForm = new SignInForm();
             signInForm.Show();
             Close();
@@ -474,11 +480,11 @@ namespace InitialProject.View.Guide
 
             if (e.Key == Key.Enter)
             {
-                switch (tabControl.SelectedIndex) 
+                switch (tabControl.SelectedIndex)
                 {
                     case 0:
-                        if(SelectedCurrentTourDTO != null)
-                        SelectTodaysTour();
+                        if (SelectedCurrentTourDTO != null)
+                            SelectTodaysTour();
                         break;
                     case 1:
                         if (SelectedUpcomingTourDTO != null)
@@ -498,7 +504,7 @@ namespace InitialProject.View.Guide
                 e.Handled = true;
             }
         }
-        private void ArrowKeys_PreviewKeyDown(object sender, KeyEventArgs e)
+        private void LeftRightArrowKeys_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Left || e.Key == Key.Right)
             {
@@ -518,51 +524,147 @@ namespace InitialProject.View.Guide
                 e.Handled = true;
             }
         }
-
         private void DataGrid_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (Keyboard.IsKeyDown(Key.LeftCtrl) && e.Key == Key.L)
             {
-                switch (tabControl.SelectedIndex)
-                {
-                    case 0:
-                        if (CurrentToursDataGrid.Items.Count > 0)
-                        {
-                            CurrentToursDataGrid.SelectedItem = CurrentToursDataGrid.Items[0];
-                            CurrentToursDataGrid.ScrollIntoView(CurrentToursDataGrid.SelectedItem);
-                            CurrentToursDataGrid.Focus();
-                        }
-                        break;
-                    case 1:
-                        if (UpcomingToursDataGrid.Items.Count > 0)
-                        {
-                            UpcomingToursDataGrid.SelectedItem = UpcomingToursDataGrid.Items[0];
-                            UpcomingToursDataGrid.ScrollIntoView(UpcomingToursDataGrid.SelectedItem);
-                            UpcomingToursDataGrid.Focus();
-                        }
-                        break;
-                    case 2:
-                        if (FinishedToursDataGrid.Items.Count > 0)
-                        {
-                            FinishedToursDataGrid.SelectedItem = FinishedToursDataGrid.Items[0];
-                            FinishedToursDataGrid.Focus();
-                            FinishedToursDataGrid.ScrollIntoView(FinishedToursDataGrid.SelectedItem);
-                        }
-                        break;
-                    case 3:
-                        if (RatedToursDataGrid.Items.Count > 0)
-                        {
-                            RatedToursDataGrid.SelectedItem = RatedToursDataGrid.Items[0];
-                            RatedToursDataGrid.ScrollIntoView(RatedToursDataGrid.SelectedItem);
-                            RatedToursDataGrid.Focus();
-                        }
-                        break;
-                    default:
-                        return;
-                }
+                var currentDataGrid = GetCurrentDataGrid();
+                var firstItem = GetFirstItem(currentDataGrid);
+                SelectAndScrollTo(firstItem, currentDataGrid);
                 e.Handled = true;
             }
         }
+
+        private object GetFirstItem(DataGrid dataGrid)
+        {
+            if (dataGrid.Items.Count > 0)
+            {
+                return dataGrid.Items[0];
+            }
+            return null;
+        }
+
+        private void SelectAndScrollTo(object item, DataGrid dataGrid)
+        {
+            if (item != null)
+            {
+                dataGrid.SelectedItem = item;
+                dataGrid.ScrollIntoView(item);
+                dataGrid.Focus();
+            }
+        }
+
+        private void UpDownArrowKeys_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Down || e.Key == Key.Up)
+            {
+
+                DataGrid currentDataGrid = GetCurrentDataGrid();
+                int current_index = currentDataGrid.SelectedIndex;
+                        if (Keyboard.IsKeyDown(Key.Down))
+                        {
+                            if (current_index < currentDataGrid.Items.Count - 1)
+                            {
+                        // Select the next item in the DataGrid
+                        currentDataGrid.SelectedItem = currentDataGrid.Items[current_index + 1];
+                        currentDataGrid.ScrollIntoView(currentDataGrid.SelectedItem);
+                        currentDataGrid.Focus();
+                            }
+                            else
+                            {
+                        currentDataGrid.SelectedItem = currentDataGrid.Items[0];
+                        currentDataGrid.ScrollIntoView(currentDataGrid.SelectedItem);
+                        currentDataGrid.Focus();
+                            }
+                        }
+                        else if (Keyboard.IsKeyDown(Key.Up))
+                        {
+                            if (current_index > 0)
+                            {
+                        // Select the previous item in the DataGrid
+                        currentDataGrid.SelectedItem = currentDataGrid.Items[current_index - 1];
+                        currentDataGrid.ScrollIntoView(currentDataGrid.SelectedItem);
+                        currentDataGrid.Focus();
+                            }
+                            else
+                            {
+                        // The currently selected item is the first item in the DataGrid, select the last item instead
+                        currentDataGrid.SelectedItem = currentDataGrid.Items[currentDataGrid.Items.Count - 1];
+                        currentDataGrid.ScrollIntoView(currentDataGrid.SelectedItem);
+                        currentDataGrid.Focus();
+                            }
+                        }
+                e.Handled = true;
+            }
+        }
+
+        private void SortAsc_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (!Keyboard.IsKeyDown(Key.LeftShift) || !Keyboard.IsKeyDown(Key.A))
+                return;
+
+            var grid = GetCurrentDataGrid();
+            if (grid == null || grid.Items.Count == 0)
+                return;
+
+            var view = CollectionViewSource.GetDefaultView(grid.ItemsSource);
+            var sortColumn = GetNextSortColumn();
+            view.SortDescriptions.Clear();
+            view.SortDescriptions.Add(new SortDescription(sortColumn, ListSortDirection.Ascending));
+            view.Refresh();
+            e.Handled = true;
+        }
+        private void SortDesc_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (!Keyboard.IsKeyDown(Key.LeftShift) || !Keyboard.IsKeyDown(Key.D))
+                return;
+
+            var grid = GetCurrentDataGrid();
+            if (grid == null || grid.Items.Count == 0)
+                return;
+
+            var view = CollectionViewSource.GetDefaultView(grid.ItemsSource);
+            var sortColumn = GetNextSortColumn();
+            view.SortDescriptions.Clear();
+            view.SortDescriptions.Add(new SortDescription(sortColumn, ListSortDirection.Descending));
+            view.Refresh();
+            e.Handled = true;
+        }
+        private DataGrid GetCurrentDataGrid()
+        {
+            switch (tabControl.SelectedIndex)
+            {
+                case 0:
+                    return CurrentToursDataGrid;
+                case 1:
+                    return UpcomingToursDataGrid;
+                case 2:
+                    return FinishedToursDataGrid;
+                case 3:
+                    return RatedToursDataGrid;
+                default:
+                    return null;
+            }
+        }
+
+        private string GetNextSortColumn()
+        {
+            switch (CurrentSortIndex)
+            {
+                case 0:
+                    CurrentSortIndex++;
+                    return "Name";
+                case 1:
+                    CurrentSortIndex++;
+                    return "Location";
+                case 2:
+                    CurrentSortIndex = 0;
+                    return "StartTime";
+                default:
+                    return "";
+            }
+        }
+
 
         private void ShowActiveTourWarning()
         {

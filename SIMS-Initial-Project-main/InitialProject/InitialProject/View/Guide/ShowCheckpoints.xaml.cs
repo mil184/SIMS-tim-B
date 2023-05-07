@@ -78,7 +78,7 @@ namespace InitialProject.View.Guide
         {
             Checkpoints = new ObservableCollection<Checkpoint>();
             UnmarkedGuests = new ObservableCollection<UserDTO>();
-            Index = 0;
+            Index = 1;
         }
         private void LoadUnmarkedGuests()
         {
@@ -99,6 +99,7 @@ namespace InitialProject.View.Guide
             PreviewKeyDown += Escape_PreviewKeyDown;
             PreviewKeyDown += DataGrid_PreviewKeyDown;
             PreviewKeyDown += NextCheckpoint_PreviewKeyDown;
+            PreviewKeyDown += EndTour_PreviewKeyDown;
         }
         private bool HasUser(int userId)
         {
@@ -158,17 +159,18 @@ namespace InitialProject.View.Guide
         }
         private void SetBackground(Checkpoint checkpoint, ListBoxItem listBoxItem, int currentCheckpointId, int firstCheckpointId, ref ListBoxItem previousListBoxItem)
         {
-            if (checkpoint.Id <= currentCheckpointId)
+            if (checkpoint.Id < currentCheckpointId)
             {
                 SetBackground(listBoxItem, Brushes.LightGray);
             }
+
             else if (checkpoint.Id == currentCheckpointId + 1)
             {
-                SetBackground(listBoxItem, Brushes.White);
+                SetBackground(listBoxItem, new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F2F2F2")));
             }
             else
             {
-                SetBackground(listBoxItem, Brushes.White);
+                SetBackground(listBoxItem, new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F2F2F2")));
             }
             if (checkpoint.Id == SelectedTour.CurrentCheckpointId)
             {
@@ -398,5 +400,6 @@ namespace InitialProject.View.Guide
 
             Index++;
         }
+
     }
 }

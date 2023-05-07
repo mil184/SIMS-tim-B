@@ -178,6 +178,7 @@ namespace InitialProject.View.Guide
             InitializeComboBoxes();
             InitializeCountryDropdown();
             InitializeShortcuts();
+            FillWithTestData();
         }
         private void InitializeCollections()
         {
@@ -518,6 +519,27 @@ namespace InitialProject.View.Guide
         private void ShowLocationWarning()
         {
             MessageBox.Show("Please enter the location.", "Location warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+        private void FillWithTestData()
+        {
+            TourName = "Osaka Food Tour";
+            Description = "Embark on a great Japanese journey and try our famous food!";
+            TourLanguage = "Japanese";
+            MaxGuests = "100";
+            Duration = "50";
+
+            cbCountry.SelectedItem = "Japan";
+            cbCity.SelectedItem = "Osaka";
+
+            DateTimes.Add(new DateTime(2023, 5, 7, 23, 59, 59));
+
+            ImageUrls.Add("test1");
+            ImageUrls.Add("test2");
+            ImageUrls.Add("test3");
+
+            Checkpoints.Add(new Checkpoint("The Bridge", 1));
+            Checkpoints.Add(new Checkpoint("The Castle", 2));
+            //Checkpoints.Add(new Checkpoint("The Volcano", 3));
         }
     }
 }
