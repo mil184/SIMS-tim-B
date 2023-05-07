@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ns="clr-namespace:InitialProject.Localization"
         xmlns:local="clr-namespace:InitialProject.View.Guest2"
         mc:Ignorable="d"
         Title="DMJM-Tours" Height="768" Width="1024"
@@ -46,15 +47,25 @@
                                 </StackPanel>
                             </Button.Content>
                         </Button>
-
-                        <Button FontSize="20" Height="35" HorizontalAlignment="Stretch">
-                            <Button.Content>
-                                <StackPanel Orientation="Horizontal">
-                                    <Image Source="/Resources/Images/language.png" Width="Auto" Margin="5"/>
-                                    <TextBlock Text="Show in Serbian"/>
-                                </StackPanel>
-                            </Button.Content>
-                        </Button>
+                        <StackPanel Orientation="Horizontal">
+                            <Button FontSize="20" Height="35" HorizontalAlignment="Stretch" Click="SerbianButton_Click">
+                                <Button.Content>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="/Resources/Images/language.png" Width="Auto" Margin="5"/>
+                                        <TextBlock Text="Serbian"/>
+                                    </StackPanel>
+                                </Button.Content>
+                            </Button>
+                            <Button FontSize="20" Height="35" HorizontalAlignment="Stretch" Click="EnglishButton_Click">
+                                <Button.Content>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="/Resources/Images/language.png" Width="Auto" Margin="5"/>
+                                        <TextBlock Text="English"/>
+                                    </StackPanel>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        
                     </StackPanel>
                 </Grid>
             </Border>
@@ -86,7 +97,7 @@
                     <ColumnDefinition Width="25*"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Text="Tour Name:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
+                <TextBlock Text="{ns:Loc TourName}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
                 <TextBox Name="txtTourName" Margin="5" IsReadOnly="True"    
                     Text="{Binding Path=tourDTO.Name, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                     Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Width="200" Height="60">
