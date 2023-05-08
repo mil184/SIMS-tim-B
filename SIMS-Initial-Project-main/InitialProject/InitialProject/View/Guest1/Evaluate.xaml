@@ -5,49 +5,101 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InitialProject.View.Guest1"
         mc:Ignorable="d"
-        Title="Evaluate" Height="500" Width="850">
+        Title="Evaluate" Height="600" Width="1070"
+        Background="#e9f1fa">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="1.5*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-
-        <Label Margin="0,10,0,0" Content ="Accommodation rating(cleanliness):" />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2.4*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        
+        <Label Margin="0,10,0,0" Content ="Accommodation rating(cleanliness):" FontSize="16"/>
         <StackPanel Orientation="Horizontal" Margin="10,40,0,0">
-            <RadioButton Name="cleanliness1"  Content="1" IsChecked="{Binding Cleanliness, UpdateSourceTrigger=PropertyChanged}"/>
-            <RadioButton Name="cleanliness2" Content="2" IsChecked="{Binding Cleanliness, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
-            <RadioButton Name="cleanliness3" Content="3" IsChecked="{Binding Cleanliness, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
-            <RadioButton Name="cleanliness4" Content="4" IsChecked="{Binding Cleanliness, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
-            <RadioButton Name="cleanliness5" Content="5" IsChecked="{Binding Cleanliness, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
+            <RadioButton Name="cleanliness1"  Content="1" IsChecked="{Binding Cleanliness, UpdateSourceTrigger=PropertyChanged}" Margin="0,5,0,0" FontSize="16"/>
+            <RadioButton Name="cleanliness2" Content="2" IsChecked="{Binding Cleanliness, UpdateSourceTrigger=PropertyChanged}" Margin="10,5,0,0" FontSize="16"/>
+            <RadioButton Name="cleanliness3" Content="3" IsChecked="{Binding Cleanliness, UpdateSourceTrigger=PropertyChanged}" Margin="10,5,0,0" FontSize="16"/>
+            <RadioButton Name="cleanliness4" Content="4" IsChecked="{Binding Cleanliness, UpdateSourceTrigger=PropertyChanged}" Margin="10,5,0,0" FontSize="16"/>
+            <RadioButton Name="cleanliness5" Content="5" IsChecked="{Binding Cleanliness, UpdateSourceTrigger=PropertyChanged}" Margin="10,5,0,0" FontSize="16"/>
         </StackPanel>
 
-        <Label Margin="0,70,0,0" Content="Owner rating(correctness):" />
+        <Label Margin="0,70,0,0" Content="Owner rating(correctness):" FontSize="16" />
         <StackPanel Orientation="Horizontal" Margin="10,100,0,0">
-            <RadioButton Name="correctness1" Content="1" IsChecked="{Binding Correctness, UpdateSourceTrigger=PropertyChanged}"/>
-            <RadioButton Name="correctness2" Content="2" IsChecked="{Binding Correctness, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
-            <RadioButton Name="correctness3" Content="3" IsChecked="{Binding Correctness, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
-            <RadioButton Name="correctness4" Content="4" IsChecked="{Binding Correctness, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
-            <RadioButton Name="correctness5" Content="5" IsChecked="{Binding Correctness, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
+            <RadioButton Name="correctness1" Content="1" IsChecked="{Binding Correctness, UpdateSourceTrigger=PropertyChanged}" Margin="0,5,0,0" FontSize="16"/>
+            <RadioButton Name="correctness2" Content="2" IsChecked="{Binding Correctness, UpdateSourceTrigger=PropertyChanged}" Margin="10,5,0,0" FontSize="16"/>
+            <RadioButton Name="correctness3" Content="3" IsChecked="{Binding Correctness, UpdateSourceTrigger=PropertyChanged}" Margin="10,5,0,0" FontSize="16"/>
+            <RadioButton Name="correctness4" Content="4" IsChecked="{Binding Correctness, UpdateSourceTrigger=PropertyChanged}" Margin="10,5,0,0" FontSize="16"/>
+            <RadioButton Name="correctness5" Content="5" IsChecked="{Binding Correctness, UpdateSourceTrigger=PropertyChanged}" Margin="10,5,0,0" FontSize="16"/>
         </StackPanel>
 
-        <Label Margin="0,150,0,0" Content="Additional comment:" />
-        <TextBox x:Name="commentTextBox" Width="350" Height="100" Margin="10,178,440,27"  Text="{Binding Path=Comment, UpdateSourceTrigger=PropertyChanged}"/>
-
-        <StackPanel Orientation="Horizontal" Margin="0,10" Grid.Row="3">
-            <Label Content="Picture upload:" Margin="0,5,0,0"/>
-            <TextBox x:Name="UrlTextBox" Width="150" Height="20" Margin="0,0,0,110" />
-            <Button x:Name="addPictureButton" Click="AddPicture_Click" Width="30" Height="20" Margin="5,0,0,110">
-                <Image Source="/Resources/Images/upload.png" Height="15" Width="30" />
+        <StackPanel Orientation="Vertical" Grid.Row="1">
+          <Label Margin="10" Content="Additional comment:" FontSize="16"/>
+          <TextBox x:Name="commentTextBox" Width="350" Height="100" Margin="10"  Text="{Binding Path=Comment, UpdateSourceTrigger=PropertyChanged}" FontSize="14" HorizontalAlignment="Left"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="2">
+            <Label Content="Picture upload:" Margin="10" FontSize="16" Height="30"/>
+            <TextBox x:Name="UrlTextBox" Width="150" Height="25" Margin="10" FontSize="14"/>
+            <Button x:Name="addPictureButton" Click="AddPicture_Click" Width="100" Height="35" Margin="10" Background="White">
+                <Image Source="/Resources/Images/upload.png"/>
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="20" Background="{TemplateBinding Background}" BorderThickness="2" BorderBrush="#6d87a3">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
             </Button>
-            <ListBox x:Name="UrlListBox" Width="220" Height="40" Margin="10,5,0,110" ItemsSource="{Binding ImageUrls}" />
+            <ListBox x:Name="UrlListBox" Width="300" Height="40" Margin="10" ItemsSource="{Binding ImageUrls}" FontSize="14"/>
         </StackPanel>
 
-        <StackPanel Orientation="Horizontal" Margin="5,70" Grid.Row="4">
-            <Button Content="Recommendation for reservation" Height="30" Width="200" Margin="5,0,0,0"/>
-            <Button Content="Save" Click="Save_Click" Height="30" Width="60" Margin="350,0,40,0"/>
-            <Button Content="Cancel" Click="Cancel_Click" Height="30" Width="60" />
+        <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="3">
+            <Button Content="Recommendation for reservation" Height="40" Width="280" Margin="10" FontSize="16" Background="#97b9de">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="20" Background="{TemplateBinding Background}" BorderThickness="2" BorderBrush="#6d87a3">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+        </StackPanel>
+
+        <Border BorderThickness="2" BorderBrush="#abc4e0" Height="70" Width="300" HorizontalAlignment="Right" Margin="5" Grid.Column="1" VerticalAlignment="Top" CornerRadius="10">
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock Text="Accommodation name: " FontSize="14" FontStyle="Italic"/>
+                    <TextBlock Text="{Binding SelectedUnratedAccommodation.AccommodationName}" FontSize="14" FontStyle="Italic"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock Text="Owner: " FontSize="14" FontStyle="Italic"/>
+                    <TextBlock Text="{Binding SelectedUnratedAccommodation.UserName}" FontSize="14" FontStyle="Italic"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+        <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="3" Grid.Column="1">
+            <Button Content="Save" Click="Save_Click" Height="40" Width="110" Margin="10" FontSize="16" Background="#97b9de">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="20" Background="{TemplateBinding Background}" BorderThickness="2" BorderBrush="#6d87a3">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <Button Content="Cancel" Click="Cancel_Click" Height="40" Width="110" FontSize="16" Margin="30,10,10,10" Background="#97b9de">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="20" Background="{TemplateBinding Background}" BorderThickness="2" BorderBrush="#6d87a3">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
         </StackPanel>
     </Grid>
 </Window>

@@ -25,15 +25,20 @@
     <None Remove="Resources\Images\guest.png" />
     <None Remove="Resources\Images\guest2.png" />
     <None Remove="Resources\Images\home.png" />
+    <None Remove="Resources\Images\image.png" />
     <None Remove="Resources\Images\image_unavailable.png" />
     <None Remove="Resources\Images\info.png" />
     <None Remove="Resources\Images\inspection.png" />
+    <None Remove="Resources\Images\leftArrow.png" />
     <None Remove="Resources\Images\owner.png" />
+    <None Remove="Resources\Images\pdf.jpg" />
     <None Remove="Resources\Images\red-x.png" />
+    <None Remove="Resources\Images\rightArrow.png" />
     <None Remove="Resources\Images\search.jpg" />
     <None Remove="Resources\Images\tour-guide.png" />
     <None Remove="Resources\Images\traveler.png" />
     <None Remove="Resources\Images\upload.png" />
+    <None Remove="Resources\Images\video.png" />
     <None Remove="Resources\Images\view.png" />
   </ItemGroup>
 
@@ -60,6 +65,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\guest.png" />
+    <Resource Include="Resources\Images\image.png" />
     <Resource Include="Resources\Images\image_unavailable.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -67,10 +73,13 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\inspection.png" />
+    <Resource Include="Resources\Images\leftArrow.png" />
     <Resource Include="Resources\Images\owner.png" />
+    <Resource Include="Resources\Images\pdf.jpg" />
     <Resource Include="Resources\Images\red-x.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\Images\rightArrow.png" />
     <Resource Include="Resources\Images\search.jpg" />
     <Resource Include="Resources\Images\tour-guide.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -93,6 +102,7 @@
   <ItemGroup>
     <Resource Include="Resources\Images\guest2.png" />
     <Resource Include="Resources\Images\upload.png" />
+    <Resource Include="Resources\Images\video.png" />
   </ItemGroup>
 
   <ItemGroup>
