@@ -1,6 +1,7 @@
-﻿using InitialProject.Model;
+﻿    using InitialProject.Model;
 using InitialProject.Repository;
 using InitialProject.Service;
+using InitialProject.View.Guide.UserControls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,6 +10,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using Image = InitialProject.Model.Image;
 
@@ -178,7 +180,7 @@ namespace InitialProject.View.Guide
             InitializeComboBoxes();
             InitializeCountryDropdown();
             InitializeShortcuts();
-            FillWithTestData();
+            //FillWithTestData();
         }
         private void InitializeCollections()
         {
@@ -212,32 +214,35 @@ namespace InitialProject.View.Guide
         {
             PreviewKeyDown += Escape_PreviewKeyDown;
             PreviewKeyDown += Create_PreviewKeyDown;
+            PreviewKeyDown += Enter_PreviewKeyDown;
         }
 
         private void TourCreation() 
         {
+            bool valid = true;
+
             if (!IsValid)
             {
                 ShowInvalidInfoWarning();
-                return;
+                valid = false;
             }
 
             if (ImageUrls.Count() < 1)
             {
                 ShowImageWarning();
-                return;
+                valid = false;
             }
 
             if (Checkpoints.Count() < 2)
             {
                 ShowCheckpointWarning();
-                return;
+                valid = false;
             }
 
             if (DateTimes.Count() < 1)
             {
                 ShowNoDateTimeWarning();
-                return;
+                valid = false;
             }
 
             TourLocation = _locationService.GetLocation(Country, City);
@@ -245,12 +250,15 @@ namespace InitialProject.View.Guide
             if (TourLocation == null)
             {
                 ShowLocationWarning();
-                return;
+                valid = false;
             }
 
-            SaveTour();
+            if (valid)
+            {
+                SaveTour();
 
-            Close();
+                Close();
+            }
         }
         private void btnCreateTour_Click(object sender, RoutedEventArgs e)
         {
@@ -316,6 +324,10 @@ namespace InitialProject.View.Guide
         }
         private void AddImageButton_Click(object sender, RoutedEventArgs e)
         {
+            AddImage();
+        }
+        private void AddImage() 
+        {
             string imageUrl = UrlTextBox.Text;
             if (!string.IsNullOrEmpty(imageUrl))
             {
@@ -330,6 +342,11 @@ namespace InitialProject.View.Guide
 
         private void AddCheckpointButton_Click(object sender, RoutedEventArgs e)
         {
+            AddCheckpoint();
+        }
+
+        private void AddCheckpoint() 
+        {
             if (string.IsNullOrEmpty(CheckpointTextBox.Text))
                 return;
 
@@ -337,7 +354,6 @@ namespace InitialProject.View.Guide
             Checkpoints.Add(checkpoint);
 
             CheckpointTextBox.Text = string.Empty;
-
         }
 
         private Checkpoint CreateCheckpoint(string name, int order)
@@ -386,13 +402,18 @@ namespace InitialProject.View.Guide
         }
         private void addDateButton_Click(object sender, RoutedEventArgs e)
         {
+            AddDate();
+        }
+
+        private void AddDate() 
+        {
             if (IsDateTimeInputValid())
             {
                 DateTime selectedDateTime = GetSelectedDateTime();
                 DateTimes.Add(selectedDateTime);
                 return;
-            }             
-            
+            }
+
             ShowInvalidDateTimeWarning();
         }
         private bool IsDateTimeInputValid()
@@ -488,6 +509,24 @@ namespace InitialProject.View.Guide
                 this.Close();
             }
         }
+        private void Enter_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                if (Hours_cb.IsFocused || Minutes_cb.IsFocused || dpDate.IsKeyboardFocusWithin) 
+                {
+                    AddDate();
+                }
+                else if (UrlTextBox.IsFocused || UrlBtn.IsFocused) 
+                {
+                    AddImage();
+                }
+                else if(CheckpointTextBox.IsFocused || CheckpointBtn.IsFocused) 
+                {
+                    AddCheckpoint();
+                }
+            }
+        }
         private void Create_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.S)
@@ -495,30 +534,252 @@ namespace InitialProject.View.Guide
                 TourCreation();
             }
         }
-
         private void ShowInvalidInfoWarning()
         {
-            MessageBox.Show("Please enter valid information.", "Info warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            if (string.IsNullOrEmpty(txtTourName.Text))
+            {
+                CustomMessageBox messageBox = new CustomMessageBox();
+                messageBox.Text = "Tour Name is required.";
+
+                Popup popup = new Popup();
+                popup.AllowsTransparency = true; // Allow the popup to have a transparent background
+                popup.Child = messageBox;
+                popup.PlacementTarget = txtTourName; // Set the placement target to the TextBox control
+                popup.Placement = PlacementMode.Right; // Set the placement mode to right
+                popup.VerticalOffset = -23;
+                popup.IsOpen = true;
+
+                // Hide the popup when the user starts typing again
+                txtTourName.TextChanged += (s, args) =>
+                {
+                    popup.IsOpen = false;
+                };
+            }
+            if (string.IsNullOrEmpty(txtTourDescription.Text))
+            {
+                CustomMessageBox messageBox = new CustomMessageBox();
+                messageBox.Text = "Tour Description is required.";
+
+                Popup popup = new Popup();
+                popup.AllowsTransparency = true; // Allow the popup to have a transparent background
+                popup.Child = messageBox;
+                popup.PlacementTarget = txtTourDescription; // Set the placement target to the TextBox control
+                popup.Placement = PlacementMode.Right; // Set the placement mode to right
+                popup.IsOpen = true;
+
+                // Hide the popup when the user starts typing again
+                txtTourDescription.TextChanged += (s, args) =>
+                {
+                    popup.IsOpen = false;
+                };
+            }
+            if (string.IsNullOrEmpty(txtTourLanguage.Text))
+            {
+                CustomMessageBox messageBox = new CustomMessageBox();
+                messageBox.Text = "Tour Language is required.";
+
+                Popup popup = new Popup();
+                popup.AllowsTransparency = true; // Allow the popup to have a transparent background
+                popup.Child = messageBox;
+                popup.PlacementTarget = txtTourLanguage; // Set the placement target to the TextBox control
+                popup.Placement = PlacementMode.Right; // Set the placement mode to right
+                popup.VerticalOffset = -27;
+                popup.IsOpen = true;
+
+                // Hide the popup when the user starts typing again
+                txtTourLanguage.TextChanged += (s, args) =>
+                {
+                    popup.IsOpen = false;
+                };
+            }
+           
+            if (string.IsNullOrEmpty(txtMaxGuests.Text) || !int.TryParse(MaxGuests, out int TryParseNumber) || int.Parse(MaxGuests) <= 0)
+            {
+                CustomMessageBox messageBox = new CustomMessageBox();
+                messageBox.Text = GetMessageForMaxGuests();
+
+                Popup popup = new Popup();
+                popup.AllowsTransparency = true; // Allow the popup to have a transparent background
+                popup.Child = messageBox;
+                popup.PlacementTarget = txtMaxGuests; // Set the placement target to the TextBox control
+                popup.Placement = PlacementMode.Right; // Set the placement mode to right
+                popup.VerticalOffset = -20;
+                popup.IsOpen = true;
+
+                // Hide the popup when the user starts typing again
+                txtMaxGuests.TextChanged += (s, args) =>
+                {
+                    popup.IsOpen = false;
+                };
+            }
+            if (string.IsNullOrEmpty(txtDuration.Text) || !double.TryParse(Duration, out double tryParseNumber) || double.Parse(Duration) <= 0)
+            {
+                CustomMessageBox messageBox = new CustomMessageBox();
+                messageBox.Text = GetMessageForDuration();
+
+                Popup popup = new Popup();
+                popup.AllowsTransparency = true; // Allow the popup to have a transparent background
+                popup.Child = messageBox;
+                popup.PlacementTarget = txtDuration; // Set the placement target to the TextBox control
+                popup.Placement = PlacementMode.Right; // Set the placement mode to right
+                popup.VerticalOffset = -10;
+                popup.IsOpen = true;
+
+                // Hide the popup when the user starts typing again
+                txtDuration.TextChanged += (s, args) =>
+                {
+                    popup.IsOpen = false;
+                };
+            }
+        }
+        private string GetMessageForMaxGuests() 
+        {
+            if (string.IsNullOrEmpty(txtMaxGuests.Text))
+               return "Max Guest Number is required.";
+
+            if (!int.TryParse(MaxGuests, out int tryParseNumber))
+                return "Not a number value.";
+
+            if (int.TryParse(MaxGuests, out int TryParseNumber) && int.Parse(MaxGuests) <= 0)
+               return "Invalid number value.";
+
+            return "";
+        }
+        private string GetMessageForDuration()
+        {
+            if (string.IsNullOrEmpty(txtDuration.Text))
+                return "Duration is required.";
+
+            if (!double.TryParse(Duration, out double tryParseNumber))
+                return "Not a number value.";
+
+            if (double.TryParse(Duration, out double TryParseNumber) && double.Parse(Duration) <= 0)
+                return "Invalid number value.";
+
+            return "";
         }
         private void ShowImageWarning()
         {
-            MessageBox.Show("Please enter at least one image.", "Image warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            CustomMessageBox messageBox = new CustomMessageBox();
+            messageBox.Text = "At least one image is required";
+
+            Popup popup = new Popup();
+            popup.AllowsTransparency = true; // Allow the popup to have a transparent background
+            popup.Child = messageBox;
+            popup.PlacementTarget = UrlTextBox; // Set the placement target to the TextBox control
+            popup.Placement = PlacementMode.Right; // Set the placement mode to right
+            popup.VerticalOffset = -10;
+            popup.HorizontalOffset = 40;
+            popup.IsOpen = true;
+
+            // Hide the popup when the user starts typing again
+            UrlTextBox.TextChanged += (s, args) =>
+            {
+                popup.IsOpen = false;
+            };
         }
         private void ShowNoDateTimeWarning()
         {
-            MessageBox.Show("Please enter at least one date and time.", "Date and time warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            CustomMessageBox messageBox = new CustomMessageBox();
+            messageBox.Text = "At least one date";
+            messageBox.TextAdditional = "and time is required";
+
+            Popup popup = new Popup();
+            popup.AllowsTransparency = true; // Allow the popup to have a transparent background
+            popup.Child = messageBox;
+            popup.PlacementTarget = Minutes_cb; // Set the placement target to the TextBox control
+            popup.Placement = PlacementMode.Right; // Set the placement mode to right
+            popup.VerticalOffset = -10;
+            popup.HorizontalOffset = 40;
+            popup.IsOpen = true;
+
+            // Hide the popup when the user starts typing again
+            Minutes_cb.SelectionChanged += (s, args) =>
+            {
+                popup.IsOpen = false;
+            };
+            Hours_cb.SelectionChanged += (s, args) =>
+            {
+                popup.IsOpen = false;
+            };
+            dpDate.SelectedDateChanged += (s, args) =>
+            {
+                popup.IsOpen = false;
+            };
         }
         private void ShowInvalidDateTimeWarning()
         {
-            MessageBox.Show("Please choose a valid date and time.", "Date and time warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            CustomMessageBox messageBox = new CustomMessageBox();
+            messageBox.Text = "Invalid date and time values";
+  
+            Popup popup = new Popup();
+            popup.AllowsTransparency = true; // Allow the popup to have a transparent background
+            popup.Child = messageBox;
+            popup.PlacementTarget = Minutes_cb; // Set the placement target to the TextBox control
+            popup.Placement = PlacementMode.Right; // Set the placement mode to right
+            popup.VerticalOffset = -10;
+            popup.HorizontalOffset = 40;
+            popup.IsOpen = true;
+
+            // Hide the popup when the user starts typing again
+            Minutes_cb.SelectionChanged += (s, args) =>
+            {
+                popup.IsOpen = false;
+            };
+            Hours_cb.SelectionChanged += (s, args) =>
+            {
+                popup.IsOpen = false;
+            };
+            dpDate.SelectedDateChanged += (s, args) =>
+            {
+                popup.IsOpen = false;
+            };
         }
         private void ShowCheckpointWarning()
         {
-            MessageBox.Show("Please enter at least two checkpoints.", "Checkpoint warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            CustomMessageBox messageBox = new CustomMessageBox();
+            messageBox.Text = "At least two checkpoints";
+             messageBox.TextAdditional = "are required";
+
+            Popup popup = new Popup();
+            popup.AllowsTransparency = true; // Allow the popup to have a transparent background
+            popup.Child = messageBox;
+            popup.PlacementTarget = CheckpointTextBox; // Set the placement target to the TextBox control
+            popup.Placement = PlacementMode.Right; // Set the placement mode to right
+            popup.VerticalOffset = -10;
+            popup.HorizontalOffset = 40;
+            popup.IsOpen = true;
+
+            // Hide the popup when the user starts typing again
+            CheckpointTextBox.TextChanged += (s, args) =>
+            {
+                popup.IsOpen = false;
+            };
         }
         private void ShowLocationWarning()
         {
-            MessageBox.Show("Please enter the location.", "Location warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+
+            CustomMessageBox messageBox = new CustomMessageBox();
+            messageBox.Text = "Location is required";
+
+            Popup popup = new Popup();
+            popup.AllowsTransparency = true; // Allow the popup to have a transparent background
+            popup.Child = messageBox;
+            popup.PlacementTarget = cbCity; // Set the placement target to the TextBox control
+            popup.Placement = PlacementMode.Right; // Set the placement mode to right
+            popup.VerticalOffset = -20;
+            popup.IsOpen = true;
+
+            // Hide the popup when the user starts typing again
+            cbCity.SelectionChanged += (s, args) =>
+            {
+                popup.IsOpen = false;
+            };
+            cbCountry.SelectionChanged += (s, args) =>
+            {
+                popup.IsOpen = false;
+            };
+
         }
         private void FillWithTestData()
         {

@@ -5,25 +5,35 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InitialProject.View.Guide"
         mc:Ignorable="d"
-        Title="DMJM-Tours" Height="810" Width="530"
+        Title="DMJM-Tours" Height="820" Width="530"
         Icon ="/Resources/Images/favicon.ico"
         Background="#F2F2F2"
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <ControlTemplate x:Key="ValidationErrorTemplate">
             <DockPanel LastChildFill="True">
-                <Border BorderBrush="Red" BorderThickness="1">
+                <Border BorderBrush="#FFA500" BorderThickness="1">
                     <AdornedElementPlaceholder />
                 </Border>
-                <!--<TextBlock Foreground="Red" Text="{Binding [0].ErrorContent}" Margin="5,0,0,0" />-->
-                <TextBlock Foreground="Red" Margin="5,0,0,0" />
             </DockPanel>
         </ControlTemplate>
         <Style TargetType="{x:Type TextBox}">
             <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ValidationErrorTemplate}" />
         </Style>
     </Window.Resources>
-    <Border Background="#E9F1F7" BorderThickness="3" BorderBrush="#007ACC" CornerRadius="5" Margin="10">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0" Background="#E9F1F7" BorderThickness="3" BorderBrush="#007ACC" CornerRadius="5" Margin="2">
+            <StackPanel Orientation="Horizontal" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Image Source="/Resources/Images/info.png" Width="22" Height="22" Margin="2"/>
+            <TextBlock FontSize="13" FontStyle="Italic" Text="Navigate with" VerticalAlignment="Center" Foreground="#007ACC"/>
+            <TextBlock FontSize="15" FontStyle="Italic" Text=" TAB/ LSHIFT+TAB" VerticalAlignment="Center" Foreground="#FFA500"/>
+        </StackPanel>
+        </Border>
+                <Border Grid.Row="1" Background="#E9F1F7" BorderThickness="3" BorderBrush="#007ACC" CornerRadius="5" Margin="5">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -37,7 +47,8 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -46,107 +57,57 @@
 
             <!-- Tour Details Section -->
 
-            <TextBlock Text="Tour Name:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" FontSize="16" Margin="5 5 5 5" Foreground="#007ACC" FontWeight="Bold"/>
-            <TextBox Name="txtTourName" Margin="5 5 5 5" 
+                <TextBlock Text="Tour Name:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" FontSize="15" Margin="4" Foreground="#007ACC" FontWeight="Bold"/>
+                <TextBox Name="txtTourName" Margin="4" 
                          
                  Text="{Binding Path=TourName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                  Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Width="300">
-            </TextBox>
+                </TextBox>
 
-            <TextBlock Text="Tour Description:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" FontSize="16" Margin="5 5 5 5" Foreground="#007ACC" FontWeight="Bold" />
-            <TextBox Name="txtTourDescription" Margin="5 5 5 5"   Height="100" Text="{Binding Path=Description, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Grid.Row="2" Grid.Column="1" 
+                <TextBlock Text="Tour Description:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" FontSize="15" Margin="4" Foreground="#007ACC" FontWeight="Bold" />
+                <TextBox Name="txtTourDescription" Margin="4"   Height="100" Text="{Binding Path=Description, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Grid.Row="2" Grid.Column="1" 
                          HorizontalAlignment="Left" Width="300" TextWrapping="Wrap" />
 
-            <TextBlock Text="Language:" Grid.Row="3" Grid.Column="0" FontSize="16" Margin="5 5 5 5" Foreground="#007ACC" FontWeight="Bold"/>
-            <TextBox Name="txtTourLanguage" Margin="5 5 5 5"                 
+                <TextBlock Text="Language:" Grid.Row="3" Grid.Column="0" FontSize="15" Margin="4" Foreground="#007ACC" FontWeight="Bold"/>
+                <TextBox Name="txtTourLanguage" Margin="4"                 
                  Text="{Binding Path=TourLanguage, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                  Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" Width="300">
-            </TextBox>
-            <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
-                <TextBlock Text="Maximum Guests:" FontSize="16" Margin="5 5 5 5" Foreground="#007ACC" FontWeight="Bold"/>
-                <TextBox Name="txtMaxGuests" Text="{Binding Path=MaxGuests, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-             Margin="5 5 5 5"  Width="80"/>
+                </TextBox>
 
-                <TextBlock Text="Duration (hours):" VerticalAlignment="Center" FontSize="16" Margin="5 5 5 5" Foreground="#007ACC" FontWeight="Bold"/>
-                <TextBox Name="txtDuration" Text="{Binding Path=Duration, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-             Margin="5 5 5 5"  Width="80"/>
-            </StackPanel>
+                <TextBlock Grid.Row="4" Text="Maximum Guests:" FontSize="15" Margin="4" Foreground="#007ACC" FontWeight="Bold"/>
+                <TextBox Grid.Row="4" Grid.Column="1" Name="txtMaxGuests" Text="{Binding Path=MaxGuests, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+             Margin="4"  Width="300" HorizontalAlignment="Left"/>
 
+                <TextBlock Grid.Row="5" Text="Duration (hours):" VerticalAlignment="Center" FontSize="15" Margin="4" Foreground="#007ACC" FontWeight="Bold"/>
+                <TextBox Grid.Row="5" Grid.Column="1" Name="txtDuration" Text="{Binding Path=Duration, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+             Margin="4"  Width="300" HorizontalAlignment="Left"/>
 
-            <TextBlock Text="Country:" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" FontSize="16" Margin="5 5 5 5" Foreground="#007ACC" FontWeight="Bold"/>
-            <ComboBox Name="cbCountry" Margin="5 5 5 5"   SelectionChanged="CbCountry_SelectionChanged" Grid.Row="5" Grid.Column="1"
+                <TextBlock Text="Country:" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" FontSize="15" Margin="4" Foreground="#007ACC" FontWeight="Bold"/>
+                <ComboBox Name="cbCountry" Margin="4"   SelectionChanged="CbCountry_SelectionChanged" Grid.Row="6" Grid.Column="1"
                           HorizontalAlignment="Left" Width="300">
-                <ComboBoxItem IsSelected="True"/>
-            </ComboBox>
+                    <ComboBoxItem IsSelected="True"/>
+                </ComboBox>
 
-            <TextBlock Text="City:" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" FontSize="16" Margin="5 5 5 5" Foreground="#007ACC" FontWeight="Bold"/>
-            <ComboBox Name="cbCity" Margin="5 5 5 5"   SelectionChanged="CbCity_SelectionChanged" IsEnabled="False" Grid.Row="6" Grid.Column="1"
+                <TextBlock Text="City:" Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" FontSize="15" Margin="4" Foreground="#007ACC" FontWeight="Bold"/>
+                <ComboBox Name="cbCity" Margin="4"   SelectionChanged="CbCity_SelectionChanged" IsEnabled="False" Grid.Row="7" Grid.Column="1"
                           HorizontalAlignment="Left" Width="300">
-                <ComboBoxItem IsSelected="True"/>
-            </ComboBox>
+                    <ComboBoxItem IsSelected="True"/>
+                </ComboBox>
 
-            <TextBlock Text="Date and Time:" Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" FontSize="16" Margin="5 5 5 5" Foreground="#007ACC" FontWeight="Bold"/>
-            <StackPanel Orientation="Horizontal" Margin="5 5 5 5"  Grid.Row="7" Grid.Column="1" Height="Auto">
-                <DatePicker Name="dpDate" Width="125" VerticalAlignment="Center" Height="25"/>
-                <ComboBox Name="Hours_cb" SelectionChanged="Hours_cb_SelectionChanged" Width="70" Margin="5 5 5 5"   VerticalAlignment="Center" Height="25">
-                    <ComboBox.Effect>
-                        <DropShadowEffect />
-                    </ComboBox.Effect>
-                </ComboBox>
-                <ComboBox Name="Minutes_cb" SelectionChanged="Minutes_cb_SelectionChanged" Width="70" Margin="5 5 5 5"   VerticalAlignment="Center" Height="25">
-                    <ComboBox.Effect>
-                        <DropShadowEffect />
-                    </ComboBox.Effect>
-                </ComboBox>
-                <Button Content="+" Width="30" Height="30" Background="#007ACC" Foreground="White" FontSize="16" BorderThickness="0" Padding="5 0" Click="addDateButton_Click" Margin="5 5 5 5" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <EventTrigger RoutedEvent="Button.Click">
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </EventTrigger>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="border" Property="Background" Value="#005F8B" />
-                                </Trigger>
-                                <Trigger Property="IsPressed" Value="True">
-                                    <Setter TargetName="border" Property="Background" Value="#00415E" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-            </StackPanel>
-            <StackPanel Orientation="Vertical" Grid.Row="8" Grid.Column="1">
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <ListBox Name="SelectedTimesListBox" Grid.Row="8" ItemsSource="{Binding DateTimes}" Height="80" Margin="5 5 5 5" ScrollViewer.VerticalScrollBarVisibility="Visible">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding StringFormat={}{0:dd.MM.yyyy. HH:mm}}" />
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </ScrollViewer>
-            </StackPanel>
-            <TextBlock Text="Images:" VerticalAlignment="Top" FontSize="16" Margin="5 5 5 5" Grid.Row="9" Grid.Column="0" Foreground="#007ACC" FontWeight="Bold"/>
-            <StackPanel Grid.Row="9" Grid.Column="1">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <TextBox x:Name="UrlTextBox" Width="270" Height="20" Margin="5 5 5 5" Grid.Row="0" Grid.Column="0" />
-                    <Button Grid.Row="0" Grid.Column="1" Content="+" Width="30" Height="30" Background="#007ACC" Foreground="White" FontSize="16" BorderThickness="0" Padding="5 0" Click="AddImageButton_Click" Margin="5 5 5 5" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="Date and Time:" Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" FontSize="15" Margin="4" Foreground="#007ACC" FontWeight="Bold"/>
+                <StackPanel Orientation="Horizontal" Margin="4"  Grid.Row="8" Grid.Column="1" Height="Auto">
+                    <DatePicker Name="dpDate" Width="125" VerticalAlignment="Center" Height="25"/>
+                    <ComboBox Name="Hours_cb" SelectionChanged="Hours_cb_SelectionChanged" Width="70" Margin="4"   VerticalAlignment="Center" Height="25">
+                        <ComboBox.Effect>
+                            <DropShadowEffect />
+                        </ComboBox.Effect>
+                    </ComboBox>
+                    <ComboBox Name="Minutes_cb" SelectionChanged="Minutes_cb_SelectionChanged" Width="70" Margin="4"   VerticalAlignment="Center" Height="25">
+                        <ComboBox.Effect>
+                            <DropShadowEffect />
+                        </ComboBox.Effect>
+                    </ComboBox>
+                    <Button Content="+" Width="30" Height="30" Background="#007ACC" Foreground="White" FontSize="15" BorderThickness="0" Padding="5 0" Click="addDateButton_Click" Margin="4" HorizontalAlignment="Center" VerticalAlignment="Center" Name ="DateBtn">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
                                 <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -170,22 +131,107 @@
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
-                </Grid>
-                <ListBox x:Name="UrlListBox" Width="Auto" Height="80" Margin="5 5 5 5" ItemsSource="{Binding ImageUrls}" ScrollViewer.VerticalScrollBarVisibility="Visible" />
-            </StackPanel>
-            <TextBlock Text="Checkpoints:" VerticalAlignment="Top" FontSize="16" Margin="5 5 5 5" Grid.Row="10" Grid.Column="0" Foreground="#007ACC" FontWeight="Bold"/>
-            <StackPanel Grid.Row="10" Grid.Column="1">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <TextBox x:Name="CheckpointTextBox" Width="270" Height="20" Margin="5 5 5 5" Grid.Row="0" Grid.Column="0" />
-                    <Button Grid.Row="0" Grid.Column="1" Content="+" Width="30" Height="30" Background="#007ACC" Foreground="White" FontSize="16" BorderThickness="0" Padding="5 0" Click="AddCheckpointButton_Click" Margin="5 5 5 5" HorizontalAlignment="Center" VerticalAlignment="Center">
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Grid.Row="9" Grid.Column="1">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ListBox Name="SelectedTimesListBox" Grid.Row="9" ItemsSource="{Binding DateTimes}" Height="80" Margin="4" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding StringFormat={}{0:dd.MM.yyyy. HH:mm}}" />
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </ScrollViewer>
+                </StackPanel>
+                <TextBlock Text="Images:" VerticalAlignment="Top" FontSize="15" Margin="4" Grid.Row="10" Grid.Column="0" Foreground="#007ACC" FontWeight="Bold"/>
+                <StackPanel Grid.Row="10" Grid.Column="1">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="UrlTextBox" Width="270" Height="20" Margin="4" Grid.Row="0" Grid.Column="0" />
+                        <Button Grid.Row="0" Grid.Column="1" Content="+" Width="30" Height="30" Background="#007ACC" Foreground="White" FontSize="15" BorderThickness="0" Padding="5 0" Click="AddImageButton_Click" Margin="4" HorizontalAlignment="Center" VerticalAlignment="Center" Name ="UrlBtn">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <EventTrigger RoutedEvent="Button.Click">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="#005F8B" />
+                                        </Trigger>
+                                        <Trigger Property="IsPressed" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="#00415E" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </Grid>
+                    <ListBox x:Name="UrlListBox" Width="Auto" Height="80" Margin="4" ItemsSource="{Binding ImageUrls}" ScrollViewer.VerticalScrollBarVisibility="Visible" />
+                </StackPanel>
+                <TextBlock Text="Checkpoints:" VerticalAlignment="Top" FontSize="15" Margin="4" Grid.Row="11" Grid.Column="0" Foreground="#007ACC" FontWeight="Bold"/>
+                <StackPanel Grid.Row="11" Grid.Column="1">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="CheckpointTextBox" Width="270" Height="20" Margin="4" Grid.Row="0" Grid.Column="0" />
+                        <Button Grid.Row="0" Grid.Column="1" Content="+" Width="30" Height="30" Background="#007ACC" Foreground="White" FontSize="15" BorderThickness="0" Padding="5 0" Click="AddCheckpointButton_Click" Margin="4" HorizontalAlignment="Center" VerticalAlignment="Center" Name ="CheckpointBtn">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <EventTrigger RoutedEvent="Button.Click">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="#005F8B" />
+                                        </Trigger>
+                                        <Trigger Property="IsPressed" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="#00415E" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </Grid>
+                    <ListBox x:Name="CheckpointsListBox" Width="Auto" Height="80" Margin="4" ItemsSource="{Binding Checkpoints}" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Order}" FontWeight="Bold" Margin="5 0 5 0" FontSize="15"/>
+                                    <TextBlock Text="{Binding Name}" Margin="5 0 0 0" FontSize="15"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </StackPanel>
+                <StackPanel Grid.Row="12" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button Content="    Save&#x0a;(CTRL + S)" Width="100" Height="60" Background="#007ACC" Foreground="White" FontSize="15" BorderThickness="0" Padding="5 0" Click="btnCreateTour_Click" Margin="5">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
                                 <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -208,92 +254,57 @@
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
                         </Button.Template>
-                    </Button>                </Grid>
-                <ListBox x:Name="CheckpointsListBox" Width="Auto" Height="80" Margin="5 5 5 5" ItemsSource="{Binding Checkpoints}" ScrollViewer.VerticalScrollBarVisibility="Visible">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding Order}" FontWeight="Bold" Margin="5 0 5 0" FontSize="17"/>
-                                <TextBlock Text="{Binding Name}" Margin="5 0 0 0" FontSize="17"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </StackPanel>
-            <StackPanel Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Content="    Save&#x0a;(CTRL + S)" Width="100" Height="60" Background="#007ACC" Foreground="White" FontSize="16" BorderThickness="0" Padding="5 0" Click="btnCreateTour_Click" Margin="5">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <EventTrigger RoutedEvent="Button.Click">
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </EventTrigger>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="border" Property="Background" Value="#005F8B" />
-                                </Trigger>
-                                <Trigger Property="IsPressed" Value="True">
-                                    <Setter TargetName="border" Property="Background" Value="#00415E" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-                <Button Content=" Most Requested&#x0a;     (CTRL + R)" Width="150" Height="60" Background="#007ACC" Foreground="White" FontSize="16" BorderThickness="0" Padding="5 0" Margin="5">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <EventTrigger RoutedEvent="Button.Click">
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </EventTrigger>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="border" Property="Background" Value="#005F8B" />
-                                </Trigger>
-                                <Trigger Property="IsPressed" Value="True">
-                                    <Setter TargetName="border" Property="Background" Value="#00415E" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-                <Button Content=" Cancel&#x0a;  (ESC)" Width="100" Height="60" Background="#007ACC" Foreground="White" FontSize="16" BorderThickness="0" Padding="5 0" Click="CancelButton_Click" Margin="5">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <EventTrigger RoutedEvent="Button.Click">
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </EventTrigger>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="border" Property="Background" Value="#005F8B" />
-                                </Trigger>
-                                <Trigger Property="IsPressed" Value="True">
-                                    <Setter TargetName="border" Property="Background" Value="#00415E" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-            </StackPanel>
-        </Grid>
-    </Border>
+                    </Button>
+                    <Button Content=" Most Requested&#x0a;     (CTRL + R)" Width="150" Height="60" Background="#007ACC" Foreground="White" FontSize="15" BorderThickness="0" Padding="5 0" Margin="5">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <EventTrigger RoutedEvent="Button.Click">
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="border" Property="Background" Value="#005F8B" />
+                                    </Trigger>
+                                    <Trigger Property="IsPressed" Value="True">
+                                        <Setter TargetName="border" Property="Background" Value="#00415E" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                    <Button Content=" Cancel&#x0a;  (ESC)" Width="100" Height="60" Background="#007ACC" Foreground="White" FontSize="15" BorderThickness="0" Padding="5 0" Click="CancelButton_Click" Margin="5">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <EventTrigger RoutedEvent="Button.Click">
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="border" Property="Background" Value="#005F8B" />
+                                    </Trigger>
+                                    <Trigger Property="IsPressed" Value="True">
+                                        <Setter TargetName="border" Property="Background" Value="#00415E" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
 </Window>
