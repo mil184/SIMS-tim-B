@@ -534,7 +534,6 @@ namespace InitialProject.View.Guide
                 e.Handled = true;
             }
         }
-
         private object GetFirstItem(DataGrid dataGrid)
         {
             if (dataGrid.Items.Count > 0)
@@ -543,7 +542,6 @@ namespace InitialProject.View.Guide
             }
             return null;
         }
-
         private void SelectAndScrollTo(object item, DataGrid dataGrid)
         {
             if (item != null)
@@ -553,69 +551,121 @@ namespace InitialProject.View.Guide
                 dataGrid.Focus();
             }
         }
-
         private void UpDownArrowKeys_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Down || e.Key == Key.Up)
+            if ((e.Key == Key.Down || e.Key == Key.Up))
             {
                 DataGrid currentDataGrid = GetCurrentDataGrid();
                 if (currentDataGrid.Items.Count < 1) return;
 
                 int current_index = currentDataGrid.SelectedIndex;
+
+                if (current_index == -1 && currentDataGrid == FinishedToursDataGrid) 
+                {
+                    Years_cb.Focus();
+                    e.Handled = true;
+                    return;
+                }
                 if (Keyboard.IsKeyDown(Key.Down))
                 {
-                    if (current_index < currentDataGrid.Items.Count - 1)
-                    {
-                        // Select the next item in the DataGrid
-                        currentDataGrid.SelectedItem = currentDataGrid.Items[current_index + 1];
-                        currentDataGrid.ScrollIntoView(currentDataGrid.SelectedItem);
-                        currentDataGrid.Focus();
-                    }
-                    else
-                    {
-                        if (currentDataGrid != FinishedToursDataGrid)
-                        {
-                            currentDataGrid.SelectedItem = currentDataGrid.Items[0];
-                            currentDataGrid.ScrollIntoView(currentDataGrid.SelectedItem);
-                            currentDataGrid.Focus();
-                        }
-                        else
-                        {
-                            // Unselect the selected item in the DataGrid before focusing on the ComboBox
-                            currentDataGrid.SelectedItem = null;
-                            Years_cb.Focus();
-                        }
-                    }
+                    MoveToNextItem(currentDataGrid, current_index);
                 }
                 else if (Keyboard.IsKeyDown(Key.Up))
                 {
-                    if (current_index > 0)
-                    {
-                        // Select the previous item in the DataGrid
-                        currentDataGrid.SelectedItem = currentDataGrid.Items[current_index - 1];
-                        currentDataGrid.ScrollIntoView(currentDataGrid.SelectedItem);
-                        currentDataGrid.Focus();
-                    }
-                    else
-                    {
-                        if (currentDataGrid != FinishedToursDataGrid)
-                        {
-                            currentDataGrid.SelectedItem = currentDataGrid.Items[currentDataGrid.Items.Count - 1];
-                            currentDataGrid.ScrollIntoView(currentDataGrid.SelectedItem);
-                            currentDataGrid.Focus();
-                        }
-                        else
-                        {
-                            // Unselect the selected item in the DataGrid before focusing on the ComboBox
-                            currentDataGrid.SelectedItem = null;
-                            Years_cb.Focus();
-                        }
-                    }
+                    MoveToPreviousItem(currentDataGrid, current_index);
                 }
                 e.Handled = true;
             }
         }
 
+        private void MoveToNextItem(DataGrid currentDataGrid, int current_index)
+        {
+            if (current_index < currentDataGrid.Items.Count - 1)
+            {
+                // Select the next item in the DataGrid
+                currentDataGrid.SelectedItem = currentDataGrid.Items[current_index + 1];
+                currentDataGrid.ScrollIntoView(currentDataGrid.SelectedItem);
+                currentDataGrid.Focus();
+            }
+            else 
+            {
+                if (currentDataGrid != FinishedToursDataGrid)
+                {
+                    MoveToFirstItem(currentDataGrid);
+                }
+                else
+                {
+                    UnselectSelectedItem(currentDataGrid);
+                    FocusOnComboBox();
+                }
+            }
+        }
+
+
+        private void MoveToPreviousItem(DataGrid currentDataGrid, int current_index)
+        {
+            if (current_index > 0)
+            {
+                // Select the previous item in the DataGrid
+                currentDataGrid.SelectedItem = currentDataGrid.Items[current_index - 1];
+                currentDataGrid.ScrollIntoView(currentDataGrid.SelectedItem);
+                currentDataGrid.Focus();
+            }
+            else
+            {
+                if (currentDataGrid != FinishedToursDataGrid)
+                {
+                    MoveToLastItem(currentDataGrid);
+                }
+                else
+                {
+                    UnselectSelectedItem(currentDataGrid);
+                    FocusOnComboBox();
+                }
+            }
+        }
+
+        private void MoveToFirstItem(DataGrid currentDataGrid)
+        {
+            if (Years_cb.IsDropDownOpen)
+            {
+                // Move to the first item of the combo box
+                Years_cb.SelectedIndex = 0;
+            }
+            else
+            {
+                // Move to the first item of the data grid
+                currentDataGrid.SelectedItem = currentDataGrid.Items[0];
+                currentDataGrid.ScrollIntoView(currentDataGrid.SelectedItem);
+                currentDataGrid.Focus();
+            }
+        }
+
+        private void MoveToLastItem(DataGrid currentDataGrid)
+        {
+            if (Years_cb.IsDropDownOpen)
+            {
+                // Move to the last item of the combo box
+                Years_cb.SelectedIndex = Years_cb.Items.Count - 1;
+            }
+            else
+            {
+                // Move to the last item of the data grid
+                currentDataGrid.SelectedItem = currentDataGrid.Items[currentDataGrid.Items.Count - 1];
+                currentDataGrid.ScrollIntoView(currentDataGrid.SelectedItem);
+                currentDataGrid.Focus();
+            }
+        }
+
+        private void UnselectSelectedItem(DataGrid currentDataGrid)
+        {
+            currentDataGrid.SelectedItem = null;
+        }
+
+        private void FocusOnComboBox()
+        {
+            Years_cb.Focus();
+        }
 
         private void SortAsc_PreviewKeyDown(object sender, KeyEventArgs e)
         {

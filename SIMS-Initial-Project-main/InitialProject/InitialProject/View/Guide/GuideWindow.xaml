@@ -141,12 +141,12 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
                         <Image Source="/Resources/Images/info.png" Width="24" Height="24" Margin="0 0 10 0"/>
-                        <TextBlock FontSize="14" FontStyle="Italic" Text="To start the demo, press" VerticalAlignment="Center" Foreground="#007ACC"/>
+                        <TextBlock FontSize="14" FontStyle="Italic" Text="Start the demo with" VerticalAlignment="Center" Foreground="#007ACC"/>
                         <TextBlock FontSize="16" FontStyle="Italic" Text=" CTRL + D" VerticalAlignment="Center" Foreground="#FFA500"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
                         <Image Source="/Resources/Images/info.png" Width="24" Height="24" Margin="0 0 10 0"/>
-                        <TextBlock FontSize="14" FontStyle="Italic" Text="To sort data, press" VerticalAlignment="Center" Foreground="#007ACC"/>
+                        <TextBlock FontSize="14" FontStyle="Italic" Text="Sort data with" VerticalAlignment="Center" Foreground="#007ACC"/>
                         <TextBlock FontSize="16" FontStyle="Italic" Text=" LSHIFT + A/D" VerticalAlignment="Center" Foreground="#FFA500"/>
                     </StackPanel>
                 </StackPanel>
@@ -444,7 +444,7 @@
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <ComboBox Name="Years_cb" SelectionChanged="Years_cb_SelectionChanged" Grid.Column="0" Margin="10 10 150 10" Width="200" Height="30" FontSize="16"/>
+                                <ComboBox Name="Years_cb" SelectionChanged="Years_cb_SelectionChanged" Grid.Column="0" Margin="10 10 150 10" Width="200" Height="30" FontSize="16" IsEditable="True"/>
                                 <Grid Grid.Column="1" Margin="10">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
