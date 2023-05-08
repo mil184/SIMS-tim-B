@@ -7,7 +7,8 @@
         mc:Ignorable="d"
         Title="DMJM-Tours" Height="768" Width="1024"
         Icon ="/Resources/Images/favicon.ico"
-        Background="#F2F2F2">
+        Background="#F2F2F2"
+        WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style x:Key="AppFont" TargetType="TextBlock">
             <Setter Property="FontFamily" Value="Fonts/Pacifico-Regular.ttf" />
@@ -116,25 +117,37 @@
             <!-- Info texts -->
             <Border Grid.Column="1" Background="#E9F1F7" BorderThickness="3" BorderBrush="#007ACC" CornerRadius="5" Margin="5">
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="10">
-                    <StackPanel Orientation="Horizontal" Margin="0 0 0 20">
+                    <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
                         <Image Source="/Resources/Images/info.png" Width="24" Height="24" Margin="0 0 10 0"/>
-                        <TextBlock FontSize="16" FontStyle="Italic" Text="Navigate through tabs with" VerticalAlignment="Center" Foreground="#007ACC"/>
-                        <TextBlock FontSize="18" FontStyle="Italic" Text=" arrow keys" VerticalAlignment="Center" Foreground="#FFA500"/>
+                        <TextBlock FontSize="14" FontStyle="Italic" Text="Navigate through data with" VerticalAlignment="Center" Foreground="#007ACC"/>
+                        <TextBlock FontSize="14" FontStyle="Italic" VerticalAlignment="Center" Foreground="#FFA500">
+                        <Run Text="  &#x25B2;"/>
+                        <LineBreak/>
+                        <Run Text="  &#x25BC;"/>
+                        </TextBlock>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0 0 0 20">
+                    <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
                         <Image Source="/Resources/Images/info.png" Width="24" Height="24" Margin="0 0 10 0"/>
-                        <TextBlock FontSize="16" FontStyle="Italic" Text="Select the grid with" VerticalAlignment="Center" Foreground="#007ACC"/>
-                        <TextBlock FontSize="18" FontStyle="Italic" Text=" CTRL + L" VerticalAlignment="Center" Foreground="#FFA500"/>
+                        <TextBlock FontSize="14" FontStyle="Italic" Text="Navigate through tabs with" VerticalAlignment="Center" Foreground="#007ACC"/>
+                        <TextBlock FontSize="16" FontStyle="Italic" VerticalAlignment="Center" Foreground="#FFA500">
+                        <Run Text=" &#x25C0;"/>
+                        <Run Text=" &#x25B6;"/>
+                        </TextBlock>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0 0 0 20">
+                    <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
                         <Image Source="/Resources/Images/info.png" Width="24" Height="24" Margin="0 0 10 0"/>
-                        <TextBlock FontSize="16" FontStyle="Italic" Text="Navigate through data with" VerticalAlignment="Center" Foreground="#007ACC"/>
-                        <TextBlock FontSize="18" FontStyle="Italic" Text=" arrow keys" VerticalAlignment="Center" Foreground="#FFA500"/>
+                        <TextBlock FontSize="14" FontStyle="Italic" Text="Select the grid with" VerticalAlignment="Center" Foreground="#007ACC"/>
+                        <TextBlock FontSize="16" FontStyle="Italic" Text=" CTRL + L" VerticalAlignment="Center" Foreground="#FFA500"/>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0 0 0 20">
+                    <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
                         <Image Source="/Resources/Images/info.png" Width="24" Height="24" Margin="0 0 10 0"/>
-                        <TextBlock FontSize="16" FontStyle="Italic" Text="To start the demo, press" VerticalAlignment="Center" Foreground="#007ACC"/>
-                        <TextBlock FontSize="18" FontStyle="Italic" Text=" CTRL + D" VerticalAlignment="Center" Foreground="#FFA500"/>
+                        <TextBlock FontSize="14" FontStyle="Italic" Text="To start the demo, press" VerticalAlignment="Center" Foreground="#007ACC"/>
+                        <TextBlock FontSize="16" FontStyle="Italic" Text=" CTRL + D" VerticalAlignment="Center" Foreground="#FFA500"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
+                        <Image Source="/Resources/Images/info.png" Width="24" Height="24" Margin="0 0 10 0"/>
+                        <TextBlock FontSize="14" FontStyle="Italic" Text="To sort data, press" VerticalAlignment="Center" Foreground="#007ACC"/>
+                        <TextBlock FontSize="16" FontStyle="Italic" Text=" LSHIFT + A/D" VerticalAlignment="Center" Foreground="#FFA500"/>
                     </StackPanel>
                 </StackPanel>
             </Border>
@@ -253,7 +266,7 @@
                                 </ControlTemplate>
                             </Button.Template>
                         </Button>
-                        <Button Grid.Column="3" Content="Start Tour&#x0a; (ENTER)" Height="50" Width="130" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Center">
+                        <Button Grid.Column="3" Content="Start Tour&#x0a; (ENTER)" Height="50" Width="130" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Center" Click="StartTourButton_Click">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -341,7 +354,7 @@
                                     </ControlTemplate>
                                 </Button.Template>
                             </Button>
-                            <Button Grid.Column="1" Content="Generate Report&#x0a;         (ENTER)" Margin="0 0 5 0" Height="50" Width="160" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Right">
+                            <Button Grid.Column="1" Content="Generate Report&#x0a;    (CTRL + R)" Margin="0 0 5 0" Height="50" Width="160" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Right" Click="GenerateReportButton_Click">
                                 <Button.Template>
                                     <ControlTemplate TargetType="Button">
                                         <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -366,7 +379,7 @@
                                 </Button.Template>
                             </Button>
                         </Grid>
-                        <Button Grid.Column="1" Content="Abort Selected Tour&#x0a;         (ENTER)" Margin="0 0 5 0" Height="50" Width="160" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Right">
+                        <Button Grid.Column="1" Content="Abort Selected Tour&#x0a;         (ENTER)" Margin="0 0 5 0" Height="50" Width="160" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Right" Click="AbortButton_Click">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -392,10 +405,10 @@
                         </Button>
 
                     </Grid>
-                    <GroupBox Header="Upcoming Tours" FontSize="28" Foreground="#007ACC">
+                    <GroupBox Header="Upcoming Tours" FontSize="28" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2">
                         <StackPanel Margin="0 20 0 0">
-                            <ScrollViewer Height="360" VerticalScrollBarVisibility="Auto">
-                                <DataGrid ItemsSource="{Binding UpcomingTours}" SelectedItem="{Binding Path=SelectedUpcomingTourDTO}" AutoGenerateColumns="False" Name="UpcomingToursDataGrid" IsReadOnly="true"  HorizontalAlignment="Stretch" MouseDoubleClick="UpcomingToursDataGrid_MouseDoubleClick">
+                            <ScrollViewer Height="300" VerticalScrollBarVisibility="Auto">
+                                <DataGrid ItemsSource="{Binding UpcomingTours}" SelectedItem="{Binding Path=SelectedUpcomingTourDTO}" AutoGenerateColumns="False" Name="UpcomingToursDataGrid" IsReadOnly="true"  HorizontalAlignment="Stretch" MouseDoubleClick="UpcomingToursDataGrid_MouseDoubleClick" Margin="10">
                                     <DataGrid.CellStyle>
                                         <Style TargetType="DataGridCell">
                                             <Setter Property="FontSize" Value="18"/>
@@ -444,7 +457,7 @@
                                 </Grid>
                             </Grid>
                         </GroupBox>
-                        <Button Grid.Column="2" Content="  Show Statistics&#x0a; For Selected Tour&#x0a;        (ENTER)" Margin="0 0 5 0" Height="80" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2">
+                        <Button Grid.Column="2" Content="  Show Statistics&#x0a; For Selected Tour&#x0a;        (ENTER)" Margin="0 0 5 0" Height="80" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" Click="StatisticsButton_Click">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -499,7 +512,7 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
-                        <Button Grid.Column="3" Content="  View Ratings For&#x0a;     Selected Tour  &#x0a;         (ENTER)" Height="80" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Right" Margin="10">
+                        <Button Grid.Column="3" Content="  View Ratings For&#x0a;     Selected Tour  &#x0a;         (ENTER)" Height="80" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Right" Margin="10" Click="RatingsButton_Click">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">

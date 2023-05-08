@@ -531,7 +531,7 @@ namespace InitialProject.View.Guide
             cbCountry.SelectedItem = "Japan";
             cbCity.SelectedItem = "Osaka";
 
-            DateTimes.Add(new DateTime(2023, 5, 7, 23, 59, 59));
+            DateTimes.Add(new DateTime(2023, 5, 8, 23, 59, 59));
 
             ImageUrls.Add("test1");
             ImageUrls.Add("test2");
@@ -539,7 +539,14 @@ namespace InitialProject.View.Guide
 
             Checkpoints.Add(new Checkpoint("The Bridge", 1));
             Checkpoints.Add(new Checkpoint("The Castle", 2));
-            //Checkpoints.Add(new Checkpoint("The Volcano", 3));
+            Checkpoints.Add(new Checkpoint("The Volcano", 3));
+            Checkpoints.Add(new Checkpoint("The X", 4));
+            Checkpoints.Add(new Checkpoint("The Something", 5));
+            Checkpoints.Add(new Checkpoint("The House", 6));
+            Checkpoints.Add(new Checkpoint("The Hotel", 7));
+            Checkpoints.Add(new Checkpoint("The Tree", 8));
+            Checkpoints.Add(new Checkpoint("The Tower", 9));
+            Checkpoints.Add(new Checkpoint("The Field", 10));
         }
     }
 }

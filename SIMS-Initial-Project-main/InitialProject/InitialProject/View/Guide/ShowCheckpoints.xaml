@@ -7,7 +7,8 @@
         mc:Ignorable="d"
         Title="DMJM-Tours" Width="1024" Height="520"
         Icon ="/Resources/Images/favicon.ico"
-        Background="#F2F2F2">
+        Background="#F2F2F2"
+        WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -91,7 +92,7 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <ScrollViewer>
-                <ListBox Name="listBox" Margin="10" BorderThickness="0" ItemsSource="{Binding Checkpoints, UpdateSourceTrigger=PropertyChanged}" Height="250">
+                    <ListBox Name="listBox" Margin="10" BorderThickness="0" ItemsSource="{Binding Checkpoints, UpdateSourceTrigger=PropertyChanged}" Height="250" SelectionChanged="ListBox_SelectionChanged">
                     <ListBox.ItemContainerStyle>
                         <Style TargetType="ListBoxItem">
                             <Setter Property="Padding" Value="0"/>
@@ -115,10 +116,10 @@
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" Margin="10">
                                 <TextBlock Margin="0 0 10 0">
-                            <Run Text="{Binding Order}" FontWeight="Bold"/>
-                            <Run Text="."/>
+                            <Run Text="{Binding Order}" FontWeight="Bold" FontSize="18"/>
+                            <Run Text="." FontSize="18"/>
                                 </TextBlock>
-                                <TextBlock Text="{Binding Name}" Margin="0 0 10 0"/>
+                                    <TextBlock Text="{Binding Name}" Margin="0 0 10 0" FontSize="18"/>
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>

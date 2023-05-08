@@ -139,10 +139,18 @@ namespace InitialProject.View.Guide
                 checkpointName
                 );
         }
+
         // This method is called when the ListBox is loaded into the user interface. It sets the VISUAL APPEARANCE of each ListBox item
         // based on the current state of the application, including the currently selected checkpoint and the first checkpoint in the list.
         // The method iterates through each ListBox item, gets the corresponding Checkpoint, CheckBox, and ListBoxItem controls, and calls 
         // the SetCheckpointCheckboxAndBackground method to set the state of the CheckBox and the background color of the ListBoxItem.
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (listBox.SelectedItem != null)
+            {
+                listBox.ScrollIntoView(listBox.SelectedItem);
+            }
+        }
         private void ListBox_Loaded(object sender, RoutedEventArgs e)
         {
             int currentCheckpointId = SelectedTour.CurrentCheckpointId;
@@ -199,24 +207,6 @@ namespace InitialProject.View.Guide
                 }
             }
         }
-
-        private void EndTour()
-        {
-            UpdateTourStatus();
-            Close();
-        }
-        private void UpdateTourStatus()
-        {
-            SelectedTour.IsActive = false;
-            SelectedTour.IsFinished = true;
-            _tourService.Update(SelectedTour);
-        }
-        private void UpdateNextCheckpoint(int nextIndex)
-        {
-            SelectedTour.CurrentCheckpointId = Checkpoints[nextIndex].Id;
-            _tourService.Update(SelectedTour);
-        }
-
         private void UpdateListBoxItemBackgrounds(int currentIndex)
         {
             ListBox_Loaded(listBox, null);
@@ -234,6 +224,22 @@ namespace InitialProject.View.Guide
                     previousListBoxItem.BorderBrush = null;
                 }
             }
+        }
+        private void EndTour()
+        {
+            UpdateTourStatus();
+            Close();
+        }
+        private void UpdateTourStatus()
+        {
+            SelectedTour.IsActive = false;
+            SelectedTour.IsFinished = true;
+            _tourService.Update(SelectedTour);
+        }
+        private void UpdateNextCheckpoint(int nextIndex)
+        {
+            SelectedTour.CurrentCheckpointId = Checkpoints[nextIndex].Id;
+            _tourService.Update(SelectedTour);
         }
         private void UpdateCurrentCheckpoint(int currentIndex)
         {

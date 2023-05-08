@@ -152,9 +152,31 @@ namespace InitialProject.View.Guide
 
             var view = CollectionViewSource.GetDefaultView(grid.ItemsSource);
             var sortColumn = GetNextSortColumn();
+
+            // Check if the column is already sorted in ascending order
+            var isAlreadySorted = view.SortDescriptions.Count > 0 && view.SortDescriptions[0].PropertyName == sortColumn && view.SortDescriptions[0].Direction == ListSortDirection.Ascending;
+
+            // Remove the arrow symbol from the previously sorted column header
+            if (!isAlreadySorted)
+            {
+                var prevSortColumn = view.SortDescriptions.Count > 0 ? view.SortDescriptions[0].PropertyName : null;
+                var prevHeader = grid.Columns.FirstOrDefault(c => c.SortMemberPath == prevSortColumn);
+                if (prevHeader != null)
+                {
+                    prevHeader.Header = prevHeader.Header.ToString().Replace(" ▲", "").Replace(" ▼", "");
+                }
+            }
+
+            // Set the new sort order and add the arrow symbol to the sorted column header
             view.SortDescriptions.Clear();
             view.SortDescriptions.Add(new SortDescription(sortColumn, ListSortDirection.Ascending));
             view.Refresh();
+
+            var header = grid.Columns.FirstOrDefault(c => c.SortMemberPath == sortColumn);
+            if (header != null)
+            {
+                header.Header = $"{header.Header}{(isAlreadySorted ? "▲" : " ▲")}";
+            }
             e.Handled = true;
         }
         private void SortDesc_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -168,9 +190,31 @@ namespace InitialProject.View.Guide
 
             var view = CollectionViewSource.GetDefaultView(grid.ItemsSource);
             var sortColumn = GetNextSortColumn();
+
+            // Check if the column is already sorted in descending order
+            var isAlreadySorted = view.SortDescriptions.Count > 0 && view.SortDescriptions[0].PropertyName == sortColumn && view.SortDescriptions[0].Direction == ListSortDirection.Descending;
+
+            // Remove the arrow symbol from the previously sorted column header
+            if (!isAlreadySorted)
+            {
+                var prevSortColumn = view.SortDescriptions.Count > 0 ? view.SortDescriptions[0].PropertyName : null;
+                var prevHeader = grid.Columns.FirstOrDefault(c => c.SortMemberPath == prevSortColumn);
+                if (prevHeader != null)
+                {
+                    prevHeader.Header = prevHeader.Header.ToString().Replace(" ▲", "").Replace(" ▼", "");
+                }
+            }
+
+            // Set the new sort order and add the arrow symbol to the sorted column header
             view.SortDescriptions.Clear();
             view.SortDescriptions.Add(new SortDescription(sortColumn, ListSortDirection.Descending));
             view.Refresh();
+
+            var header = grid.Columns.FirstOrDefault(c => c.SortMemberPath == sortColumn);
+            if (header != null)
+            {
+                header.Header = $"{header.Header} ▼";
+            }
             e.Handled = true;
         }
         private string GetNextSortColumn()
@@ -182,7 +226,7 @@ namespace InitialProject.View.Guide
                     return "Username";
                 case 1:
                     _viewModel.CurrentSortIndex++;
-                    return "Arrival";
+                    return "Checkpoint";
                 case 2:
                     _viewModel.CurrentSortIndex++;
                     return "Rating";
@@ -192,6 +236,15 @@ namespace InitialProject.View.Guide
                 default:
                     return "";
             }
+        }
+
+        private void ViewButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_viewModel.SelectedRatingDTO == null) return;
+
+            RatingsOverviewViewModel ratingsOverviewViewModel = new RatingsOverviewViewModel(_viewModel.SelectedRatingDTO);
+            RatingsOverview overview = new RatingsOverview(ratingsOverviewViewModel);
+            overview.Show();
         }
     }
 }

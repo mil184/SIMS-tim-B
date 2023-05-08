@@ -19,7 +19,7 @@ namespace InitialProject.Model.DTO
         public string Language { get; set; }
         public string Knowledge { get; set; }
         public string Interestingness { get; set; }
-        public bool IsValid { get; set; }
+        public bool Valid { get; set; }
 
         public List<string> Urls { get; set; }
 
@@ -30,7 +30,7 @@ namespace InitialProject.Model.DTO
             Checkpoint = checkpoint;
             Comment = comment;
             Rating = getRating(knowledge, language, interestingness);
-            IsValid = isValid;
+            Valid = isValid;
             Knowledge = knowledge.ToString();
             Language = language.ToString();
             Interestingness = interestingness.ToString();
@@ -46,7 +46,7 @@ namespace InitialProject.Model.DTO
         {
             get
             {
-                string imagePath = IsValid ? "/Resources/Images/green-check.png" : "/Resources/Images/red-x.png";
+                string imagePath = Valid ? "/Resources/Images/green-check.png" : "/Resources/Images/red-x.png";
                 return new BitmapImage(new Uri(imagePath, UriKind.Relative));
             }
         }

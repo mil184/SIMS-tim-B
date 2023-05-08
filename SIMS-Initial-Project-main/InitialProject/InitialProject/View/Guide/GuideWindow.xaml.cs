@@ -1,4 +1,4 @@
-using InitialProject.Model;
+﻿using InitialProject.Model;
 using InitialProject.Model.DTO;
 using InitialProject.Repository;
 using InitialProject.Resources.Observer;
@@ -558,45 +558,64 @@ namespace InitialProject.View.Guide
         {
             if (e.Key == Key.Down || e.Key == Key.Up)
             {
-
                 DataGrid currentDataGrid = GetCurrentDataGrid();
+                if (currentDataGrid.Items.Count < 1) return;
+
                 int current_index = currentDataGrid.SelectedIndex;
-                        if (Keyboard.IsKeyDown(Key.Down))
-                        {
-                            if (current_index < currentDataGrid.Items.Count - 1)
-                            {
+                if (Keyboard.IsKeyDown(Key.Down))
+                {
+                    if (current_index < currentDataGrid.Items.Count - 1)
+                    {
                         // Select the next item in the DataGrid
                         currentDataGrid.SelectedItem = currentDataGrid.Items[current_index + 1];
                         currentDataGrid.ScrollIntoView(currentDataGrid.SelectedItem);
                         currentDataGrid.Focus();
-                            }
-                            else
-                            {
-                        currentDataGrid.SelectedItem = currentDataGrid.Items[0];
-                        currentDataGrid.ScrollIntoView(currentDataGrid.SelectedItem);
-                        currentDataGrid.Focus();
-                            }
-                        }
-                        else if (Keyboard.IsKeyDown(Key.Up))
+                    }
+                    else
+                    {
+                        if (currentDataGrid != FinishedToursDataGrid)
                         {
-                            if (current_index > 0)
-                            {
+                            currentDataGrid.SelectedItem = currentDataGrid.Items[0];
+                            currentDataGrid.ScrollIntoView(currentDataGrid.SelectedItem);
+                            currentDataGrid.Focus();
+                        }
+                        else
+                        {
+                            // Unselect the selected item in the DataGrid before focusing on the ComboBox
+                            currentDataGrid.SelectedItem = null;
+                            Years_cb.Focus();
+                        }
+                    }
+                }
+                else if (Keyboard.IsKeyDown(Key.Up))
+                {
+                    if (current_index > 0)
+                    {
                         // Select the previous item in the DataGrid
                         currentDataGrid.SelectedItem = currentDataGrid.Items[current_index - 1];
                         currentDataGrid.ScrollIntoView(currentDataGrid.SelectedItem);
                         currentDataGrid.Focus();
-                            }
-                            else
-                            {
-                        // The currently selected item is the first item in the DataGrid, select the last item instead
-                        currentDataGrid.SelectedItem = currentDataGrid.Items[currentDataGrid.Items.Count - 1];
-                        currentDataGrid.ScrollIntoView(currentDataGrid.SelectedItem);
-                        currentDataGrid.Focus();
-                            }
+                    }
+                    else
+                    {
+                        if (currentDataGrid != FinishedToursDataGrid)
+                        {
+                            currentDataGrid.SelectedItem = currentDataGrid.Items[currentDataGrid.Items.Count - 1];
+                            currentDataGrid.ScrollIntoView(currentDataGrid.SelectedItem);
+                            currentDataGrid.Focus();
                         }
+                        else
+                        {
+                            // Unselect the selected item in the DataGrid before focusing on the ComboBox
+                            currentDataGrid.SelectedItem = null;
+                            Years_cb.Focus();
+                        }
+                    }
+                }
                 e.Handled = true;
             }
         }
+
 
         private void SortAsc_PreviewKeyDown(object sender, KeyEventArgs e)
         {
@@ -609,9 +628,31 @@ namespace InitialProject.View.Guide
 
             var view = CollectionViewSource.GetDefaultView(grid.ItemsSource);
             var sortColumn = GetNextSortColumn();
+
+            // Check if the column is already sorted in ascending order
+            var isAlreadySorted = view.SortDescriptions.Count > 0 && view.SortDescriptions[0].PropertyName == sortColumn && view.SortDescriptions[0].Direction == ListSortDirection.Ascending;
+
+            // Remove the arrow symbol from the previously sorted column header
+            if (!isAlreadySorted)
+            {
+                var prevSortColumn = view.SortDescriptions.Count > 0 ? view.SortDescriptions[0].PropertyName : null;
+                var prevHeader = grid.Columns.FirstOrDefault(c => c.SortMemberPath == prevSortColumn);
+                if (prevHeader != null)
+                {
+                    prevHeader.Header = prevHeader.Header.ToString().Replace(" ▲", "").Replace(" ▼", "");
+                }
+            }
+
+            // Set the new sort order and add the arrow symbol to the sorted column header
             view.SortDescriptions.Clear();
             view.SortDescriptions.Add(new SortDescription(sortColumn, ListSortDirection.Ascending));
             view.Refresh();
+
+            var header = grid.Columns.FirstOrDefault(c => c.SortMemberPath == sortColumn);
+            if (header != null)
+            {
+                header.Header = $"{header.Header}{(isAlreadySorted ? "▲" : " ▲")}";
+            }
             e.Handled = true;
         }
         private void SortDesc_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -625,11 +666,34 @@ namespace InitialProject.View.Guide
 
             var view = CollectionViewSource.GetDefaultView(grid.ItemsSource);
             var sortColumn = GetNextSortColumn();
+
+            // Check if the column is already sorted in descending order
+            var isAlreadySorted = view.SortDescriptions.Count > 0 && view.SortDescriptions[0].PropertyName == sortColumn && view.SortDescriptions[0].Direction == ListSortDirection.Descending;
+
+            // Remove the arrow symbol from the previously sorted column header
+            if (!isAlreadySorted)
+            {
+                var prevSortColumn = view.SortDescriptions.Count > 0 ? view.SortDescriptions[0].PropertyName : null;
+                var prevHeader = grid.Columns.FirstOrDefault(c => c.SortMemberPath == prevSortColumn);
+                if (prevHeader != null)
+                {
+                    prevHeader.Header = prevHeader.Header.ToString().Replace(" ▲", "").Replace(" ▼", "");
+                }
+            }
+
+            // Set the new sort order and add the arrow symbol to the sorted column header
             view.SortDescriptions.Clear();
             view.SortDescriptions.Add(new SortDescription(sortColumn, ListSortDirection.Descending));
             view.Refresh();
+
+            var header = grid.Columns.FirstOrDefault(c => c.SortMemberPath == sortColumn);
+            if (header != null)
+            {
+                header.Header = $"{header.Header} ▼";
+            }
             e.Handled = true;
         }
+
         private DataGrid GetCurrentDataGrid()
         {
             switch (tabControl.SelectedIndex)
@@ -685,5 +749,29 @@ namespace InitialProject.View.Guide
             return messageBoxResult == MessageBoxResult.Yes;
         }
 
+        private void StartTourButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(SelectedCurrentTourDTO != null)
+            SelectTodaysTour();
+        }
+        private void GenerateReportButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void AbortButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedUpcomingTourDTO != null)
+                SelectUpcomingTour();
+        }
+        private void StatisticsButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedFinishedTourDTO != null)
+                SelectFinishedTour();
+        }
+        private void RatingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedRatedTourDTO != null)
+                SelectRatedTour();
+        }
     }
 }
