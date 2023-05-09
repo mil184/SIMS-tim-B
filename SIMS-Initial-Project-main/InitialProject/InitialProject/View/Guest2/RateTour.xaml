@@ -3,15 +3,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ns="clr-namespace:InitialProject.Localization"
         xmlns:local="clr-namespace:InitialProject.View.Guest2"
         mc:Ignorable="d"
         Title="RateTour" Height="768" Width="600">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="100"/>
-            <RowDefinition Height="90" />
-            <RowDefinition Height="90" />
-            <RowDefinition Height="90" />
+            <RowDefinition Height="100" />
+            <RowDefinition Height="100" />
+            <RowDefinition Height="100" />
             <RowDefinition />
             <RowDefinition />
             <RowDefinition Height="70"/>
@@ -43,16 +44,16 @@
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="/Resources/Images/theme.png" Margin="0"/>
-                                    <TextBlock Text="Dark Theme"/>
+                                    <TextBlock Text="{ns:Loc Theme}"/>
                                 </StackPanel>
                             </Button.Content>
                         </Button>
 
-                        <Button FontSize="18" Height="35" HorizontalAlignment="Stretch">
+                        <Button FontSize="18" Height="35" HorizontalAlignment="Stretch" Click="LanguageButton_Click">
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="/Resources/Images/language.png" Width="Auto" Margin="5"/>
-                                    <TextBlock Text="Show in Serbian"/>
+                                    <TextBlock Text="{ns:Loc LanguageBtn}"/>
                                 </StackPanel>
                             </Button.Content>
                         </Button>
@@ -64,7 +65,7 @@
         </Grid>
 
 
-        <Label Grid.Row="1" FontSize="20" Margin="10" Content ="1. How would you rate your tour guide's knowledge?" />
+        <Label Grid.Row="1" FontSize="20" Margin="10" Content ="{ns:Loc KnowledgeQuestion}" />
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10,40,0,0">
             <RadioButton Name="knowledge1" Content="1" Checked="SetRatingForGuideKnowledge" FontSize="20" Margin="10"/>
             <RadioButton Name="knowledge2" Content="2" Checked="SetRatingForGuideKnowledge" FontSize="20" Margin="10"/>
@@ -72,8 +73,10 @@
             <RadioButton Name="knowledge4" Content="4" Checked="SetRatingForGuideKnowledge" FontSize="20" Margin="10"/>
             <RadioButton Name="knowledge5" Content="5" Checked="SetRatingForGuideKnowledge" FontSize="20" Margin="10"/>
         </StackPanel>
+        <Label Grid.Row="1" Margin="10,70,0,0" Content="{ns:Loc VeryBad}"/>
+        <Label Grid.Row="1" Margin="210,70,0,0" Content="{ns:Loc VeryGood}"/>
 
-        <Label Grid.Row="2" FontSize="20" Margin="10" Content="2. How interesting was this tour?" />
+        <Label Grid.Row="2" FontSize="20" Margin="10" Content="{ns:Loc InterestingnessQuestion}" />
         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="10,40,0,0">
             <RadioButton Name="interestingness1" Content="1" Checked="SetRatingForInterestingness" FontSize="20" Margin="10"/>
             <RadioButton Name="interestingness2" Content="2" Checked="SetRatingForInterestingness" FontSize="20" Margin="10"/>
@@ -81,8 +84,10 @@
             <RadioButton Name="interestingness4" Content="4" Checked="SetRatingForInterestingness" FontSize="20" Margin="10"/>
             <RadioButton Name="interestingness5" Content="5" Checked="SetRatingForInterestingness" FontSize="20" Margin="10"/>
         </StackPanel>
+        <Label Grid.Row="2" Margin="10,70,0,0" Content="{ns:Loc VeryBad}"/>
+        <Label Grid.Row="2" Margin="210,70,0,0" Content="{ns:Loc VeryGood}"/>
 
-        <Label Grid.Row="3" FontSize="20" Margin="10" Content="3. How would you rate your tour guide's language?" />
+        <Label Grid.Row="3" FontSize="20" Margin="10" Content="{ns:Loc LanguageQuestion}" />
         <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="10,40,0,0">
             <RadioButton Name="language1" Content="1" Checked="SetRatingForGuideLanguage" FontSize="20" Margin="10"/>
             <RadioButton Name="language2" Content="2" Checked="SetRatingForGuideLanguage" FontSize="20" Margin="10"/>
@@ -90,26 +95,36 @@
             <RadioButton Name="language4" Content="4" Checked="SetRatingForGuideLanguage" FontSize="20" Margin="10"/>
             <RadioButton Name="language5" Content="5" Checked="SetRatingForGuideLanguage" FontSize="20" Margin="10"/>
         </StackPanel>
+        <Label Grid.Row="3" Margin="10,70,0,0" Content="{ns:Loc VeryBad}"/>
+        <Label Grid.Row="3" Margin="210,70,0,0" Content="{ns:Loc VeryGood}"/>
 
         <StackPanel Grid.Row="4">
-            <Label  FontSize="20" Margin="10" Content="4. Write a comment:" />
-            <TextBox  x:Name="commentTextBox" Width="350" Height="90" Margin="10, 5, 5, 5" HorizontalAlignment="Left" Text="{Binding Path=Comment, UpdateSourceTrigger=PropertyChanged}"/>
+            <Label  FontSize="20" Margin="10" Content="{ns:Loc CommentQuestion}" />
+            <TextBox  x:Name="commentTextBox" Width="350" Height="65" Margin="10, 5, 5, 5" HorizontalAlignment="Left" Text="{Binding Path=Comment, UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
         
         <StackPanel Grid.Row="5"  Margin="10" Orientation="Vertical" >
             <StackPanel Orientation="Horizontal" Height="40" VerticalAlignment="Top">
-                <Label FontSize="20" Content="5. Add one or more images:" />
+                <Label FontSize="20" Content="{ns:Loc ImagesQuestion}" />
                 <TextBox x:Name="UrlTextBox" Width="160" Height="30" Margin="10, 0, 0, 0" />
                 <Button Click="AddImage_Click" Width="30" Height="30" Margin="5,5,0,5">
                     <Image Source="/Resources/Images/upload.png" Height="15" Width="30" />
                 </Button>
             </StackPanel>
-            <ListBox x:Name="UrlListBox" Width="350" Height="60" Margin="10, 5, 5, 5" HorizontalAlignment="Left" ItemsSource="{Binding ImageUrls}" />
+            <ListBox x:Name="UrlListBox" Width="350" Height="65" Margin="10, 5, 5, 5" HorizontalAlignment="Left" ItemsSource="{Binding ImageUrls}" />
         </StackPanel>
 
         <StackPanel Grid.Row="6" Margin="10" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="Submit Review" Click="Submit_Click" FontSize="20" Height="40" Width="150" Margin="5, 5, 10, 5"/>
-            <Button Content="Cancel" Click="Cancel_Click" FontSize="20" Height="40" Width="150" Margin="5, 5, 10, 5"/>
+            <Button Content="{ns:Loc Submit}" Click="Submit_Click" FontSize="20" Height="40" Width="150" Margin="5, 5, 10, 5"/>
+            <Button Click="Cancel_Click" FontSize="20" Height="40" Width="150" Margin="5, 5, 10, 5">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Resources/Images/back.png" Width="25" Margin="5"/>
+                        <TextBlock Text="{ns:Loc Exit}"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+            
         </StackPanel>
 
     </Grid>

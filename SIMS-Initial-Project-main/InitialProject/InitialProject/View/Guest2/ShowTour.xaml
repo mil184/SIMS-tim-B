@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ns="clr-namespace:InitialProject.Localization"
         xmlns:local="clr-namespace:InitialProject.View.Guest2"
-        xmlns:p="clr-namespace:InitialProject.Properties"
         mc:Ignorable="d"
         Title="DMJM-Tours" Height="768" Width="1024"
         Icon ="/Resources/Images/favicon.ico">
@@ -48,26 +47,16 @@
                                 </StackPanel>
                             </Button.Content>
                         </Button>
-                        <StackPanel Orientation="Horizontal">
-                            <Button FontSize="20" Height="35" HorizontalAlignment="Stretch" Click="SerbianButton_Click">
+                        <Button FontSize="20" Margin="0,0,0,20" Height="35" HorizontalAlignment="Stretch" Click="LanguageButton_Click">
                                 <Button.Content>
                                     <StackPanel Orientation="Horizontal">
                                         <Image Source="/Resources/Images/language.png" Width="Auto" Margin="5"/>
-                                        <TextBlock Text="{ns:Loc Serbian}"/>
+                                        <TextBlock Text="{ns:Loc LanguageBtn}"/>
                                     </StackPanel>
                                 </Button.Content>
                             </Button>
-                            <Button FontSize="20" Height="35" HorizontalAlignment="Stretch" Click="EnglishButton_Click">
-                                <Button.Content>
-                                    <StackPanel Orientation="Horizontal">
-                                        <Image Source="/Resources/Images/language.png" Width="Auto" Margin="5"/>
-                                        <TextBlock Text="{ns:Loc English}"/>
-                                    </StackPanel>
-                                </Button.Content>
-                            </Button>
+
                         </StackPanel>
-                        
-                    </StackPanel>
                 </Grid>
             </Border>
         </Grid>

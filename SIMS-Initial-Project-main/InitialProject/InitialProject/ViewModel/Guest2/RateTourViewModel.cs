@@ -19,6 +19,11 @@ namespace InitialProject.ViewModel.Guest2
         private readonly TourService _tourService;
         private readonly ImageRepository _imageRepository;
 
+        public int LanguageButtonClickCount { get; set; }
+        private App app;
+        private const string SRB = "sr-Latn-RS";
+        private const string ENG = "en-US";
+
         private int _guideKnowledge;
         public int GuideKnowledge
         {
@@ -100,6 +105,10 @@ namespace InitialProject.ViewModel.Guest2
             _tourReservationService = tourReservationService;
             _tourService = tourService;
             _imageRepository = imageRepository;
+
+            app = (App)Application.Current;
+            app.ChangeLanguage(SRB);
+            LanguageButtonClickCount = 0;
         }
 
 
@@ -149,6 +158,19 @@ namespace InitialProject.ViewModel.Guest2
                 _imageRepository.Save(image);
                 _imageIds.Add(image.Id);
             }
+        }
+
+        public void LanguageButton_Click(object sender, RoutedEventArgs e)
+        {
+            LanguageButtonClickCount++;
+
+            if (LanguageButtonClickCount % 2 == 1)
+            {
+                app.ChangeLanguage(ENG);
+                return;
+            }
+
+            app.ChangeLanguage(SRB);
         }
     }
 }

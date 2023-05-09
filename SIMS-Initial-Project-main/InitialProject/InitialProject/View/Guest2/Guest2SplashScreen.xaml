@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ns="clr-namespace:InitialProject.Localization"
         xmlns:local="clr-namespace:InitialProject.View.Guest2"
         mc:Ignorable="d"
         Title="DMJM-Tours" Height="768" Width="1024"
@@ -14,18 +15,64 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <!-- Left side of the separator -->
+        
+
         <StackPanel Grid.Column="0" Margin="20" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <TextBlock Text="Welcome!" FontSize="70" Margin="0 0 0 30" TextAlignment="Center"/>
-            <StackPanel Orientation="Horizontal" Margin="0 0 0 30">
-                <Ellipse Width="80" Height="80" VerticalAlignment="Center" Margin="0 0 10 0">
-                    <Ellipse.Fill>
-                        <ImageBrush ImageSource="/Resources/Images/ana.jpg" Stretch="UniformToFill" />
-                    </Ellipse.Fill>
-                </Ellipse>
-                <TextBlock Text="{Binding LoggedInUser.Username, FallbackValue=Guest2}" FontSize="40" VerticalAlignment="Center" Margin="20 0 0 0" TextAlignment="Center"/>
+            <Border BorderBrush="#DDDDDD" BorderThickness="2" Margin="3">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Resources/Images/favicon.ico" Margin="10" HorizontalAlignment="Left" Height="60"/>
+                    <TextBlock FontSize="50" FontFamily="Bernard MT" FontWeight="Bold" VerticalAlignment="Center" Margin="10">
+                            DMJM Tours
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+            
+            <TextBlock Text="{ns:Loc Welcome}" FontSize="70" Margin="0 0 0 30" TextAlignment="Center"/>
+
+            <Border BorderBrush="#DDDDDD" BorderThickness="2" Margin="3">
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal" Margin="20">
+                        <Ellipse Width="80" Height="80" VerticalAlignment="Center" Margin="0 0 10 0">
+                            <Ellipse.Fill>
+                                <ImageBrush ImageSource="/Resources/Images/ana.jpg" Stretch="UniformToFill" />
+                            </Ellipse.Fill>
+                        </Ellipse>
+                        <TextBlock Text="{Binding LoggedInUser.Username, FallbackValue=Guest2}" FontSize="40" VerticalAlignment="Center" Margin="20 0 0 0" TextAlignment="Center"/>
+                        
+                </StackPanel>
+                    <Button Content="{ns:Loc LogOut}" Margin="20" Padding="20" FontSize="28" Click="LogOutButtonClick"/>
+                </StackPanel>
+
+
+
+            </Border>
+            
+            
+
+            <StackPanel>
+                
             </StackPanel>
-            <Button Content="Log Out" Margin="0 0 0 20" Padding="20" FontSize="28" Click="LogOutButtonClick"/>
+            
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button FontSize="20" Margin="0, 20, 5, 5" Height="40" Width="120">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Resources/Images/theme.png" Margin="0"/>
+                            <TextBlock Text="{ns:Loc Theme}" VerticalAlignment="Center" Width="Auto" Padding="5"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+
+                <Button FontSize="20" Height="40" Margin="5, 20, 0, 5" Click="LanguageButton_Click">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Resources/Images/language.png" Width="Auto" Margin="5"/>
+                            <TextBlock Text="{ns:Loc LanguageBtn}" VerticalAlignment="Center" Width="Auto" Padding="5"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+            
         </StackPanel>
 
         <!-- Separator -->
@@ -33,12 +80,12 @@
 
         <!-- Right side of the separator -->
         <StackPanel Grid.Column="2" Margin="20" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Button Content="Tour Reservation" Margin="0 0 0 20" Padding="20" FontSize="28" Click="TourReservationButtonClick"/>
-            <Button Content="Tour Tracking" Margin="0 0 0 20" Padding="20" FontSize="28" Click="TrackingButton_Click"/>
-            <Button Content="Tour Rating" Margin="0 0 0 20" Padding="20" FontSize="28" Click="RatingButton_Click"/>
-            <Button Content="Tour Requesting" Margin="0 0 0 20" Padding="20" FontSize="28" Click="RequestingButton_Click"/>
-            <Button Content="Complex Tour Requesting" Margin="0 0 0 20" Padding="20" FontSize="28" Click="ComplexRequestingButton_Click"/>
-            <Button Content="Vouchers" Margin="0 0 0 20" Padding="20" FontSize="28" Click="VouchersButton_Click"/>
+            <Button Content="{ns:Loc TourReservationTab}" Margin="0 0 0 20" Padding="20" FontSize="28" Click="TourReservationButtonClick"/>
+            <Button Content="{ns:Loc TourTrackingTab}" Margin="0 0 0 20" Padding="20" FontSize="28" Click="TrackingButton_Click"/>
+            <Button Content="{ns:Loc TourRatingTab}" Margin="0 0 0 20" Padding="20" FontSize="28" Click="RatingButton_Click"/>
+            <Button Content="{ns:Loc TourRequestingTab}" Margin="0 0 0 20" Padding="20" FontSize="28" Click="RequestingButton_Click"/>
+            <Button Content="{ns:Loc ComplexTourRequestingTab}" Margin="0 0 0 20" Padding="20" FontSize="28" Click="ComplexRequestingButton_Click"/>
+            <Button Content="{ns:Loc VouchersTab}" Margin="0 0 0 20" Padding="20" FontSize="28" Click="VouchersButton_Click"/>
         </StackPanel>
     </Grid>
 </Window>

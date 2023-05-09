@@ -19,13 +19,12 @@ namespace InitialProject.View.Guest2
         public Guest2TourDTO tourDTO { get; set; }
         public int imageIndex { get; set; }
 
-        public int LanguageButtonClickCount { get; set; }   
-
         public List<string> imageUrls { get; set; }
 
         private readonly TourService _tourService;
         private readonly ImageRepository _imageRepository;
 
+        public int LanguageButtonClickCount { get; set; }
         private App app;
         private const string SRB = "sr-Latn-RS";
         private const string ENG = "en-US";
@@ -68,6 +67,7 @@ namespace InitialProject.View.Guest2
 
             app = (App)Application.Current;
             app.ChangeLanguage(SRB);
+            LanguageButtonClickCount = 0;
         }
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)
@@ -136,16 +136,17 @@ namespace InitialProject.View.Guest2
 
         #endregion
 
-        
-
-        private void SerbianButton_Click(object sender, RoutedEventArgs e)
+        public void LanguageButton_Click(object sender, RoutedEventArgs e)
         {   
+            LanguageButtonClickCount++;
+
+            if (LanguageButtonClickCount % 2 == 1)
+            {
+                app.ChangeLanguage(ENG);
+                return;
+            } 
+            
             app.ChangeLanguage(SRB);
         }
-        private void EnglishButton_Click(object sender, RoutedEventArgs e)
-        {
-            app.ChangeLanguage(ENG);
-        }
-
     }
 }

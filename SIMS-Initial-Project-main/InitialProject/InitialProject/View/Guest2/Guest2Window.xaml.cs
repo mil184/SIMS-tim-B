@@ -33,6 +33,11 @@ namespace InitialProject.View.Guest2
 
         public ObservableCollection<Location> Locations;
 
+        public int LanguageButtonClickCount { get; set; }
+        private App app;
+        private const string SRB = "sr-Latn-RS";
+        private const string ENG = "en-US";
+
         public ObservableCollection<Guest2TourDTO> NonReservedTours { get; set; }
 
         private readonly TourService _tourService;
@@ -194,6 +199,10 @@ namespace InitialProject.View.Guest2
             FinishedTourDTOs = ConvertToDTO(FinishedTours);
 
             ConfirmArrival();
+
+            app = (App)Application.Current;
+            app.ChangeLanguage(SRB);
+            LanguageButtonClickCount = 0;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -510,6 +519,19 @@ namespace InitialProject.View.Guest2
             SignInForm signInForm = new SignInForm();
             signInForm.Show();
             Close();
+        }
+
+        private void LanguageButton_Click(object sender, RoutedEventArgs e)
+        {
+            LanguageButtonClickCount++;
+
+            if (LanguageButtonClickCount % 2 == 1)
+            {
+                app.ChangeLanguage(ENG);
+                return;
+            }
+
+            app.ChangeLanguage(SRB);
         }
     }
 }

@@ -7,11 +7,20 @@ namespace InitialProject.View.Guest2
     {
         public User LoggedInUser { get; set; }
 
+        public int LanguageButtonClickCount { get; set; }
+        private App app;
+        private const string SRB = "sr-Latn-RS";
+        private const string ENG = "en-US";
+
         public Guest2SplashScreen(User user)
         {
             InitializeComponent();
             DataContext = this;
             LoggedInUser = user;
+
+            app = (App)Application.Current;
+            app.ChangeLanguage(SRB);
+            LanguageButtonClickCount = 0;
         }
 
         private void TourReservationButtonClick(object sender, RoutedEventArgs e)
@@ -66,6 +75,19 @@ namespace InitialProject.View.Guest2
             guest2Window.Show();
             guest2Window.tab.SelectedIndex = 5;
             Close();
+        }
+
+        public void LanguageButton_Click(object sender, RoutedEventArgs e)
+        {
+            LanguageButtonClickCount++;
+
+            if (LanguageButtonClickCount % 2 == 1)
+            {
+                app.ChangeLanguage(ENG);
+                return;
+            }
+
+            app.ChangeLanguage(SRB);
         }
     }
 }

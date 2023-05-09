@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ns="clr-namespace:InitialProject.Localization"
         xmlns:local="clr-namespace:InitialProject.View.Guest2"
         mc:Ignorable="d"
         Title="DMJM-Tours" Height="768" Width="1024"
@@ -42,16 +43,16 @@
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="/Resources/Images/theme.png" Margin="0"/>
-                                    <TextBlock Text="Dark Theme"/>
+                                    <TextBlock Text="{ns:Loc Theme}"/>
                                 </StackPanel>
                             </Button.Content>
                         </Button>
 
-                        <Button FontSize="20" Height="35" HorizontalAlignment="Stretch">
+                        <Button FontSize="20" Height="35" HorizontalAlignment="Stretch" Click="LanguageButton_Click">
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="/Resources/Images/language.png" Width="Auto" Margin="5"/>
-                                    <TextBlock Text="Show in Serbian"/>
+                                    <TextBlock Text="{ns:Loc LanguageBtn}"/>
                                 </StackPanel>
                             </Button.Content>
                         </Button>
@@ -90,11 +91,11 @@
         <!-- Tabs section -->
         <TabControl Grid.Row="1" Name="tab">
             <!-- Tour Reservation tab -->
-            <TabItem Header="Tour Reservation" FontSize="20">
+            <TabItem Header="{ns:Loc TourReservationTab}" FontSize="20">
                 <Grid Margin="10">
 
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="245"/>
+                        <ColumnDefinition Width="265"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
@@ -110,13 +111,10 @@
                   
 
                     <!-- Search section -->
-
-                    <!--<GroupBox Header="Filtration" Margin="10" FontSize="25" />-->
-
                     <Grid Grid.RowSpan="5" Grid.Column="0" Margin="10">
                         <Grid.RowDefinitions>
                             <RowDefinition/>
-                            <RowDefinition Height="235"/>
+                            <RowDefinition Height="200"/>
                             <RowDefinition/>
                             <RowDefinition/>
                             <RowDefinition/>
@@ -125,29 +123,28 @@
                             <RowDefinition/>
                         </Grid.RowDefinitions>
 
-                        <Label Grid.Row="0" Content="Filtration" FontWeight="Bold" FontSize="25" />
+                        <Label Grid.Row="0" Content="{ns:Loc Filtration}" FontWeight="Bold" FontSize="25" />
 
                         <StackPanel Grid.Row="1" Orientation="Horizontal">
                             <Image Source="/Resources/Images/info.png" Height="30" HorizontalAlignment="Left" Margin="3"/>
-                            <TextBlock FontSize="19" FontStyle="Italic" TextWrapping="Wrap" Width="180" Margin="3">
-                                Filtration is used to show only specific, relevant tours when you input wanted information. This way, the list of tours gets smaller, but these tours do not disappear.
-                            </TextBlock>
+                            <TextBlock FontSize="18" FontStyle="Italic" TextWrapping="Wrap" Width="180" Margin="3" Text="{ns:Loc FiltrationInfo}"/>
+
                         </StackPanel>
-                        
-                        <TextBlock Grid.Row="2" Text="City:" Margin="5" />
-                        <TextBox Grid.Row="2" Width="120" Text="{Binding City}" HorizontalAlignment="Right" Margin="5"/>
 
-                        <TextBlock Grid.Row="3" Text="Country:" Margin="5" />
-                        <TextBox Grid.Row="3" Width="120" Text="{Binding Country}" HorizontalAlignment="Right" Margin="5"/>
+                        <TextBlock Grid.Row="2" Text="{ns:Loc TourCity}" Margin="5" />
+                        <TextBox Grid.Row="2" Width="120" Text="{Binding City}" HorizontalAlignment="Right" Margin="3.2"/>
 
-                        <TextBlock Grid.Row="5" Text="Duration:" Margin="5" />
-                        <TextBox Grid.Row="5" Width="50" Text="{Binding Duration}" HorizontalAlignment="Right" Margin="5"/>
+                        <TextBlock Grid.Row="3" Text="{ns:Loc TourCountry}" Margin="5" />
+                        <TextBox Grid.Row="3" Width="120" Text="{Binding Country}" HorizontalAlignment="Right" Margin="3.2"/>
 
-                        <TextBlock Grid.Row="4" Text="Language:" Margin="5" />
-                        <TextBox Grid.Row="4" Width="120" Text="{Binding TourLanguage}" HorizontalAlignment="Right" Margin="5"/>
+                        <TextBlock Grid.Row="5" Text="{ns:Loc Duration}" Margin="5" />
+                        <TextBox Grid.Row="5" Width="50" Text="{Binding Duration}" HorizontalAlignment="Right" Margin="3.2"/>
 
-                        <TextBlock Grid.Row="6" Text="Person Count:" Margin="5" />
-                        <TextBox Grid.Row="6" Width="50" Text="{Binding Guests}" HorizontalAlignment="Right" Margin="5"/>
+                        <TextBlock Grid.Row="4" Text="{ns:Loc Language}" Margin="5" />
+                        <TextBox Grid.Row="4" Width="120" Text="{Binding TourLanguage}" HorizontalAlignment="Right" Margin="3.2"/>
+
+                        <TextBlock Grid.Row="6" Text="{ns:Loc PersonCount}" Margin="5" />
+                        <TextBox Grid.Row="6" Width="50" Text="{Binding Guests}" HorizontalAlignment="Right" Margin="3.2"/>
 
                         
 
@@ -155,7 +152,7 @@
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="/Resources/Images/see.png" Margin="4" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Apply Filter" FontSize="20" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{ns:Loc Filter}" FontSize="20" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button.Content>
                         </Button>
@@ -167,27 +164,25 @@
 
                         <StackPanel Grid.Row="1" Orientation="Horizontal">
                             <Image Source="/Resources/Images/info.png" Height="30" HorizontalAlignment="Left" Margin="3"/>
-                            <TextBlock FontSize="19" FontStyle="Italic" TextWrapping="Wrap" Margin="3">
-                                Select a tour in order to reserve it!
-                            </TextBlock>
+                            <TextBlock FontSize="19" FontStyle="Italic" TextWrapping="Wrap" Margin="3" Text="{ns:Loc ReserveInfo}"/>
                         </StackPanel>
 
                         <GroupBox Grid.Row="1" Grid.Column="1" Margin="10" FontSize="20" Height="210">
                             <GroupBox.Header>
-                                <Label FontSize="25" FontWeight="Bold">Available tours</Label>
+                                <Label FontSize="25" FontWeight="Bold" Content="{ns:Loc AvailableTours}"/>
                             </GroupBox.Header>
                             <ScrollViewer VerticalScrollBarVisibility="Auto">
                                 <DataGrid ItemsSource="{Binding TourDTOs}"  
                                       SelectedItem="{Binding Path=SelectedGuest2TourDTO}"
                                       AutoGenerateColumns="False" IsReadOnly="True">
                                     <DataGrid.Columns>
-                                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" />
-                                        <DataGridTextColumn Header="Country" Binding="{Binding Country}" Width="*"/>
-                                        <DataGridTextColumn Header="City" Binding="{Binding City}" Width="*"/>
-                                        <DataGridTextColumn Header="Language" Binding="{Binding Language}" Width="*"/>
-                                        <DataGridTextColumn Header="Guests" Binding="{Binding Guests}" Width="*"/>
-                                        <DataGridTextColumn Header="Duration (hours)" Binding="{Binding Duration}" Width="*"/>
-                                        <DataGridTemplateColumn Header="See more" Width="*">
+                                        <DataGridTextColumn Header="{ns:Loc DGName}"  Binding="{Binding Name}" Width="*" />
+                                        <DataGridTextColumn Header="{ns:Loc DGCountry}" Binding="{Binding Country}" Width="*"/>
+                                        <DataGridTextColumn Header="{ns:Loc DGCity}" Binding="{Binding City}" Width="*"/>
+                                        <DataGridTextColumn Header="{ns:Loc DGLanguage}" Binding="{Binding Language}" Width="*"/>
+                                        <DataGridTextColumn Header="{ns:Loc DGGuests}" Binding="{Binding Guests}" Width="*"/>
+                                        <DataGridTextColumn Header="{ns:Loc DGDuration}" Binding="{Binding Duration}" Width="*"/>
+                                        <DataGridTemplateColumn Header="{ns:Loc DGSeeMore}" Width="*">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <Button Click="ShowMoreButton_Click">
@@ -206,49 +201,45 @@
                             </ScrollViewer>
                         </GroupBox>
 
-                        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10">
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10, 0, 0, 1">
                             <Image Source="/Resources/Images/group.png" Height="25" HorizontalAlignment="Left" Margin="3"/>
-                            <TextBlock FontSize="20" TextWrapping="Wrap" Margin="3">
-                                How many guests are included in this reservation?
-                            </TextBlock>
-                            <TextBox Margin="11, 0, 0, 0" Width="100" Text="{Binding PersonCount}" Name="PersonCountTB" />
+                            <Label FontSize="20" Content="{ns:Loc PersonCountQuestion}"/>
+                            <TextBox Margin="30, 0, 0, 0" Width="100" Text="{Binding PersonCount}" Name="PersonCountTB" />
                             
                             
                         </StackPanel>
 
-                        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10">
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10, 1, 0, 0">
                             <Image Source="/Resources/Images/group.png" Height="25" HorizontalAlignment="Left" Margin="3"/>
-                            <TextBlock FontSize="20" TextWrapping="Wrap" Margin="3">
-                                What is the average age of guests?
-                            </TextBlock>
-                            <TextBox Margin="145, 0, 0, 0" Width="100" Text="{Binding AverageAge}" Name="AverageAgeTB"/>
+                            <Label FontSize="20" Content="{ns:Loc AverageAgeQuestion}"/>
+                            <TextBox Margin="30, 0, 0, 0" Width="100" Text="{Binding AverageAge}" Name="AverageAgeTB"/>
                         </StackPanel>
 
-                        <GroupBox Grid.Row="3" Header="Your Vouchers" Margin="10 20 10 10">
+                        <GroupBox Grid.Row="3" Header="{ns:Loc YourVouchers}" Margin="10 20 10 10">
                             <ScrollViewer VerticalScrollBarVisibility="Auto">
                                 <DataGrid ItemsSource="{Binding Vouchers}" 
                                         SelectedItem="{Binding Path=SelectedVoucher}"
                                         AutoGenerateColumns="False" IsReadOnly="True">
                                     <DataGrid.Columns>
-                                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" />
-                                        <DataGridTextColumn Header="Start Date" Binding="{Binding StartDateTime}" Width="*" />
-                                        <DataGridTextColumn Header="Expiration Date" Binding="{Binding ExpirationDateTime}" Width="*" />
+                                        <DataGridTextColumn Header="{ns:Loc DGName}" Binding="{Binding Name}" Width="*" />
+                                        <DataGridTextColumn Header="{ns:Loc StartDate}" Binding="{Binding StartDateTime}" Width="*" />
+                                        <DataGridTextColumn Header="{ns:Loc ExpirationDate}" Binding="{Binding ExpirationDateTime}" Width="*" />
                                     </DataGrid.Columns>
                                 </DataGrid>
                             </ScrollViewer>
                             
                         </GroupBox>
                         <StackPanel Grid.Row="4" Orientation="Horizontal">
-                            <TextBlock Text="I dont want to use a voucher" Margin="10"/>
+                            <TextBlock Text="{ns:Loc NoVoucher}" Margin="10, 0, 0, 0"/>
                             <StackPanel Orientation="Horizontal">
-                                <RadioButton Name="NoVoucherBtn"  VerticalAlignment="Center"/>
+                                <RadioButton Name="NoVoucherBtn" VerticalAlignment="Center"/>
                             </StackPanel>
                         </StackPanel>
 
                     </StackPanel>
-                    
-                       
-                    <Button Grid.Row="2" Grid.Column="1" Content="Reserve Tour" Click="SaveButton_Click" Width="200" Margin="10" HorizontalAlignment="Center" Height="40"/>
+
+
+                    <Button Grid.Row="2" Grid.Column="1" Content="{ns:Loc ReserveTour}" Click="SaveButton_Click" Width="200" Margin="10" HorizontalAlignment="Center" Height="40"/>
                 </Grid>
             </TabItem>
 
@@ -274,7 +265,7 @@
             </TabItem>
             
             <!-- Tour Rating tab -->
-            <TabItem Header="Tour Rating" FontSize="20">
+            <TabItem Header="{ns:Loc TourRatingTab}" FontSize="20">
                 <StackPanel Margin="10">
 
                     <!-- Tour overview section -->
@@ -319,27 +310,27 @@
             </TabItem>
 
             <!-- Tour Requesting tab -->
-            <TabItem Header="Tour Requesting" FontSize="20">
+            <TabItem Header="{ns:Loc TourRequestingTab}" FontSize="20">
             </TabItem>
 
             <!-- Complex Tour Requesting tab -->
-            <TabItem Header="Complex Tour Requesting" FontSize="20">
+            <TabItem Header="{ns:Loc ComplexTourRequestingTab}" FontSize="20">
             </TabItem>
 
             <!-- Vouchers tab -->
-            <TabItem Header="Vouchers" FontSize="20">
+            <TabItem Header="{ns:Loc VouchersTab}" FontSize="20">
                 <StackPanel Margin="20">
                     <GroupBox FontSize="20">
                         <GroupBox.Header>
-                            <Label FontSize="25" FontWeight="Bold">Your Vouchers</Label>
+                            <Label FontSize="25" FontWeight="Bold" Content="{ns:Loc YourVouchers}"/>
                         </GroupBox.Header>
                         <ScrollViewer VerticalScrollBarVisibility="Auto">
                             <DataGrid ItemsSource="{Binding Vouchers}" 
                                   AutoGenerateColumns="False" IsReadOnly="True" Margin="5" Height="200">
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" />
-                                    <DataGridTextColumn Header="Start Date" Binding="{Binding StartDateTime}" Width="*" />
-                                    <DataGridTextColumn Header="Expiration Date" Binding="{Binding ExpirationDateTime}" Width="*" />
+                                    <DataGridTextColumn Header="{ns:Loc DGName}" Binding="{Binding Name}" Width="*" />
+                                    <DataGridTextColumn Header="{ns:Loc StartDate}" Binding="{Binding StartDateTime}" Width="*" />
+                                    <DataGridTextColumn Header="{ns:Loc ExpirationDate}" Binding="{Binding ExpirationDateTime}" Width="*" />
                                 </DataGrid.Columns>
                                 <DataGrid.ColumnHeaderStyle>
                                     <Style TargetType="DataGridColumnHeader">
@@ -351,32 +342,32 @@
                     </GroupBox>
                     <GroupBox FontSize="20">
                         <GroupBox.Header>
-                            <Label FontSize="25" FontWeight="Bold">What are vouchers?</Label>
+                            <Label FontSize="25" FontWeight="Bold" Content="{ns:Loc Voucher6}"/>
                         </GroupBox.Header>
                         <StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="5, 0, 0, 0">
                                 <Image Source="/Resources/Images/gift.png" Height="20"/>
-                                <Label>Vouchers can be used to reserve a tour.</Label>
+                                <Label Content="{ns:Loc Voucher1}"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="5, 0, 0, 0">
                                 <Image Source="/Resources/Images/gift.png" Height="20"/>
-                                <Label>Vouchers can be obtained in several ways:</Label>
+                                <Label Content="{ns:Loc Voucher2}"></Label>
                             </StackPanel>
                             <StackPanel Margin="15, 0, 0, 0">
                                 <StackPanel Orientation="Horizontal" Margin="5, 0, 5, 0" Height="50" HorizontalAlignment="Left">
                                     <Image Source="/Resources/Images/gift.png" Height="20"/>
-                                    <TextBlock TextWrapping="Wrap" Width="800" Margin="5, 0, 0, 0">By attending any 5 tours in one year. These vouchers expire in 6 months and can be used for any tour. </TextBlock>
-                                
+                                    <TextBlock TextWrapping="Wrap" Width="800" Margin="5, 0, 0, 0" Text="{ns:Loc Voucher3}"/>
+
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="5, 0, 0, 0">
                                     <Image Source="/Resources/Images/gift.png" Height="20"/>
-                                    <Label>When a tour guide quits or cancels a tour you reserved.</Label>
+                                    <Label Content="{ns:Loc Voucher4}"/>
 
                                 </StackPanel>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="5, 0, 0, 0">
                                 <Image Source="/Resources/Images/gift.png" Height="20"/>
-                                <Label>Used or expired vouchers will no longer be visible.</Label>
+                                <Label Content="{ns:Loc Voucher5}"/>
                             </StackPanel>
                         </StackPanel>
                         

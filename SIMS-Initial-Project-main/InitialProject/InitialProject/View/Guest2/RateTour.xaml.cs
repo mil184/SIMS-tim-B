@@ -80,5 +80,10 @@ namespace InitialProject.View.Guest2
             _viewModel.AddImage(UrlTextBox.Text);
             UrlTextBox.Text = string.Empty;
         }
+
+        public void LanguageButton_Click(object sender, RoutedEventArgs e)
+        {
+            _viewModel.LanguageButton_Click(sender, e);
+        }
     }
 }

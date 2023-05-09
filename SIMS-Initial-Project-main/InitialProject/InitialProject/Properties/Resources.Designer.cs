@@ -61,11 +61,110 @@ namespace InitialProject.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dostupne ture.
+        /// </summary>
+        public static string AvailableTours {
+            get {
+                return ResourceManager.GetString("AvailableTours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Koje su prosečne godine grupe?.
+        /// </summary>
+        public static string AverageAgeQuestion {
+            get {
+                return ResourceManager.GetString("AverageAgeQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 4. Dodati komentar:*.
+        /// </summary>
+        public static string CommentQuestion {
+            get {
+                return ResourceManager.GetString("CommentQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zahtevanje kompleksnih tura.
+        /// </summary>
+        public static string ComplexTourRequestingTab {
+            get {
+                return ResourceManager.GetString("ComplexTourRequestingTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Trenutni broj gostiju:.
         /// </summary>
         public static string CurrentGuests {
             get {
                 return ResourceManager.GetString("CurrentGuests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Grad.
+        /// </summary>
+        public static string DGCity {
+            get {
+                return ResourceManager.GetString("DGCity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Država.
+        /// </summary>
+        public static string DGCountry {
+            get {
+                return ResourceManager.GetString("DGCountry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trajanje (sati).
+        /// </summary>
+        public static string DGDuration {
+            get {
+                return ResourceManager.GetString("DGDuration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Broj gostiju.
+        /// </summary>
+        public static string DGGuests {
+            get {
+                return ResourceManager.GetString("DGGuests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Jezik.
+        /// </summary>
+        public static string DGLanguage {
+            get {
+                return ResourceManager.GetString("DGLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Naziv.
+        /// </summary>
+        public static string DGName {
+            get {
+                return ResourceManager.GetString("DGName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Videti još.
+        /// </summary>
+        public static string DGSeeMore {
+            get {
+                return ResourceManager.GetString("DGSeeMore", resourceCulture);
             }
         }
         
@@ -79,15 +178,6 @@ namespace InitialProject.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Engleski:.
-        /// </summary>
-        public static string English {
-            get {
-                return ResourceManager.GetString("English", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Izlaz.
         /// </summary>
         public static string Exit {
@@ -97,7 +187,52 @@ namespace InitialProject.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vodic:.
+        ///   Looks up a localized string similar to Krajnji datum.
+        /// </summary>
+        public static string ExpirationDate {
+            get {
+                return ResourceManager.GetString("ExpirationDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string fg {
+            get {
+                return ResourceManager.GetString("fg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filtriraj.
+        /// </summary>
+        public static string Filter {
+            get {
+                return ResourceManager.GetString("Filter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filtracija.
+        /// </summary>
+        public static string Filtration {
+            get {
+                return ResourceManager.GetString("Filtration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filtracija se koristi da se prikažu samo specifične, relevantne ture kada se unesu željene informacije..
+        /// </summary>
+        public static string FiltrationInfo {
+            get {
+                return ResourceManager.GetString("FiltrationInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vodič:.
         /// </summary>
         public static string Guide {
             get {
@@ -115,11 +250,65 @@ namespace InitialProject.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 5. Dodati jednu ili više slika:*.
+        /// </summary>
+        public static string ImagesQuestion {
+            get {
+                return ResourceManager.GetString("ImagesQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 2. Koliko je tura bila zanimljiva?*.
+        /// </summary>
+        public static string InterestingnessQuestion {
+            get {
+                return ResourceManager.GetString("InterestingnessQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1. Kako biste ocenili vodičevo znanje?*.
+        /// </summary>
+        public static string KnowledgeQuestion {
+            get {
+                return ResourceManager.GetString("KnowledgeQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Jezik:.
         /// </summary>
         public static string Language {
             get {
                 return ResourceManager.GetString("Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prikaži na engleskom.
+        /// </summary>
+        public static string LanguageBtn {
+            get {
+                return ResourceManager.GetString("LanguageBtn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 3. Kako biste ocenili vodičevo poznavanje jezika?*.
+        /// </summary>
+        public static string LanguageQuestion {
+            get {
+                return ResourceManager.GetString("LanguageQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Odjavi se.
+        /// </summary>
+        public static string LogOut {
+            get {
+                return ResourceManager.GetString("LogOut", resourceCulture);
             }
         }
         
@@ -133,11 +322,38 @@ namespace InitialProject.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sledeca.
+        ///   Looks up a localized string similar to Sledeća.
         /// </summary>
         public static string Next {
             get {
                 return ResourceManager.GetString("Next", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ne želim da koristim vaučer..
+        /// </summary>
+        public static string NoVoucher {
+            get {
+                return ResourceManager.GetString("NoVoucher", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Broj gostiju:.
+        /// </summary>
+        public static string PersonCount {
+            get {
+                return ResourceManager.GetString("PersonCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Koliko ljudi će prisustvovati turi?.
+        /// </summary>
+        public static string PersonCountQuestion {
+            get {
+                return ResourceManager.GetString("PersonCountQuestion", resourceCulture);
             }
         }
         
@@ -151,16 +367,43 @@ namespace InitialProject.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Srpski.
+        ///   Looks up a localized string similar to Odaberi turu kako bi rezervisao!.
         /// </summary>
-        public static string Serbian {
+        public static string ReserveInfo {
             get {
-                return ResourceManager.GetString("Serbian", resourceCulture);
+                return ResourceManager.GetString("ReserveInfo", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tema:.
+        ///   Looks up a localized string similar to Rezerviši turu.
+        /// </summary>
+        public static string ReserveTour {
+            get {
+                return ResourceManager.GetString("ReserveTour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Početni datum.
+        /// </summary>
+        public static string StartDate {
+            get {
+                return ResourceManager.GetString("StartDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Poslati.
+        /// </summary>
+        public static string Submit {
+            get {
+                return ResourceManager.GetString("Submit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tema.
         /// </summary>
         public static string Theme {
             get {
@@ -178,7 +421,7 @@ namespace InitialProject.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Drzava ture:.
+        ///   Looks up a localized string similar to Država ture:.
         /// </summary>
         public static string TourCountry {
             get {
@@ -201,6 +444,141 @@ namespace InitialProject.Properties {
         public static string TourName {
             get {
                 return ResourceManager.GetString("TourName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ocenjivanje ture.
+        /// </summary>
+        public static string TourRatingTab {
+            get {
+                return ResourceManager.GetString("TourRatingTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zahtevanje tura.
+        /// </summary>
+        public static string TourRequestingTab {
+            get {
+                return ResourceManager.GetString("TourRequestingTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rezervisanje ture.
+        /// </summary>
+        public static string TourReservationTab {
+            get {
+                return ResourceManager.GetString("TourReservationTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Praćenje ture.
+        /// </summary>
+        public static string TourTrackingTab {
+            get {
+                return ResourceManager.GetString("TourTrackingTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Veoma loše.
+        /// </summary>
+        public static string VeryBad {
+            get {
+                return ResourceManager.GetString("VeryBad", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Veoma dobro.
+        /// </summary>
+        public static string VeryGood {
+            get {
+                return ResourceManager.GetString("VeryGood", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vaučeri mogu da se iskoriste pri rezervaciji ture..
+        /// </summary>
+        public static string Voucher1 {
+            get {
+                return ResourceManager.GetString("Voucher1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vaučeri se mogu osvojiti na nekoliko načina:.
+        /// </summary>
+        public static string Voucher2 {
+            get {
+                return ResourceManager.GetString("Voucher2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prisustvovanjem na barem 5 tura u jednoj godini. Ovi vaučeri traju 6 meseci i mogu se koristiti za bilo koju turu..
+        /// </summary>
+        public static string Voucher3 {
+            get {
+                return ResourceManager.GetString("Voucher3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kada vodič da otkaz ili otkaže turu koju ste rezervisali..
+        /// </summary>
+        public static string Voucher4 {
+            get {
+                return ResourceManager.GetString("Voucher4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Iskorišćeni ili nevažeći vaučeri se neće prikazivati..
+        /// </summary>
+        public static string Voucher5 {
+            get {
+                return ResourceManager.GetString("Voucher5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Šta su vaučeri?.
+        /// </summary>
+        public static string Voucher6 {
+            get {
+                return ResourceManager.GetString("Voucher6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vaučeri.
+        /// </summary>
+        public static string VouchersTab {
+            get {
+                return ResourceManager.GetString("VouchersTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dobrodošli!.
+        /// </summary>
+        public static string Welcome {
+            get {
+                return ResourceManager.GetString("Welcome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tvoji vaučeri.
+        /// </summary>
+        public static string YourVouchers {
+            get {
+                return ResourceManager.GetString("YourVouchers", resourceCulture);
             }
         }
     }
