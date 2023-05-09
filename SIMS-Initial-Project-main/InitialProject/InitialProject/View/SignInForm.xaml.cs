@@ -89,8 +89,8 @@ namespace InitialProject
                     }
                     else if (user.Type == InitialProject.Resources.Enums.UserType.guest2)
                     {
-                        Guest2SplashScreen guest2SplashScreen = new Guest2SplashScreen(user);
-                        guest2SplashScreen.Show();
+                        Guest2Window guest2Window = new Guest2Window(user);
+                        guest2Window.Show();
                         Close();
                     }
                 } 

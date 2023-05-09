@@ -90,6 +90,18 @@
 
         <!-- Tabs section -->
         <TabControl Grid.Row="1" Name="tab">
+            <!-- Home tab -->
+            <TabItem Header="{ns:Loc HomeTab}" FontSize="20">
+                <StackPanel Grid.Column="2" Margin="20" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Button Content="{ns:Loc TourReservationTab}" Margin="0 0 0 20" Padding="20" FontSize="28" Click="TourReservationButtonClick"/>
+                    <Button Content="{ns:Loc TourTrackingTab}" Margin="0 0 0 20" Padding="20" FontSize="28" Click="TrackingButton_Click"/>
+                    <Button Content="{ns:Loc TourRatingTab}" Margin="0 0 0 20" Padding="20" FontSize="28" Click="RatingButton_Click"/>
+                    <Button Content="{ns:Loc TourRequestingTab}" Margin="0 0 0 20" Padding="20" FontSize="28" Click="RequestingButton_Click"/>
+                    <Button Content="{ns:Loc ComplexTourRequestingTab}" Margin="0 0 0 20" Padding="20" FontSize="28" Click="ComplexRequestingButton_Click"/>
+                    <Button Content="{ns:Loc VouchersTab}" Margin="0 0 0 20" Padding="20" FontSize="28" Click="VouchersButton_Click"/>
+                </StackPanel>
+            </TabItem>
+            
             <!-- Tour Reservation tab -->
             <TabItem Header="{ns:Loc TourReservationTab}" FontSize="20">
                 <Grid Margin="10">

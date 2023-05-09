@@ -177,6 +177,9 @@
   <data name="Guide" xml:space="preserve">
     <value>Vodič:</value>
   </data>
+  <data name="HomeTab" xml:space="preserve">
+    <value>Početna stranica</value>
+  </data>
   <data name="Images" xml:space="preserve">
     <value>Slike ture:</value>
   </data>

@@ -381,6 +381,40 @@ namespace InitialProject.View.Guest2
         }
         #endregion
 
+        #region Home tab
+
+        private void TourReservationButtonClick(object sender, RoutedEventArgs e)
+        {
+            this.tab.SelectedIndex = 1;
+        }
+
+        private void TrackingButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.tab.SelectedIndex = 2;
+        }
+
+        private void RatingButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.tab.SelectedIndex = 3;
+        }
+
+        private void RequestingButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.tab.SelectedIndex = 4;
+        }
+
+        private void ComplexRequestingButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.tab.SelectedIndex = 5;
+        }
+
+        private void VouchersButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.tab.SelectedIndex = 6;
+        }
+
+        #endregion
+
         public void FormTours()
         {
             foreach (Tour tour in _tourService.GetReservableTours())

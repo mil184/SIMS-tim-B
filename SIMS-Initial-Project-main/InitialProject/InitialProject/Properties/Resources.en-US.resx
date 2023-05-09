@@ -174,6 +174,9 @@
   <data name="Guide" xml:space="preserve">
     <value>Guide:</value>
   </data>
+  <data name="HomeTab" xml:space="preserve">
+    <value>Home</value>
+  </data>
   <data name="Images" xml:space="preserve">
     <value>Tour Images:</value>
   </data>
