@@ -247,10 +247,10 @@
     <value>Tour Name:</value>
   </data>
   <data name="TourRatingTab" xml:space="preserve">
-    <value>TourRating</value>
+    <value>Tour Rating</value>
   </data>
   <data name="TourRequestingTab" xml:space="preserve">
-    <value>TourRequesting</value>
+    <value>Tour Requesting</value>
   </data>
   <data name="TourReservationTab" xml:space="preserve">
     <value>Tour Reservation</value>
@@ -286,7 +286,7 @@
     <value>Vouchers</value>
   </data>
   <data name="Welcome" xml:space="preserve">
-    <value>Welcome!</value>
+    <value>Welcome to DMJM Tours! What would you like to do?</value>
   </data>
   <data name="YourVouchers" xml:space="preserve">
     <value>Your Vouchers</value>

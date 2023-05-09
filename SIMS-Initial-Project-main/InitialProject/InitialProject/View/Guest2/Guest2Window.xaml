@@ -81,7 +81,7 @@
                     <TextBlock Text="{Binding LoggedInUser.Username, FallbackValue=Guest2}" FontSize="19" HorizontalAlignment="Center" Grid.Row="1" Margin="5, 0, 5, 5"/>
                 </Grid>
 
-                <Button Content="Log Out" Grid.Column="1" FontSize="20" Margin="0,42,20,42" Padding="4" Height="35" Width="100" Click="LogOutButton_Click" />
+                <Button Content="{ns:Loc LogOut}" Grid.Column="1" FontSize="20" Margin="0,42,20,42" Padding="4" Height="35" Width="100" Click="LogOutButton_Click" />
 
             </Grid>
         </Grid>
@@ -92,14 +92,22 @@
         <TabControl Grid.Row="1" Name="tab">
             <!-- Home tab -->
             <TabItem Header="{ns:Loc HomeTab}" FontSize="20">
-                <StackPanel Grid.Column="2" Margin="20" VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <Button Content="{ns:Loc TourReservationTab}" Margin="0 0 0 20" Padding="20" FontSize="28" Click="TourReservationButtonClick"/>
-                    <Button Content="{ns:Loc TourTrackingTab}" Margin="0 0 0 20" Padding="20" FontSize="28" Click="TrackingButton_Click"/>
-                    <Button Content="{ns:Loc TourRatingTab}" Margin="0 0 0 20" Padding="20" FontSize="28" Click="RatingButton_Click"/>
-                    <Button Content="{ns:Loc TourRequestingTab}" Margin="0 0 0 20" Padding="20" FontSize="28" Click="RequestingButton_Click"/>
-                    <Button Content="{ns:Loc ComplexTourRequestingTab}" Margin="0 0 0 20" Padding="20" FontSize="28" Click="ComplexRequestingButton_Click"/>
-                    <Button Content="{ns:Loc VouchersTab}" Margin="0 0 0 20" Padding="20" FontSize="28" Click="VouchersButton_Click"/>
+                
+                
+                <StackPanel Orientation="Vertical" Margin="20" HorizontalAlignment="Center">
+                    <Label Content="{ns:Loc Welcome}" HorizontalAlignment="Center" FontSize="20"/>
+                    <StackPanel Orientation="Horizontal"  Grid.Column="2" Margin="20" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <Button Content="{ns:Loc TourReservationTab}" Margin="20" Padding="20" FontSize="28" Click="TourReservationButtonClick"/>
+                        <Button Content="{ns:Loc TourTrackingTab}" Margin="20" Padding="20" FontSize="28" Click="TrackingButton_Click"/>
+                        <Button Content="{ns:Loc TourRatingTab}" Margin="20" Padding="20" FontSize="28" Click="RatingButton_Click"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Column="2" Margin="20" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <Button Content="{ns:Loc TourRequestingTab}" Margin="20" Padding="20" FontSize="28" Click="RequestingButton_Click"/>
+                        <Button Content="{ns:Loc ComplexTourRequestingTab}" Margin="20" Padding="20" FontSize="28" Click="ComplexRequestingButton_Click"/>
+                        <Button Content="{ns:Loc VouchersTab}" Margin="20" Padding="20" FontSize="28" Click="VouchersButton_Click"/>
+                    </StackPanel>
                 </StackPanel>
+               
             </TabItem>
             
             <!-- Tour Reservation tab -->

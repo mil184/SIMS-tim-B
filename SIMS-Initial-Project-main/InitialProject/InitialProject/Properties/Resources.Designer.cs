@@ -574,7 +574,7 @@ namespace InitialProject.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dobrodošli!.
+        ///   Looks up a localized string similar to Dobrodošli na DMJM Tours! Šta biste želeli da radite?.
         /// </summary>
         public static string Welcome {
             get {
