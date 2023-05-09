@@ -264,7 +264,7 @@
             </TabItem>
 
             <!-- Tour Tracking tab -->
-            <TabItem Header="Tour Tracking" FontSize="20">
+            <TabItem Header="{ns:Loc TourTrackingTab}" FontSize="20">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
