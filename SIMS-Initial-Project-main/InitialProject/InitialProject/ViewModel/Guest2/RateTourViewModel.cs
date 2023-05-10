@@ -120,12 +120,36 @@ namespace InitialProject.ViewModel.Guest2
 
         public void Submit()
         {
-            var messageBoxResult = MessageBox.Show($"Would you like to save your rating?", "Rating Tour Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            //if (GuideKnowledge == null)
+            //{
+            //    MessageBox.Show("Please rate your guide's knowledge!", "Guide knowledge warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            //   // return;
+            //}
 
-            if (messageBoxResult == MessageBoxResult.No)
-            {
-                return;
-            }
+            //else if (Interestingness == null)
+            //{
+            //    MessageBox.Show("Please rate tour interestingness!", "Interestingness warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            //   // return;
+            //}
+
+            //else if (GuideLanguage == null)
+            //{
+            //    MessageBox.Show("Please rate your guide's language!", "Guide language warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            //    //return;
+            //}
+
+            //else if (Comment == null)
+            //{
+            //    MessageBox.Show("Please add a comment!", "Comment warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            //    //return;
+            //}
+
+            //else if (ImageUrls.Count == 0)
+            //{
+            //    MessageBox.Show("Please add at least one image!", "Images warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            //   // return;
+            //}
+             
 
             TourRating tourRating = new TourRating(
                     SelectedTour.TourId,
@@ -145,6 +169,10 @@ namespace InitialProject.ViewModel.Guest2
             _tourReservationService.Update(tourReservation);
 
             _tourRatingService.Save(tourRating);
+
+            MessageBox.Show("Tour successfuly rated!");
+
+            
         }
 
         public void AddImage(string urlTextBox)

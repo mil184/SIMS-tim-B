@@ -10,10 +10,9 @@
     <Window.Resources>
         <ControlTemplate x:Key="ValidationErrorTemplate">
             <DockPanel LastChildFill="True">
-                <Border BorderBrush="Red" BorderThickness="1">
+                <Border BorderBrush="#FFA500" BorderThickness="1">
                     <AdornedElementPlaceholder />
                 </Border>
-                <TextBlock Foreground="Red" Text="{Binding [0].ErrorContent}" Margin="5,0,0,0" />
             </DockPanel>
         </ControlTemplate>
         <Style TargetType="{x:Type TextBox}">

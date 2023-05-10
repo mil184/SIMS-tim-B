@@ -132,6 +132,12 @@
   <data name="CurrentGuests" xml:space="preserve">
     <value>Current Guests:</value>
   </data>
+  <data name="CurrentlyActiveCP" xml:space="preserve">
+    <value>Currently Active checkpoint:</value>
+  </data>
+  <data name="CurrentlyActiveTour" xml:space="preserve">
+    <value>Currently Active tour:</value>
+  </data>
   <data name="DGCity" xml:space="preserve">
     <value>City</value>
   </data>
@@ -143,6 +149,9 @@
   </data>
   <data name="DGGuests" xml:space="preserve">
     <value>Guests</value>
+  </data>
+  <data name="DGGuide" xml:space="preserve">
+    <value>Guide</value>
   </data>
   <data name="DGLanguage" xml:space="preserve">
     <value>Language</value>
@@ -218,6 +227,9 @@
   </data>
   <data name="Previous" xml:space="preserve">
     <value>Previous</value>
+  </data>
+  <data name="RateTourBtn" xml:space="preserve">
+    <value>Rate This Tour</value>
   </data>
   <data name="ReserveInfo" xml:space="preserve">
     <value>Select a tour in order to reserve it!</value>

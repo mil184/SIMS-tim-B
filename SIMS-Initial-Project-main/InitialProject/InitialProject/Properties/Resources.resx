@@ -132,6 +132,12 @@
   <data name="CurrentGuests" xml:space="preserve">
     <value>Trenutni broj gostiju:</value>
   </data>
+  <data name="CurrentlyActiveCP" xml:space="preserve">
+    <value>Trenutno aktivna ključna tačka:</value>
+  </data>
+  <data name="CurrentlyActiveTour" xml:space="preserve">
+    <value>Trenutno aktivna tura:</value>
+  </data>
   <data name="DGCity" xml:space="preserve">
     <value>Grad</value>
   </data>
@@ -143,6 +149,9 @@
   </data>
   <data name="DGGuests" xml:space="preserve">
     <value>Broj gostiju</value>
+  </data>
+  <data name="DGGuide" xml:space="preserve">
+    <value>Vodič</value>
   </data>
   <data name="DGLanguage" xml:space="preserve">
     <value>Jezik</value>
@@ -161,9 +170,6 @@
   </data>
   <data name="ExpirationDate" xml:space="preserve">
     <value>Krajnji datum</value>
-  </data>
-  <data name="fg" xml:space="preserve">
-    <value />
   </data>
   <data name="Filter" xml:space="preserve">
     <value>Filtriraj</value>
@@ -221,6 +227,9 @@
   </data>
   <data name="Previous" xml:space="preserve">
     <value>Prethodna</value>
+  </data>
+  <data name="RateTourBtn" xml:space="preserve">
+    <value>Oceni turu</value>
   </data>
   <data name="ReserveInfo" xml:space="preserve">
     <value>Odaberi turu kako bi rezervisao!</value>

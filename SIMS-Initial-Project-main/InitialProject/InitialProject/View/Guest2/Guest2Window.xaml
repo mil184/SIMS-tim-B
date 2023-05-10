@@ -8,6 +8,21 @@
         mc:Ignorable="d"
         Title="DMJM-Tours" Height="768" Width="1024"
         Icon ="/Resources/Images/favicon.ico">
+
+    <Window.Resources>
+        <ControlTemplate x:Key="ValidationErrorTemplate">
+            <DockPanel LastChildFill="True">
+                <Border BorderBrush="Red" BorderThickness="1">
+                    <AdornedElementPlaceholder x:Name="textBox"/>
+                </Border>
+                <TextBlock Foreground="Red" Text="{Binding [0].ErrorContent}" Margin="5,0,0,0" />
+            </DockPanel>
+        </ControlTemplate>
+        <Style TargetType="{x:Type TextBox}">
+            <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ValidationErrorTemplate}" />
+        </Style>
+    </Window.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="120"/>
@@ -78,10 +93,10 @@
                         </Ellipse.Fill>
                     </Ellipse>
 
-                    <TextBlock Text="{Binding LoggedInUser.Username, FallbackValue=Guest2}" FontSize="19" HorizontalAlignment="Center" Grid.Row="1" Margin="5, 0, 5, 5"/>
+                    <TextBlock Text="{Binding LoggedInUser.Username, FallbackValue=Guest2}" FontSize="20" Height="35" HorizontalAlignment="Center" Grid.Row="1" Margin="5, 0, 5, 5"/>
                 </Grid>
 
-                <Button Content="{ns:Loc LogOut}" Grid.Column="1" FontSize="20" Margin="0,42,20,42" Padding="4" Height="35" Width="100" Click="LogOutButton_Click" />
+                <Button Content="{ns:Loc LogOut}" Grid.Column="1" FontSize="20" Margin="0,42,20,42" Padding="4, 0, 4, 0" Height="35" Width="120" Click="LogOutButton_Click" />
 
             </Grid>
         </Grid>
@@ -93,9 +108,8 @@
             <!-- Home tab -->
             <TabItem Header="{ns:Loc HomeTab}" FontSize="20">
                 
-                
                 <StackPanel Orientation="Vertical" Margin="20" HorizontalAlignment="Center">
-                    <Label Content="{ns:Loc Welcome}" HorizontalAlignment="Center" FontSize="20"/>
+                    <Label Content="{ns:Loc Welcome}" HorizontalAlignment="Center" FontSize="25"/>
                     <StackPanel Orientation="Horizontal"  Grid.Column="2" Margin="20" VerticalAlignment="Center" HorizontalAlignment="Center">
                         <Button Content="{ns:Loc TourReservationTab}" Margin="20" Padding="20" FontSize="28" Click="TourReservationButtonClick"/>
                         <Button Content="{ns:Loc TourTrackingTab}" Margin="20" Padding="20" FontSize="28" Click="TrackingButton_Click"/>
@@ -224,7 +238,7 @@
                         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10, 0, 0, 1">
                             <Image Source="/Resources/Images/group.png" Height="25" HorizontalAlignment="Left" Margin="3"/>
                             <Label FontSize="20" Content="{ns:Loc PersonCountQuestion}"/>
-                            <TextBox Margin="30, 0, 0, 0" Width="100" Text="{Binding PersonCount}" Name="PersonCountTB" />
+                            <TextBox Margin="30, 0, 0, 0" Width="100" Text="{Binding Path=PersonCount, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"  Name="PersonCountTB" />
                             
                             
                         </StackPanel>
@@ -232,13 +246,16 @@
                         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10, 1, 0, 0">
                             <Image Source="/Resources/Images/group.png" Height="25" HorizontalAlignment="Left" Margin="3"/>
                             <Label FontSize="20" Content="{ns:Loc AverageAgeQuestion}"/>
-                            <TextBox Margin="30, 0, 0, 0" Width="100" Text="{Binding AverageAge}" Name="AverageAgeTB"/>
+                            <TextBox Margin="30, 0, 0, 0" Width="100" Text="{Binding Path=AverageAge, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"  Name="AverageAgeTB"/>
                         </StackPanel>
 
-                        <GroupBox Grid.Row="3" Header="{ns:Loc YourVouchers}" Margin="10 20 10 10">
+                        <GroupBox Grid.Row="3" Margin="10 20 10 10">
+                            <GroupBox.Header>
+                                <Label FontSize="25" FontWeight="Bold" Content="{ns:Loc YourVouchers}"/>
+                            </GroupBox.Header>
                             <ScrollViewer VerticalScrollBarVisibility="Auto">
                                 <DataGrid ItemsSource="{Binding Vouchers}" 
-                                        SelectedItem="{Binding Path=SelectedVoucher}"
+                                        SelectedItem="{Binding Path=SelectedVoucher, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                                         AutoGenerateColumns="False" IsReadOnly="True">
                                     <DataGrid.Columns>
                                         <DataGridTextColumn Header="{ns:Loc DGName}" Binding="{Binding Name}" Width="*" />
@@ -264,7 +281,7 @@
             </TabItem>
 
             <!-- Tour Tracking tab -->
-            <TabItem Header="Tour Tracking" FontSize="20">
+            <TabItem Header="{ns:Loc TourTrackingTab}" FontSize="20">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -272,15 +289,15 @@
                     </Grid.RowDefinitions>
 
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="25*"/>
-                        <ColumnDefinition Width="75*"/>
+                        <ColumnDefinition Width="5*"/>
+                        <ColumnDefinition Width="5*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Label Grid.Row="0" Grid.Column="0">Currently Active tour:</Label>
-                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Path=CurrentlyActiveTour.Name, FallbackValue=NoTourCurrentlyActive}"/>
+                    <Label Grid.Row="0" Grid.Column="0" FontSize="20" HorizontalAlignment="Right" Margin="10" Content="{ns:Loc CurrentlyActiveTour}"/>
+                    <TextBlock Grid.Row="0" Grid.Column="1" FontSize="20" HorizontalAlignment="Left" Margin="10" Text="{Binding Path=CurrentlyActiveTour.Name, FallbackValue=NoTourCurrentlyActive}"/>
 
-                    <Label Grid.Row="1" Grid.Column="0">Currently Active checkpoint:</Label>
-                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Path=CurrentlyActiveCheckpoint.Name, FallbackValue=NoTourCurrentlyActive}"/>
+                    <Label Grid.Row="1" Grid.Column="0" FontSize="20" HorizontalAlignment="Right" Margin="10" Content="{ns:Loc CurrentlyActiveCP}"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" FontSize="20" HorizontalAlignment="Left" Margin="10" Text="{Binding Path=CurrentlyActiveCheckpoint.Name, FallbackValue=NoTourCurrentlyActive}"/>
                 </Grid>
             </TabItem>
             
@@ -299,11 +316,11 @@
                                       SelectedItem="{Binding Path=SelectedGuest2TourDTO}"
                                       AutoGenerateColumns="False" IsReadOnly="True" Height="300" Margin="5">
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
-                                    <DataGridTextColumn Header="Country" Binding="{Binding Country}" Width="*"/>
-                                    <DataGridTextColumn Header="City" Binding="{Binding City}" Width="*"/>
-                                    <DataGridTextColumn Header="Date and Time" Binding="{Binding Guide}" Width="*"/>
-                                    <DataGridTemplateColumn Header="Show more" Width="*">
+                                    <DataGridTextColumn Header="{ns:Loc DGName}" Binding="{Binding Name}" Width="*"/>
+                                    <DataGridTextColumn Header="{ns:Loc DGCountry}" Binding="{Binding Country}" Width="*"/>
+                                    <DataGridTextColumn Header="{ns:Loc DGCity}" Binding="{Binding City}" Width="*"/>
+                                    <DataGridTextColumn Header="{ns:Loc DGGuide}" Binding="{Binding Guide}" Width="*"/>
+                                    <DataGridTemplateColumn Header="{ns:Loc DGSeeMore}" Width="*">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <Button Click="ShowMoreButton_Click">
@@ -323,8 +340,8 @@
                     </GroupBox>
 
                     <!-- Rate Tour -->
-                    
-                        <Button Margin="20" Content="Rate This Tour" Width="200" Height="40" HorizontalAlignment="Center" Click="RateButton_Click"/>
+
+                    <Button Margin="20" Content="{ns:Loc RateTourBtn}" Width="200" Height="40" HorizontalAlignment="Center" Click="RateButton_Click"/>
                     
                 </StackPanel>
             </TabItem>

@@ -13,7 +13,7 @@ using System.Windows;
 
 namespace InitialProject.View.Guest2
 {
-    public partial class Guest2Window : Window, INotifyPropertyChanged, IObserver
+    public partial class Guest2Window : Window, INotifyPropertyChanged, IObserver, IDataErrorInfo
     {
         public User LoggedInUser { get; set; }
 
@@ -48,6 +48,8 @@ namespace InitialProject.View.Guest2
         private readonly TourReservationService _tourReservationService;
         private readonly TourRatingService _tourRatingService;
         private readonly VoucherService _voucherService;
+
+        #region Properties
 
         private string _personCount;
         public string PersonCount
@@ -145,6 +147,8 @@ namespace InitialProject.View.Guest2
                 }
             }
         }
+
+        #endregion
 
         public Guest2Window(User user)
         {
@@ -248,19 +252,37 @@ namespace InitialProject.View.Guest2
         #region Reservation
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!IsInputValid())
+            #region Validation
+
+            if (!IsSelectionValid())
             {
+                MessageBox.Show("Please select a tour.", "Tour selection warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
+
+            if (!IsPersonCountInputValid())
+            {
+                MessageBox.Show("Please enter the number of guests.", "Guest count warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (!IsAverageAgeInputValid())
+            {
+                MessageBox.Show("Please enter the average age of guests.", "Average age warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (!IsVoucherValid())
+            {
+                MessageBox.Show("Please state whether you want to use a voucher.", "Voucher warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            #endregion
 
             Tour selectedTour = _tourService.GetById(SelectedGuest2TourDTO.TourId);
             int personCount = int.Parse(PersonCount);
             int spacesLeft = selectedTour.MaxGuests - selectedTour.CurrentGuestCount;
-
-            if (!IsVoucherValid())
-            {
-                return;
-            }
 
             if (personCount > spacesLeft && selectedTour.CurrentGuestCount != selectedTour.MaxGuests)
             {
@@ -281,9 +303,19 @@ namespace InitialProject.View.Guest2
             AverageAgeTB.Text = "";
         }
 
-        private bool IsInputValid()
+        private bool IsSelectionValid()
         {
-            return PersonCount != null && AverageAge != null;
+            return SelectedGuest2TourDTO != null;
+        }
+
+        private bool IsPersonCountInputValid()
+        {
+            return PersonCount != null;
+        }
+
+        private bool IsAverageAgeInputValid()
+        {
+            return AverageAge != null;
         }
 
         private bool IsVoucherValid()
@@ -329,6 +361,8 @@ namespace InitialProject.View.Guest2
             {
                 SaveNewReservation(tourReservation);
             }
+
+            MessageBox.Show("Reservation successful!");
         }
 
         private void UpdateExistingReservation(TourReservation tourReservation)
@@ -379,6 +413,48 @@ namespace InitialProject.View.Guest2
             }
             return false;
         }
+        #endregion
+
+        #region Validation
+
+        public string Error => null;
+        public string this[string columnName]
+        {
+            get
+            {
+                int TryParseNumber;
+                if (columnName == "PersonCount")
+                {
+                    if(string.IsNullOrEmpty(PersonCount))
+                        return "Number of guests is required";
+
+                    if(!int.TryParse(PersonCount, out TryParseNumber))
+                        return "This field should be a number";
+                    else
+                    {
+                        if (int.Parse(PersonCount) <= 0)
+                            return "Invalid value";
+                    }
+                }
+                else if (columnName == "AverageAge")
+                {
+                    if (string.IsNullOrEmpty(AverageAge))
+                        return "Average age of guests is required";
+
+                    if (!int.TryParse(AverageAge, out TryParseNumber))
+                        return "This field should be a number";
+                    else
+                    {
+                        if (int.Parse(AverageAge) <= 0)
+                            return "Invalid value";
+                    }
+                }
+                return null;
+            }
+        }
+
+        private readonly string[] _validatedProperties = { "PersonCount", "AverageAge" };
+
         #endregion
 
         #region Home tab
@@ -532,6 +608,7 @@ namespace InitialProject.View.Guest2
                 }
             }
         }
+
         private void ShowMoreButton_Click(object sender, RoutedEventArgs e)
         {
             ShowTour showTour = new ShowTour(SelectedGuest2TourDTO);
@@ -540,8 +617,13 @@ namespace InitialProject.View.Guest2
 
         private void RateButton_Click(object sender, RoutedEventArgs e)
         {
-            if (SelectedGuest2TourDTO != null)
+            if (SelectedGuest2TourDTO == null)
             {
+                MessageBox.Show("Please select a tour in order to rate it!", "Tour selection warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+                
+            else
+            { 
                 RateTourViewModel rateTourViewModel = new RateTourViewModel(SelectedGuest2TourDTO, LoggedInUser, _tourRatingService, _tourReservationService, _tourService, _imageRepository);
                 RateTour rateTour = new RateTour(rateTourViewModel);
                 rateTour.Show();

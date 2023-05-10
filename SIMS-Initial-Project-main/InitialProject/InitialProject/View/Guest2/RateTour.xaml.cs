@@ -85,5 +85,7 @@ namespace InitialProject.View.Guest2
         {
             _viewModel.LanguageButton_Click(sender, e);
         }
+
+        
     }
 }

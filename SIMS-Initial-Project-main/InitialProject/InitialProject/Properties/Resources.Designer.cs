@@ -106,6 +106,24 @@ namespace InitialProject.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Trenutno aktivna ključna tačka:.
+        /// </summary>
+        public static string CurrentlyActiveCP {
+            get {
+                return ResourceManager.GetString("CurrentlyActiveCP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trenutno aktivna tura:.
+        /// </summary>
+        public static string CurrentlyActiveTour {
+            get {
+                return ResourceManager.GetString("CurrentlyActiveTour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Grad.
         /// </summary>
         public static string DGCity {
@@ -138,6 +156,15 @@ namespace InitialProject.Properties {
         public static string DGGuests {
             get {
                 return ResourceManager.GetString("DGGuests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vodič.
+        /// </summary>
+        public static string DGGuide {
+            get {
+                return ResourceManager.GetString("DGGuide", resourceCulture);
             }
         }
         
@@ -192,15 +219,6 @@ namespace InitialProject.Properties {
         public static string ExpirationDate {
             get {
                 return ResourceManager.GetString("ExpirationDate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        public static string fg {
-            get {
-                return ResourceManager.GetString("fg", resourceCulture);
             }
         }
         
@@ -372,6 +390,15 @@ namespace InitialProject.Properties {
         public static string Previous {
             get {
                 return ResourceManager.GetString("Previous", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Oceni turu.
+        /// </summary>
+        public static string RateTourBtn {
+            get {
+                return ResourceManager.GetString("RateTourBtn", resourceCulture);
             }
         }
         

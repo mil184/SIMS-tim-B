@@ -89,61 +89,61 @@
 
                 <TextBlock Text="{ns:Loc TourName}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
                 <TextBox Name="txtTourName" Margin="5" IsReadOnly="True"    
-                    Text="{Binding Path=tourDTO.Name, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                    Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Width="200" Height="60">
+                    Text="{Binding Path=tourDTO.Name}"
+                    Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Width="300" Height="60">
                 </TextBox>
 
                 <TextBlock Text="{ns:Loc TourDesc}" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" />
                 <TextBox Name="txtTourDescription" Margin="5" Height="100" IsReadOnly="True"
-                         Text="{Binding Path=tourDTO.Description, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
-                         Grid.Row="0" Grid.Column="3" HorizontalAlignment="Left" Width="200" TextWrapping="Wrap" />
+                         Text="{Binding Path=tourDTO.Description}" 
+                         Grid.Row="0" Grid.Column="3" HorizontalAlignment="Left" Width="300" TextWrapping="Wrap" />
 
 
                 <TextBlock Text="{ns:Loc TourCountry}" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" />
                 <TextBox Name="txtTourCountry" Margin="5" IsReadOnly="True"
-                         Text="{Binding Path=tourDTO.Country, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
-                         Grid.Row="1" Grid.Column="3" HorizontalAlignment="Left" Width="200"/>
+                         Text="{Binding Path=tourDTO.Country}" 
+                         Grid.Row="1" Grid.Column="3" HorizontalAlignment="Left" Width="300"/>
 
                 <TextBlock Text="{ns:Loc TourCity}" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" />
                 <TextBox Name="txtTourCity" Margin="5" IsReadOnly="True"
-                         Text="{Binding Path=tourDTO.City, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
-                         Grid.Row="2" Grid.Column="3" HorizontalAlignment="Left" Width="200"/>
+                         Text="{Binding Path=tourDTO.City}" 
+                         Grid.Row="2" Grid.Column="3" HorizontalAlignment="Left" Width="300"/>
 
                 <TextBlock Text="{ns:Loc Language}" Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" />
                 <TextBox Name="txtLanguage" Margin="5" IsReadOnly="True"
-                         Text="{Binding Path=tourDTO.Language, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                         Text="{Binding Path=tourDTO.Language}" 
                          Grid.Row="3" Grid.Column="3"
-                         HorizontalAlignment="Left" Width="200"/>
+                         HorizontalAlignment="Left" Width="300"/>
 
                 <TextBlock Text="{ns:Loc MaxGuests}" Grid.Row="4" Grid.Column="2" VerticalAlignment="Center" />
                 <TextBox Name="txtMaxGuests" Margin="5" IsReadOnly="True"
-                         Text="{Binding Path=tourDTO.MaxGuests, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                         Text="{Binding Path=tourDTO.MaxGuests}" 
                          Grid.Row="4" Grid.Column="3"
-                         HorizontalAlignment="Left" Width="200"/>
+                         HorizontalAlignment="Left" Width="300"/>
 
                 <TextBlock Text="{ns:Loc CurrentGuests}" Grid.Row="5" Grid.Column="2" VerticalAlignment="Center" />
                 <TextBox Name="txtCurrentGuests" Margin="5" IsReadOnly="True"
-                         Text="{Binding Path=tourDTO.CurrentGuestCount, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                         Text="{Binding Path=tourDTO.CurrentGuestCount}" 
                          Grid.Row="5" Grid.Column="3"
-                         HorizontalAlignment="Left" Width="200"/>
+                         HorizontalAlignment="Left" Width="300"/>
 
                 <TextBlock Text="{ns:Loc StartDateTime}" Grid.Row="6" Grid.Column="2" VerticalAlignment="Center" />
                 <TextBox Name="txtStartDateTime" Margin="5" IsReadOnly="True"
-                         Text="{Binding Path=tourDTO.StartTime, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, StringFormat={}{0:dd.M.yyyy. HH:mm}}" 
+                         Text="{Binding Path=tourDTO.StartTime, StringFormat={}{0:dd.M.yyyy. HH:mm}}" 
                          Grid.Row="6" Grid.Column="3"
-                         HorizontalAlignment="Left" Width="200" />
+                         HorizontalAlignment="Left" Width="300" />
 
                 <TextBlock Text="{ns:Loc Duration}" Grid.Row="7" Grid.Column="2" VerticalAlignment="Center" />
                 <TextBox Name="txtDuration" Margin="5" IsReadOnly="True"
-                         Text="{Binding Path=tourDTO.Duration, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                         Text="{Binding Path=tourDTO.Duration}" 
                          Grid.Row="7" Grid.Column="3"
-                         HorizontalAlignment="Left" Width="200"/>
+                         HorizontalAlignment="Left" Width="300"/>
 
                 <TextBlock Text="{ns:Loc Guide}" Grid.Row="8" Grid.Column="2" VerticalAlignment="Center" />
                 <TextBox Name="txtGuide" Margin="5" IsReadOnly="True"
-                         Text="{Binding Path=tourDTO.Guide, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                         Text="{Binding Path=tourDTO.Guide}" 
                          Grid.Row="8" Grid.Column="3"
-                         HorizontalAlignment="Left" Width="200"/>
+                         HorizontalAlignment="Left" Width="300"/>
 
                 <TextBlock Text="{ns:Loc Images}" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" />
                 <Image Name="picHolder" Grid.ColumnSpan="2" Grid.Row="2" Grid.RowSpan="6" Stretch="Uniform" Margin="10"/>
