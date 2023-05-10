@@ -63,7 +63,13 @@
             </Button.Template>
         </Button>
         <GroupBox Header="Ratings" FontSize="32" Margin="10" Grid.Row="1" Foreground="#007ACC" BorderBrush="#007ACC" Background="#E9F1F7" BorderThickness="2">
-            <DataGrid ItemsSource="{Binding GuestRatings}" SelectedItem="{Binding Path=SelectedRatingDTO}" AutoGenerateColumns="False" Name="RatingsDataGrid" IsReadOnly="true" MouseDoubleClick="RatingsDataGrid_MouseDoubleClick" Margin="10 10 10 10" FontSize="24">
+            <DataGrid ItemsSource="{Binding GuestRatings}" 
+                      SelectedItem="{Binding Path=SelectedRatingDTO}" 
+                      AutoGenerateColumns="False" Name="RatingsDataGrid" 
+                      IsReadOnly="true" 
+                      MouseDoubleClick="RatingsDataGrid_MouseDoubleClick" 
+                      Margin="10 10 10 10"
+                      FontSize="24">
                 <DataGrid.CellStyle>
                     <Style TargetType="DataGridCell">
                         <Setter Property="Padding" Value="10"/>

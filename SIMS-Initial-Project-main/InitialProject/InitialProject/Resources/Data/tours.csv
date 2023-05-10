@@ -15,8 +15,11 @@
 15|qswad|258|sadc|sd|12|0|6.5.2023. 23:59:00|12|3|85|72,73,74,75|72|True|False|False|False
 16|Today|349|Best Today|Serbian|11|3|7.5.2023. 23:59:00|11|3|86|76,77,78,79|78|False|True|False|True
 17|Today|349|Best Today|Serbian|11|0|24.5.2023. 23:59:00|11|3|86|76,77,78,79|-1|False|False|True|False
-18|Something|267|Well it is something|German|321|0|10.5.2023. 23:59:00|11|3|89|80,81,82,83,84,85|-1|False|False|False|False
+18|Something|267|Well it is something|German|321|0|10.5.2023. 23:59:00|11|3|89|80,81,82,83,84,85|84|False|True|False|False
 19|Something|267|Well it is something|German|321|0|7.5.2023. 23:59:00|11|3|89|80,81,82,83,84,85|84|False|True|False|False
-20|LLOL|2|feqkow|qedjkmwl|12|5|7.5.2023. 23:59:00|22|3|90,91|86,87,88,89,90,91|90|False|True|False|False
+20|Tour Around|2|feqkow|qedjkmwl|12|5|7.5.2023. 23:59:00|22|3|90,91|86,87,88,89,90,91|90|False|True|False|False
 21|wed|327|qwsade|qswad|233|3|7.5.2023. 23:59:00|23|3|92|92,93,94,95,96|95|False|True|False|False
 22|Im|444|Best|English|12|3|7.5.2023. 23:59:00|11|3|93,94|97,98,99,100,101,102|101|False|True|False|False
+23|e3qde|329|wqde|11|11|3|10.5.2023. 20:08:00|22|3|143|103,104,105|104|False|True|False|True
+24|TestTour|1|This is the best tour|Serbian|15|0|10.5.2023. 23:20:00|2|3|144|106,107,108|107|False|True|False|False
+25|SomeUpcomingTour|2|This is coming soon|German|11|0|15.5.2023. 23:20:00|11|3|152|109,110,111|-1|False|False|True|False

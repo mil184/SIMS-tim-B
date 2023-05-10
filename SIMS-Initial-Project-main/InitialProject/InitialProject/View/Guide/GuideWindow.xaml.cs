@@ -556,6 +556,7 @@ namespace InitialProject.View.Guide
             if ((e.Key == Key.Down || e.Key == Key.Up))
             {
                 DataGrid currentDataGrid = GetCurrentDataGrid();
+                if (currentDataGrid == null) return;
                 if (currentDataGrid.Items.Count < 1) return;
 
                 int current_index = currentDataGrid.SelectedIndex;

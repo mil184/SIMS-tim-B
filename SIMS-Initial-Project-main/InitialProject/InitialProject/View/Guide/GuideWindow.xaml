@@ -438,13 +438,13 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <GroupBox Header="Most Visited" FontSize="28" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2" Width="Auto">
+                        <GroupBox Header="Most Visited" FontSize="28" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Stretch">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <ComboBox Name="Years_cb" SelectionChanged="Years_cb_SelectionChanged" Grid.Column="0" Margin="10 10 150 10" Width="200" Height="30" FontSize="16" IsEditable="True"/>
+                                <ComboBox Name="Years_cb" SelectionChanged="Years_cb_SelectionChanged" Grid.Column="0" Margin="10 10 150 10" Width="120" Height="30" FontSize="16" IsEditable="True"/>
                                 <Grid Grid.Column="1" Margin="10">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
@@ -559,16 +559,218 @@
                     <TextBlock Text="Requests" FontSize="17"/>
                 </TabItem.Header>
                 <StackPanel Margin="10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <GroupBox Header="Filters" FontSize="20" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2"
+                    HorizontalAlignment="Stretch" Margin="10">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Orientation="Vertical" Margin="5" Grid.Row="0" Grid.Column="0">
+                                    <TextBlock Text="City:" Margin="0 0 0 5" FontSize="14"/>
+                                    <ComboBox Width="200" Height="20"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Vertical" Margin="5" Grid.Row="0" Grid.Column="1">
+                                    <TextBlock Text="Country:" Margin="0 0 0 5" FontSize="14"/>
+                                    <ComboBox Width="200" Height="20"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Vertical" Margin="5" Grid.Row="0" Grid.Column="2">
+                                    <TextBlock Text="Guests:" Margin="0 0 0 5" FontSize="14"/>
+                                    <TextBox Width="150" Height="20"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Vertical" Margin="5" Grid.Row="1" Grid.Column="0">
+                                    <TextBlock Text="Start Date:" Margin="0 0 0 5" FontSize="14"/>
+                                    <DatePicker Width="200" Height="20" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Vertical" Margin="5" Grid.Row="1" Grid.Column="1">
+                                    <TextBlock Text="End Date:" Margin="0 0 0 5" FontSize="14"/>
+                                    <DatePicker Width="200" Height="20" FontSize="11"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Vertical" Margin="5" Grid.Row="1" Grid.Column="2">
+                                    <TextBlock Text="Language:" Margin="0 0 0 5" FontSize="14"/>
+                                    <TextBox Width="150" Height="20"/>
+                                </StackPanel>
 
+                                <Button Content="    Filter&#x0a;(CTRL + F)" Grid.RowSpan="4" Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="50 5 5 5" Height="60" Width="90" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" Click="StatisticsButton_Click">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <EventTrigger RoutedEvent="Button.Click">
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </EventTrigger>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="border" Property="Background" Value="#005F8B" />
+                                                </Trigger>
+                                                <Trigger Property="IsPressed" Value="True">
+                                                    <Setter TargetName="border" Property="Background" Value="#00415E" />
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </Grid>
+                        </GroupBox>
+
+
+
+                        <Button Grid.Column="2" Content="  Show Statistics&#x0a; For Selected Tour&#x0a;        (ENTER)" Margin="0 0 5 0" Height="80" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" Click="StatisticsButton_Click">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <EventTrigger RoutedEvent="Button.Click">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="#005F8B" />
+                                        </Trigger>
+                                        <Trigger Property="IsPressed" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="#00415E" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </Grid>
+                    <GroupBox Header="Pending Requests" FontSize="28" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2">
+                        <DataGrid Height ="210" ItemsSource="{Binding FinishedTours}" SelectedItem="{Binding Path=SelectedFinishedTourDTO}" AutoGenerateColumns="False" Name="FsinishedToursDataGrid" IsReadOnly="true" MouseDoubleClick="FinishedToursDataGrid_MouseDoubleClick" Margin="10 10 10 10">
+                            <DataGrid.CellStyle>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="FontSize" Value="18"/>
+                                    <Setter Property="Padding" Value="10"/>
+                                </Style>
+                            </DataGrid.CellStyle>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" FontSize="18"/>
+                                <DataGridTextColumn Header="Location" Binding="{Binding Location}" Width="*" FontSize="18"/>
+                                <DataGridTextColumn Header="Start Time" Binding="{Binding Path=StartTime,StringFormat={}{0:dd.M.yyyy. HH:mm}}" Width="*" FontSize="18"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </GroupBox>
                 </StackPanel>
             </TabItem>
             <TabItem>
                 <TabItem.Header>
                     <TextBlock Text="Request Statistics" FontSize="17"/>
                 </TabItem.Header>
-                <StackPanel Margin="10">
-
-                </StackPanel>
+                <Grid Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="2.5*"/>
+                    </Grid.ColumnDefinitions>
+                    <GroupBox Header="Filters" FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10">
+                        <!-- Add the content of the group box here -->
+                    </GroupBox>
+                    <Grid Grid.Column="1" Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
+                        <GroupBox Header="Language Only" FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+                            <Grid Margin="5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width ="1*"/>
+                                    <ColumnDefinition Width ="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Grid.Row="0" Grid.Column="0" Background="LightGray" BorderThickness="2" BorderBrush="Black">
+                                    <TextBox Text="Language" IsReadOnly="True"  HorizontalAlignment="Center" Background="LightGray" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
+                                    </Border>
+                                <Border Grid.Row="0" Grid.Column="1" Background="LightGray" BorderThickness="2" BorderBrush="Black">
+                                    <TextBox Text="Number Of Requests" IsReadOnly="True"  HorizontalAlignment="Center" Background="LightGray" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
+                                </Border>
+                                <Border Grid.Row="1" Grid.Column="0" Background="#F5F5F5" BorderThickness="2" BorderBrush="Black">
+                                    <TextBox Text="Number Of Requests" IsReadOnly="True"  HorizontalAlignment="Center" Background="#F5F5F5" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
+                                </Border>
+                                <Border Grid.Row="1" Grid.Column="1" Background="#F5F5F5" BorderThickness="2" BorderBrush="Black">
+                                    <TextBox Text="Number Of Requests" IsReadOnly="True"  HorizontalAlignment="Center" Background="#F5F5F5" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
+                                </Border>
+                            </Grid>
+                        </GroupBox>
+                        <GroupBox Grid.Row="1" Header="Location Only" FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+                            <Grid Margin="5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width ="1*"/>
+                                    <ColumnDefinition Width ="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Grid.Row="0" Grid.Column="0" Background="LightGray" BorderThickness="2" BorderBrush="Black">
+                                    <TextBox Text="Location" IsReadOnly="True"  HorizontalAlignment="Center" Background="LightGray" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
+                                </Border>
+                                <Border Grid.Row="0" Grid.Column="1" Background="LightGray" BorderThickness="2" BorderBrush="Black">
+                                    <TextBox Text="Number Of Requests" IsReadOnly="True"  HorizontalAlignment="Center" Background="LightGray" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
+                                </Border>
+                                <Border Grid.Row="1" Grid.Column="0" Background="#F5F5F5" BorderThickness="2" BorderBrush="Black">
+                                    <TextBox Text="Number Of Requests" IsReadOnly="True"  HorizontalAlignment="Center" Background="#F5F5F5" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
+                                </Border>
+                                <Border Grid.Row="1" Grid.Column="1" Background="#F5F5F5" BorderThickness="2" BorderBrush="Black">
+                                    <TextBox Text="Number Of Requests" IsReadOnly="True"  HorizontalAlignment="Center" Background="#F5F5F5" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
+                                </Border>
+                            </Grid>
+                        </GroupBox>
+                        <GroupBox Grid.Row="2" Header="Location And Language" FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+                            <Grid Margin="5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width ="1*"/>
+                                    <ColumnDefinition Width ="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Grid.Row="0" Grid.Column="0" Background="LightGray" BorderThickness="2" BorderBrush="Black">
+                                    <TextBox Text="Location And Language" IsReadOnly="True"  HorizontalAlignment="Center" Background="LightGray" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
+                                </Border>
+                                <Border Grid.Row="0" Grid.Column="1" Background="LightGray" BorderThickness="2" BorderBrush="Black">
+                                    <TextBox Text="Number Of Requests" IsReadOnly="True"  HorizontalAlignment="Center" Background="LightGray" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
+                                </Border>
+                                <Border Grid.Row="1" Grid.Column="0" Background="#F5F5F5" BorderThickness="2" BorderBrush="Black">
+                                    <TextBox Text="Number Of Requests" IsReadOnly="True"  HorizontalAlignment="Center" Background="#F5F5F5" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
+                                </Border>
+                                <Border Grid.Row="1" Grid.Column="1" Background="#F5F5F5" BorderThickness="2" BorderBrush="Black">
+                                    <TextBox Text="Number Of Requests" IsReadOnly="True"  HorizontalAlignment="Center" Background="#F5F5F5" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
+                                </Border>
+                            </Grid>
+                        </GroupBox>
+                    </Grid>
+                </Grid>
             </TabItem>
             <TabItem>
                 <TabItem.Header>
