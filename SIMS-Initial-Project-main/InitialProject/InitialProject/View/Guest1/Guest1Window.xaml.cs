@@ -463,11 +463,12 @@ namespace InitialProject.View.Guest1
 
         public void FormGuestRatings()
         {
+            GuestRatings.Clear();
             foreach (GuestReview review in _guestReviewRepository.GetAll())
             {
                 if (review.GuestId == LoggedInUser.Id && _accommodationReservationService.GetById(review.ReservationId).IsRated)
                 { 
-                   Guest1RatingsDTO dto = new Guest1RatingsDTO(review.Cleanness, review.Behavior, review.Comment);
+                   Guest1RatingsDTO dto = new Guest1RatingsDTO(review.Cleanness, review.Behavior, review.Comment, _userRepository.GetById(_accommodationReservationService.GetById(review.ReservationId).OwnerId).Username);
                    GuestRatings.Add(dto);
                 }
             }

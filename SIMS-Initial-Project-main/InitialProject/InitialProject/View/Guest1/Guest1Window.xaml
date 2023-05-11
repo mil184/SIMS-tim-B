@@ -252,6 +252,7 @@
                                     <DataGridTextColumn Header="Grade for cleanliness" Binding="{Binding Cleanliness}" Width="*"/>
                                     <DataGridTextColumn Header="Grade for following the rules" Binding="{Binding Behavior}" Width="*"/>
                                     <DataGridTextColumn Header="Comment" Binding="{Binding Comment}" Width="*"/>
+                                    <DataGridTextColumn Header="Owner who rated" Binding="{Binding Username}" Width="*"/>
                                 </DataGrid.Columns>
                             </DataGrid>
                         </ScrollViewer>
