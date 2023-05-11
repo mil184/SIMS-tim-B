@@ -35,35 +35,28 @@ namespace InitialProject.View.Guest1
         public User LoggedInUser { get; set; }
         public ObservableCollection<Accommodation> AllAccommodations { get; set; }
         public ObservableCollection<GuestAccommodationDTO> PresentableAccommodations { get; set; }
-
         public ObservableCollection<Location> Locations;
         public GuestAccommodationDTO SelectedAccommodation { get; set; }
-
 
         public AccommodationRatingsDTO SelectedUnratedAccommodation { get; set; }
         public ObservableCollection<AccommodationRatings> AccommodationRatings { get; set; }
         public AccommodationRatings SelectedAccommodationRatings { get; set; }
         public ObservableCollection<AccommodationReservation> UnratedReservations { get; set; }
 
-
         public ObservableCollection<AccommodationReservation> PresentableReservations { get; set; }
         public AccommodationReservation SelectedReservation { get; set; }
         public ObservableCollection<RescheduleRequest> AllReschedules { get; set; }
 
-
-      //  private readonly AccommodationRepository _accommodationRepository;
-
-        private readonly LocationService _locationService;
-
-        private readonly UserRepository _userRepository;
-
-        private readonly ImageRepository _imageRepository;
-
-        private readonly AccommodationRatingsRepository _accommodationRatingsRepository;
-        private readonly RescheduleRequestRepository _rescheduleRequestRepository;
+        public ObservableCollection<Guest1RatingsDTO> GuestRatings { get; set; }
 
         private readonly AccommodationService _accommodationService;
         private readonly AccommodationReservationService _accommodationReservationService;
+        private readonly LocationService _locationService;
+        private readonly UserRepository _userRepository;
+        private readonly ImageRepository _imageRepository;
+        private readonly AccommodationRatingsRepository _accommodationRatingsRepository;
+        private readonly RescheduleRequestRepository _rescheduleRequestRepository;
+        private readonly GuestReviewRepository _guestReviewRepository;
 
         private string searchName;
         public string SearchName
@@ -151,7 +144,6 @@ namespace InitialProject.View.Guest1
             }
         }
 
-
         public Guest1Window(User user)
         {
             InitializeComponent();
@@ -182,6 +174,8 @@ namespace InitialProject.View.Guest1
             _rescheduleRequestRepository = new RescheduleRequestRepository();
             _rescheduleRequestRepository.Subscribe(this);
 
+            _guestReviewRepository  = new GuestReviewRepository();
+            _guestReviewRepository.Subscribe(this);
 
             AllAccommodations = new ObservableCollection<Accommodation>(_accommodationService.GetAll());
             PresentableAccommodations = ConvertToDTO(new List<Accommodation>(AllAccommodations));
@@ -193,6 +187,8 @@ namespace InitialProject.View.Guest1
             PresentableReservations = new ObservableCollection<AccommodationReservation>(_accommodationReservationService.GetAll());
             AllReschedules = new ObservableCollection<RescheduleRequest>(_rescheduleRequestRepository.GetAll());
 
+            GuestRatings = new ObservableCollection<Guest1RatingsDTO>();
+            FormGuestRatings();
         }
 
         private void ReserveButton_Click(object sender, RoutedEventArgs e)
@@ -309,6 +305,7 @@ namespace InitialProject.View.Guest1
         public void Update() 
         {
             FormUnratedReservation();
+            FormGuestRatings();
         }
 
         private void ImagesButton_Click(object sender, RoutedEventArgs e)
@@ -372,7 +369,6 @@ namespace InitialProject.View.Guest1
         {
             Close();
         }
-
 
         private void CancelReservation_Click(object sender, RoutedEventArgs e)
         {
@@ -465,14 +461,17 @@ namespace InitialProject.View.Guest1
             MessageBox.Show($"Cannot cancel reservation. Less than {SelectedReservation.CancellationPeriod} left before start date.", "Cancel reservation warning", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
 
-        private void SearchButton_Click(object sender, RoutedEventArgs e)
+        public void FormGuestRatings()
         {
-
-        }
-
-        private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-
+            GuestRatings.Clear();
+            foreach (GuestReview review in _guestReviewRepository.GetAll())
+            {
+                if (review.GuestId == LoggedInUser.Id && _accommodationReservationService.GetById(review.ReservationId).IsRated)
+                { 
+                   Guest1RatingsDTO dto = new Guest1RatingsDTO(review.Cleanness, review.Behavior, review.Comment, _userRepository.GetById(_accommodationReservationService.GetById(review.ReservationId).OwnerId).Username);
+                   GuestRatings.Add(dto);
+                }
+            }
         }
     }
 }
