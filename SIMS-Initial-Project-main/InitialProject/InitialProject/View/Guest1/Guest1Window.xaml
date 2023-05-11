@@ -331,13 +331,64 @@
                         <Button Content="Report on active reservation move requests" Height="40" Width="320" Background="White" Margin="10" FontSize="16">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
-                                    <Border CornerRadius="20" Background="{TemplateBinding Background}">
+                                    <Border CornerRadius="20" Background="{TemplateBinding Background}" BorderBrush="#abc4e0" BorderThickness="2">
                                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </Border>
                                 </ControlTemplate>
                             </Button.Template>
                         </Button>
                     </StackPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Random reservation" Width="140" Height="40" FontSize="13">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid>
+                        <StackPanel Orientation="Horizontal" Margin="20,10,10,10">
+                            <TextBlock Text="Start Date:" VerticalAlignment="Center" Margin="10" FontSize="16"/>
+                            <DatePicker x:Name="startDatePicker" Margin="10,0,10,0" FontSize="16" Height="30"/>
+                            
+                            <TextBlock Text="End Date:" VerticalAlignment="Center" Margin="10" FontSize="16"/>
+                            <DatePicker x:Name="endDatePicker" Margin="10,0,10,0" FontSize="16" Height="30"/>
+
+                            <StackPanel Orientation="Vertical" Margin="40,10,10,10">
+                                <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
+                                    <TextBlock Text="Number of guests:" VerticalAlignment="Center" Margin="0,0,10,0" FontSize="16"/>
+                                    <TextBox x:Name="maxGuestsTextBox" Width="70" Margin="12,0,10,0" FontSize="16" Height="30"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
+                                    <TextBlock Text="Days for reservation:" VerticalAlignment="Center" Margin="0,0,10,0" FontSize="16"/>
+                                    <TextBox x:Name="numDaysTextBox" Width="70" Margin="0,0,10,0" FontSize="16" Height="30"/>
+                                </StackPanel>
+                            </StackPanel>
+                            
+                            <Button Content="Search" Click="SearchButton_Click" FontSize="16" Width="120" Height="50" Margin="90,10,10,10" Background="White">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border CornerRadius="20" Background="{TemplateBinding Background}" BorderBrush="#abc4e0" BorderThickness="2">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                        </StackPanel>
+                    </Grid>
+
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <DataGrid Height="370" Width="900" Margin="10" AutoGenerateColumns="False" IsReadOnly="true">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Start date" Width="*" />
+                                <DataGridTextColumn Header="End date"  Width="*" />
+                                <DataGridTextColumn Header="Country"  Width="*" />
+                                <DataGridTextColumn Header="City"  Width="*" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </ScrollViewer>
                 </Grid>
             </TabItem>
         </TabControl>

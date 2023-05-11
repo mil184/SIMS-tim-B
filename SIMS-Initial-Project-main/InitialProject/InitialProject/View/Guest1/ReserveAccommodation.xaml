@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:InitialProject.View.Guest1"
         mc:Ignorable="d"
         Title="ReserveAccommodation" Height="600" Width="1100"
-        Background="#e9f1fa">
+        Background="#e9f1fa"
+        WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -70,8 +71,8 @@
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <DataGrid Height="400" Width="950" Margin="10" ItemsSource="{Binding DateIntervals}" AutoGenerateColumns="False" IsReadOnly="true" MouseDoubleClick="DataGrid_MouseDoubleClick">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="StartDate" Binding="{Binding Path=StartDate, StringFormat={}{0:dd.MM.yyyy}}" Width="*" />
-                    <DataGridTextColumn Header="EndDate" Binding="{Binding Path=EndDate, StringFormat={}{0:dd.MM.yyyy}}" Width="*" />
+                    <DataGridTextColumn Header="Start date" Binding="{Binding Path=StartDate, StringFormat={}{0:dd.MM.yyyy}}" Width="*" />
+                    <DataGridTextColumn Header="End date" Binding="{Binding Path=EndDate, StringFormat={}{0:dd.MM.yyyy}}" Width="*" />
                 </DataGrid.Columns>
             </DataGrid>
         </ScrollViewer>

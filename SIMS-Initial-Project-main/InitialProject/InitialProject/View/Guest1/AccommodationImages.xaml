@@ -7,7 +7,8 @@
         mc:Ignorable="d"
         Title="DMJM-Tours" Height="650" Width="900"
         Icon ="/Resources/Images/favicon.ico"
-        Background="#e9f1fa">
+        Background="#e9f1fa"
+        WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"></ColumnDefinition>

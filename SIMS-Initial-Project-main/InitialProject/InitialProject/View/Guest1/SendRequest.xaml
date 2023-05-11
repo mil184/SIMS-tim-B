@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:InitialProject.View.Guest1"
         mc:Ignorable="d"
         Title="SendRequest" Height="580" Width="500"
-        Background="#e9f1fa">
+        Background="#e9f1fa"
+        WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

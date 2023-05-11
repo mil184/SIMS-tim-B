@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:InitialProject.View.Guest1"
         mc:Ignorable="d"
         Title="Evaluate" Height="600" Width="1070"
-        Background="#e9f1fa">
+        Background="#e9f1fa"
+        WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <ControlTemplate x:Key="ValidationTemplate">
             <StackPanel>
