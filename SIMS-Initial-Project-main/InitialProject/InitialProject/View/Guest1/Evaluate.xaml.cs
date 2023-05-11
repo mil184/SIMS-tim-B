@@ -8,7 +8,9 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Security.Policy;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -25,7 +27,7 @@ namespace InitialProject.View.Guest1
     /// <summary>
     /// Interaction logic for Evaluate.xaml
     /// </summary>
-    public partial class Evaluate : Window
+    public partial class Evaluate : Window, IDataErrorInfo
     {
         private readonly AccommodationRatingsRepository _accommodationRatingsRepository;
         private readonly AccommodationReservationService _accommodationReservationService;
@@ -38,7 +40,7 @@ namespace InitialProject.View.Guest1
         private int _cleanliness;
         public int Cleanliness
         {
-            get => _cleanliness;
+            get => _cleanliness; 
             set
             {
                 if (value != _cleanliness)
@@ -46,6 +48,7 @@ namespace InitialProject.View.Guest1
                     _cleanliness = value;
                     OnPropertyChanged();
                 }
+                
             }
         }
 
@@ -72,6 +75,20 @@ namespace InitialProject.View.Guest1
                 if (value != _comment)
                 {
                     _comment = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _url;
+        public string Url
+        {
+            get => _url;
+            set
+            {
+                if (value != _url)
+                {
+                    _url = value;
                     OnPropertyChanged();
                 }
             }
@@ -157,10 +174,12 @@ namespace InitialProject.View.Guest1
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-            if (!ValidateComment()) return;
-            var messageBoxResult = MessageBox.Show($"Would you like to save your rating?", "Rating Accommodation Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
-              if (messageBoxResult == MessageBoxResult.Yes)
-              {
+            if (!ValidateData()) return;
+            if (IsValid)
+            {
+                var messageBoxResult = MessageBox.Show($"Would you like to save your rating?", "Rating Accommodation Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (messageBoxResult == MessageBoxResult.Yes)
+                {
                     SetRatingsForCleanlinees();
                     SetRatingsForCorrectness();
                     AccommodationRatings accommodationRatings = new AccommodationRatings(Reservation.Id, Reservation.AccommodationId, Reservation.OwnerId, Reservation.GuestId, Cleanliness, Correctness, Comment, _imageIds);
@@ -171,6 +190,7 @@ namespace InitialProject.View.Guest1
                     MessageBox.Show("Rating saved successfully.");
                     CheckForSuperOwnerPrivileges(Reservation.OwnerId);
                     Close();
+                }
             }
         }
 
@@ -217,18 +237,69 @@ namespace InitialProject.View.Guest1
             }
             UrlTextBox.Text = string.Empty;
         }
-        private bool ValidateComment()
+
+        public bool ValidateData()
         {
-            if(string.IsNullOrEmpty(commentTextBox.Text))
-            {
-                ShowNoCommentWarning();
+     
+          if (!(cleanliness1.IsChecked == true || cleanliness2.IsChecked == true || cleanliness3.IsChecked == true || cleanliness4.IsChecked == true || cleanliness5.IsChecked == true))
+          {
+                ShowNoCleanlinessWarning();
                 return false;
-            }
-            return true;
+          }
+
+          if (!(correctness1.IsChecked == true || correctness2.IsChecked == true || correctness3.IsChecked == true || correctness4.IsChecked == true || correctness5.IsChecked == true))
+          {
+                ShowNoCorrectnessWarning();
+                return false;
+          }
+
+          return true;
         }
-        private void ShowNoCommentWarning()
+
+        private void ShowNoCleanlinessWarning()
         {
-            MessageBox.Show("Please enter a comment.", "Comment warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show("Please select an option for cleanliness.", "Cleanliness warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+        private void ShowNoCorrectnessWarning()
+        {
+            MessageBox.Show("Please select an option for correctness.", "Correctness warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+        public string Error => null;
+        public string this[string columnName]
+        {
+            get
+            {
+                string error = null;
+
+                if (columnName == "Comment" && string.IsNullOrEmpty(Comment))
+                {
+                    error = "Comment is required!";
+                }
+
+                if (columnName == "Url" && string.IsNullOrEmpty(Url))
+                {
+                    error = "Image URL is required!";
+                }
+
+                return error;
+            }
+        
+        }
+
+        private readonly string[] _validatedProperties = { "Comment", "Url"};
+
+        public bool IsValid
+        {
+            get
+            {
+                foreach (var property in _validatedProperties)
+                {
+                    if (this[property] != null)
+                        return false;
+                }
+
+                return true;
+            }
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

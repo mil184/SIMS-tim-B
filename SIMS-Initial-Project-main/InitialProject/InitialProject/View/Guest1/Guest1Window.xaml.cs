@@ -464,5 +464,15 @@ namespace InitialProject.View.Guest1
         {
             MessageBox.Show($"Cannot cancel reservation. Less than {SelectedReservation.CancellationPeriod} left before start date.", "Cancel reservation warning", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
+
+        private void SearchButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+
+        }
     }
 }
