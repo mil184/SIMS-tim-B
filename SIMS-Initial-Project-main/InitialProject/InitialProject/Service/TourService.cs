@@ -1,15 +1,10 @@
 ﻿using InitialProject.Model;
 using InitialProject.Repository;
-using InitialProject.Repository.Implementations;
 using InitialProject.Repository.Interfaces;
 using InitialProject.Resources.Injector;
 using InitialProject.Resources.Observer;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace InitialProject.Service
 {

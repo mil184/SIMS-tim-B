@@ -98,7 +98,7 @@
             </TabItem>
 
             <!-- Ratings tab -->
-            <TabItem Header="Ratings" Height="22" Margin="-2,0,-2,2" VerticalAlignment="Bottom">
+            <TabItem Header="Ratings">
                 <StackPanel Margin="10">
 
                     <!-- Tour overview section -->
@@ -133,6 +133,34 @@
                 </StackPanel>
             </TabItem>
 
+            <!-- Ratings tab -->
+            <TabItem Header="Ratings">
+                <StackPanel Margin="10">
+
+                    <!-- Tour overview section -->
+                    <GroupBox Grid.Row="1" Header="My Tour Requests" Margin="0 0 0 10" Height="221" Width="532">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <DataGrid ItemsSource="{Binding TourRequests}"
+                                      AutoGenerateColumns="False" IsReadOnly="True" Height="200" Width="500">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Country" Binding="{Binding Country}" Width="*"/>
+                                    <DataGridTextColumn Header="City" Binding="{Binding City}" Width="*"/>
+                                    <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
+                                    <DataGridTextColumn Header="Language" Binding="{Binding Lnguage}" Width="*"/>
+                                    <DataGridTextColumn Header="Start Date" Binding="{Binding StartDate}" Width="*"/>
+                                    <DataGridTextColumn Header="End Date" Binding="{Binding EndDate}" Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ScrollViewer>
+                    </GroupBox>
+
+                    <!-- Rate Tour -->
+                    <StackPanel Orientation="Horizontal" Margin="0, 10,0,0">
+                        <Button Content="Rate This Tour" Width="100" Height="40" HorizontalAlignment="Center" Margin="300,0,40,0" Click="RateButton_Click"/>
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+
             <!-- Currently Active Tour tab -->
             <TabItem Header="Currently Active Tour">
                 <Grid>
@@ -155,7 +183,7 @@
             </TabItem>
 
             <!-- Vouchers tab -->
-            <TabItem Header="Vouchers" Height="22" Margin="-2,0,-2,2" VerticalAlignment="Bottom">
+            <TabItem Header="Vouchers">
                 <GroupBox Grid.Row="3" Header="Your Vouchers" Margin="50 20 50 10">
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
                         <DataGrid ItemsSource="{Binding Vouchers}" 
