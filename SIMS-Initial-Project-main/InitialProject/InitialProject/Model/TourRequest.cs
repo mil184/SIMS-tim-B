@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using InitialProject.Serializer;
+using System;
+using System.Collections.ObjectModel;
 
 namespace InitialProject.Model
 {
-    public class TourRequest
+    public class TourRequest : ISerializable
     {
         public int Id { get; set; }
         public int LocationId { get; set; }
@@ -59,7 +57,7 @@ namespace InitialProject.Model
             MaxGuests = int.Parse(values[4]);
             StartTime = DateTime.Parse(values[5]);
             EndTime = DateTime.Parse(values[6]);
-            Status = int.Parse(values[7])
+            Status = int.Parse(values[7]);
         }
     }
 }
