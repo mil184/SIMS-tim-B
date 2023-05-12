@@ -15,7 +15,8 @@ namespace InitialProject.Resources.Injector
         {
             { typeof(ITourRepository), new TourCSVRepository() },
             { typeof(ICheckpointRepository), new CheckpointCSVRepository() },
-            { typeof(ILocationRepository), new LocationCSVRepository() }
+            { typeof(ILocationRepository), new LocationCSVRepository() },
+            { typeof(ITourRequestRepository), new TourRequestCSVRepository() }
 
         };
 

@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using InitialProject.Converters;
 
 namespace InitialProject.View.Guest2
 {
@@ -23,6 +24,10 @@ namespace InitialProject.View.Guest2
 
         public ObservableCollection<Guest2TourDTO> FinishedTourDTOs { get; set; }
         public List<Tour> FinishedTours { get; set; }
+
+        public ObservableCollection<TourRequest> TourRequests { get; set; }
+        public ObservableCollection<Guest2TourRequestDTO> TourRequestDTOs { get; set; }
+        public TourRequestDTOConverter TourRequestDTOConverter { get; set; }
 
         public List<Tour> CheckedTours { get; set; }
         public Tour CurrentlyActiveTour { get; set; }
@@ -41,6 +46,7 @@ namespace InitialProject.View.Guest2
         private readonly TourReservationService _tourReservationService;
         private readonly TourRatingService _tourRatingService;
         private readonly VoucherService _voucherService;
+        private readonly TourRequestService _tourRequestService;
 
 
         private string country;
@@ -99,6 +105,8 @@ namespace InitialProject.View.Guest2
             }
         }
 
+
+
         public Guest2Window(User user)
         {
             InitializeComponent();
@@ -129,11 +137,18 @@ namespace InitialProject.View.Guest2
             _voucherService = new VoucherService();
             _voucherService.Subscribe(this);
 
+            _tourRequestService = new TourRequestService();
+            _tourRequestService.Subscribe(this);
+
             Tours = new ObservableCollection<Tour>(_tourService.GetReservableTours());
             TourDTOs = ConvertToDTO(new List<Tour>(Tours));
 
             List<Voucher> UserVouchers = _voucherService.GetUserVouchers(LoggedInUser);
             Vouchers = new ObservableCollection<Voucher>(_voucherService.GetActiveVouchers(UserVouchers));
+
+            TourRequestDTOConverter = new TourRequestDTOConverter(_locationService);
+            TourRequests = new ObservableCollection<TourRequest>(_tourRequestService.GetAll());
+            TourRequestDTOs = new ObservableCollection<Guest2TourRequestDTO>(TourRequestDTOConverter.ConvertToDTOList(_tourRequestService.GetAll()));
 
             CheckedTours = new List<Tour>();
             foreach (int id in _tourReservationService.GetCheckedTourIds(LoggedInUser))
@@ -169,6 +184,9 @@ namespace InitialProject.View.Guest2
 
             Vouchers.Clear();
             FormVouchers();
+
+            TourRequestDTOs.Clear();
+            FormTourRequestDTOs();
         }
 
         public void ConfirmArrival()
@@ -219,6 +237,14 @@ namespace InitialProject.View.Guest2
             foreach (Voucher voucher in _voucherService.GetActiveVouchers(UserVouchers))
             {
                 Vouchers.Add(voucher);
+            }
+        }
+
+        public void FormTourRequestDTOs()
+        {
+            foreach(TourRequest tourRequest in _tourRequestService.GetAll())
+            {
+                TourRequestDTOs.Add(TourRequestDTOConverter.ConvertToDTO(tourRequest));
             }
         }
 

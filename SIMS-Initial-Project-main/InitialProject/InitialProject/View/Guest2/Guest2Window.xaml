@@ -98,7 +98,7 @@
             </TabItem>
 
             <!-- Ratings tab -->
-            <TabItem Header="Ratings">
+            <TabItem Header="Tour Ratings">
                 <StackPanel Margin="10">
 
                     <!-- Tour overview section -->
@@ -134,7 +134,7 @@
             </TabItem>
 
             <!-- Ratings tab -->
-            <TabItem Header="Ratings">
+            <TabItem Header="Tour Requests">
                 <StackPanel Margin="10">
 
                     <!-- Tour overview section -->
@@ -149,6 +149,7 @@
                                     <DataGridTextColumn Header="Language" Binding="{Binding Lnguage}" Width="*"/>
                                     <DataGridTextColumn Header="Start Date" Binding="{Binding StartDate}" Width="*"/>
                                     <DataGridTextColumn Header="End Date" Binding="{Binding EndDate}" Width="*"/>
+                                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*"/>
                                 </DataGrid.Columns>
                             </DataGrid>
                         </ScrollViewer>
@@ -156,7 +157,7 @@
 
                     <!-- Rate Tour -->
                     <StackPanel Orientation="Horizontal" Margin="0, 10,0,0">
-                        <Button Content="Rate This Tour" Width="100" Height="40" HorizontalAlignment="Center" Margin="300,0,40,0" Click="RateButton_Click"/>
+                        <Button Content="Request a tour" Width="100" Height="40" HorizontalAlignment="Center" Margin="300,0,40,0" Click="RateButton_Click"/>
                     </StackPanel>
                 </StackPanel>
             </TabItem>
