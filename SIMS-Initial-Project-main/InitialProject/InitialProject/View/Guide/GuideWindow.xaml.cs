@@ -1053,9 +1053,9 @@ namespace InitialProject.View.Guide
             if (SelectedPendingRequestDTO != null) 
             {
                 TourRequest request = ConvertToRequest(SelectedPendingRequestDTO);
-                CreateTour createTour = new CreateTour(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, request.Description, request.Language, _locationService.GetById(request.LocationId).Country, _locationService.GetById(request.LocationId).City, request.MaxGuests.ToString(), request.StartTime, request.EndTime);
-                createTour.ShowDialog();;
-            }
+                CreateTour createTour = new CreateTour(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService , request);
+                createTour.ShowDialog();
+            }       
         }
     }
 }

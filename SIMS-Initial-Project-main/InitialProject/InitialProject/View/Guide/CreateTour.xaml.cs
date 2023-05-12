@@ -23,6 +23,7 @@ namespace InitialProject.View.Guide
         private readonly LocationService _locationService;
         private readonly ImageRepository _imageRepository;
         private readonly CheckpointService _checkpointService;
+        private readonly TourRequestService _tourRequestService;
 
         private User LoggedInUser;
         public ObservableCollection<Checkpoint> Checkpoints { get; set; }
@@ -160,6 +161,8 @@ namespace InitialProject.View.Guide
         public DateTime? LeftBoundary { get; set; }
         public DateTime? RightBoundary { get; set; }
 
+        public TourRequest Request { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -178,6 +181,7 @@ namespace InitialProject.View.Guide
 
             LeftBoundary = null;
             RightBoundary = null;
+            Request = null;
 
             LoggedInUser = user;
             OrderCounter = 0;
@@ -188,7 +192,7 @@ namespace InitialProject.View.Guide
             InitializeShortcuts();
             //FillWithTestData();
         }
-        public CreateTour(User user, TourService tourService, LocationService locationService, ImageRepository imageRepository, CheckpointService checkpointService, string description, string language, string country, string city, string maxGuests, DateTime  startTime, DateTime endTime)
+        public CreateTour(User user, TourService tourService, LocationService locationService, ImageRepository imageRepository, CheckpointService checkpointService, TourRequestService tourRequestService, TourRequest request)
         {
             InitializeComponent();
             DataContext = this;
@@ -197,23 +201,26 @@ namespace InitialProject.View.Guide
             _locationService = locationService;
             _imageRepository = imageRepository;
             _checkpointService = checkpointService;
+            _tourRequestService = tourRequestService;
 
             LoggedInUser = user;
             OrderCounter = 0;
 
-            Description = description;
-            TourLanguage = language;
-            MaxGuests = maxGuests;
-            Country = country;
-            City = city;
+            Description = request.Description;
+            TourLanguage = request.Language;
+            MaxGuests = request.MaxGuests.ToString();
+            Country = _locationService.GetById(request.LocationId).Country;
+            City = _locationService.GetById(request.LocationId).City;
 
-            LeftBoundary = startTime;
-            RightBoundary = endTime;
+            LeftBoundary = request.StartTime;
+            RightBoundary = request.EndTime;
+            Request = request;
 
             InitializeCollections();
             InitializeComboBoxes();
             InitializeCountryDropdown();
             InitializeShortcuts();
+            _tourRequestService = tourRequestService;
             //FillWithTestData();
         }
         private void InitializeCollections()
@@ -325,6 +332,8 @@ namespace InitialProject.View.Guide
                 tour = _tourService.Save(tour);
 
                 UpdateCheckpointsTourId(tour.Id);
+                UpdateRequest(Request);
+                
             }
         }
         private List<int> SaveImages()
@@ -352,6 +361,11 @@ namespace InitialProject.View.Guide
                 checkpoint.TourId = tourId;
                 _checkpointService.Update(checkpoint);
             }
+        }
+        private void UpdateRequest(TourRequest request)
+        {
+            request.Status = InitialProject.Resources.Enums.RequestStatus.accepted;
+            _tourRequestService.Update(request);
         }
         private void Hours_cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
