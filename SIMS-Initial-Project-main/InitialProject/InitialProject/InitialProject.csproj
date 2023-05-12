@@ -9,9 +9,13 @@
 
   <ItemGroup>
     <Compile Remove="NewFolder1\**" />
+    <Compile Remove="Resources\NewFolder\**" />
     <EmbeddedResource Remove="NewFolder1\**" />
+    <EmbeddedResource Remove="Resources\NewFolder\**" />
     <None Remove="NewFolder1\**" />
+    <None Remove="Resources\NewFolder\**" />
     <Page Remove="NewFolder1\**" />
+    <Page Remove="Resources\NewFolder\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -116,7 +120,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Resources\NewFolder\" />
     <Folder Include="ViewModel\Guest1\" />
     <Folder Include="ViewModel\Owner\" />
     <Folder Include="ViewModel\Guest2\" />

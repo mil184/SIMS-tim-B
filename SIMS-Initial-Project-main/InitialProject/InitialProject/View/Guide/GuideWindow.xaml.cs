@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -29,13 +30,17 @@ namespace InitialProject.View.Guide
         private readonly CheckpointService _checkpointService;
         private readonly UserRepository _userRepository;
         private readonly VoucherRepository _voucherRepository;
+        private readonly TourRequestService _tourRequestService;
 
         public User CurrentUser { get; set; }
         public ObservableCollection<GuideTourDTO> CurrentTours { get; set; }
         public ObservableCollection<GuideTourDTO> UpcomingTours { get; set; }
         public ObservableCollection<GuideTourDTO> FinishedTours { get; set; }
         public ObservableCollection<GuideTourDTO> RatedTours { get; set; }
+        public ObservableCollection<GuideRequestDTO> PendingRequests { get; set; }
 
+        public ObservableCollection<string> Countries { get; set; }
+        public ObservableCollection<string> Cities { get; set; }
         public bool TourActive { get; set; }
 
         public int CurrentSortIndex;
@@ -43,6 +48,7 @@ namespace InitialProject.View.Guide
         public GuideTourDTO SelectedUpcomingTourDTO { get; set; }
         public GuideTourDTO SelectedFinishedTourDTO { get; set; }
         public GuideTourDTO SelectedRatedTourDTO { get; set; }
+        public GuideTourDTO SelectedPendingRequestDTO { get; set; }
 
         private GuideTourDTO _activeTour;
         public GuideTourDTO ActiveTour
@@ -84,6 +90,84 @@ namespace InitialProject.View.Guide
                 }
             }
         }
+        private string _city;
+        public string CityInput
+        {
+            get => _city;
+            set
+            {
+                if (value != _city)
+                {
+                    _city = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private string _country;
+        public string CountryInput
+        {
+            get => _country;
+            set
+            {
+                if (value != _country)
+                {
+                    _country = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private string _language;
+        public string LanguageInput
+        {
+            get => _language;
+            set
+            {
+                if (value != _language)
+                {
+                    _language = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private string _maxGuests;
+        public string MaxGuestsInput
+        {
+            get => _maxGuests;
+            set
+            {
+                if (value != _maxGuests)
+                {
+                    _maxGuests = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private DateTime? _startDateInput;
+        public DateTime? StartDateInput
+        {
+            get => _startDateInput;
+            set
+            {
+                if (value != _startDateInput)
+                {
+                    _startDateInput = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private DateTime? _endDateInput;
+        public DateTime? EndDateInput
+        {
+            get => _endDateInput;
+            set
+            {
+                if (value != _endDateInput)
+                {
+                    _endDateInput = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         public GuideWindow(User user)
         {
             InitializeComponent();
@@ -114,12 +198,17 @@ namespace InitialProject.View.Guide
             _tourRatingService = new TourRatingService();
             _tourRatingService.Subscribe(this);
 
+            _tourRequestService = new TourRequestService();
+            _tourRequestService.Subscribe(this);
+
             InitializeCollections();
             InitializeStartingSearchValues();
             InitializeComboBoxes();
             InitializeShortcuts();
             FindActiveTour();
-            SortTours();
+
+            StartDateInput = null;
+            EndDateInput = null;
 
             CurrentUser.Username = "Gorana";
             CurrentSortIndex = 0;
@@ -131,6 +220,10 @@ namespace InitialProject.View.Guide
             UpcomingTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourService.GetUpcomingTours()));
             FinishedTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourService.GetFinishedTours()));
             RatedTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourService.GetRatedTours()));
+            PendingRequests = new ObservableCollection<GuideRequestDTO>(ConvertToDTO(_tourRequestService.GetPendingRequests()));
+
+            Countries = new ObservableCollection<string>();
+            Cities = new ObservableCollection<string>();
         }
         private void InitializeComboBoxes()
         {
@@ -140,6 +233,19 @@ namespace InitialProject.View.Guide
             {
                 Years_cb.Items.Add(i.ToString());
             }
+
+            Countries.Add(string.Empty);
+            foreach(string country in _locationService.GetCountries()) 
+            {
+                Countries.Add(country);
+            }
+
+            Cities.Add(string.Empty);
+            foreach (string city in _locationService.GetCities())
+            {
+                Cities.Add(city);
+            }
+
         }
         private void InitializeStartingSearchValues()
         {
@@ -207,12 +313,6 @@ namespace InitialProject.View.Guide
                 }
             }
         }
-        private void SortTours()
-        {
-            var view1 = CollectionViewSource.GetDefaultView(UpcomingTours);
-            view1.SortDescriptions.Add(new SortDescription("StartTime", ListSortDirection.Ascending));
-        }
-
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
             CreateTour createTour = new CreateTour(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService);
@@ -304,7 +404,37 @@ namespace InitialProject.View.Guide
                 return _tourService.GetById(dto.Id);
             return null;
         }
+        public List<GuideRequestDTO> ConvertToDTO(List<TourRequest> requests)
+        {
+            List<GuideRequestDTO> dto = new List<GuideRequestDTO>();
+            foreach (TourRequest request in requests)
+            {
+                dto.Add(ConvertToDTO(request));
+            }
+            return dto;
+        }
+        public GuideRequestDTO ConvertToDTO(TourRequest request)
+        {
 
+            if (request == null)
+                return null;
+
+            return new GuideRequestDTO(
+                    request.Id,
+                    _locationService.GetById(request.LocationId).City + ", " +
+                    _locationService.GetById(request.LocationId).Country,
+                    request.Language,
+                    request.MaxGuests.ToString(),
+                    request.StartTime,
+                    request.EndTime
+                    );
+        }
+        public TourRequest ConvertToTour(GuideRequestDTO dto)
+        {
+            if (dto != null)
+                return _tourRequestService.GetById(dto.Id);
+            return null;
+        }
         private void CurrentToursDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             SelectTodaysTour();
@@ -824,5 +954,97 @@ namespace InitialProject.View.Guide
             if (SelectedRatedTourDTO != null)
                 SelectRatedTour();
         }
+
+        private void CbCity_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            CountryInput = _locationService.GetCountryByCity(CityInput);
+            UpdateRequests();
+        }
+
+        private void CbCountry_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!_locationService.GetCitiesByCountry(CountryInput).Contains(CityInput))
+                CityInput = string.Empty;
+
+            UpdateRequests();
+        }
+
+        private void txtGuests_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateRequests();
+        }
+
+        private void txtLanguage_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateRequests();
+        }
+
+        private void dpStartDate_DateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateRequests();
+        }
+
+        private void dpEndDate_DateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateRequests();
+        }
+
+        private void UpdateRequests() 
+        {
+            CheckIfAllEmpty();
+
+            PendingRequests.Clear();
+
+            List<TourRequest> result = new List<TourRequest>();
+
+            if (!string.IsNullOrEmpty(CountryInput))
+            {
+                result = _tourRequestService.GetByCountry(CountryInput);
+            }
+            else
+            {
+                result = _tourRequestService.GetPendingRequests();
+            }
+
+            if (!string.IsNullOrEmpty(CityInput))
+            {
+                result = result.Intersect(_tourRequestService.GetByCity(CityInput)).ToList();
+            }
+            if (!string.IsNullOrEmpty(LanguageInput))
+            {
+                result = result.Intersect(_tourRequestService.GetByLanguage(LanguageInput)).ToList();
+            }
+            if (!string.IsNullOrEmpty(MaxGuestsInput) && int.TryParse(MaxGuestsInput, out int integer))
+            {
+                result = result.Intersect(_tourRequestService.GetByMaxGuests(int.Parse(MaxGuestsInput))).ToList();
+            }
+            if (StartDateInput != null)
+            {
+                result = result.Intersect(_tourRequestService.GetByStartDate(StartDateInput)).ToList();
+            }
+            if (EndDateInput != null)
+            {
+                result = result.Intersect(_tourRequestService.GetByEndDate(EndDateInput)).ToList();
+            }
+
+            List<GuideRequestDTO> searchResults = ConvertToDTO(result);
+
+            foreach (GuideRequestDTO dto in searchResults)
+            {
+                PendingRequests.Add(dto);
+            }
+
+        }
+        public void CheckIfAllEmpty()
+        {
+            if (string.IsNullOrEmpty(CountryInput) && string.IsNullOrEmpty(CityInput) && string.IsNullOrEmpty(LanguageInput) && string.IsNullOrEmpty(MaxGuestsInput))
+            {
+                foreach (TourRequest request in _tourRequestService.GetPendingRequests())
+                {
+                    PendingRequests.Add(ConvertToDTO(request));
+                }
+            }
+        }
+
     }
 }

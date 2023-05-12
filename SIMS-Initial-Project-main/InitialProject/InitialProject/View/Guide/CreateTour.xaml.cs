@@ -383,7 +383,7 @@ namespace InitialProject.View.Guide
         }
         private void LoadCitiesForSelectedCountry()
         {
-            foreach (string city in _locationService.GetCities(cbCountry.SelectedItem.ToString()).OrderBy(c => c))
+            foreach (string city in _locationService.GetCitiesByCountry(cbCountry.SelectedItem.ToString()).OrderBy(c => c))
             {
                 cbCity.Items.Add(city);
             }

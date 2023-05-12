@@ -53,5 +53,97 @@ namespace InitialProject.Service
         {
             _tourRequestRepository.NotifyObservers();
         }
+        public List<TourRequest> GetPendingRequests() 
+        {
+            List<TourRequest> pendingRequests = new List<TourRequest>();
+
+            foreach(TourRequest request in GetAll()) 
+            {
+                if(request.Status == Resources.Enums.RequestStatus.pending) 
+                {
+                    pendingRequests.Add(request);
+                }
+            }
+            return pendingRequests;
+        }
+        public List<TourRequest> GetByCity(string city)
+        {
+            List<TourRequest> requests = new List<TourRequest>();
+
+            foreach (TourRequest request in GetPendingRequests())
+            {
+                if (_locationService.GetById(request.LocationId).City == city)
+                {
+                    requests.Add(request);
+                }
+            }
+            return requests;
+        }
+        public List<TourRequest> GetByCountry(string country)
+        {
+            List<TourRequest> requests = new List<TourRequest>();
+
+            foreach (TourRequest request in GetPendingRequests())
+            {
+                if (_locationService.GetById(request.LocationId).Country == country)
+                {
+                    requests.Add(request);
+                }
+            }
+            return requests;
+        }
+        public List<TourRequest> GetByMaxGuests(int maxGuests)
+        {
+            List<TourRequest> requests = new List<TourRequest>();
+
+            foreach (TourRequest request in GetPendingRequests())
+            {
+                if (request.MaxGuests >= maxGuests)
+                {
+                    requests.Add(request);
+                }
+            }
+            return requests;
+        }
+        public List<TourRequest> GetByLanguage(string language)
+        {
+            List<TourRequest> requests = new List<TourRequest>();
+
+            foreach (TourRequest request in GetPendingRequests())
+            {
+                if (request.Language.Replace(" ", "").ToLower().Contains(language.Replace(" ", "").ToLower()))
+                {
+                    requests.Add(request);
+                }
+            }
+            return requests;
+        }
+        public List<TourRequest> GetByStartDate(DateTime? startDate)
+        {
+            List<TourRequest> requests = new List<TourRequest>();
+
+            foreach (TourRequest request in GetPendingRequests())
+            {
+                if (request.StartTime >= startDate)
+                {
+                    requests.Add(request);
+                }
+            }
+            return requests;
+        }
+        public List<TourRequest> GetByEndDate(DateTime? endDate)
+        {
+            List<TourRequest> requests = new List<TourRequest>();
+
+            foreach (TourRequest request in GetPendingRequests())
+            {
+                if (request.EndTime <= endDate)
+                {
+                    requests.Add(request);
+                }
+            }
+            return requests;
+        }
+
     }
 }

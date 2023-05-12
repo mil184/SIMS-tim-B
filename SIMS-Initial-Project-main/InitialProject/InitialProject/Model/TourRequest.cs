@@ -1,4 +1,5 @@
-﻿using InitialProject.Serializer;
+﻿using InitialProject.Resources.Enums;
+using InitialProject.Serializer;
 using System;
 using System.Collections.ObjectModel;
 
@@ -13,8 +14,7 @@ namespace InitialProject.Model
         public int MaxGuests { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
-
-        public int Status { get; set; }
+        public RequestStatus Status { get; set; }
 
         public TourRequest()
         {
@@ -28,7 +28,7 @@ namespace InitialProject.Model
             MaxGuests = maxGuests;
             StartTime = startTime;
             EndTime = endTime;
-            Status = -1;
+            Status = RequestStatus.pending;
         }
 
         public string[] ToCSV()
@@ -57,7 +57,7 @@ namespace InitialProject.Model
             MaxGuests = int.Parse(values[4]);
             StartTime = DateTime.Parse(values[5]);
             EndTime = DateTime.Parse(values[6]);
-            Status = int.Parse(values[7]);
+            Status = Enum.Parse<RequestStatus>(values[7]);
         }
     }
 }

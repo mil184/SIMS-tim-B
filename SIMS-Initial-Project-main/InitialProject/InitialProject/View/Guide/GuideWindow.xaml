@@ -581,53 +581,29 @@
                                 </Grid.ColumnDefinitions>
                                 <StackPanel Orientation="Vertical" Margin="5" Grid.Row="0" Grid.Column="0">
                                     <TextBlock Text="City:" Margin="0 0 0 5" FontSize="14"/>
-                                    <ComboBox Width="200" Height="20"/>
+                                    <ComboBox Width="200" Height="20" FontSize="11" SelectionChanged="CbCity_SelectionChanged" ItemsSource="{Binding Path=Cities, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding Path=CityInput, UpdateSourceTrigger=PropertyChanged}" IsEditable="True" />
                                 </StackPanel>
                                 <StackPanel Orientation="Vertical" Margin="5" Grid.Row="0" Grid.Column="1">
                                     <TextBlock Text="Country:" Margin="0 0 0 5" FontSize="14"/>
-                                    <ComboBox Width="200" Height="20"/>
+                                    <ComboBox Width="200" Height="20" FontSize="11" SelectionChanged="CbCountry_SelectionChanged" ItemsSource="{Binding Path=Countries, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding Path=CountryInput, UpdateSourceTrigger=PropertyChanged}" IsEditable="True"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Vertical" Margin="5" Grid.Row="0" Grid.Column="2">
                                     <TextBlock Text="Guests:" Margin="0 0 0 5" FontSize="14"/>
-                                    <TextBox Width="150" Height="20"/>
+                                    <TextBox Width="150" Height="20" FontSize="11"  TextChanged="txtGuests_TextChanged" Text="{Binding Path=MaxGuestsInput, UpdateSourceTrigger=PropertyChanged}"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Vertical" Margin="5" Grid.Row="1" Grid.Column="0">
                                     <TextBlock Text="Start Date:" Margin="0 0 0 5" FontSize="14"/>
-                                    <DatePicker Width="200" Height="20" FontSize="11"/>
+                                    <DatePicker Width="200" Height="20" FontSize="11" SelectedDateChanged="dpStartDate_DateChanged" SelectedDate= "{Binding Path=StartDateInput, UpdateSourceTrigger=PropertyChanged}"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Vertical" Margin="5" Grid.Row="1" Grid.Column="1">
                                     <TextBlock Text="End Date:" Margin="0 0 0 5" FontSize="14"/>
-                                    <DatePicker Width="200" Height="20" FontSize="11"/>
+                                    <DatePicker Width="200" Height="20" FontSize="11" SelectedDateChanged="dpEndDate_DateChanged" SelectedDate= "{Binding Path =EndDateInput, UpdateSourceTrigger=PropertyChanged}" />
                                 </StackPanel>
                                 <StackPanel Orientation="Vertical" Margin="5" Grid.Row="1" Grid.Column="2">
                                     <TextBlock Text="Language:" Margin="0 0 0 5" FontSize="14"/>
-                                    <TextBox Width="150" Height="20"/>
+                                    <TextBox Width="150" FontSize="11" Height="20" TextChanged="txtLanguage_TextChanged" Text="{Binding Path=LanguageInput, UpdateSourceTrigger=PropertyChanged}"/>
                                 </StackPanel>
 
-                                <Button Content="    Filter&#x0a;(CTRL + F)" Grid.RowSpan="4" Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="50 5 5 5" Height="60" Width="90" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" Click="StatisticsButton_Click">
-                                    <Button.Template>
-                                        <ControlTemplate TargetType="Button">
-                                            <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
-                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                            </Border>
-                                            <ControlTemplate.Triggers>
-                                                <EventTrigger RoutedEvent="Button.Click">
-                                                    <BeginStoryboard>
-                                                        <Storyboard>
-                                                            <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
-                                                        </Storyboard>
-                                                    </BeginStoryboard>
-                                                </EventTrigger>
-                                                <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="border" Property="Background" Value="#005F8B" />
-                                                </Trigger>
-                                                <Trigger Property="IsPressed" Value="True">
-                                                    <Setter TargetName="border" Property="Background" Value="#00415E" />
-                                                </Trigger>
-                                            </ControlTemplate.Triggers>
-                                        </ControlTemplate>
-                                    </Button.Template>
-                                </Button>
                             </Grid>
                         </GroupBox>
 
@@ -659,7 +635,7 @@
                         </Button>
                     </Grid>
                     <GroupBox Header="Pending Requests" FontSize="28" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2">
-                        <DataGrid Height ="210" ItemsSource="{Binding FinishedTours}" SelectedItem="{Binding Path=SelectedFinishedTourDTO}" AutoGenerateColumns="False" Name="FsinishedToursDataGrid" IsReadOnly="true" MouseDoubleClick="FinishedToursDataGrid_MouseDoubleClick" Margin="10 10 10 10">
+                        <DataGrid Height ="210" ItemsSource="{Binding PendingRequests}" SelectedItem="{Binding Path=SelectedPendingRequestDTO}" AutoGenerateColumns="False" Name="PendingRequestsDataGrid" IsReadOnly="true" MouseDoubleClick="FinishedToursDataGrid_MouseDoubleClick" Margin="10 10 10 10">
                             <DataGrid.CellStyle>
                                 <Style TargetType="DataGridCell">
                                     <Setter Property="FontSize" Value="18"/>
@@ -667,9 +643,10 @@
                                 </Style>
                             </DataGrid.CellStyle>
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" FontSize="18"/>
                                 <DataGridTextColumn Header="Location" Binding="{Binding Location}" Width="*" FontSize="18"/>
-                                <DataGridTextColumn Header="Start Time" Binding="{Binding Path=StartTime,StringFormat={}{0:dd.M.yyyy. HH:mm}}" Width="*" FontSize="18"/>
+                                <DataGridTextColumn Header="Language" Binding="{Binding Language}" Width="*" FontSize="18"/>
+                                <DataGridTextColumn Header="Guest Number" Binding="{Binding MaximumGuests}" Width="1*" FontSize="18"/>
+                                <DataGridTextColumn Header="Timespan" Binding="{Binding Interval}" Width="1.5*" FontSize="18"/>
                             </DataGrid.Columns>
                         </DataGrid>
                     </GroupBox>
