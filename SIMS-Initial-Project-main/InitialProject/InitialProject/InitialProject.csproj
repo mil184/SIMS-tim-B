@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <None Remove="Fonts\Pacifico-Regular.ttf" />
+    <None Remove="Resources\Images\accommodation.png" />
     <None Remove="Resources\Images\add.png" />
     <None Remove="Resources\Images\delete.png" />
     <None Remove="Resources\Images\edit.png" />
@@ -29,9 +30,38 @@
     <None Remove="Resources\Images\image_unavailable.png" />
     <None Remove="Resources\Images\info.png" />
     <None Remove="Resources\Images\inspection.png" />
-    <None Remove="Resources\Images\leftArrow.png" />
+    <None Remove="Resources\Images\menu.png" />
     <None Remove="Resources\Images\owner.png" />
-    <None Remove="Resources\Images\pdf.jpg" />
+    <None Remove="Resources\Images\OwnerIcons\accommodation.png" />
+    <None Remove="Resources\Images\OwnerIcons\accommodationDark.png" />
+    <None Remove="Resources\Images\OwnerIcons\addAccommodation.png" />
+    <None Remove="Resources\Images\OwnerIcons\apartment.png" />
+    <None Remove="Resources\Images\OwnerIcons\arrow.png" />
+    <None Remove="Resources\Images\OwnerIcons\dislike.png" />
+    <None Remove="Resources\Images\OwnerIcons\dots.png" />
+    <None Remove="Resources\Images\OwnerIcons\forum.png" />
+    <None Remove="Resources\Images\OwnerIcons\forumDark.png" />
+    <None Remove="Resources\Images\OwnerIcons\happiness.png" />
+    <None Remove="Resources\Images\OwnerIcons\house.png" />
+    <None Remove="Resources\Images\OwnerIcons\hut.png" />
+    <None Remove="Resources\Images\OwnerIcons\image.png" />
+    <None Remove="Resources\Images\OwnerIcons\like.png" />
+    <None Remove="Resources\Images\OwnerIcons\menu.png" />
+    <None Remove="Resources\Images\OwnerIcons\music.png" />
+    <None Remove="Resources\Images\OwnerIcons\musicDark.png" />
+    <None Remove="Resources\Images\OwnerIcons\peopleTalking.jpg" />
+    <None Remove="Resources\Images\OwnerIcons\rating.png" />
+    <None Remove="Resources\Images\OwnerIcons\ratingDark.png" />
+    <None Remove="Resources\Images\OwnerIcons\renovation.png" />
+    <None Remove="Resources\Images\OwnerIcons\renovationDark.png" />
+    <None Remove="Resources\Images\OwnerIcons\report.png" />
+    <None Remove="Resources\Images\OwnerIcons\reportDark.png" />
+    <None Remove="Resources\Images\OwnerIcons\rescheduling.png" />
+    <None Remove="Resources\Images\OwnerIcons\reschedulingDark.png" />
+    <None Remove="Resources\Images\OwnerIcons\review.png" />
+    <None Remove="Resources\Images\OwnerIcons\reviewDark.png" />
+    <None Remove="Resources\Images\OwnerIcons\sad.png" />
+    <None Remove="Resources\Images\OwnerIcons\talking2.png" />
     <None Remove="Resources\Images\red-x.png" />
     <None Remove="Resources\Images\rightArrow.png" />
     <None Remove="Resources\Images\search.jpg" />
@@ -56,6 +86,7 @@
     <Resource Include="Fonts\Pacifico-Regular.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\Images\accommodation.png" />
     <Resource Include="Resources\Images\favicon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -74,9 +105,37 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\inspection.png" />
-    <Resource Include="Resources\Images\leftArrow.png" />
+    <Resource Include="Resources\Images\menu.png" />
     <Resource Include="Resources\Images\owner.png" />
-    <Resource Include="Resources\Images\pdf.jpg" />
+    <Resource Include="Resources\Images\OwnerIcons\accommodation.png" />
+    <Resource Include="Resources\Images\OwnerIcons\accommodationDark.png" />
+    <Resource Include="Resources\Images\OwnerIcons\addAccommodation.png" />
+    <Resource Include="Resources\Images\OwnerIcons\apartment.png" />
+    <Resource Include="Resources\Images\OwnerIcons\arrow.png" />
+    <Resource Include="Resources\Images\OwnerIcons\dislike.png" />
+    <Resource Include="Resources\Images\OwnerIcons\dots.png" />
+    <Resource Include="Resources\Images\OwnerIcons\forum.png" />
+    <Resource Include="Resources\Images\OwnerIcons\forumDark.png" />
+    <Resource Include="Resources\Images\OwnerIcons\happiness.png" />
+    <Resource Include="Resources\Images\OwnerIcons\house.png" />
+    <Resource Include="Resources\Images\OwnerIcons\hut.png" />
+    <Resource Include="Resources\Images\OwnerIcons\image.png" />
+    <Resource Include="Resources\Images\OwnerIcons\like.png" />
+    <Resource Include="Resources\Images\OwnerIcons\menu.png" />
+    <Resource Include="Resources\Images\OwnerIcons\musicDark.png" />
+    <Resource Include="Resources\Images\OwnerIcons\peopleTalking.jpg" />
+    <Resource Include="Resources\Images\OwnerIcons\rating.png" />
+    <Resource Include="Resources\Images\OwnerIcons\ratingDark.png" />
+    <Resource Include="Resources\Images\OwnerIcons\renovation.png" />
+    <Resource Include="Resources\Images\OwnerIcons\renovationDark.png" />
+    <Resource Include="Resources\Images\OwnerIcons\report.png" />
+    <Resource Include="Resources\Images\OwnerIcons\reportDark.png" />
+    <Resource Include="Resources\Images\OwnerIcons\rescheduling.png" />
+    <Resource Include="Resources\Images\OwnerIcons\reschedulingDark.png" />
+    <Resource Include="Resources\Images\OwnerIcons\review.png" />
+    <Resource Include="Resources\Images\OwnerIcons\reviewDark.png" />
+    <Resource Include="Resources\Images\OwnerIcons\sad.png" />
+    <Resource Include="Resources\Images\OwnerIcons\talking2.png" />
     <Resource Include="Resources\Images\red-x.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
@@ -97,7 +156,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\Images\OwnerIcons\music.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
+    <PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525" />
   </ItemGroup>
 
   <ItemGroup>
@@ -118,7 +182,6 @@
   <ItemGroup>
     <Folder Include="Resources\NewFolder\" />
     <Folder Include="ViewModel\Guest1\" />
-    <Folder Include="ViewModel\Owner\" />
     <Folder Include="ViewModel\Guest2\" />
   </ItemGroup>
 

@@ -2,6 +2,8 @@
 using InitialProject.Serializer;
 using System;
 using System.Collections.ObjectModel;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
 
 namespace InitialProject.Model
 {
@@ -50,6 +52,28 @@ namespace InitialProject.Model
             foreach (string id in values[8].Split(','))
             {
                 ImageIds.Add(int.Parse(id));
+            }
+        }
+
+        public ImageSource TypeImage
+        {
+            get
+            {
+                string imagePath;
+                if (Type == AccommodationType.House)
+                {
+                    imagePath = "/Resources/Images/OwnerIcons/house.png";
+                }
+                else if (Type == AccommodationType.Hut)
+                {
+                    imagePath = "/Resources/Images/OwnerIcons/hut.png";
+                }
+                else
+                {
+                    imagePath = "/Resources/Images/OwnerIcons/apartment.png";
+                }
+
+                return new BitmapImage(new Uri(imagePath, UriKind.Relative));
             }
         }
     }
