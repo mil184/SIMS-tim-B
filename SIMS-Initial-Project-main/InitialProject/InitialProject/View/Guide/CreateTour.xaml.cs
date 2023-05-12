@@ -157,6 +157,9 @@ namespace InitialProject.View.Guide
             }
         }
 
+        public DateTime? LeftBoundary { get; set; }
+        public DateTime? RightBoundary { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -173,8 +176,39 @@ namespace InitialProject.View.Guide
             _imageRepository = imageRepository;
             _checkpointService = checkpointService;
 
+            LeftBoundary = null;
+            RightBoundary = null;
+
             LoggedInUser = user;
             OrderCounter = 0;
+
+            InitializeCollections();
+            InitializeComboBoxes();
+            InitializeCountryDropdown();
+            InitializeShortcuts();
+            //FillWithTestData();
+        }
+        public CreateTour(User user, TourService tourService, LocationService locationService, ImageRepository imageRepository, CheckpointService checkpointService, string description, string language, string country, string city, string maxGuests, DateTime  startTime, DateTime endTime)
+        {
+            InitializeComponent();
+            DataContext = this;
+
+            _tourService = tourService;
+            _locationService = locationService;
+            _imageRepository = imageRepository;
+            _checkpointService = checkpointService;
+
+            LoggedInUser = user;
+            OrderCounter = 0;
+
+            Description = description;
+            TourLanguage = language;
+            MaxGuests = maxGuests;
+            Country = country;
+            City = city;
+
+            LeftBoundary = startTime;
+            RightBoundary = endTime;
 
             InitializeCollections();
             InitializeComboBoxes();
@@ -209,6 +243,11 @@ namespace InitialProject.View.Guide
             {
                 cbCountry.Items.Add(country);
             }
+
+            if(Country != null)
+                cbCountry.SelectedItem = Country;
+            if (City != null)
+                cbCity.SelectedItem = City;
         }
         private void InitializeShortcuts()
         {
@@ -407,6 +446,14 @@ namespace InitialProject.View.Guide
 
         private void AddDate() 
         {
+            if (LeftBoundary != null && RightBoundary != null)
+            {
+                if (GetSelectedDateTime() < LeftBoundary || GetSelectedDateTime() > RightBoundary)
+                {
+                    ShowBoundaryTimeWarning();
+                    return;
+                }
+            }
             if (IsDateTimeInputValid())
             {
                 DateTime selectedDateTime = GetSelectedDateTime();
@@ -683,6 +730,37 @@ namespace InitialProject.View.Guide
             CustomMessageBox messageBox = new CustomMessageBox();
             messageBox.Text = "At least one date";
             messageBox.TextAdditional = "and time is required";
+
+            Popup popup = new Popup();
+            popup.AllowsTransparency = true; // Allow the popup to have a transparent background
+            popup.Child = messageBox;
+            popup.PlacementTarget = Minutes_cb; // Set the placement target to the TextBox control
+            popup.Placement = PlacementMode.Right; // Set the placement mode to right
+            popup.VerticalOffset = -10;
+            popup.HorizontalOffset = 40;
+            popup.IsOpen = true;
+
+            // Hide the popup when the user starts typing again
+            Minutes_cb.SelectionChanged += (s, args) =>
+            {
+                popup.IsOpen = false;
+            };
+            Hours_cb.SelectionChanged += (s, args) =>
+            {
+                popup.IsOpen = false;
+            };
+            dpDate.SelectedDateChanged += (s, args) =>
+            {
+                popup.IsOpen = false;
+            };
+        }
+
+        private void ShowBoundaryTimeWarning()
+        {
+            CustomMessageBox messageBox = new CustomMessageBox();
+            messageBox.Text = "Only choose from";
+
+            messageBox.TextAdditional = LeftBoundary.ToString() + " - " + RightBoundary.ToString();
 
             Popup popup = new Popup();
             popup.AllowsTransparency = true; // Allow the popup to have a transparent background

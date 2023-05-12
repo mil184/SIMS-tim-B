@@ -16,8 +16,9 @@ namespace InitialProject.Model.DTO
         public string Interval { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
+        public string Description { get; set; }
 
-        public GuideRequestDTO(int id, string location, string language, string maximumGuests, DateTime startTime, DateTime endTime)
+        public GuideRequestDTO(int id, string location, string language, string maximumGuests, DateTime startTime, DateTime endTime, string description)
         {
             Id = id;
             Location = location;
@@ -33,6 +34,8 @@ namespace InitialProject.Model.DTO
                 EndTime.Day.ToString() + "." +
                 EndTime.Month.ToString() + "." +
                 EndTime.Year.ToString() + ".";
+
+            Description = description;
         }
     }
 }

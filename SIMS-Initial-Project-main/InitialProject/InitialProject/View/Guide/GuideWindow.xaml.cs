@@ -48,7 +48,7 @@ namespace InitialProject.View.Guide
         public GuideTourDTO SelectedUpcomingTourDTO { get; set; }
         public GuideTourDTO SelectedFinishedTourDTO { get; set; }
         public GuideTourDTO SelectedRatedTourDTO { get; set; }
-        public GuideTourDTO SelectedPendingRequestDTO { get; set; }
+        public GuideRequestDTO SelectedPendingRequestDTO { get; set; }
 
         private GuideTourDTO _activeTour;
         public GuideTourDTO ActiveTour
@@ -220,7 +220,7 @@ namespace InitialProject.View.Guide
             UpcomingTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourService.GetUpcomingTours()));
             FinishedTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourService.GetFinishedTours()));
             RatedTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourService.GetRatedTours()));
-            PendingRequests = new ObservableCollection<GuideRequestDTO>(ConvertToDTO(_tourRequestService.GetPendingRequests()));
+            PendingRequests = new ObservableCollection<GuideRequestDTO>(ConvertToDTO(_tourRequestService.GetPendingRequests(CurrentUser)));
 
             Countries = new ObservableCollection<string>();
             Cities = new ObservableCollection<string>();
@@ -330,6 +330,7 @@ namespace InitialProject.View.Guide
             UpdateCurrentTours();
             UpdateFinishedTours();
             UpdateActiveTour();
+            UpdatePendingRequests();
         }
         private void UpdateUpcomingTours()
         {
@@ -353,6 +354,14 @@ namespace InitialProject.View.Guide
             foreach (Tour tour in _tourService.GetFinishedTours())
             {
                 FinishedTours.Add(ConvertToDTO(tour));
+            }
+        }
+        private void UpdatePendingRequests()
+        {
+            PendingRequests.Clear();
+            foreach (TourRequest request in _tourRequestService.GetPendingRequests(CurrentUser))
+            {
+                PendingRequests.Add(ConvertToDTO(request));
             }
         }
         private void UpdateActiveTour()
@@ -426,10 +435,11 @@ namespace InitialProject.View.Guide
                     request.Language,
                     request.MaxGuests.ToString(),
                     request.StartTime,
-                    request.EndTime
+                    request.EndTime,
+                    request.Description
                     );
         }
-        public TourRequest ConvertToTour(GuideRequestDTO dto)
+        public TourRequest ConvertToRequest(GuideRequestDTO dto)
         {
             if (dto != null)
                 return _tourRequestService.GetById(dto.Id);
@@ -771,7 +781,6 @@ namespace InitialProject.View.Guide
                 currentDataGrid.Focus();
             }
         }
-
         private void MoveToLastItem(DataGrid currentDataGrid)
         {
             if (Years_cb.IsDropDownOpen)
@@ -787,17 +796,14 @@ namespace InitialProject.View.Guide
                 currentDataGrid.Focus();
             }
         }
-
         private void UnselectSelectedItem(DataGrid currentDataGrid)
         {
             currentDataGrid.SelectedItem = null;
         }
-
         private void FocusOnComboBox()
         {
             Years_cb.Focus();
         }
-
         private void SortAsc_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (!Keyboard.IsKeyDown(Key.LeftShift) || !Keyboard.IsKeyDown(Key.A))
@@ -874,7 +880,6 @@ namespace InitialProject.View.Guide
             }
             e.Handled = true;
         }
-
         private DataGrid GetCurrentDataGrid()
         {
             switch (tabControl.SelectedIndex)
@@ -891,7 +896,6 @@ namespace InitialProject.View.Guide
                     return null;
             }
         }
-
         private string GetNextSortColumn()
         {
             switch (CurrentSortIndex)
@@ -909,8 +913,6 @@ namespace InitialProject.View.Guide
                     return "";
             }
         }
-
-
         private void ShowActiveTourWarning()
         {
             MessageBox.Show("An active tour is already in progress. Please finish the current tour before starting a new one.", "Active Tour Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -999,32 +1001,32 @@ namespace InitialProject.View.Guide
 
             if (!string.IsNullOrEmpty(CountryInput))
             {
-                result = _tourRequestService.GetByCountry(CountryInput);
+                result = _tourRequestService.GetByCountry(CurrentUser,CountryInput);
             }
             else
             {
-                result = _tourRequestService.GetPendingRequests();
+                result = _tourRequestService.GetPendingRequests(CurrentUser);
             }
 
             if (!string.IsNullOrEmpty(CityInput))
             {
-                result = result.Intersect(_tourRequestService.GetByCity(CityInput)).ToList();
+                result = result.Intersect(_tourRequestService.GetByCity(CurrentUser,CityInput)).ToList();
             }
             if (!string.IsNullOrEmpty(LanguageInput))
             {
-                result = result.Intersect(_tourRequestService.GetByLanguage(LanguageInput)).ToList();
+                result = result.Intersect(_tourRequestService.GetByLanguage(CurrentUser,LanguageInput)).ToList();
             }
             if (!string.IsNullOrEmpty(MaxGuestsInput) && int.TryParse(MaxGuestsInput, out int integer))
             {
-                result = result.Intersect(_tourRequestService.GetByMaxGuests(int.Parse(MaxGuestsInput))).ToList();
+                result = result.Intersect(_tourRequestService.GetByMaxGuests(CurrentUser,int.Parse(MaxGuestsInput))).ToList();
             }
             if (StartDateInput != null)
             {
-                result = result.Intersect(_tourRequestService.GetByStartDate(StartDateInput)).ToList();
+                result = result.Intersect(_tourRequestService.GetByStartDate(CurrentUser,StartDateInput)).ToList();
             }
             if (EndDateInput != null)
             {
-                result = result.Intersect(_tourRequestService.GetByEndDate(EndDateInput)).ToList();
+                result = result.Intersect(_tourRequestService.GetByEndDate(CurrentUser,EndDateInput)).ToList();
             }
 
             List<GuideRequestDTO> searchResults = ConvertToDTO(result);
@@ -1039,12 +1041,21 @@ namespace InitialProject.View.Guide
         {
             if (string.IsNullOrEmpty(CountryInput) && string.IsNullOrEmpty(CityInput) && string.IsNullOrEmpty(LanguageInput) && string.IsNullOrEmpty(MaxGuestsInput))
             {
-                foreach (TourRequest request in _tourRequestService.GetPendingRequests())
+                foreach (TourRequest request in _tourRequestService.GetPendingRequests(CurrentUser))
                 {
                     PendingRequests.Add(ConvertToDTO(request));
                 }
             }
         }
 
+        private void PendingRequests_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (SelectedPendingRequestDTO != null) 
+            {
+                TourRequest request = ConvertToRequest(SelectedPendingRequestDTO);
+                CreateTour createTour = new CreateTour(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, request.Description, request.Language, _locationService.GetById(request.LocationId).Country, _locationService.GetById(request.LocationId).City, request.MaxGuests.ToString(), request.StartTime, request.EndTime);
+                createTour.ShowDialog();;
+            }
+        }
     }
 }

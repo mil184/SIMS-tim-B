@@ -33,10 +33,21 @@ namespace InitialProject.Service
                     tours.Add(GetById(tourReservation.TourId));
                 }
             }
-
             return tours;
         }
-
+        public List<Tour> GetGuideTours(User user)
+        {
+            List<Tour> tours = new List<Tour>();
+  
+            foreach (Tour tour in GetAll())
+            {
+                if (tour.GuideId == user.Id && !tour.IsAborted)
+                {
+                    tours.Add(tour);
+                }
+            }
+            return tours;
+        }
         public List<Tour> GetFinishedTours(List<Tour> tours)
         {
             return tours.FindAll(tour => tour.IsFinished);

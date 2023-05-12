@@ -12,11 +12,12 @@ namespace InitialProject.Service
     {
         public readonly ITourRequestRepository _tourRequestRepository;
         private readonly LocationService _locationService;
-
+        private readonly TourService _tourService;
         public TourRequestService()
         {
             _tourRequestRepository = Injector.CreateInstance<ITourRequestRepository>();
             _locationService = new LocationService();
+            _tourService = new TourService();
         }
 
         public TourRequest GetById(int id)
@@ -53,24 +54,36 @@ namespace InitialProject.Service
         {
             _tourRequestRepository.NotifyObservers();
         }
-        public List<TourRequest> GetPendingRequests() 
+        public List<TourRequest> GetPendingRequests(User user)
         {
             List<TourRequest> pendingRequests = new List<TourRequest>();
 
-            foreach(TourRequest request in GetAll()) 
+            foreach (TourRequest request in GetAll())
             {
-                if(request.Status == Resources.Enums.RequestStatus.pending) 
+                if (request.Status == Resources.Enums.RequestStatus.pending)
                 {
-                    pendingRequests.Add(request);
+                    bool canBeAdded = true;
+                    foreach (Tour tour in _tourService.GetGuideTours(user))
+                    {
+                        if (!(request.EndTime <= tour.StartTime || request.StartTime >= tour.StartTime.AddHours(tour.Duration)))
+                        {
+                            canBeAdded = false;
+                            break; // Exit the inner loop as soon as an overlap is found
+                        }
+                    }
+                    if (canBeAdded) 
+                    {
+                        pendingRequests.Add(request);
+                    }
                 }
             }
             return pendingRequests;
         }
-        public List<TourRequest> GetByCity(string city)
+        public List<TourRequest> GetByCity(User user,string city)
         {
             List<TourRequest> requests = new List<TourRequest>();
 
-            foreach (TourRequest request in GetPendingRequests())
+            foreach (TourRequest request in GetPendingRequests(user))
             {
                 if (_locationService.GetById(request.LocationId).City == city)
                 {
@@ -79,11 +92,11 @@ namespace InitialProject.Service
             }
             return requests;
         }
-        public List<TourRequest> GetByCountry(string country)
+        public List<TourRequest> GetByCountry(User user,string country)
         {
             List<TourRequest> requests = new List<TourRequest>();
 
-            foreach (TourRequest request in GetPendingRequests())
+            foreach (TourRequest request in GetPendingRequests(user))
             {
                 if (_locationService.GetById(request.LocationId).Country == country)
                 {
@@ -92,11 +105,11 @@ namespace InitialProject.Service
             }
             return requests;
         }
-        public List<TourRequest> GetByMaxGuests(int maxGuests)
+        public List<TourRequest> GetByMaxGuests(User user,int maxGuests)
         {
             List<TourRequest> requests = new List<TourRequest>();
 
-            foreach (TourRequest request in GetPendingRequests())
+            foreach (TourRequest request in GetPendingRequests(user))
             {
                 if (request.MaxGuests >= maxGuests)
                 {
@@ -105,11 +118,11 @@ namespace InitialProject.Service
             }
             return requests;
         }
-        public List<TourRequest> GetByLanguage(string language)
+        public List<TourRequest> GetByLanguage(User user, string language)
         {
             List<TourRequest> requests = new List<TourRequest>();
 
-            foreach (TourRequest request in GetPendingRequests())
+            foreach (TourRequest request in GetPendingRequests(user))
             {
                 if (request.Language.Replace(" ", "").ToLower().Contains(language.Replace(" ", "").ToLower()))
                 {
@@ -118,11 +131,11 @@ namespace InitialProject.Service
             }
             return requests;
         }
-        public List<TourRequest> GetByStartDate(DateTime? startDate)
+        public List<TourRequest> GetByStartDate(User user, DateTime? startDate)
         {
             List<TourRequest> requests = new List<TourRequest>();
 
-            foreach (TourRequest request in GetPendingRequests())
+            foreach (TourRequest request in GetPendingRequests(user))
             {
                 if (request.StartTime >= startDate)
                 {
@@ -131,11 +144,11 @@ namespace InitialProject.Service
             }
             return requests;
         }
-        public List<TourRequest> GetByEndDate(DateTime? endDate)
+        public List<TourRequest> GetByEndDate(User user, DateTime? endDate)
         {
             List<TourRequest> requests = new List<TourRequest>();
 
-            foreach (TourRequest request in GetPendingRequests())
+            foreach (TourRequest request in GetPendingRequests(user))
             {
                 if (request.EndTime <= endDate)
                 {

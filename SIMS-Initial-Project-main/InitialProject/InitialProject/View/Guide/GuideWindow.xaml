@@ -635,7 +635,7 @@
                         </Button>
                     </Grid>
                     <GroupBox Header="Pending Requests" FontSize="28" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2">
-                        <DataGrid Height ="210" ItemsSource="{Binding PendingRequests}" SelectedItem="{Binding Path=SelectedPendingRequestDTO}" AutoGenerateColumns="False" Name="PendingRequestsDataGrid" IsReadOnly="true" MouseDoubleClick="FinishedToursDataGrid_MouseDoubleClick" Margin="10 10 10 10">
+                        <DataGrid Height ="210" ItemsSource="{Binding PendingRequests}" SelectedItem="{Binding Path=SelectedPendingRequestDTO}" AutoGenerateColumns="False" Name="PendingRequestsDataGrid" IsReadOnly="true" MouseDoubleClick="PendingRequests_MouseDoubleClick" Margin="10 10 10 10">
                             <DataGrid.CellStyle>
                                 <Style TargetType="DataGridCell">
                                     <Setter Property="FontSize" Value="18"/>
