@@ -34,6 +34,7 @@ namespace InitialProject.View.Guest1
         private readonly AccommodationRatingsDTO SelectedUnratedAccommodation;
         private readonly ImageRepository _imageRepository;
         private readonly UserRepository _userRepository;
+        private readonly RenovationRecommendationRepository _renovationRecommendationRepository;
 
         public AccommodationReservation Reservation { get; set; }
 
@@ -120,6 +121,7 @@ namespace InitialProject.View.Guest1
             _accommodationReservationService = accommodationReservationService;
             _imageRepository = imageRepository;
             _userRepository = new UserRepository();
+            _renovationRecommendationRepository = new RenovationRecommendationRepository();
 
             Reservation = _accommodationReservationService.GetById(SelectedUnratedAccommodation.ReservationId);
         }
@@ -310,7 +312,7 @@ namespace InitialProject.View.Guest1
 
         private void RecommendRenovation_Click(object sender, RoutedEventArgs e)
         {
-            RecommendRenovation recommendRenovation = new RecommendRenovation();
+            RecommendRenovation recommendRenovation = new RecommendRenovation(SelectedUnratedAccommodation, _renovationRecommendationRepository, _accommodationReservationService);
             recommendRenovation.ShowDialog();
         }
     }
