@@ -67,7 +67,7 @@
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="3">
-            <Button Content="Recommendation for reservation" Height="40" Width="280" Margin="10" FontSize="16" Background="#97b9de">
+            <Button Content="Recommendation for renovation" Click="RecommendRenovation_Click" Height="40" Width="280" Margin="10" FontSize="16" Background="#97b9de">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border CornerRadius="20" Background="{TemplateBinding Background}" BorderThickness="2" BorderBrush="#6d87a3">

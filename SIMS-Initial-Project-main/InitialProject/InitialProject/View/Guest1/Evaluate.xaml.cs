@@ -308,5 +308,10 @@ namespace InitialProject.View.Guest1
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        private void RecommendRenovation_Click(object sender, RoutedEventArgs e)
+        {
+            RecommendRenovation recommendRenovation = new RecommendRenovation();
+            recommendRenovation.ShowDialog();
+        }
     }
 }
