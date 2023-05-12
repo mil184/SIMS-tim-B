@@ -364,5 +364,14 @@ namespace InitialProject.View.Guest2
                 rateTour.Show();
             }
         }
+
+        private void RequestButton_Click(object sender, RoutedEventArgs e)
+        {
+           
+
+            RequestTourViewModel requestTourViewModel = new RequestTourViewModel(_userRepository, _locationService, _tourRequestService);
+            RequestTour requestTour = new RequestTour(requestTourViewModel);
+            requestTour.Show();
+        }
     }
 }
