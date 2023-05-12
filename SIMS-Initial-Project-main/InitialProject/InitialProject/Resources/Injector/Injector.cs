@@ -15,8 +15,12 @@ namespace InitialProject.Resources.Injector
         {
             { typeof(ITourRepository), new TourCSVRepository() },
             { typeof(ICheckpointRepository), new CheckpointCSVRepository() },
-            { typeof(ILocationRepository), new LocationCSVRepository() }
-
+            { typeof(ILocationRepository), new LocationCSVRepository() },
+            { typeof(IAccommodationRepository), new AccommodationCSVRepository() },
+            { typeof(IAccommodationRatingRepository), new AccommodationRatingCSVRepository() },
+            { typeof(IAccommodationReservationRepository), new AccommodationReservationCSVRepository() },
+            { typeof(IGuestReviewRepository), new GuestReviewCSVRepository() },
+            { typeof(IRescheduleRequestRepository), new RescheduleRequestCSVRepository() }
         };
 
         public static T CreateInstance<T>() 

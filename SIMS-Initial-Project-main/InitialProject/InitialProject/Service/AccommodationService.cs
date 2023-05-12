@@ -21,6 +21,21 @@ namespace InitialProject.Service
             _locationService = new LocationService();
         }
 
+        public List<Accommodation> GetByUser(int ownerId)
+        {
+            var accommodations = new List<Accommodation>();
+
+            foreach(var accommodation in _accommodationRepository.GetAll())
+            {
+                if (accommodation.OwnerId == ownerId)
+                {
+                    accommodations.Add(accommodation);
+                }
+            }
+
+            return accommodations;
+        }
+
         public List<Accommodation> GetByName(string name)
         {
             var accommodations = new List<Accommodation>();

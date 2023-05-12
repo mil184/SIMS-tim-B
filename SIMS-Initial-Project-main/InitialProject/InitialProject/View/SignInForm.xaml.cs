@@ -70,8 +70,11 @@ namespace InitialProject
                     }
                     else if (user.Type == InitialProject.Resources.Enums.UserType.owner || user.Type == InitialProject.Resources.Enums.UserType.superowner) 
                     {
-                        OwnerWindow ownerWindow = new OwnerWindow(user);
+                        /*OwnerWindow ownerWindow = new OwnerWindow(user);
                         ownerWindow.Show();
+                        Close();*/
+                        OwnerMainWindow ownerMainWindow = new OwnerMainWindow(user);
+                        ownerMainWindow.Show();
                         Close();
                     }
                     else if (user.Type == InitialProject.Resources.Enums.UserType.guest1)
