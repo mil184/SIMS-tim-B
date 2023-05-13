@@ -13,6 +13,35 @@
         <Style x:Key="AppFont" TargetType="TextBlock">
             <Setter Property="FontFamily" Value="Fonts/Pacifico-Regular.ttf" />
         </Style>
+        <DataTemplate x:Key="MessageTemplate">
+            <Grid Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Column="0" Grid.Row="0" Text="{Binding Text}" />
+                <Grid Grid.Column="1" Grid.Row="0">
+                    <Grid.Style>
+                        <Style TargetType="Grid">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Accepted}" Value="True">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Accepted}" Value="False">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
+                    <Button Content="Accept" Click="AcceptButton_Click" />
+                    <Button Content="Decline" Click="DeclineButton_Click" Grid.Column="1" />
+                </Grid>
+            </Grid>
+        </DataTemplate>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -31,96 +60,86 @@
             <!-- App logo and title -->
 
             <Border Grid.Column="0" Background="#E9F1F7" BorderThickness="3" BorderBrush="#007ACC" CornerRadius="5" Margin="5">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Image Source="/Resources/Images/favicon.ico" Width="60" Height="60" Margin="10 0 5 0" />
-                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBlock FontSize="39" FontWeight="Bold" Text="DMJM Tours" Foreground="#007ACC" FontFamily="pack://application:,,,/Fonts/#Pacifico" Margin="0 0 10 0"/>
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
+                        <Image Source="/Resources/Images/favicon.ico" Width="30" Height="30" Margin="5" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+                        <TextBlock FontSize="25" FontWeight="Bold" Text="DMJM Tours" Foreground="#007ACC" FontFamily="pack://application:,,,/Fonts/#Pacifico" Margin="0 0 10 0" VerticalAlignment="Top" HorizontalAlignment="Center"/>
                     </StackPanel>
-                </Grid>
-            </Border>
-
-
-            <!-- User info and buttons -->
-            <Border Grid.Column="2" Background="#E9F1F7" BorderThickness="3" BorderBrush="#007ACC" CornerRadius="5" Margin="5">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <Grid Width="Auto" Height="Auto" Margin="10">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Ellipse Width="80" Height="80" VerticalAlignment="Center" Margin="0 0 10 0" StrokeThickness="3" Stroke="#FFA500">
-                            <Ellipse.Fill>
-                                <ImageBrush ImageSource="/Resources/Images/gorana.jpg" Stretch="UniformToFill" />
-                            </Ellipse.Fill>
-                        </Ellipse>
-                        <TextBlock Grid.Row="1" FontSize="18" Text="{Binding CurrentUser.Username, FallbackValue=BidningNotWorking}" HorizontalAlignment="Center" Foreground="#FFA500"/>
-                        <TextBlock Grid.Row="2" FontSize="14" Text="Guide" HorizontalAlignment="Center" Margin="0 5 0 0" Foreground="#FFA500" FontWeight="Bold"/>
-                    </Grid>
-                    <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="20 0">
-                        <Button Content="  Resign&#x0a;(ALT + Q)" Width="100" Height="60" Margin="0 0 0 10" Background="#007ACC" Foreground="White" FontSize="16" BorderThickness="0" Padding="5 0">
-                            <Button.Template>
-                                <ControlTemplate TargetType="Button">
-                                    <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
-                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                    </Border>
-                                    <ControlTemplate.Triggers>
-                                        <EventTrigger RoutedEvent="Button.Click">
-                                            <BeginStoryboard>
-                                                <Storyboard>
-                                                    <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
-                                                </Storyboard>
-                                            </BeginStoryboard>
-                                        </EventTrigger>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="border" Property="Background" Value="#005F8B" />
-                                        </Trigger>
-                                        <Trigger Property="IsPressed" Value="True">
-                                            <Setter TargetName="border" Property="Background" Value="#00415E" />
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Button.Template>
-                        </Button>
-                        <Button Content=" Log Out&#x0a;(ALT + F4)" Width="100" Height="60" Background="#007ACC" Foreground="White" FontSize="16" BorderThickness="0" Padding="5 0" Click="LogOut_Click">
-                            <Button.Template>
-                                <ControlTemplate TargetType="Button">
-                                    <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
-                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                    </Border>
-                                    <ControlTemplate.Triggers>
-                                        <EventTrigger RoutedEvent="Button.Click">
-                                            <BeginStoryboard>
-                                                <Storyboard>
-                                                    <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
-                                                </Storyboard>
-                                            </BeginStoryboard>
-                                        </EventTrigger>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="border" Property="Background" Value="#005F8B" />
-                                        </Trigger>
-                                        <Trigger Property="IsPressed" Value="True">
-                                            <Setter TargetName="border" Property="Background" Value="#00415E" />
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Button.Template>
-                        </Button>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Grid Width="Auto" Height="Auto" Margin="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Ellipse Width="65" Height="65" VerticalAlignment="Center" Margin="0 0 10 0" StrokeThickness="3" Stroke="#FFA500">
+                                <Ellipse.Fill>
+                                    <ImageBrush ImageSource="/Resources/Images/gorana.jpg" Stretch="UniformToFill" />
+                                </Ellipse.Fill>
+                            </Ellipse>
+                            <TextBlock Grid.Row="1" FontSize="18" Text="{Binding CurrentUser.Username, FallbackValue=BidningNotWorking}" HorizontalAlignment="Center" Foreground="#FFA500"/>
+                            <TextBlock Grid.Row="2" FontSize="14" Text="Guide" HorizontalAlignment="Center" Margin="0 5 0 0" Foreground="#FFA500" FontWeight="Bold"/>
+                        </Grid>
+                        <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="20 0">
+                            <Button Content="  Resign&#x0a;(ALT + Q)" Width="100" Height="60" Margin="0 0 0 10" Background="#007ACC" Foreground="White" FontSize="16" BorderThickness="0" Padding="5 0">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <EventTrigger RoutedEvent="Button.Click">
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="border" Property="Background" Value="#005F8B" />
+                                            </Trigger>
+                                            <Trigger Property="IsPressed" Value="True">
+                                                <Setter TargetName="border" Property="Background" Value="#00415E" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                            <Button Content=" Log Out&#x0a;(ALT + F4)" Width="100" Height="60" Background="#007ACC" Foreground="White" FontSize="16" BorderThickness="0" Padding="5 0" Click="LogOut_Click">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <EventTrigger RoutedEvent="Button.Click">
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="border" Property="Background" Value="#005F8B" />
+                                            </Trigger>
+                                            <Trigger Property="IsPressed" Value="True">
+                                                <Setter TargetName="border" Property="Background" Value="#00415E" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                        </StackPanel>
                     </StackPanel>
                 </StackPanel>
             </Border>
-
-            <!-- Info texts -->
-            <Border Grid.Column="1" Background="#E9F1F7" BorderThickness="3" BorderBrush="#007ACC" CornerRadius="5" Margin="5">
+            <!-- User info and buttons -->
+            <Border Grid.Column="2" Background="#E9F1F7" BorderThickness="3" BorderBrush="#007ACC" CornerRadius="5" Margin="5">
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="10">
                     <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
                         <Image Source="/Resources/Images/info.png" Width="24" Height="24" Margin="0 0 10 0"/>
-                        <TextBlock FontSize="14" FontStyle="Italic" Text="Navigate through data with" VerticalAlignment="Center" Foreground="#007ACC"/>
-                        <TextBlock FontSize="14" FontStyle="Italic" VerticalAlignment="Center" Foreground="#FFA500">
+                        <TextBlock FontSize="12" FontStyle="Italic" Text="Navigate through data with" VerticalAlignment="Center" Foreground="#007ACC"/>
+                        <TextBlock FontSize="12" FontStyle="Italic" VerticalAlignment="Center" Foreground="#FFA500">
                         <Run Text="  &#x25B2;"/>
                         <LineBreak/>
                         <Run Text="  &#x25BC;"/>
@@ -128,28 +147,42 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
                         <Image Source="/Resources/Images/info.png" Width="24" Height="24" Margin="0 0 10 0"/>
-                        <TextBlock FontSize="14" FontStyle="Italic" Text="Navigate through tabs with" VerticalAlignment="Center" Foreground="#007ACC"/>
-                        <TextBlock FontSize="16" FontStyle="Italic" VerticalAlignment="Center" Foreground="#FFA500">
+                        <TextBlock FontSize="12" FontStyle="Italic" Text="Navigate through tabs with" VerticalAlignment="Center" Foreground="#007ACC"/>
+                        <TextBlock FontSize="12" FontStyle="Italic" VerticalAlignment="Center" Foreground="#FFA500">
                         <Run Text=" &#x25C0;"/>
                         <Run Text=" &#x25B6;"/>
                         </TextBlock>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
                         <Image Source="/Resources/Images/info.png" Width="24" Height="24" Margin="0 0 10 0"/>
-                        <TextBlock FontSize="14" FontStyle="Italic" Text="Select the grid with" VerticalAlignment="Center" Foreground="#007ACC"/>
-                        <TextBlock FontSize="16" FontStyle="Italic" Text=" CTRL + L" VerticalAlignment="Center" Foreground="#FFA500"/>
+                        <TextBlock FontSize="12" FontStyle="Italic" Text="Select the grid with" VerticalAlignment="Center" Foreground="#007ACC"/>
+                        <TextBlock FontSize="12" FontStyle="Italic" Text=" CTRL + L" VerticalAlignment="Center" Foreground="#FFA500"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
                         <Image Source="/Resources/Images/info.png" Width="24" Height="24" Margin="0 0 10 0"/>
-                        <TextBlock FontSize="14" FontStyle="Italic" Text="Start the demo with" VerticalAlignment="Center" Foreground="#007ACC"/>
-                        <TextBlock FontSize="16" FontStyle="Italic" Text=" CTRL + D" VerticalAlignment="Center" Foreground="#FFA500"/>
+                        <TextBlock FontSize="12" FontStyle="Italic" Text="Start the demo with" VerticalAlignment="Center" Foreground="#007ACC"/>
+                        <TextBlock FontSize="12" FontStyle="Italic" Text=" CTRL + D" VerticalAlignment="Center" Foreground="#FFA500"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
                         <Image Source="/Resources/Images/info.png" Width="24" Height="24" Margin="0 0 10 0"/>
-                        <TextBlock FontSize="14" FontStyle="Italic" Text="Sort data with" VerticalAlignment="Center" Foreground="#007ACC"/>
-                        <TextBlock FontSize="16" FontStyle="Italic" Text=" LSHIFT + A/D" VerticalAlignment="Center" Foreground="#FFA500"/>
+                        <TextBlock FontSize="12" FontStyle="Italic" Text="Sort data with" VerticalAlignment="Center" Foreground="#007ACC"/>
+                        <TextBlock FontSize="12" FontStyle="Italic" Text=" LSHIFT + A/D" VerticalAlignment="Center" Foreground="#FFA500"/>
                     </StackPanel>
                 </StackPanel>
+            </Border>
+
+            <!-- Mail -->
+            <Border Grid.Column="1" Background="#E9F1F7" BorderThickness="3" BorderBrush="#007ACC" CornerRadius="5" Margin="5">
+                <Grid Name ="messageGrid">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height ="Auto"/>
+                        <RowDefinition Height ="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Image Source="/Resources/Images/mail.png" Width="24" Height="24" Margin="5" HorizontalAlignment="Left"/>
+                    <StackPanel Grid.Row="2" Name="MessagesStackPanel">
+                        
+                    </StackPanel>
+                </Grid>
             </Border>
 
         </Grid>
@@ -662,8 +695,31 @@
                         <ColumnDefinition Width="2.5*"/>
                     </Grid.ColumnDefinitions>
                     <GroupBox Header="Filters" FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2"
-                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10">
-                        <!-- Add the content of the group box here -->
+                 VerticalAlignment="Stretch" Margin="10">
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="10">
+                                <StackPanel Margin="10">
+                                    <TextBlock Text="Year:" FontSize="18"/>
+                                    <ComboBox Width="90" FontSize="18"/>
+                                </StackPanel>
+                                <StackPanel Margin="10">
+                                    <TextBlock Text="Month:" FontSize="18" />
+                                    <ComboBox Width="90" FontSize="18"/>
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel Margin="10">
+                                <TextBlock Text="City:" FontSize="18" Margin="10 0 0 0"/>
+                                <ComboBox Width="200" FontSize="18"/>
+                            </StackPanel>
+                            <StackPanel Margin="10">
+                                <TextBlock Text="Country:" FontSize="18" Margin="10 0 0 0"/>
+                                <ComboBox Width="200" FontSize="18"/>
+                            </StackPanel>
+                            <StackPanel Margin="10">
+                                <TextBlock Text="Language:" FontSize="18" Margin="10 0 0 0"/>
+                                <ComboBox Width="200" FontSize="18"/>
+                            </StackPanel>
+                        </StackPanel>
                     </GroupBox>
                     <Grid Grid.Column="1" Margin="10">
                         <Grid.RowDefinitions>
@@ -682,17 +738,17 @@
                                     <ColumnDefinition Width ="1*"/>
                                     <ColumnDefinition Width ="1*"/>
                                 </Grid.ColumnDefinitions>
-                                <Border Grid.Row="0" Grid.Column="0" Background="LightGray" BorderThickness="2" BorderBrush="Black">
-                                    <TextBox Text="Language" IsReadOnly="True"  HorizontalAlignment="Center" Background="LightGray" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
+                                <Border Grid.Row="0" Grid.Column="0" Background="#E9F1F7" BorderThickness="3" BorderBrush="#007ACC">
+                                    <TextBox Foreground="#007ACC" FontWeight="DemiBold" Text="Language" IsReadOnly="True"  HorizontalAlignment="Center" Background="#E9F1F7" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
                                     </Border>
-                                <Border Grid.Row="0" Grid.Column="1" Background="LightGray" BorderThickness="2" BorderBrush="Black">
-                                    <TextBox Text="Number Of Requests" IsReadOnly="True"  HorizontalAlignment="Center" Background="LightGray" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
+                                <Border Grid.Row="0" Grid.Column="1" Background="#E9F1F7" BorderThickness="3" BorderBrush="#007ACC">
+                                    <TextBox Foreground="#007ACC" FontWeight="DemiBold" Text="Number Of Requests" IsReadOnly="True"  HorizontalAlignment="Center" Background="#E9F1F7" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
                                 </Border>
-                                <Border Grid.Row="1" Grid.Column="0" Background="#F5F5F5" BorderThickness="2" BorderBrush="Black">
-                                    <TextBox Text="Number Of Requests" IsReadOnly="True"  HorizontalAlignment="Center" Background="#F5F5F5" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
+                                <Border Grid.Row="1" Grid.Column="0" Background="#F5F5F5" BorderThickness="3" BorderBrush="#007ACC">
+                                    <TextBox  Text="Language" IsReadOnly="True"  HorizontalAlignment="Center" Background="#F5F5F5" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
                                 </Border>
-                                <Border Grid.Row="1" Grid.Column="1" Background="#F5F5F5" BorderThickness="2" BorderBrush="Black">
-                                    <TextBox Text="Number Of Requests" IsReadOnly="True"  HorizontalAlignment="Center" Background="#F5F5F5" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
+                                <Border Grid.Row="1" Grid.Column="1" Background="#F5F5F5" BorderThickness="3" BorderBrush="#007ACC">
+                                    <TextBox  Text="Language" IsReadOnly="True"  HorizontalAlignment="Center" Background="#F5F5F5" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
                                 </Border>
                             </Grid>
                         </GroupBox>
@@ -707,17 +763,17 @@
                                     <ColumnDefinition Width ="1*"/>
                                     <ColumnDefinition Width ="1*"/>
                                 </Grid.ColumnDefinitions>
-                                <Border Grid.Row="0" Grid.Column="0" Background="LightGray" BorderThickness="2" BorderBrush="Black">
-                                    <TextBox Text="Location" IsReadOnly="True"  HorizontalAlignment="Center" Background="LightGray" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
+                                <Border Grid.Row="0" Grid.Column="0" Background="#E9F1F7" BorderThickness="3" BorderBrush="#007ACC">
+                                    <TextBox Foreground="#007ACC" FontWeight="DemiBold" Text="Location" IsReadOnly="True"  HorizontalAlignment="Center" Background="#E9F1F7" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
                                 </Border>
-                                <Border Grid.Row="0" Grid.Column="1" Background="LightGray" BorderThickness="2" BorderBrush="Black">
-                                    <TextBox Text="Number Of Requests" IsReadOnly="True"  HorizontalAlignment="Center" Background="LightGray" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
+                                <Border Grid.Row="0" Grid.Column="1" Background="#E9F1F7" BorderThickness="3" BorderBrush="#007ACC">
+                                    <TextBox Foreground="#007ACC" FontWeight="DemiBold" Text="Number Of Requests" IsReadOnly="True"  HorizontalAlignment="Center" Background="#E9F1F7" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
                                 </Border>
-                                <Border Grid.Row="1" Grid.Column="0" Background="#F5F5F5" BorderThickness="2" BorderBrush="Black">
-                                    <TextBox Text="Number Of Requests" IsReadOnly="True"  HorizontalAlignment="Center" Background="#F5F5F5" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
+                                <Border Grid.Row="1" Grid.Column="0" Background="#F5F5F5" BorderThickness="3" BorderBrush="#007ACC">
+                                    <TextBox  Text="Language" IsReadOnly="True"  HorizontalAlignment="Center" Background="#F5F5F5" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
                                 </Border>
-                                <Border Grid.Row="1" Grid.Column="1" Background="#F5F5F5" BorderThickness="2" BorderBrush="Black">
-                                    <TextBox Text="Number Of Requests" IsReadOnly="True"  HorizontalAlignment="Center" Background="#F5F5F5" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
+                                <Border Grid.Row="1" Grid.Column="1" Background="#F5F5F5" BorderThickness="3" BorderBrush="#007ACC">
+                                    <TextBox  Text="Language" IsReadOnly="True"  HorizontalAlignment="Center" Background="#F5F5F5" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
                                 </Border>
                             </Grid>
                         </GroupBox>
@@ -732,17 +788,17 @@
                                     <ColumnDefinition Width ="1*"/>
                                     <ColumnDefinition Width ="1*"/>
                                 </Grid.ColumnDefinitions>
-                                <Border Grid.Row="0" Grid.Column="0" Background="LightGray" BorderThickness="2" BorderBrush="Black">
-                                    <TextBox Text="Location And Language" IsReadOnly="True"  HorizontalAlignment="Center" Background="LightGray" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
+                                <Border Grid.Row="0" Grid.Column="0" Background="#E9F1F7" BorderThickness="3" BorderBrush="#007ACC">
+                                    <TextBox Foreground="#007ACC" FontWeight="DemiBold" Text="Location And Language" IsReadOnly="True"  HorizontalAlignment="Center" Background="#E9F1F7" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
                                 </Border>
-                                <Border Grid.Row="0" Grid.Column="1" Background="LightGray" BorderThickness="2" BorderBrush="Black">
-                                    <TextBox Text="Number Of Requests" IsReadOnly="True"  HorizontalAlignment="Center" Background="LightGray" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
+                                <Border Grid.Row="0" Grid.Column="1" Background="#E9F1F7" BorderThickness="3" BorderBrush="#007ACC">
+                                    <TextBox Foreground="#007ACC" FontWeight="DemiBold" Text="Number Of Requests" IsReadOnly="True"  HorizontalAlignment="Center" Background="#E9F1F7" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
                                 </Border>
-                                <Border Grid.Row="1" Grid.Column="0" Background="#F5F5F5" BorderThickness="2" BorderBrush="Black">
-                                    <TextBox Text="Number Of Requests" IsReadOnly="True"  HorizontalAlignment="Center" Background="#F5F5F5" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
+                                <Border Grid.Row="1" Grid.Column="0" Background="#F5F5F5" BorderThickness="3" BorderBrush="#007ACC">
+                                    <TextBox  Text="Language" IsReadOnly="True"  HorizontalAlignment="Center" Background="#F5F5F5" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
                                 </Border>
-                                <Border Grid.Row="1" Grid.Column="1" Background="#F5F5F5" BorderThickness="2" BorderBrush="Black">
-                                    <TextBox Text="Number Of Requests" IsReadOnly="True"  HorizontalAlignment="Center" Background="#F5F5F5" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
+                                <Border Grid.Row="1" Grid.Column="1" Background="#F5F5F5" BorderThickness="3" BorderBrush="#007ACC">
+                                    <TextBox  Text="Language" IsReadOnly="True"  HorizontalAlignment="Center" Background="#F5F5F5" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
                                 </Border>
                             </Grid>
                         </GroupBox>

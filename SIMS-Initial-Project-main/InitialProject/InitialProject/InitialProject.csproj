@@ -34,6 +34,7 @@
     <None Remove="Resources\Images\info.png" />
     <None Remove="Resources\Images\inspection.png" />
     <None Remove="Resources\Images\leftArrow.png" />
+    <None Remove="Resources\Images\mail.png" />
     <None Remove="Resources\Images\owner.png" />
     <None Remove="Resources\Images\pdf.jpg" />
     <None Remove="Resources\Images\red-x.png" />
@@ -79,6 +80,9 @@
     </Resource>
     <Resource Include="Resources\Images\inspection.png" />
     <Resource Include="Resources\Images\leftArrow.png" />
+    <Resource Include="Resources\Images\mail.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Images\owner.png" />
     <Resource Include="Resources\Images\pdf.jpg" />
     <Resource Include="Resources\Images\red-x.png">

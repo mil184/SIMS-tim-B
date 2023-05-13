@@ -17,6 +17,8 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
 
 namespace InitialProject.View.Guide
 {
@@ -213,6 +215,11 @@ namespace InitialProject.View.Guide
             CurrentUser.Username = "Gorana";
             CurrentSortIndex = 0;
 
+            //AddMessage("Hello, world!");
+            //AddMessage("How are you today?");
+            //AddMessage("Do you want to grab lunch?");
+            //AddMessage("Do you want to grab lunch?");
+            //AddMessage("Do you want to grab lunch?");
         }
         private void InitializeCollections()
         {
@@ -235,7 +242,7 @@ namespace InitialProject.View.Guide
             }
 
             Countries.Add(string.Empty);
-            foreach(string country in _locationService.GetCountries()) 
+            foreach (string country in _locationService.GetCountries())
             {
                 Countries.Add(country);
             }
@@ -701,7 +708,7 @@ namespace InitialProject.View.Guide
 
                 int current_index = currentDataGrid.SelectedIndex;
 
-                if (current_index == -1 && currentDataGrid == FinishedToursDataGrid) 
+                if (current_index == -1 && currentDataGrid == FinishedToursDataGrid)
                 {
                     Years_cb.Focus();
                     e.Handled = true;
@@ -728,7 +735,7 @@ namespace InitialProject.View.Guide
                 currentDataGrid.ScrollIntoView(currentDataGrid.SelectedItem);
                 currentDataGrid.Focus();
             }
-            else 
+            else
             {
                 if (currentDataGrid != FinishedToursDataGrid)
                 {
@@ -918,7 +925,7 @@ namespace InitialProject.View.Guide
             MessageBox.Show("An active tour is already in progress. Please finish the current tour before starting a new one.", "Active Tour Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
         private void ShowAbortTourWarning()
-        { 
+        {
             MessageBox.Show("You may not abort this tour as you are breaking the 2 day rule.", "Abort Tour Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
         private bool ConfirmStartTour(Tour selectedTour)
@@ -934,8 +941,8 @@ namespace InitialProject.View.Guide
 
         private void StartTourButton_Click(object sender, RoutedEventArgs e)
         {
-            if(SelectedCurrentTourDTO != null)
-            SelectTodaysTour();
+            if (SelectedCurrentTourDTO != null)
+                SelectTodaysTour();
         }
         private void GenerateReportButton_Click(object sender, RoutedEventArgs e)
         {
@@ -991,7 +998,7 @@ namespace InitialProject.View.Guide
             UpdateRequests();
         }
 
-        private void UpdateRequests() 
+        private void UpdateRequests()
         {
             CheckIfAllEmpty();
 
@@ -1001,7 +1008,7 @@ namespace InitialProject.View.Guide
 
             if (!string.IsNullOrEmpty(CountryInput))
             {
-                result = _tourRequestService.GetByCountry(CurrentUser,CountryInput);
+                result = _tourRequestService.GetByCountry(CurrentUser, CountryInput);
             }
             else
             {
@@ -1010,23 +1017,23 @@ namespace InitialProject.View.Guide
 
             if (!string.IsNullOrEmpty(CityInput))
             {
-                result = result.Intersect(_tourRequestService.GetByCity(CurrentUser,CityInput)).ToList();
+                result = result.Intersect(_tourRequestService.GetByCity(CurrentUser, CityInput)).ToList();
             }
             if (!string.IsNullOrEmpty(LanguageInput))
             {
-                result = result.Intersect(_tourRequestService.GetByLanguage(CurrentUser,LanguageInput)).ToList();
+                result = result.Intersect(_tourRequestService.GetByLanguage(CurrentUser, LanguageInput)).ToList();
             }
             if (!string.IsNullOrEmpty(MaxGuestsInput) && int.TryParse(MaxGuestsInput, out int integer))
             {
-                result = result.Intersect(_tourRequestService.GetByMaxGuests(CurrentUser,int.Parse(MaxGuestsInput))).ToList();
+                result = result.Intersect(_tourRequestService.GetByMaxGuests(CurrentUser, int.Parse(MaxGuestsInput))).ToList();
             }
             if (StartDateInput != null)
             {
-                result = result.Intersect(_tourRequestService.GetByStartDate(CurrentUser,StartDateInput)).ToList();
+                result = result.Intersect(_tourRequestService.GetByStartDate(CurrentUser, StartDateInput)).ToList();
             }
             if (EndDateInput != null)
             {
-                result = result.Intersect(_tourRequestService.GetByEndDate(CurrentUser,EndDateInput)).ToList();
+                result = result.Intersect(_tourRequestService.GetByEndDate(CurrentUser, EndDateInput)).ToList();
             }
 
             List<GuideRequestDTO> searchResults = ConvertToDTO(result);
@@ -1050,12 +1057,136 @@ namespace InitialProject.View.Guide
 
         private void PendingRequests_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (SelectedPendingRequestDTO != null) 
+            if (SelectedPendingRequestDTO != null)
             {
                 TourRequest request = ConvertToRequest(SelectedPendingRequestDTO);
-                CreateTour createTour = new CreateTour(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService , request);
+                CreateTour createTour = new CreateTour(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService, request);
                 createTour.ShowDialog();
-            }       
+            }
+        }
+        private void AddMessage(string text)
+        {
+            var messageGrid = new Grid();
+            messageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            messageGrid.ColumnDefinitions.Add(new ColumnDefinition());
+
+            var messageTextBlock = new TextBlock
+            {
+                Text = text,
+                VerticalAlignment = VerticalAlignment.Center,
+                Margin = new Thickness(10, 0, 10, 0)
+            };
+            Grid.SetColumn(messageTextBlock, 0);
+
+            var buttonPanel = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                HorizontalAlignment = HorizontalAlignment.Right,
+                Margin = new Thickness(10, 0, 10, 0)
+            };
+            Grid.SetColumn(buttonPanel, 1);
+
+            var acceptButton = new Button
+            {
+                Content = "Accept",
+                Margin = new Thickness(5),
+                Width = 75,
+                DataContext = messageGrid
+            };
+            acceptButton.Click += AcceptButton_Click;
+            buttonPanel.Children.Add(acceptButton);
+
+            var declineButton = new Button
+            {
+                Content = "Decline",
+                Margin = new Thickness(5),
+                Width = 75,
+                DataContext = messageGrid
+            };
+            declineButton.Click += DeclineButton_Click;
+            buttonPanel.Children.Add(declineButton);
+
+            messageGrid.Children.Add(messageTextBlock);
+            messageGrid.Children.Add(buttonPanel);
+            messageGrid.RenderTransform = new TranslateTransform { Y = 100 };
+
+            MessagesStackPanel.Children.Add(messageGrid);
+
+            var storyboard = new Storyboard();
+            var animation = new DoubleAnimation
+            {
+                From = 100,
+                To = 0,
+                Duration = TimeSpan.FromSeconds(1)
+            };
+            Storyboard.SetTarget(animation, messageGrid);
+            Storyboard.SetTargetProperty(animation, new PropertyPath("(FrameworkElement.RenderTransform).(TranslateTransform.Y)"));
+            storyboard.Children.Add(animation);
+            storyboard.Begin();
+        }
+        private void AcceptButton_Click(object sender, RoutedEventArgs e)
+        {
+            var messageGrid = ((sender as Button).DataContext as Grid);
+
+            // Get the index of the clicked message grid
+            int clickedIndex = MessagesStackPanel.Children.IndexOf(messageGrid);
+
+            // Remove the clicked message grid from the stack panel
+            MessagesStackPanel.Children.Remove(messageGrid);
+
+            // Move all the message grids above the clicked one up by the height of the clicked message grid
+            for (int i = clickedIndex - 1; i >= 0; i--)
+            {
+                var message = MessagesStackPanel.Children[i] as FrameworkElement;
+
+                // Create a storyboard to animate the message grid up
+                var storyboard = new Storyboard();
+                var animation = new DoubleAnimation
+                {
+                    To = -message.ActualHeight,
+                    Duration = TimeSpan.FromSeconds(0.5)
+                };
+                Storyboard.SetTarget(animation, message);
+                Storyboard.SetTargetProperty(animation, new PropertyPath("(FrameworkElement.RenderTransform).(TranslateTransform.Y)"));
+                storyboard.Children.Add(animation);
+
+                // Start the storyboard and adjust the message's margin
+                storyboard.Begin();
+                message.Margin = new Thickness(0, -message.ActualHeight, 0, 0);
+            }
+        }
+
+        private void DeclineButton_Click(object sender, RoutedEventArgs e)
+        {
+            var messageGrid = ((sender as Button).DataContext as Grid);
+
+            // Get the index of the clicked message grid
+            int clickedIndex = MessagesStackPanel.Children.IndexOf(messageGrid);
+
+            // Remove the clicked message grid from the stack panel
+            MessagesStackPanel.Children.Remove(messageGrid);
+
+            // Move all the message grids above the clicked one up by the height of the clicked message grid
+            for (int i = clickedIndex - 1; i >= 0; i--)
+            {
+                var message = MessagesStackPanel.Children[i] as FrameworkElement;
+
+                // Create a storyboard to animate the message grid up
+                var storyboard = new Storyboard();
+                var animation = new DoubleAnimation
+                {
+                    To = -message.ActualHeight,
+                    Duration = TimeSpan.FromSeconds(0.5)
+                };
+                Storyboard.SetTarget(animation, message);
+                Storyboard.SetTargetProperty(animation, new PropertyPath("(FrameworkElement.RenderTransform).(TranslateTransform.Y)"));
+                storyboard.Children.Add(animation);
+
+                // Start the storyboard and adjust the message's margin
+                storyboard.Begin();
+                message.Margin = new Thickness(0, -message.ActualHeight, 0, 0);
+            }
+
         }
     }
 }
