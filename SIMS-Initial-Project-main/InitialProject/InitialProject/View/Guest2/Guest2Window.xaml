@@ -147,8 +147,8 @@
                                     <DataGridTextColumn Header="City" Binding="{Binding City}" Width="*"/>
                                     <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
                                     <DataGridTextColumn Header="Language" Binding="{Binding Language}" Width="*"/>
-                                    <DataGridTextColumn Header="Start Date" Binding="{Binding StartDate}" Width="*"/>
-                                    <DataGridTextColumn Header="End Date" Binding="{Binding EndDate}" Width="*"/>
+                                    <DataGridTextColumn Header="Start Date" Binding="{Binding StartTime, StringFormat={}{0:MM/dd/yyyy}}" Width="*"/>
+                                    <DataGridTextColumn Header="End Date" Binding="{Binding EndTime, StringFormat={}{0:MM/dd/yyyy}}" Width="*"/>
                                     <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*"/>
                                 </DataGrid.Columns>
                             </DataGrid>

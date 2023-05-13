@@ -22,7 +22,6 @@ namespace InitialProject.ViewModel.Guest2
         private readonly UserRepository _userRepository;
         private readonly LocationService _locationService;
         private readonly TourRequestService _tourRequestService;
-        //public RequestTour Window { get; set; }
 
         #region Properties
 
@@ -200,7 +199,6 @@ namespace InitialProject.ViewModel.Guest2
             _userRepository = userRepository;
             _locationService = locationService;
             _tourRequestService = tourRequestService;
-            //Window = requestTour;
             _tourRequestService.Subscribe(this);
 
             
