@@ -30,6 +30,7 @@
     <None Remove="Resources\Images\image_unavailable.png" />
     <None Remove="Resources\Images\info.png" />
     <None Remove="Resources\Images\inspection.png" />
+    <None Remove="Resources\Images\leftArrow.png" />
     <None Remove="Resources\Images\menu.png" />
     <None Remove="Resources\Images\owner.png" />
     <None Remove="Resources\Images\OwnerIcons\accommodation.png" />
@@ -105,6 +106,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\inspection.png" />
+    <Resource Include="Resources\Images\leftArrow.png" />
     <Resource Include="Resources\Images\menu.png" />
     <Resource Include="Resources\Images\owner.png" />
     <Resource Include="Resources\Images\OwnerIcons\accommodation.png" />
@@ -181,7 +183,6 @@
 
   <ItemGroup>
     <Folder Include="Resources\NewFolder\" />
-    <Folder Include="ViewModel\Guest1\" />
     <Folder Include="ViewModel\Guest2\" />
   </ItemGroup>
 

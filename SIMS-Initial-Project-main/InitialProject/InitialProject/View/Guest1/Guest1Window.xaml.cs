@@ -406,8 +406,7 @@ namespace InitialProject.View.Guest1
         {
             if (SelectedReservation != null)
             {
-                SendRequestViewModel sendRequestViewModel = new SendRequestViewModel(SelectedReservation, _rescheduleRequestRepository);
-                SendRequest sendRequest = new SendRequest(sendRequestViewModel);
+                SendRequest sendRequest = new SendRequest(SelectedReservation, _rescheduleRequestRepository);
                 sendRequest.ShowDialog();
             }
         }

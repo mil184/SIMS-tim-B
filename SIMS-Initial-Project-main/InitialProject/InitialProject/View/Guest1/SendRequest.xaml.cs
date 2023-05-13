@@ -26,23 +26,12 @@ namespace InitialProject.View.Guest1
     {
         private readonly SendRequestViewModel _viewModel;
 
-        public SendRequest(SendRequestViewModel viewModel)
+        public SendRequest(AccommodationReservation selectedReservation, RescheduleRequestRepository rescheduleRequestRepository)
         {
             InitializeComponent();
-            _viewModel = viewModel;
+            _viewModel = new SendRequestViewModel(selectedReservation, rescheduleRequestRepository);
             DataContext = _viewModel;
         }
-
-        private void Send_Click(object sender, RoutedEventArgs e)
-        {
-            _viewModel.Send();
-            Close();
-        }
-        private void Cancel_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-
       
     }
 }

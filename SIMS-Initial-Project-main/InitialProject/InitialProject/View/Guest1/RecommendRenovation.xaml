@@ -8,6 +8,14 @@
         Title="Recommendation for renovation" Height="600" Width="1050"
         Background="#e9f1fa"
         WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <ControlTemplate x:Key="ValidationTemplate">
+            <StackPanel>
+                <AdornedElementPlaceholder x:Name="textBox" />
+                <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red" />
+            </StackPanel>
+        </ControlTemplate>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -24,9 +32,9 @@
         </Border>
         <StackPanel Orientation="Vertical" Grid.Row="1" Margin="10">
             <Label Content="Information about the state of the accommodation:" FontSize="16"/>
-            <TextBox x:Name="infoTextBox" Text="{Binding Path=Information, UpdateSourceTrigger=PropertyChanged}" Width="480" Height="130" Margin="10" FontSize="14" HorizontalAlignment="Left"/>
+            <TextBox x:Name="infoTextBox" Text="{Binding Path=Information, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Width="480" Height="130" Margin="10" FontSize="14" HorizontalAlignment="Left" Validation.ErrorTemplate="{StaticResource ValidationTemplate}"/>
         </StackPanel>
-        <Grid Grid.Row="2" Margin="10">
+        <Grid Grid.Row="2" Margin="10" Validation.ErrorTemplate="{StaticResource ValidationTemplate}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
@@ -39,15 +47,15 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Label Content="Renovation urgency levels:" FontSize="16"/>
-            <CheckBox Name="checkbox1" Grid.Column="1" Content="Level 1 - it would be nice to renovate some small things, but everthing works as it should without it" IsChecked="{Binding RenovationLevel, UpdateSourceTrigger=PropertyChanged}" FontSize="16" Margin="10"/>
-            <CheckBox Name="checkbox2" Grid.Column="1" Grid.Row="1" Content="Level 2 - small gripes with the accommodation that if removed would make it perfect" IsChecked="{Binding RenovationLevel, UpdateSourceTrigger=PropertyChanged}" FontSize="16" Margin="10"/>
-            <CheckBox Name="checkbox3" Grid.Column="1" Grid.Row="2" Content="Level 3 - a few things that really bothered me should be renovated" IsChecked="{Binding RenovationLevel, UpdateSourceTrigger=PropertyChanged}" FontSize="16" Margin="10"/>
-            <CheckBox Name="checkbox4" Grid.Column="1" Grid.Row="3" Content="Level 4 - there are a lot of bad things and renovation is really necessary" IsChecked="{Binding RenovationLevel, UpdateSourceTrigger=PropertyChanged}" FontSize="16" Margin="10"/>
-            <CheckBox Name="checkbox5" Grid.Column="1" Grid.Row="4" Content="Level 5 - the accommodation is in a very bad condition and is not worth renting at all if you don't renovating it" IsChecked="{Binding RenovationLevel, UpdateSourceTrigger=PropertyChanged}" FontSize="16" Margin="10"/>
+            <CheckBox Name="checkbox1" Grid.Column="1" Content="Level 1 - it would be nice to renovate some small things, but everthing works as it should without it" IsChecked="{Binding Checkbox1IsChecked, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" FontSize="16" Margin="10"/>
+            <CheckBox Name="checkbox2" Grid.Column="1" Grid.Row="1" Content="Level 2 - small gripes with the accommodation that if removed would make it perfect" IsChecked="{Binding Checkbox2IsChecked, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" FontSize="16" Margin="10"/>
+            <CheckBox Name="checkbox3" Grid.Column="1" Grid.Row="2" Content="Level 3 - a few things that really bothered me should be renovated" IsChecked="{Binding Checkbox3IsChecked, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" FontSize="16" Margin="10"/>
+            <CheckBox Name="checkbox4" Grid.Column="1" Grid.Row="3" Content="Level 4 - there are a lot of bad things and renovation is really necessary" IsChecked="{Binding Checkbox4IsChecked, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" FontSize="16" Margin="10"/>
+            <CheckBox Name="checkbox5" Grid.Column="1" Grid.Row="4" Content="Level 5 - the accommodation is in a very bad condition and is not worth renting at all if you don't renovating it" IsChecked="{Binding Checkbox5IsChecked, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" FontSize="16" Margin="10"/>
         </Grid>
         
         <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="3">
-            <Button Content="Send" Click="SendRecommendation_Click" Height="40" Width="110" Margin="380,10,10,10" FontSize="16" Background="#97b9de">
+            <Button Content="Send" Command="{Binding SendRecommendationCommand}" Height="40" Width="110" Margin="380,10,10,10" FontSize="16" Background="#97b9de">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border CornerRadius="20" Background="{TemplateBinding Background}" BorderThickness="2" BorderBrush="#6d87a3">
@@ -56,7 +64,7 @@
                     </ControlTemplate>
                 </Button.Template>
             </Button>
-            <Button Content="Cancel" Click="CancelRecommendation_Click" Height="40" Width="110" FontSize="16" Margin="60,10,10,10" Background="#97b9de">
+            <Button Content="Cancel" Command="{Binding CancelRecommendationCommand}" Height="40" Width="110" FontSize="16" Margin="60,10,10,10" Background="#97b9de">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border CornerRadius="20" Background="{TemplateBinding Background}" BorderThickness="2" BorderBrush="#6d87a3">
