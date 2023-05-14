@@ -1,16 +1,18 @@
-1|423|Discovering local cuisine|French|10|18.5.2023. 13:30:00|28.5.2023. 16:30:00|accepted
-2|139|Visiting historical landmarks|English|8|25.5.2023. 10:00:00|25.6.2023. 16:00:00|pending
-3|234|Exploring the city on foot|Spanish|15|4.6.2023. 09:00:00|28.6.2023. 12:00:00|pending
-4|67|Learning about local art|German|5|12.6.2023. 14:00:00|22.6.2023. 17:00:00|invalid
-5|178|Hiking in the mountains|English|10|22.6.2023. 08:00:00|29.6.2023. 16:00:00|pending
-6|420|Exploring local wildlife|Russian|12|30.6.2023. 10:00:00|8.7.2023. 14:00:00|accepted
-7|145|Discovering hidden gems|English|6|5.7.2023. 13:00:00|14.7.2023. 16:00:00|accepted
-8|311|Sightseeing in the city|Spanish|20|15.7.2023. 10:00:00|22.7.2023. 18:00:00|pending
-9|32|Exploring the coast|Italian|8|20.7.2023. 09:00:00|29.7.2023. 13:00:00|pending
-10|82|Learning about local traditions|English|4|28.7.2023. 14:00:00|18.8.2023. 17:00:00|pending
-11|212|Tasting local wines|French|6|2.8.2023. 16:00:00|8.8.2023. 19:00:00|accepted
-12|129|Visiting local museums|German|10|10.8.2023. 11:00:00|23.8.2023. 15:00:00|pending
-13|87|Exploring local architecture|Spanish|12|20.8.2023. 14:00:00|29.8.2023. 17:00:00|pending
-14|343|Hiking in the forest|English|8|25.8.2023. 09:00:00|8.9.2023. 13:00:00|pending
-15|256|Discovering local crafts|Italian|5|1.9.2023. 10:00:00|19.9.2023. 12:00:00|accepted
-16|399|Sightseeing in the city center|Spanish|15|10.9.2023. 11:00:00|24.9.2023. 18:00:00|pending
+1|423|Discovering local cuisine|French|10|18.5.2023. 13:30:00|28.5.2023. 16:30:00|accepted|5
+2|139|Visiting historical landmarks|English|8|25.5.2023. 10:00:00|25.6.2023. 16:00:00|pending|5
+3|234|Exploring the city on foot|Spanish|15|4.6.2023. 09:00:00|28.6.2023. 12:00:00|accepted|5
+4|67|Learning about local art|German|5|12.6.2023. 14:00:00|22.6.2023. 17:00:00|invalid|5
+5|178|Hiking in the mountains|English|10|22.6.2023. 08:00:00|29.6.2023. 16:00:00|pending|5
+6|420|Exploring local wildlife|Russian|12|30.6.2023. 10:00:00|8.7.2023. 14:00:00|accepted|5
+7|145|Discovering hidden gems|English|6|5.7.2023. 13:00:00|14.7.2023. 16:00:00|accepted|5
+8|311|Sightseeing in the city|Spanish|20|15.7.2023. 10:00:00|22.7.2023. 18:00:00|pending|5
+9|32|Exploring the coast|Italian|8|20.7.2023. 09:00:00|29.7.2023. 13:00:00|pending|5
+10|82|Learning about local traditions|English|4|28.7.2023. 14:00:00|18.8.2023. 17:00:00|pending|5
+11|212|Tasting local wines|French|6|2.8.2023. 16:00:00|8.8.2023. 19:00:00|accepted|5
+12|129|Visiting local museums|German|10|10.8.2023. 11:00:00|23.8.2023. 15:00:00|pending|5
+13|87|Exploring local architecture|Spanish|12|20.8.2023. 14:00:00|29.8.2023. 17:00:00|pending|5
+14|343|Hiking in the forest|English|8|25.8.2023. 09:00:00|8.9.2023. 13:00:00|pending|5
+15|256|Discovering local crafts|Italian|5|1.9.2023. 10:00:00|19.9.2023. 12:00:00|accepted|5
+16|399|Sightseeing in the city center|Spanish|15|10.9.2023. 11:00:00|24.9.2023. 18:00:00|pending|5
+17|201|wdqef|qwdewf|11|26.1.0001. 04:04:00|24.1.0001. 02:06:00|pending|5
+18|100|Omg pyramida|Cairic|10|20.1.0001. 05:05:00|24.3.0001. 03:05:00|pending|5

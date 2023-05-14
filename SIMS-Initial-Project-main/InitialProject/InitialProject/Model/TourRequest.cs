@@ -15,12 +15,13 @@ namespace InitialProject.Model
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public RequestStatus Status { get; set; }
+        public int UserId { get; set; }
 
         public TourRequest()
         {
         }
 
-        public TourRequest(int locationId, string description, string language, int maxGuests, DateTime startTime, DateTime endTime)
+        public TourRequest(int locationId, string description, string language, int maxGuests, DateTime startTime, DateTime endTime, int userId)
         {
             LocationId = locationId;
             Description = description;
@@ -29,6 +30,7 @@ namespace InitialProject.Model
             StartTime = startTime;
             EndTime = endTime;
             Status = RequestStatus.pending;
+            UserId = userId;
         }
 
         public string[] ToCSV()
@@ -42,7 +44,8 @@ namespace InitialProject.Model
                 MaxGuests.ToString(),
                 StartTime.ToString(),
                 EndTime.ToString(),
-                Status.ToString()
+                Status.ToString(),
+                UserId.ToString()
             };
 
             return csvValues;
@@ -58,6 +61,7 @@ namespace InitialProject.Model
             StartTime = DateTime.Parse(values[5]);
             EndTime = DateTime.Parse(values[6]);
             Status = Enum.Parse<RequestStatus>(values[7]);
+            UserId = int.Parse(values[8]);
         }
     }
 }

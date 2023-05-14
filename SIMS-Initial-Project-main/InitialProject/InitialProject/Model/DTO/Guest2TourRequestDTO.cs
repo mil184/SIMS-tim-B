@@ -1,4 +1,5 @@
-﻿using System;
+﻿using InitialProject.Resources.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,15 +18,14 @@ namespace InitialProject.Model.DTO
         public int MaxGuests { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
-        public string Status { get; set; }
-        
-
+        public RequestStatus Status { get; set; }
+       
         public Guest2TourRequestDTO()
         {
 
         }
 
-        public Guest2TourRequestDTO(int id, string country, string city, string description, string language, int maxGuests, DateTime startTime, DateTime endTime, int status)
+        public Guest2TourRequestDTO(int id, string country, string city, string description, string language, int maxGuests, DateTime startTime, DateTime endTime, RequestStatus status)
         {
             Id = id;
             Country = country;
@@ -36,14 +36,7 @@ namespace InitialProject.Model.DTO
             MaxGuests = maxGuests;
             StartTime = startTime;
             EndTime = endTime;
-
-            if (status == 0)
-                Status = "Pending";
-            else if (status == 1)
-                Status = "Approved";
-            else if (status == 2)
-                Status = "Denied";
-
+            Status = status;
         }
     }
 }

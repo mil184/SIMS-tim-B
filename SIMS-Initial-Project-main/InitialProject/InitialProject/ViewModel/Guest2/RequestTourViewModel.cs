@@ -26,6 +26,8 @@ namespace InitialProject.ViewModel.Guest2
         private readonly LocationService _locationService;
         private readonly TourRequestService _tourRequestService;
 
+        public User LoggedInUser { get; set; }
+
         #region Properties
 
         private string _country;
@@ -197,7 +199,7 @@ namespace InitialProject.ViewModel.Guest2
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public RequestTourViewModel(UserRepository userRepository, LocationService locationService, TourRequestService tourRequestService)
+        public RequestTourViewModel(UserRepository userRepository, LocationService locationService, TourRequestService tourRequestService, User user)
         {
             _userRepository = userRepository;
             _locationService = locationService;
@@ -206,6 +208,8 @@ namespace InitialProject.ViewModel.Guest2
 
             cbCountryItemsSource = new ObservableCollection<string>();
             cbCityItemsSource = new ObservableCollection<string>();
+
+            LoggedInUser = user;
 
             InitializeCountryDropdown();
         }   
@@ -220,7 +224,9 @@ namespace InitialProject.ViewModel.Guest2
                 Language,
                 MaxGuests,
                 StartDateTime,
-                EndDateTime);
+                EndDateTime,
+                LoggedInUser.Id
+                );
 
             _tourRequestService.Save(tourRequest);
         }
@@ -256,7 +262,7 @@ namespace InitialProject.ViewModel.Guest2
 
         public void LoadCitiesForSelectedCountry()
         {
-            foreach (string city in _locationService.GetCities(Country).OrderBy(c => c))
+            foreach (string city in _locationService.GetCitiesByCountry(Country).OrderBy(c => c))
             {
                 cbCityItemsSource.Add(city);
             }

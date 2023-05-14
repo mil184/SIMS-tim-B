@@ -369,7 +369,7 @@ namespace InitialProject.View.Guest2
         {
            
 
-            RequestTourViewModel requestTourViewModel = new RequestTourViewModel(_userRepository, _locationService, _tourRequestService);
+            RequestTourViewModel requestTourViewModel = new RequestTourViewModel(_userRepository, _locationService, _tourRequestService, LoggedInUser);
             RequestTour requestTour = new RequestTour(requestTourViewModel);
             requestTour.Show();
         }
