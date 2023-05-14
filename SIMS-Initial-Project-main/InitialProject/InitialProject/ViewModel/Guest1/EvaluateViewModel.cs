@@ -353,7 +353,7 @@ namespace InitialProject.ViewModel.Guest1
                     _accommodationReservationService.Update(reservation);
                     _accommodationRatingsRepository.Save(accommodationRatings);
                     MessageBox.Show("Rating saved successfully.");
-                    //CheckForSuperOwnerPrivileges(Reservation.OwnerId);
+                    CheckForSuperOwnerPrivileges(Reservation.OwnerId);
                     var window = Application.Current.Windows.OfType<Evaluate>().FirstOrDefault();
                     window.Close();
                 }

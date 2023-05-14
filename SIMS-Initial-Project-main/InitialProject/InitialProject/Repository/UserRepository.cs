@@ -46,6 +46,33 @@ namespace InitialProject.Repository
             return user;
         }
 
+        public User Save(User user)
+        {
+            user.Id = NextId();
+
+            _users = _serializer.FromCSV(FilePath);
+            _users.Add(user);
+            _serializer.ToCSV(FilePath, _users);
+            NotifyObservers();
+
+            return user;
+        }
+
+        public int NextId()
+        {
+            _users = _serializer.FromCSV(FilePath);
+            if (_users.Count < 1)
+            {
+                return 1;
+            }
+            return _users.Max(c => c.Id) + 1;
+        }
+
+        public List<User> GetAll()
+        {
+            return _users;
+        }
+
         public void Subscribe(IObserver observer)
         {
             _observers.Add(observer);

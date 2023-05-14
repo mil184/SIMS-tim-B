@@ -10,20 +10,28 @@ namespace InitialProject.Model
         public string Username { get; set; }
         public string Password { get; set; }
         public UserType Type { get; set; }
+        public int? NumberOfReservations { get; set; }
+        public int? BonusPoints { get; set; }
+        public DateTime? SuperGuestExpirationDate { get; set; }
 
         public User() { }
 
-        public User(string username, string password, UserType type)
+        public User(string username, string password, UserType type, int? numberOfReservations, int? bonusPoints, DateTime? superGuestExpirationDate)
         {
             Username = username;
             Password = password;
             Type = type;
-
+            NumberOfReservations = numberOfReservations;
+            BonusPoints = bonusPoints;
+            SuperGuestExpirationDate = superGuestExpirationDate;
         }
 
         public string[] ToCSV()
         {
-            string[] csvValues = { Id.ToString(), Username, Password, Type.ToString() };
+            string numberOfReservations = NumberOfReservations.HasValue ? NumberOfReservations.Value.ToString() : "";
+            string bonusPoints = BonusPoints.HasValue ? BonusPoints.Value.ToString() : "";
+            string superGuestExpirationDate = SuperGuestExpirationDate.HasValue ? SuperGuestExpirationDate.Value.ToString() : "";
+            string[] csvValues = { Id.ToString(), Username, Password, Type.ToString(), numberOfReservations, bonusPoints, superGuestExpirationDate };
             return csvValues;
         }
 
@@ -33,6 +41,9 @@ namespace InitialProject.Model
             Username = values[1];
             Password = values[2];
             Type = Enum.Parse<UserType>(values[3]);
+            NumberOfReservations = string.IsNullOrEmpty(values[4]) ? null : (int?)Convert.ToInt32(values[4]);
+            BonusPoints = string.IsNullOrEmpty(values[5]) ? null : (int?)Convert.ToInt32(values[5]);
+            SuperGuestExpirationDate = string.IsNullOrEmpty(values[6]) ? null : (DateTime?)Convert.ToDateTime(values[6]);
         }
     }
 }

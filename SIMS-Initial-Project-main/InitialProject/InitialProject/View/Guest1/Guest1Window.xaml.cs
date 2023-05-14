@@ -52,7 +52,7 @@ namespace InitialProject.View.Guest1
         private readonly AccommodationService _accommodationService;
         private readonly AccommodationReservationService _accommodationReservationService;
         private readonly LocationService _locationService;
-        private readonly UserRepository _userRepository;
+        private readonly UserService _userService;
         private readonly ImageRepository _imageRepository;
         private readonly AccommodationRatingsRepository _accommodationRatingsRepository;
         private readonly RescheduleRequestRepository _rescheduleRequestRepository;
@@ -162,8 +162,8 @@ namespace InitialProject.View.Guest1
             _locationService = new LocationService();
             _locationService.Subscribe(this);
 
-            _userRepository = new UserRepository();
-            _userRepository.Subscribe(this);
+            _userService = new UserService();
+            _userService.Subscribe(this);
 
             _imageRepository = new ImageRepository();
             _imageRepository.Subscribe(this);
@@ -288,7 +288,7 @@ namespace InitialProject.View.Guest1
         public AccommodationRatingsDTO ConvertToDTO(AccommodationReservation reservation)
         {
             return new AccommodationRatingsDTO(reservation.Id,
-                _userRepository.GetById(reservation.OwnerId).Username,
+                _userService.GetById(reservation.OwnerId).Username,
                 _accommodationService.GetById(reservation.AccommodationId).Name);
 
         }
@@ -447,6 +447,7 @@ namespace InitialProject.View.Guest1
         private void GuestWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
             CheckRescheduleRequestsStatus();
+            CheckSuperGuestStatus();
         }
 
 
@@ -467,10 +468,22 @@ namespace InitialProject.View.Guest1
             {
                 if (review.GuestId == LoggedInUser.Id && _accommodationReservationService.GetById(review.ReservationId).IsRated)
                 { 
-                   Guest1RatingsDTO dto = new Guest1RatingsDTO(review.Cleanness, review.Behavior, review.Comment, _userRepository.GetById(_accommodationReservationService.GetById(review.ReservationId).OwnerId).Username);
+                   Guest1RatingsDTO dto = new Guest1RatingsDTO(review.Cleanness, review.Behavior, review.Comment, _userService.GetById(_accommodationReservationService.GetById(review.ReservationId).OwnerId).Username);
                    GuestRatings.Add(dto);
                 }
             }
         }
+
+        private void CheckSuperGuestStatus()
+        {
+            _userService.PromoteToSuperGuest(LoggedInUser.Id);
+            User currentUser = _userService.GetById(LoggedInUser.Id);
+            if (currentUser.Type == UserType.superguest)
+            {
+                string message = $"Congratulations, you have become a super guest! You have received 5 bonus points that you can use in future accommodation reservations.";
+                MessageBox.Show(message, "Promote to super guest status", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
     }
 }
