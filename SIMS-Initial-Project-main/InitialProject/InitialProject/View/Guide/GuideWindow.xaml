@@ -614,27 +614,27 @@
                                 </Grid.ColumnDefinitions>
                                 <StackPanel Orientation="Vertical" Margin="5" Grid.Row="0" Grid.Column="0">
                                     <TextBlock Text="City:" Margin="0 0 0 5" FontSize="14"/>
-                                    <ComboBox Width="200" Height="20" FontSize="11" SelectionChanged="CbCity_SelectionChanged" ItemsSource="{Binding Path=Cities, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding Path=CityInput, UpdateSourceTrigger=PropertyChanged}" IsEditable="True" />
+                                    <ComboBox Width="200" Height="20" FontSize="11" SelectionChanged="CbCity_SelectionChanged" ItemsSource="{Binding Path=RequestCities, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding Path=RequestCityInput, UpdateSourceTrigger=PropertyChanged}" IsEditable="True" />
                                 </StackPanel>
                                 <StackPanel Orientation="Vertical" Margin="5" Grid.Row="0" Grid.Column="1">
                                     <TextBlock Text="Country:" Margin="0 0 0 5" FontSize="14"/>
-                                    <ComboBox Width="200" Height="20" FontSize="11" SelectionChanged="CbCountry_SelectionChanged" ItemsSource="{Binding Path=Countries, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding Path=CountryInput, UpdateSourceTrigger=PropertyChanged}" IsEditable="True"/>
+                                    <ComboBox Width="200" Height="20" FontSize="11" SelectionChanged="CbCountry_SelectionChanged" ItemsSource="{Binding Path=RequestCountries, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding Path=RequestCountryInput, UpdateSourceTrigger=PropertyChanged}" IsEditable="True"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Vertical" Margin="5" Grid.Row="0" Grid.Column="2">
                                     <TextBlock Text="Guests:" Margin="0 0 0 5" FontSize="14"/>
-                                    <TextBox Width="150" Height="20" FontSize="11"  TextChanged="txtGuests_TextChanged" Text="{Binding Path=MaxGuestsInput, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <TextBox Width="150" Height="20" FontSize="11"  TextChanged="txtGuests_TextChanged" Text="{Binding Path=RequestMaxGuestsInput, UpdateSourceTrigger=PropertyChanged}"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Vertical" Margin="5" Grid.Row="1" Grid.Column="0">
                                     <TextBlock Text="Start Date:" Margin="0 0 0 5" FontSize="14"/>
-                                    <DatePicker Width="200" Height="20" FontSize="11" SelectedDateChanged="dpStartDate_DateChanged" SelectedDate= "{Binding Path=StartDateInput, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <DatePicker Width="200" Height="20" FontSize="11" SelectedDateChanged="dpStartDate_DateChanged" SelectedDate= "{Binding Path=RequestStartDateInput, UpdateSourceTrigger=PropertyChanged}"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Vertical" Margin="5" Grid.Row="1" Grid.Column="1">
                                     <TextBlock Text="End Date:" Margin="0 0 0 5" FontSize="14"/>
-                                    <DatePicker Width="200" Height="20" FontSize="11" SelectedDateChanged="dpEndDate_DateChanged" SelectedDate= "{Binding Path =EndDateInput, UpdateSourceTrigger=PropertyChanged}" />
+                                    <DatePicker Width="200" Height="20" FontSize="11" SelectedDateChanged="dpEndDate_DateChanged" SelectedDate= "{Binding Path =RequestEndDateInput, UpdateSourceTrigger=PropertyChanged}" />
                                 </StackPanel>
                                 <StackPanel Orientation="Vertical" Margin="5" Grid.Row="1" Grid.Column="2">
                                     <TextBlock Text="Language:" Margin="0 0 0 5" FontSize="14"/>
-                                    <TextBox Width="150" FontSize="11" Height="20" TextChanged="txtLanguage_TextChanged" Text="{Binding Path=LanguageInput, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <TextBox Width="150" FontSize="11" Height="20" TextChanged="txtLanguage_TextChanged" Text="{Binding Path=RequestLanguageInput, UpdateSourceTrigger=PropertyChanged}"/>
                                 </StackPanel>
 
                             </Grid>
@@ -709,15 +709,15 @@
                             </StackPanel>
                             <StackPanel Margin="10">
                                 <TextBlock Text="City:" FontSize="18" Margin="10 0 0 0"/>
-                                <ComboBox Width="200" FontSize="18"/>
+                                <ComboBox Width="200" FontSize="18" ItemsSource = "{Binding Path = StatisticsCities, UpdateSourceTrigger=PropertyChanged}"  SelectedItem="{Binding Path = StatisticsCityInput, UpdateSourceTrigger=PropertyChanged}"/>
                             </StackPanel>
                             <StackPanel Margin="10">
                                 <TextBlock Text="Country:" FontSize="18" Margin="10 0 0 0"/>
-                                <ComboBox Width="200" FontSize="18"/>
+                                <ComboBox Width="200" FontSize="18" ItemsSource = "{Binding Path = StatisticsCountries, UpdateSourceTrigger=PropertyChanged}"  SelectedItem="{Binding Path = StatisticsCountryInput, UpdateSourceTrigger=PropertyChanged}"/>
                             </StackPanel>
                             <StackPanel Margin="10">
                                 <TextBlock Text="Language:" FontSize="18" Margin="10 0 0 0"/>
-                                <ComboBox Width="200" FontSize="18"/>
+                                <TextBox Width="200" FontSize="18" Text="{Binding Path = StatisticsLanguageInput, UpdateSourceTrigger=PropertyChanged}"/>
                             </StackPanel>
                         </StackPanel>
                     </GroupBox>

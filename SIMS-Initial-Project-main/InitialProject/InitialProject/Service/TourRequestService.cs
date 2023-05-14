@@ -5,6 +5,7 @@ using InitialProject.Resources.Injector;
 using InitialProject.Resources.Observer;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace InitialProject.Service
 {
@@ -156,6 +157,49 @@ namespace InitialProject.Service
                 }
             }
             return requests;
+        }
+
+        public List<TourRequest> GetByAllParameters(User user,int year, int month, string city, string country, string language)
+        {
+            List<TourRequest> byLanguage = GetAll();
+            if (language != null)
+                byLanguage = GetByLanguage(user, language);
+
+            List<TourRequest> byCountry = GetAll();
+            if (country != null)
+                byCountry = GetByCountry(user, country);
+
+            List<TourRequest> byCity = GetAll();
+            if (city != null)
+                byCity = GetByCity(user, city);
+
+            List<TourRequest> byYearMonth= GetAll();
+            if (year != null && month != null) 
+            {
+                DateTime dateTimeYearMonthStart = new DateTime(year, month, 1, 0, 0, 0);
+                DateTime dateTimeYearMonthEnd = new DateTime(year, month, DateTime.DaysInMonth(year, month), 23, 59, 59);
+
+                byYearMonth = GetByStartDate(user,dateTimeYearMonthStart);
+                byYearMonth.Intersect(GetByEndDate(user, dateTimeYearMonthEnd)).ToList();
+            }
+
+            List<TourRequest> byYear= GetAll();
+            if (year != null && month == null) 
+            {
+                DateTime dateTimeYearStart = new DateTime(year,1, 1, 0, 0, 0);
+                DateTime dateTimeYearEnd = new DateTime(year,12, DateTime.DaysInMonth(year, month), 23, 59, 59);
+
+                byYear = GetByStartDate(user, dateTimeYearStart);
+                byYear.Intersect(GetByEndDate(user, dateTimeYearEnd)).ToList();
+            }
+
+            List<TourRequest> result = byLanguage;
+            result = result.Intersect(byCountry).ToList();
+            result = result.Intersect(byCity).ToList();
+            result = result.Intersect(byYearMonth).ToList();
+            result = result.Intersect(byYear).ToList();
+
+            return result;
         }
 
     }

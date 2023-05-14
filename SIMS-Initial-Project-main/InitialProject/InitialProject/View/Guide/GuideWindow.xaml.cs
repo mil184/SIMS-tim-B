@@ -41,8 +41,14 @@ namespace InitialProject.View.Guide
         public ObservableCollection<GuideTourDTO> RatedTours { get; set; }
         public ObservableCollection<GuideRequestDTO> PendingRequests { get; set; }
 
-        public ObservableCollection<string> Countries { get; set; }
-        public ObservableCollection<string> Cities { get; set; }
+        public ObservableCollection<string> RequestCountries { get; set; }
+        public ObservableCollection<string> RequestCities { get; set; }
+
+        public ObservableCollection<string> StatisticsCountries { get; set; }
+        public ObservableCollection<string> StatisticsCities { get; set; }
+
+        public ObservableCollection<string> StatisticsYears { get; set; }
+        public ObservableCollection<string> StatisticsMonths { get; set; }
         public bool TourActive { get; set; }
 
         public int CurrentSortIndex;
@@ -92,80 +98,145 @@ namespace InitialProject.View.Guide
                 }
             }
         }
-        private string _city;
-        public string CityInput
+        private string _requestCity;
+        public string RequestCityInput
         {
-            get => _city;
+            get => _requestCity;
             set
             {
-                if (value != _city)
+                if (value != _requestCity)
                 {
-                    _city = value;
+                    _requestCity = value;
                     OnPropertyChanged();
                 }
             }
         }
-        private string _country;
-        public string CountryInput
+        private string _requestCountry;
+        public string RequestCountryInput
         {
-            get => _country;
+            get => _requestCountry;
             set
             {
-                if (value != _country)
+                if (value != _requestCountry)
                 {
-                    _country = value;
+                    _requestCountry = value;
                     OnPropertyChanged();
                 }
             }
         }
-        private string _language;
-        public string LanguageInput
+        private string _requestLanguage;
+        public string RequestLanguageInput
         {
-            get => _language;
+            get => _requestLanguage;
             set
             {
-                if (value != _language)
+                if (value != _requestLanguage)
                 {
-                    _language = value;
+                    _requestLanguage = value;
                     OnPropertyChanged();
                 }
             }
         }
-        private string _maxGuests;
-        public string MaxGuestsInput
+        private string _requestMaxGuests;
+        public string RequestMaxGuestsInput
         {
-            get => _maxGuests;
+            get => _requestMaxGuests;
             set
             {
-                if (value != _maxGuests)
+                if (value != _requestMaxGuests)
                 {
-                    _maxGuests = value;
+                    _requestMaxGuests = value;
                     OnPropertyChanged();
                 }
             }
         }
-        private DateTime? _startDateInput;
-        public DateTime? StartDateInput
+        private DateTime? _requestStartDateInput;
+        public DateTime? RequestStartDateInput
         {
-            get => _startDateInput;
+            get => _requestStartDateInput;
             set
             {
-                if (value != _startDateInput)
+                if (value != _requestStartDateInput)
                 {
-                    _startDateInput = value;
+                    _requestStartDateInput = value;
                     OnPropertyChanged();
                 }
             }
         }
-        private DateTime? _endDateInput;
-        public DateTime? EndDateInput
+        private DateTime? _requestEndDateInput;
+        public DateTime? RequestEndDateInput
         {
-            get => _endDateInput;
+            get => _requestEndDateInput;
             set
             {
-                if (value != _endDateInput)
+                if (value != _requestEndDateInput)
                 {
-                    _endDateInput = value;
+                    _requestEndDateInput = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private string _statisticsCity;
+        public string StatisticsCityInput
+        {
+            get => _statisticsCity;
+            set
+            {
+                if (value != _statisticsCity)
+                {
+                    _statisticsCity = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private string _statisticsCountry;
+        public string StatisticsCountryInput
+        {
+            get => _statisticsCountry;
+            set
+            {
+                if (value != _statisticsCountry)
+                {
+                    _statisticsCountry = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private string _statisticsLanguage;
+        public string StatisticsLanguageInput
+        {
+            get => _statisticsLanguage;
+            set
+            {
+                if (value != _statisticsLanguage)
+                {
+                    _statisticsLanguage = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private string _statisticsYear;
+        public string StatisticsYearInput
+        {
+            get => _statisticsYear;
+            set
+            {
+                if (value != _statisticsYear)
+                {
+                    _statisticsYear = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private string _statisticsMonth;
+        public string StatisticsMonthInput
+        {
+            get => _statisticsMonth;
+            set
+            {
+                if (value != _statisticsMonth)
+                {
+                    _statisticsMonth = value;
                     OnPropertyChanged();
                 }
             }
@@ -209,8 +280,8 @@ namespace InitialProject.View.Guide
             InitializeShortcuts();
             FindActiveTour();
 
-            StartDateInput = null;
-            EndDateInput = null;
+            RequestStartDateInput = null;
+            RequestEndDateInput = null;
 
             CurrentUser.Username = "Gorana";
             CurrentSortIndex = 0;
@@ -229,9 +300,16 @@ namespace InitialProject.View.Guide
             RatedTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourService.GetRatedTours()));
             PendingRequests = new ObservableCollection<GuideRequestDTO>(ConvertToDTO(_tourRequestService.GetPendingRequests(CurrentUser)));
 
-            Countries = new ObservableCollection<string>();
-            Cities = new ObservableCollection<string>();
+            RequestCountries = new ObservableCollection<string>();
+            RequestCities = new ObservableCollection<string>();
+
+            StatisticsCountries = new ObservableCollection<string>();
+            StatisticsCities = new ObservableCollection<string>();
+
+            StatisticsYears = new ObservableCollection<string>();
+            StatisticsMonths = new ObservableCollection<string>();
         }
+
         private void InitializeComboBoxes()
         {
             Years_cb.Items.Add("Alltime");
@@ -241,18 +319,48 @@ namespace InitialProject.View.Guide
                 Years_cb.Items.Add(i.ToString());
             }
 
-            Countries.Add(string.Empty);
+            RequestCountries.Add(string.Empty);
             foreach (string country in _locationService.GetCountries())
             {
-                Countries.Add(country);
+                RequestCountries.Add(country);
             }
 
-            Cities.Add(string.Empty);
+            RequestCities.Add(string.Empty);
             foreach (string city in _locationService.GetCities())
             {
-                Cities.Add(city);
+                RequestCities.Add(city);
             }
 
+            StatisticsCountries.Add(string.Empty);
+            foreach (string country in _locationService.GetCountries())
+            {
+                StatisticsCountries.Add(country);
+            }
+
+            StatisticsCities.Add(string.Empty);
+            foreach (string city in _locationService.GetCities())
+            {
+               StatisticsCities.Add(city);
+            }
+
+            StatisticsYears.Add(string.Empty);
+            for(int i = 2000; i < DateTime.Now.Year; i++)
+            {
+                RequestCountries.Add(i.ToString());
+            }
+            StatisticsYears.Add(string.Empty);
+            StatisticsYears.Add("JAN");
+            StatisticsYears.Add("FEB");
+            StatisticsYears.Add("MAR");
+            StatisticsYears.Add("APR");
+            StatisticsYears.Add("MAY");
+            StatisticsYears.Add("JUN");
+            StatisticsYears.Add("JUL");
+            StatisticsYears.Add("AUG");
+            StatisticsYears.Add("SEP");
+            StatisticsYears.Add("OCT");
+            StatisticsYears.Add("NOV");
+            StatisticsYears.Add("DEC");
         }
         private void InitializeStartingSearchValues()
         {
@@ -966,14 +1074,14 @@ namespace InitialProject.View.Guide
 
         private void CbCity_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            CountryInput = _locationService.GetCountryByCity(CityInput);
+            RequestCountryInput = _locationService.GetCountryByCity(RequestCityInput);
             UpdateRequests();
         }
 
         private void CbCountry_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (!_locationService.GetCitiesByCountry(CountryInput).Contains(CityInput))
-                CityInput = string.Empty;
+            if (!_locationService.GetCitiesByCountry(RequestCountryInput).Contains(RequestCityInput))
+                RequestCityInput = string.Empty;
 
             UpdateRequests();
         }
@@ -1006,34 +1114,34 @@ namespace InitialProject.View.Guide
 
             List<TourRequest> result = new List<TourRequest>();
 
-            if (!string.IsNullOrEmpty(CountryInput))
+            if (!string.IsNullOrEmpty(RequestCountryInput))
             {
-                result = _tourRequestService.GetByCountry(CurrentUser, CountryInput);
+                result = _tourRequestService.GetByCountry(CurrentUser, RequestCountryInput);
             }
             else
             {
                 result = _tourRequestService.GetPendingRequests(CurrentUser);
             }
 
-            if (!string.IsNullOrEmpty(CityInput))
+            if (!string.IsNullOrEmpty(RequestCityInput))
             {
-                result = result.Intersect(_tourRequestService.GetByCity(CurrentUser, CityInput)).ToList();
+                result = result.Intersect(_tourRequestService.GetByCity(CurrentUser, RequestCityInput)).ToList();
             }
-            if (!string.IsNullOrEmpty(LanguageInput))
+            if (!string.IsNullOrEmpty(RequestLanguageInput))
             {
-                result = result.Intersect(_tourRequestService.GetByLanguage(CurrentUser, LanguageInput)).ToList();
+                result = result.Intersect(_tourRequestService.GetByLanguage(CurrentUser, RequestLanguageInput)).ToList();
             }
-            if (!string.IsNullOrEmpty(MaxGuestsInput) && int.TryParse(MaxGuestsInput, out int integer))
+            if (!string.IsNullOrEmpty(RequestMaxGuestsInput) && int.TryParse(RequestMaxGuestsInput, out int integer))
             {
-                result = result.Intersect(_tourRequestService.GetByMaxGuests(CurrentUser, int.Parse(MaxGuestsInput))).ToList();
+                result = result.Intersect(_tourRequestService.GetByMaxGuests(CurrentUser, int.Parse(RequestMaxGuestsInput))).ToList();
             }
-            if (StartDateInput != null)
+            if (RequestStartDateInput != null)
             {
-                result = result.Intersect(_tourRequestService.GetByStartDate(CurrentUser, StartDateInput)).ToList();
+                result = result.Intersect(_tourRequestService.GetByStartDate(CurrentUser, RequestStartDateInput)).ToList();
             }
-            if (EndDateInput != null)
+            if (RequestEndDateInput != null)
             {
-                result = result.Intersect(_tourRequestService.GetByEndDate(CurrentUser, EndDateInput)).ToList();
+                result = result.Intersect(_tourRequestService.GetByEndDate(CurrentUser, RequestEndDateInput)).ToList();
             }
 
             List<GuideRequestDTO> searchResults = ConvertToDTO(result);
@@ -1046,7 +1154,7 @@ namespace InitialProject.View.Guide
         }
         public void CheckIfAllEmpty()
         {
-            if (string.IsNullOrEmpty(CountryInput) && string.IsNullOrEmpty(CityInput) && string.IsNullOrEmpty(LanguageInput) && string.IsNullOrEmpty(MaxGuestsInput))
+            if (string.IsNullOrEmpty(RequestCountryInput) && string.IsNullOrEmpty(RequestCityInput) && string.IsNullOrEmpty(RequestLanguageInput) && string.IsNullOrEmpty(RequestMaxGuestsInput))
             {
                 foreach (TourRequest request in _tourRequestService.GetPendingRequests(CurrentUser))
                 {
