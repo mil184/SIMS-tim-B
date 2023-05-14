@@ -19,6 +19,9 @@ namespace InitialProject.ViewModel.Guest2
 {
     public class RequestTourViewModel : INotifyPropertyChanged, IObserver
     {
+        public ObservableCollection<String> cbCountryItemsSource { get; set; }
+        public ObservableCollection<String> cbCityItemsSource { get; set; }
+
         private readonly UserRepository _userRepository;
         private readonly LocationService _locationService;
         private readonly TourRequestService _tourRequestService;
@@ -201,16 +204,18 @@ namespace InitialProject.ViewModel.Guest2
             _tourRequestService = tourRequestService;
             _tourRequestService.Subscribe(this);
 
-            
-        }
+            cbCountryItemsSource = new ObservableCollection<string>();
+            cbCityItemsSource = new ObservableCollection<string>();
+
+            InitializeCountryDropdown();
+        }   
 
         private void CreateTourRequest()
         {
             Location tourLocation = _locationService.GetLocation(Country, City);
 
             TourRequest tourRequest = new TourRequest(
-                //tourLocation.Id,
-                3,
+                tourLocation.Id,
                 Description,
                 Language,
                 MaxGuests,
@@ -230,45 +235,31 @@ namespace InitialProject.ViewModel.Guest2
             //
         }
 
-        //private void CbCountry_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        //{
-        //    if (cbCountry.SelectedItem != null && _locationService != null)
-        //    {
-        //        ClearCityItems();
-        //        EnableCitySelection();
-        //        LoadCitiesForSelectedCountry();
-        //    }
-        //}
-        //private void ClearCityItems()
-        //{
-        //    if (cbCity.Items != null)
-        //    {
-        //        cbCity.Items.Clear();
-        //    }
-        //}
-        //private void EnableCitySelection()
-        //{
-        //    cbCity.IsEnabled = true;
-        //}
-        //private void LoadCitiesForSelectedCountry()
-        //{
-        //    foreach (string city in _locationService.GetCities(cbCountry.SelectedItem.ToString()).OrderBy(c => c))
-        //    {
-        //        cbCity.Items.Add(city);
-        //    }
-        //}
-        //private void CbCity_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        //{
-        //    if (cbCountry.SelectedItem != null && cbCity.SelectedItem != null)
-        //    {
-        //        UpdateCountryAndCity();
-        //    }
-        //}
-        //private void UpdateCountryAndCity()
-        //{
-        //    Country = cbCountry.SelectedItem.ToString();
-        //    City = cbCity.SelectedItem.ToString();
-        //}
+        private void InitializeCountryDropdown()
+        {
+            cbCountryItemsSource = new ObservableCollection<String>(_locationService.GetCountries().OrderBy(c => c));
+        }
 
+         public void InitializeCityDropdown()
+         {         
+            ClearCityItems();
+            LoadCitiesForSelectedCountry();     
+         }
+
+        public void ClearCityItems()
+        {
+            if (cbCityItemsSource != null)
+            {
+                cbCityItemsSource.Clear();
+            }
+        }
+
+        public void LoadCitiesForSelectedCountry()
+        {
+            foreach (string city in _locationService.GetCities(Country).OrderBy(c => c))
+            {
+                cbCityItemsSource.Add(city);
+            }
+        }
     }
 }

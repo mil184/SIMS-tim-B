@@ -56,5 +56,10 @@ namespace InitialProject.View.Guest2
             _viewModel.RequestTourButton_Click(sender, e);
             Close();
         }
+
+        private void cbCountrySelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            _viewModel.InitializeCityDropdown();
+        }
     }
 }
