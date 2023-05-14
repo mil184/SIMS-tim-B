@@ -18,6 +18,7 @@ namespace InitialProject.Resources.Injector
             { typeof(ILocationRepository), new LocationCSVRepository() },
             { typeof(IAccommodationRepository), new AccommodationCSVRepository() },
             { typeof(IAccommodationRatingRepository), new AccommodationRatingCSVRepository() },
+            { typeof(IAccommodationRenovationRepository), new AccommodationRenovationCSVRepository() },
             { typeof(IAccommodationReservationRepository), new AccommodationReservationCSVRepository() },
             { typeof(IGuestReviewRepository), new GuestReviewCSVRepository() },
             { typeof(IRescheduleRequestRepository), new RescheduleRequestCSVRepository() }

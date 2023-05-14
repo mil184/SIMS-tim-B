@@ -9,7 +9,7 @@
       Title="AccommodationsPage">
 
     <DockPanel>
-        <Button DockPanel.Dock="Bottom" Height="50" Width="50" Command="{Binding AddAccommodationCommand}">
+        <Button DockPanel.Dock="Bottom" Height="50" Width="50" Command="{Binding AddAccommodationCommand}" Background="Transparent">
             <Image Source="/Resources/Images/OwnerIcons/image.png"></Image>
         </Button>
         <DataGrid ItemsSource="{Binding Path=Accommodations, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Bottom"
@@ -32,6 +32,28 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="3*" FontSize="20" ></DataGridTextColumn>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <Button Height="30" Background="Transparent" >
+                                    <Image Source="/Resources/Images/OwnerIcons/stats.png"></Image>
+                                </Button>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <Button Height="30" Background="Transparent" Command="{Binding DataContext.RenovateAccommodationCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                    <Image Source="/Resources/Images/OwnerIcons/renovation.png" />
+                                </Button>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
     </DockPanel>

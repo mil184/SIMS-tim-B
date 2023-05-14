@@ -29,10 +29,10 @@
                 <DropShadowEffect Color="Black" />
             </Button.Effect>
         </Button>
-        <Button Grid.Row="0" Grid.Column="1" Width="190" Height="140" Background="#381C74" Foreground="White">
+        <Button Grid.Row="0" Grid.Column="1" Width="190" Height="140" Background="#381C74" Command="{Binding NavigateToRenovationsPageCommand}">
             <StackPanel Orientation="Horizontal">
                 <Image Source="/Resources/Images/OwnerIcons/renovation.png" Height="24" Width="24" Margin="7"/>
-                <TextBlock Margin="7" VerticalAlignment="Center" FontSize="14">Renovations</TextBlock>
+                <TextBlock Margin="7" VerticalAlignment="Center" FontSize="14" Foreground="White">Renovations</TextBlock>
             </StackPanel>
             <Button.Effect>
                 <DropShadowEffect Color="Black" />

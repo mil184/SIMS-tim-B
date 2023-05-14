@@ -17,6 +17,7 @@ namespace InitialProject.ViewModel.Owner
         public RelayCommand NavigateToHomePageCommand { get; set; }
         public RelayCommand NavigateBackCommand { get; set; }
         public RelayCommand NavigateToAccommodationsPageCommand { get; set; }
+        public RelayCommand NavigateToRenovationsPageCommand { get; set; }
         public RelayCommand NavigateToGuestReviewPageCommand { get; set; }
         public RelayCommand NavigateToRatingsPageCommand { get; set; }
         public RelayCommand PlayMusicCommand { get; set; }
@@ -44,6 +45,15 @@ namespace InitialProject.ViewModel.Owner
             Page accommodations = new AccommodationsPage(MainWindow, MainWindow.LoggedInUser);
             MainWindow.Main.NavigationService.Navigate(accommodations);
             MainWindow.Title.Content = "Accommodations";
+            MainWindow.BackButton.Visibility = Visibility.Visible;
+            MainWindow.DotsButton.Visibility = Visibility.Hidden;
+        }
+
+        private void Execute_NavigateToRenovationsPageCommand(object obj)
+        {
+            Page renovations = new RenovationsPage(MainWindow.LoggedInUser);
+            MainWindow.Main.NavigationService.Navigate(renovations);
+            MainWindow.Title.Content = "Renovations";
             MainWindow.BackButton.Visibility = Visibility.Visible;
             MainWindow.DotsButton.Visibility = Visibility.Hidden;
         }
@@ -97,6 +107,7 @@ namespace InitialProject.ViewModel.Owner
             NavigateToHomePageCommand = new RelayCommand(Execute_NavigateToHomePageCommand, CanExecute_Command);
             NavigateBackCommand = new RelayCommand(Execute_NavigateBackCommand, CanExecute_Command);
             NavigateToAccommodationsPageCommand = new RelayCommand(Execute_NavigateToAccommodationsPageCommand, CanExecute_Command);
+            NavigateToRenovationsPageCommand = new RelayCommand(Execute_NavigateToRenovationsPageCommand, CanExecute_Command);
             NavigateToGuestReviewPageCommand = new RelayCommand(Execute_NavigateToGuestReviewPageCommand, CanExecute_Command);
             NavigateToRatingsPageCommand = new RelayCommand(Execute_NavigateToRatingsPageCommand, CanExecute_Command);
             PlayMusicCommand = new RelayCommand(Execute_PlayMusicCommand, CanExecute_Command);
