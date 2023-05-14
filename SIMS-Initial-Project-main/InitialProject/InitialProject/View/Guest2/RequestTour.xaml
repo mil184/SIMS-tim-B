@@ -1,0 +1,47 @@
+﻿<Window x:Class="InitialProject.View.Guest2.RequestTour"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:local="clr-namespace:InitialProject.View.Guest2"
+        mc:Ignorable="d"
+        Title="RequestTour" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Margin ="20" Grid.Column="0">
+            <Label FontSize="20" Height="40" Margin="5" Content="Country: "/>
+            <Label FontSize="20" Height="40" Margin="5" Content="City: "/>
+            <Label FontSize="20" Height="40" Margin="5" Content="Description: "/>
+            <Label FontSize="20" Height="40" Margin="5" Content="Language: "/>
+            <Label FontSize="20" Height="40" Margin="5" Content="Max Guests: "/>
+            <Label FontSize="20" Height="40" Margin="5" Content="Start Date and Time: "/>
+            <Label FontSize="20" Height="40" Margin="5" Content="End Date and Time: "/>
+        </StackPanel>
+
+        <StackPanel Margin ="0, 20, 240, 20" Grid.Column="1" HorizontalAlignment="Right">
+            <ComboBox Height="40" Width="300" Margin="5" ItemsSource="{Binding cbCountryItemsSource}" SelectedItem="{Binding Country}" IsEnabled="True" SelectionChanged="cbCountrySelectionChanged"/>
+            <ComboBox Height="40" Width="300" Margin="5" ItemsSource="{Binding cbCityItemsSource}" SelectedItem="{Binding City}" IsEnabled="True"/>
+
+            <TextBox Height="40" Width="300" Margin="5" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+            <TextBox Height="40" Width="300" Margin="5" Text="{Binding Language, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+            <TextBox Height="40" Width="300" Margin="5" Text="{Binding MaxGuests, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+            <StackPanel Orientation="Horizontal" Height="40" Margin="5">
+                <DatePicker Width="150" SelectedDate="{Binding StartDate, UpdateSourceTrigger=PropertyChanged}"/>
+                <ComboBox Name ="StartHour_cb" SelectedItem="{Binding StartHour, UpdateSourceTrigger=PropertyChanged}" Width="70" Margin="5, 0, 5, 0"/>
+                <ComboBox Name ="StartMinute_cb" SelectedItem="{Binding StartMinute, UpdateSourceTrigger=PropertyChanged}" Width="70" Margin="5, 0, 5, 0"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Height="40" Margin="5">
+                <DatePicker Width="150" SelectedDate="{Binding EndDate, UpdateSourceTrigger=PropertyChanged}"/>
+                <ComboBox Name ="EndHour_cb" SelectedItem="{Binding EndHour, UpdateSourceTrigger=PropertyChanged}" Width="70" Margin="5, 0, 5, 0"/>
+                <ComboBox Name ="EndMinute_cb" SelectedItem="{Binding EndMinute, UpdateSourceTrigger=PropertyChanged}" Width="70" Margin="5, 0, 5, 0"/>
+            </StackPanel>
+        </StackPanel>
+
+        <Button Grid.ColumnSpan="2" VerticalAlignment="Bottom" Height="40" Width="200" Margin="10" Content="Request tour" FontSize="20" Click="RequestTourButton_Click"/>
+    </Grid>
+</Window>

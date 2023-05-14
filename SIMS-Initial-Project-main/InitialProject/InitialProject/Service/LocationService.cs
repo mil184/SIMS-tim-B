@@ -40,6 +40,7 @@ namespace InitialProject.Service
             }
             return cities;
         }
+
         public List<string> GetCitiesByCountry(String country)
         {
             List<string> cities = new List<string>();

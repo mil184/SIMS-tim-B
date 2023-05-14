@@ -3,6 +3,7 @@ using InitialProject.Repository;
 using InitialProject.Repository.Interfaces;
 using InitialProject.Resources.Injector;
 using InitialProject.Resources.Observer;
+using InitialProject.ViewModel.Guest2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
