@@ -210,6 +210,8 @@ namespace InitialProject.ViewModel.Guest2
             cbCityItemsSource = new ObservableCollection<string>();
 
             LoggedInUser = user;
+            StartDate = DateTime.Now;
+            EndDate = DateTime.Now;
 
             InitializeCountryDropdown();
         }   

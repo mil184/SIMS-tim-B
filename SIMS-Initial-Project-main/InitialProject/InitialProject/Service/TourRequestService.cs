@@ -94,6 +94,70 @@ namespace InitialProject.Service
             }
             return requests;
         }
+        public List<TourRequest> GetByYear(User guest, string year)
+        {
+            List<TourRequest> requests = new List<TourRequest>();
+
+            foreach (TourRequest request in GetAll())
+            {
+                if (request.GuestId == guest.Id)
+                {
+                    if (year == "All time")
+                    {
+                        requests = GetAll();
+                    }
+                    else if (request.StartTime.Year.ToString() == year)
+                    {
+                        requests.Add(request);
+                    }
+                }
+            }
+
+            return requests;
+        }
+
+        public int GetTotalGuestCountForYear(List<TourRequest> tourRequests)
+        {
+            int counter = 0;
+
+            foreach(TourRequest tourRequest in tourRequests)
+            {
+                counter += tourRequest.MaxGuests;
+            }
+
+            return counter;
+        }
+
+        public List<TourRequest> GetAcceptedRequests(List<TourRequest> tourRequests)
+        {
+            List<TourRequest> requests = new List<TourRequest>();
+
+            foreach (TourRequest request in tourRequests)
+            {
+                if (request.Status.ToString() == "accepted")
+                {
+                    requests.Add(request);
+                }
+            }
+
+            return requests;
+        }
+
+        public List<TourRequest> GetDeniedRequests(List<TourRequest> tourRequests)
+        {
+            List<TourRequest> requests = new List<TourRequest>();
+
+            foreach (TourRequest request in tourRequests)
+            {
+                if (request.Status.ToString() == "invalid")
+                {
+                    requests.Add(request);
+                }
+            }
+
+            return requests;
+        }
+
         public List<TourRequest> GetByCountry(User user,string country)
         {
             List<TourRequest> requests = new List<TourRequest>();
