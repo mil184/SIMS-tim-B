@@ -13,6 +13,7 @@ namespace InitialProject.Service
     {
 
         private readonly AccommodationReservationRepository _accommodationReservationRepository;
+        private readonly AccommodationRenovationService _accommodationRenovationService;
 
         public AccommodationReservationService()
         {
@@ -32,6 +33,29 @@ namespace InitialProject.Service
                     }
                 }
             }
+            #region renovation
+            AccommodationRenovation renovation = _accommodationRenovationService.GetByAccommodationId(accommodationId);     // renovation of requested accommodation
+            if (startDate >= renovation.StartDate && startDate <= renovation.EndDate)                                       // adds to reserved dates all renovation dates
+            {
+                for (DateTime date = startDate; date <= renovation.EndDate; date = date.AddDays(1))
+                {
+                    if (!reservedDates.Contains(date))
+                    {
+                        reservedDates.Add(date);
+                    }
+                }
+            }
+            if (endDate >= renovation.StartDate && endDate <= renovation.EndDate)
+            {
+                for (DateTime date = renovation.StartDate; date <= endDate; date = date.AddDays(1))
+                {
+                    if (!reservedDates.Contains(date))
+                    {
+                        reservedDates.Add(date);
+                    }
+                }
+            }
+            #endregion
             List<DateTime> availableDates = new List<DateTime>();
             for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
             {

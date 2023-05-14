@@ -5,6 +5,7 @@ using InitialProject.Resources.Injector;
 using InitialProject.Resources.Observer;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace InitialProject.Service
 {
@@ -97,6 +98,11 @@ namespace InitialProject.Service
             }
 
             return filteredDates;
+        }
+
+        public AccommodationRenovation GetByAccommodationId(int accommodationId)
+        {
+            return _accommodationRenovationRepository.GetAll().FirstOrDefault(x => x.AccommodationId == accommodationId);
         }
 
         public void Remove(int id)
