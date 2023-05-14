@@ -365,6 +365,7 @@ namespace InitialProject.View.Guide
         private void UpdateRequest(TourRequest request)
         {
             request.Status = InitialProject.Resources.Enums.RequestStatus.accepted;
+            request.GuideId = LoggedInUser.Id;
             _tourRequestService.Update(request);
         }
         private void Hours_cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
