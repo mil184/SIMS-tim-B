@@ -476,14 +476,19 @@ namespace InitialProject.View.Guest1
 
         private void CheckSuperGuestStatus()
         {
-            _userService.PromoteToSuperGuest(LoggedInUser.Id);
             User currentUser = _userService.GetById(LoggedInUser.Id);
-            if (currentUser.Type == UserType.superguest)
+            int numberOfReservations = _accommodationReservationService.GetAll().Where(i => i.GuestId == currentUser.Id).Count();
+
+            if (currentUser.Type == UserType.guest1 && numberOfReservations >= 10)
             {
+                _userService.PromoteToSuperGuest(LoggedInUser.Id);
                 string message = $"Congratulations, you have become a super guest! You have received 5 bonus points that you can use in future accommodation reservations.";
                 MessageBox.Show(message, "Promote to super guest status", MessageBoxButton.OK, MessageBoxImage.Information);
+                RegularUserText.Visibility = Visibility.Collapsed;
+                SuperGuestText.Visibility = Visibility.Visible;
             }
         }
+
 
     }
 }

@@ -18,6 +18,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using InitialProject.Service;
+using InitialProject.Resources.Enums;
 
 namespace InitialProject.View.Guest1
 {
@@ -28,6 +29,7 @@ namespace InitialProject.View.Guest1
     {
         private readonly AccommodationReservationService _accommodationReservationService;
         private readonly AccommodationService _accommodationService;
+        private readonly UserService _userService;
 
         private AccommodationReservation _reservation;
         public AccommodationReservation Reservation
@@ -183,6 +185,8 @@ namespace InitialProject.View.Guest1
             _accommodationReservationService = accommodationReservationService;
 
             DateIntervals = new ObservableCollection<DatesDTO>();
+
+            _userService = new UserService();
         }
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
@@ -369,11 +373,24 @@ namespace InitialProject.View.Guest1
                     _accommodationReservationService.Save(reservation);
 
                     MessageBox.Show("Reservation created successfully.");
+
+                    UpdateUserBonusPoints(LoggedInUser.Id);
                     Close();
                 }
                 return;
             }
         }
+
+        private void UpdateUserBonusPoints(int userId)
+        {
+            var user = _userService.GetById(userId);
+            user.NumberOfReservations += 1;
+            user.BonusPoints -= 1;
+            _userService.Update(user);
+            string message = $"You have {user.BonusPoints} bonus points left.";
+            MessageBox.Show(message, "Information about bonus points", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
 
         private void ShowNoDateTimeWarning()
         {
