@@ -34,6 +34,18 @@ namespace InitialProject.Repository
             return _accommodations.Max(c => c.Id) + 1;
         }
 
+        public Accommodation Update(Accommodation accommodation)
+        {
+            _accommodations = _serializer.FromCSV(FilePath);
+            Accommodation current = _accommodations.Find(c => c.Id == accommodation.Id);
+            int index = _accommodations.IndexOf(current);
+            _accommodations.Remove(current);
+            _accommodations.Insert(index, accommodation);       // keep ascending order of ids in file 
+            _serializer.ToCSV(FilePath, _accommodations);
+            NotifyObservers();
+            return accommodation;
+        }
+
         public Accommodation Save(Accommodation accommodation)
         {
             accommodation.Id = NextId();

@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace InitialProject.Repository.Implementations
 {
-    internal class AccommodationCSVRepository : IAccommodationRepository
+    public class AccommodationCSVRepository : IAccommodationRepository
     {
         private const string FilePath = "../../../Resources/Data/accommodations.csv";
         private readonly Serializer<Accommodation> _serializer;

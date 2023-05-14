@@ -4,18 +4,15 @@ using System.Windows.Controls;
 
 namespace InitialProject.View.Owner
 {
-    public partial class HomeScreen : Page
+    public partial class RenovationsPage : Page
     {
-        public OwnerMainWindow MainWindow { get; set; }
         public User LoggedInUser { get; set; }
-        public HomeScreenViewModel _viewModel { get; set; }
-
-        public HomeScreen(OwnerMainWindow window, User user)
+        public RenovationsPageViewModel _viewModel;
+        public RenovationsPage(User user)
         {
             InitializeComponent();
-            MainWindow = window;
             LoggedInUser = user;
-            _viewModel = new HomeScreenViewModel(MainWindow);
+            _viewModel = new RenovationsPageViewModel(LoggedInUser);
             DataContext = _viewModel;
         }
     }

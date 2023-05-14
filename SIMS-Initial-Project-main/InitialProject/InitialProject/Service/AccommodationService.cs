@@ -1,5 +1,6 @@
 ﻿using InitialProject.Model;
 using InitialProject.Repository;
+using InitialProject.Repository.Interfaces;
 using InitialProject.Resources.Enums;
 using InitialProject.Resources.Observer;
 using System;
@@ -14,11 +15,27 @@ namespace InitialProject.Service
     {
         private readonly AccommodationRepository _accommodationRepository;
         private readonly LocationService _locationService;
+        private readonly AccommodationRenovationService _accommodationRenovationService;
 
         public AccommodationService()
         {
             _accommodationRepository = new AccommodationRepository();
             _locationService = new LocationService();
+            _accommodationRenovationService = new AccommodationRenovationService();
+
+            SetRenovatedStatus();
+        }
+
+        private void SetRenovatedStatus()
+        {
+            foreach (Accommodation accommodation in _accommodationRepository.GetAll())
+            {
+                if (_accommodationRenovationService.GetAll().Any(r => r.AccommodationId == accommodation.Id && r.EndDate.AddYears(1) > DateTime.Now))
+                {
+                    accommodation.IsRenovated = true;
+                    _accommodationRepository.Update(accommodation);
+                }
+            }
         }
 
         public List<Accommodation> GetByUser(int ownerId)

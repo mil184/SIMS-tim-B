@@ -28,7 +28,7 @@
                             <Image Source= "/Resources/Images/OwnerIcons/accommodationDark.png" Height= "24" Width= "24" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="Renovations" Height="45">
+                    <MenuItem Header="Renovations" Height="45" Command="{Binding NavigateToRenovationsPageCommand}">
                         <MenuItem.HeaderTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{TemplateBinding Content}" VerticalAlignment="Center"/>
