@@ -60,6 +60,12 @@ namespace InitialProject.Repository
             return renovationRecommendations;
         }
 
+        public RenovationRecommendation GetById(int id)
+        {
+            _renovationRecommendations = _serializer.FromCSV(FilePath);
+            return _renovationRecommendations.FirstOrDefault(u => u.Id == id);
+        }
+
         public List<RenovationRecommendation> GetAll()
         {
             return _renovationRecommendations;

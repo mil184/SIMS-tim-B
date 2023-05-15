@@ -19,7 +19,7 @@ namespace InitialProject.ViewModel.Guest1
 {
     public class RecommendRenovationViewModel: INotifyPropertyChanged, IDataErrorInfo
     {
-        private readonly RenovationRecommendationRepository _renovationRecommendationRepository;
+        private readonly RenovationRecommendationService _renovationRecommendationService;
         private readonly AccommodationReservationService _accommodationReservationService;
         public AccommodationReservation Reservation { get; set; }
 
@@ -142,10 +142,10 @@ namespace InitialProject.ViewModel.Guest1
         {
             get => SelectedUnratedAccommodation?.AccommodationName;
         }
-        public RecommendRenovationViewModel(AccommodationRatingsDTO selectedUnratedAccommodation, RenovationRecommendationRepository renovationRecommendationRepository, AccommodationReservationService accommodationReservationService)
+        public RecommendRenovationViewModel(AccommodationRatingsDTO selectedUnratedAccommodation, RenovationRecommendationService renovationRecommendationService, AccommodationReservationService accommodationReservationService)
         {
             SelectedUnratedAccommodation = selectedUnratedAccommodation;
-            _renovationRecommendationRepository = renovationRecommendationRepository;
+            _renovationRecommendationService = renovationRecommendationService;
             _accommodationReservationService = accommodationReservationService;
 
             Reservation = _accommodationReservationService.GetById(SelectedUnratedAccommodation.ReservationId);
@@ -198,7 +198,7 @@ namespace InitialProject.ViewModel.Guest1
                 {
                     SetValuesForRenovationLevel();
                     RenovationRecommendation renovationRecommendation = new RenovationRecommendation(Reservation.AccommodationId, Information, RenovationLevel, Reservation.GuestId, DateTime.Now);
-                    _renovationRecommendationRepository.Save(renovationRecommendation);
+                    _renovationRecommendationService.Save(renovationRecommendation);
                     MessageBox.Show("Recommendation for renovation sent successfully.");
                     var window = Application.Current.Windows.OfType<RecommendRenovation>().FirstOrDefault();
                     window.Close();
