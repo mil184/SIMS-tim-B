@@ -9,9 +9,13 @@
 
   <ItemGroup>
     <Compile Remove="NewFolder1\**" />
+    <Compile Remove="Resources\NewFolder\**" />
     <EmbeddedResource Remove="NewFolder1\**" />
+    <EmbeddedResource Remove="Resources\NewFolder\**" />
     <None Remove="NewFolder1\**" />
+    <None Remove="Resources\NewFolder\**" />
     <Page Remove="NewFolder1\**" />
+    <Page Remove="Resources\NewFolder\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,6 +36,7 @@
     <None Remove="Resources\Images\inspection.png" />
     <None Remove="Resources\Images\leftArrow.png" />
     <None Remove="Resources\Images\menu.png" />
+    <None Remove="Resources\Images\mail.png" />
     <None Remove="Resources\Images\owner.png" />
     <None Remove="Resources\Images\OwnerIcons\accommodation.png" />
     <None Remove="Resources\Images\OwnerIcons\accommodationDark.png" />
@@ -110,7 +115,11 @@
     </Resource>
     <Resource Include="Resources\Images\inspection.png" />
     <Resource Include="Resources\Images\leftArrow.png" />
+
     <Resource Include="Resources\Images\menu.png" />
+    <Resource Include="Resources\Images\mail.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Images\owner.png" />
     <Resource Include="Resources\Images\OwnerIcons\accommodation.png" />
     <Resource Include="Resources\Images\OwnerIcons\accommodationDark.png" />
@@ -190,6 +199,8 @@
   <ItemGroup>
     <Folder Include="Resources\NewFolder\" />
     <Folder Include="ViewModel\Guest2\" />
+    <Folder Include="ViewModel\Guest1\" />
+    <Folder Include="ViewModel\Owner\" />
   </ItemGroup>
 
 </Project>

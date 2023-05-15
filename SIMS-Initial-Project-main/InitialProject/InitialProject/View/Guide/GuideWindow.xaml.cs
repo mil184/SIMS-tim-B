@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -16,6 +17,8 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
 
 namespace InitialProject.View.Guide
 {
@@ -29,13 +32,64 @@ namespace InitialProject.View.Guide
         private readonly CheckpointService _checkpointService;
         private readonly UserRepository _userRepository;
         private readonly VoucherRepository _voucherRepository;
+        private readonly TourRequestService _tourRequestService;
 
         public User CurrentUser { get; set; }
         public ObservableCollection<GuideTourDTO> CurrentTours { get; set; }
         public ObservableCollection<GuideTourDTO> UpcomingTours { get; set; }
         public ObservableCollection<GuideTourDTO> FinishedTours { get; set; }
         public ObservableCollection<GuideTourDTO> RatedTours { get; set; }
+        public ObservableCollection<GuideRequestDTO> PendingRequests { get; set; }
 
+        public ObservableCollection<string> RequestCountries { get; set; }
+        public ObservableCollection<string> RequestCities { get; set; }
+
+        public ObservableCollection<string> StatisticsCountries { get; set; }
+        public ObservableCollection<string> StatisticsCities { get; set; }
+
+        public ObservableCollection<string> StatisticsYears { get; set; }
+        public ObservableCollection<string> StatisticsMonths { get; set; }
+
+
+        private int _locationRequestsCount;
+        public int LocationRequestsCount
+        {
+            get { return _locationRequestsCount; }
+            set
+            {
+                if (_locationRequestsCount != value)
+                {
+                    _locationRequestsCount = value;
+                    OnPropertyChanged(nameof(LocationRequestsCount));
+                }
+            }
+        }
+        private int _languageRequestsCount;
+        public int LanguageRequestsCount
+        {
+            get { return _languageRequestsCount; }
+            set
+            {
+                if (_languageRequestsCount != value)
+                {
+                    _languageRequestsCount = value;
+                    OnPropertyChanged(nameof(LanguageRequestsCount));
+                }
+            }
+        }
+        private int _languageLocationRequestsCount;
+        public int LanguageLocationRequestsCount
+        {
+            get { return _languageLocationRequestsCount; }
+            set
+            {
+                if (_languageLocationRequestsCount != value)
+                {
+                    _languageLocationRequestsCount = value;
+                    OnPropertyChanged(nameof(LanguageLocationRequestsCount));
+                }
+            }
+        }
         public bool TourActive { get; set; }
 
         public int CurrentSortIndex;
@@ -43,6 +97,7 @@ namespace InitialProject.View.Guide
         public GuideTourDTO SelectedUpcomingTourDTO { get; set; }
         public GuideTourDTO SelectedFinishedTourDTO { get; set; }
         public GuideTourDTO SelectedRatedTourDTO { get; set; }
+        public GuideRequestDTO SelectedPendingRequestDTO { get; set; }
 
         private GuideTourDTO _activeTour;
         public GuideTourDTO ActiveTour
@@ -84,6 +139,201 @@ namespace InitialProject.View.Guide
                 }
             }
         }
+        private string _requestCity;
+        public string RequestCityInput
+        {
+            get => _requestCity;
+            set
+            {
+                if (value != _requestCity)
+                {
+                    _requestCity = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private string _requestCountry;
+        public string RequestCountryInput
+        {
+            get => _requestCountry;
+            set
+            {
+                if (value != _requestCountry)
+                {
+                    _requestCountry = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private string _requestLanguage;
+        public string RequestLanguageInput
+        {
+            get => _requestLanguage;
+            set
+            {
+                if (value != _requestLanguage)
+                {
+                    _requestLanguage = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private string _requestMaxGuests;
+        public string RequestMaxGuestsInput
+        {
+            get => _requestMaxGuests;
+            set
+            {
+                if (value != _requestMaxGuests)
+                {
+                    _requestMaxGuests = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private DateTime? _requestStartDateInput;
+        public DateTime? RequestStartDateInput
+        {
+            get => _requestStartDateInput;
+            set
+            {
+                if (value != _requestStartDateInput)
+                {
+                    _requestStartDateInput = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private DateTime? _requestEndDateInput;
+        public DateTime? RequestEndDateInput
+        {
+            get => _requestEndDateInput;
+            set
+            {
+                if (value != _requestEndDateInput)
+                {
+                    _requestEndDateInput = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private string _statisticsCity;
+        public string StatisticsCityInput
+        {
+            get => _statisticsCity;
+            set
+            {
+                if (value != _statisticsCity)
+                {
+                    _statisticsCity = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private string _statisticsCountry;
+        public string StatisticsCountryInput
+        {
+            get => _statisticsCountry;
+            set
+            {
+                if (value != _statisticsCountry)
+                {
+                    _statisticsCountry = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private string _statisticsLanguage;
+        public string StatisticsLanguageInput
+        {
+            get => _statisticsLanguage;
+            set
+            {
+                if (value != _statisticsLanguage)
+                {
+                    _statisticsLanguage = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private string _statisticsYear;
+        public string StatisticsYearInput
+        {
+            get => _statisticsYear;
+            set
+            {
+                if (value != _statisticsYear)
+                {
+                    _statisticsYear = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private string _statisticsMonth;
+        public string StatisticsMonthInput
+        {
+            get => _statisticsMonth;
+            set
+            {
+                if (value != _statisticsMonth)
+                {
+                    _statisticsMonth = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private bool _isMonthClickable;
+        public bool IsMonthClickable
+        {
+            get => _isMonthClickable;
+            set
+            {
+                if (value != _isMonthClickable)
+                {
+                    _isMonthClickable = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private string _languageR;
+        public string LanguageR
+        {
+            get => _languageR;
+            set
+            {
+                if (value != _languageR)
+                {
+                    _languageR = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private string _location;
+        public string Location
+        {
+            get => _location;
+            set
+            {
+                if (value != _location)
+                {
+                    _location = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private string _languageAndLocation;
+        public string LanguageAndLocation
+        {
+            get => _languageAndLocation;
+            set
+            {
+                if (value != _languageAndLocation)
+                {
+                    _languageAndLocation = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         public GuideWindow(User user)
         {
             InitializeComponent();
@@ -114,15 +364,26 @@ namespace InitialProject.View.Guide
             _tourRatingService = new TourRatingService();
             _tourRatingService.Subscribe(this);
 
+            _tourRequestService = new TourRequestService();
+            _tourRequestService.Subscribe(this);
+
             InitializeCollections();
             InitializeStartingSearchValues();
             InitializeComboBoxes();
             InitializeShortcuts();
             FindActiveTour();
-            SortTours();
+
+            RequestStartDateInput = null;
+            RequestEndDateInput = null;
 
             CurrentUser.Username = "Gorana";
             CurrentSortIndex = 0;
+
+            //AddMessage("Hello, world!");
+            //AddMessage("How are you today?");
+            //AddMessage("Do you want to grab lunch?");
+            //AddMessage("Do you want to grab lunch?");
+            //AddMessage("Do you want to grab lunch?");
 
         }
         private void InitializeCollections()
@@ -131,7 +392,18 @@ namespace InitialProject.View.Guide
             UpcomingTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourService.GetUpcomingTours()));
             FinishedTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourService.GetFinishedTours()));
             RatedTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourService.GetRatedTours()));
+            PendingRequests = new ObservableCollection<GuideRequestDTO>(ConvertToDTO(_tourRequestService.GetPendingRequests(CurrentUser)));
+
+            RequestCountries = new ObservableCollection<string>();
+            RequestCities = new ObservableCollection<string>();
+
+            StatisticsCountries = new ObservableCollection<string>();
+            StatisticsCities = new ObservableCollection<string>();
+
+            StatisticsYears = new ObservableCollection<string>();
+            StatisticsMonths = new ObservableCollection<string>();
         }
+
         private void InitializeComboBoxes()
         {
             Years_cb.Items.Add("Alltime");
@@ -140,6 +412,56 @@ namespace InitialProject.View.Guide
             {
                 Years_cb.Items.Add(i.ToString());
             }
+
+            RequestCountries.Add(string.Empty);
+            foreach (string country in _locationService.GetCountries())
+            {
+                RequestCountries.Add(country);
+            }
+
+            RequestCities.Add(string.Empty);
+            foreach (string city in _locationService.GetCities())
+            {
+                RequestCities.Add(city);
+            }
+
+            StatisticsCountries.Add("-");
+            foreach (string country in _locationService.GetCountries())
+            {
+                StatisticsCountries.Add(country);
+            }
+
+            StatisticsCities.Add("-");
+            foreach (string city in _locationService.GetCities())
+            {
+                StatisticsCities.Add(city);
+            }
+
+            StatisticsYears.Add("Alltime");
+            for (int i = 2000; i <= DateTime.Now.Year; i++)
+            {
+                StatisticsYears.Add(i.ToString());
+            }
+
+            StatisticsMonths.Add("-");
+            StatisticsMonths.Add("JAN");
+            StatisticsMonths.Add("FEB");
+            StatisticsMonths.Add("MAR");
+            StatisticsMonths.Add("APR");
+            StatisticsMonths.Add("MAY");
+            StatisticsMonths.Add("JUN");
+            StatisticsMonths.Add("JUL");
+            StatisticsMonths.Add("AUG");
+            StatisticsMonths.Add("SEP");
+            StatisticsMonths.Add("OCT");
+            StatisticsMonths.Add("NOV");
+            StatisticsMonths.Add("DEC");
+
+            StatisticsYearInput = "Alltime";
+            IsMonthClickable = false;
+            StatisticsCityInput = "-";
+            StatisticsCountryInput = "-";
+            StatisticsLanguageInput = string.Empty;
         }
         private void InitializeStartingSearchValues()
         {
@@ -207,15 +529,9 @@ namespace InitialProject.View.Guide
                 }
             }
         }
-        private void SortTours()
-        {
-            var view1 = CollectionViewSource.GetDefaultView(UpcomingTours);
-            view1.SortDescriptions.Add(new SortDescription("StartTime", ListSortDirection.Ascending));
-        }
-
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
-            CreateTour createTour = new CreateTour(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService);
+            CreateTour createTour = new CreateTour(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService);
             createTour.ShowDialog();
         }
 
@@ -230,6 +546,7 @@ namespace InitialProject.View.Guide
             UpdateCurrentTours();
             UpdateFinishedTours();
             UpdateActiveTour();
+            UpdatePendingRequests();
         }
         private void UpdateUpcomingTours()
         {
@@ -253,6 +570,14 @@ namespace InitialProject.View.Guide
             foreach (Tour tour in _tourService.GetFinishedTours())
             {
                 FinishedTours.Add(ConvertToDTO(tour));
+            }
+        }
+        private void UpdatePendingRequests()
+        {
+            PendingRequests.Clear();
+            foreach (TourRequest request in _tourRequestService.GetPendingRequests(CurrentUser))
+            {
+                PendingRequests.Add(ConvertToDTO(request));
             }
         }
         private void UpdateActiveTour()
@@ -304,7 +629,38 @@ namespace InitialProject.View.Guide
                 return _tourService.GetById(dto.Id);
             return null;
         }
+        public List<GuideRequestDTO> ConvertToDTO(List<TourRequest> requests)
+        {
+            List<GuideRequestDTO> dto = new List<GuideRequestDTO>();
+            foreach (TourRequest request in requests)
+            {
+                dto.Add(ConvertToDTO(request));
+            }
+            return dto;
+        }
+        public GuideRequestDTO ConvertToDTO(TourRequest request)
+        {
 
+            if (request == null)
+                return null;
+
+            return new GuideRequestDTO(
+                    request.Id,
+                    _locationService.GetById(request.LocationId).City + ", " +
+                    _locationService.GetById(request.LocationId).Country,
+                    request.Language,
+                    request.MaxGuests.ToString(),
+                    request.StartTime,
+                    request.EndTime,
+                    request.Description
+                    );
+        }
+        public TourRequest ConvertToRequest(GuideRequestDTO dto)
+        {
+            if (dto != null)
+                return _tourRequestService.GetById(dto.Id);
+            return null;
+        }
         private void CurrentToursDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             SelectTodaysTour();
@@ -471,7 +827,7 @@ namespace InitialProject.View.Guide
             if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.A)
             {
                 e.Handled = true;
-                Window createTour = new CreateTour(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService);
+                Window createTour = new CreateTour(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService);
                 createTour.ShowDialog();
             }
         }
@@ -561,7 +917,7 @@ namespace InitialProject.View.Guide
 
                 int current_index = currentDataGrid.SelectedIndex;
 
-                if (current_index == -1 && currentDataGrid == FinishedToursDataGrid) 
+                if (current_index == -1 && currentDataGrid == FinishedToursDataGrid)
                 {
                     Years_cb.Focus();
                     e.Handled = true;
@@ -588,7 +944,7 @@ namespace InitialProject.View.Guide
                 currentDataGrid.ScrollIntoView(currentDataGrid.SelectedItem);
                 currentDataGrid.Focus();
             }
-            else 
+            else
             {
                 if (currentDataGrid != FinishedToursDataGrid)
                 {
@@ -641,7 +997,6 @@ namespace InitialProject.View.Guide
                 currentDataGrid.Focus();
             }
         }
-
         private void MoveToLastItem(DataGrid currentDataGrid)
         {
             if (Years_cb.IsDropDownOpen)
@@ -657,17 +1012,14 @@ namespace InitialProject.View.Guide
                 currentDataGrid.Focus();
             }
         }
-
         private void UnselectSelectedItem(DataGrid currentDataGrid)
         {
             currentDataGrid.SelectedItem = null;
         }
-
         private void FocusOnComboBox()
         {
             Years_cb.Focus();
         }
-
         private void SortAsc_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (!Keyboard.IsKeyDown(Key.LeftShift) || !Keyboard.IsKeyDown(Key.A))
@@ -744,7 +1096,6 @@ namespace InitialProject.View.Guide
             }
             e.Handled = true;
         }
-
         private DataGrid GetCurrentDataGrid()
         {
             switch (tabControl.SelectedIndex)
@@ -761,7 +1112,6 @@ namespace InitialProject.View.Guide
                     return null;
             }
         }
-
         private string GetNextSortColumn()
         {
             switch (CurrentSortIndex)
@@ -779,14 +1129,12 @@ namespace InitialProject.View.Guide
                     return "";
             }
         }
-
-
         private void ShowActiveTourWarning()
         {
             MessageBox.Show("An active tour is already in progress. Please finish the current tour before starting a new one.", "Active Tour Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
         private void ShowAbortTourWarning()
-        { 
+        {
             MessageBox.Show("You may not abort this tour as you are breaking the 2 day rule.", "Abort Tour Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
         private bool ConfirmStartTour(Tour selectedTour)
@@ -802,8 +1150,8 @@ namespace InitialProject.View.Guide
 
         private void StartTourButton_Click(object sender, RoutedEventArgs e)
         {
-            if(SelectedCurrentTourDTO != null)
-            SelectTodaysTour();
+            if (SelectedCurrentTourDTO != null)
+                SelectTodaysTour();
         }
         private void GenerateReportButton_Click(object sender, RoutedEventArgs e)
         {
@@ -823,6 +1171,382 @@ namespace InitialProject.View.Guide
         {
             if (SelectedRatedTourDTO != null)
                 SelectRatedTour();
+        }
+
+        private void CbCity_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            RequestCountryInput = _locationService.GetCountryByCity(RequestCityInput);
+            UpdateRequests();
+        }
+
+        private void CbCountry_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!_locationService.GetCitiesByCountry(RequestCountryInput).Contains(RequestCityInput))
+                RequestCityInput = string.Empty;
+
+            UpdateRequests();
+        }
+
+        private void txtGuests_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateRequests();
+        }
+
+        private void txtLanguage_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateRequests();
+        }
+
+        private void dpStartDate_DateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateRequests();
+        }
+
+        private void dpEndDate_DateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateRequests();
+        }
+
+        private void UpdateRequests()
+        {
+            CheckIfAllEmpty();
+
+            PendingRequests.Clear();
+
+            List<TourRequest> result = new List<TourRequest>();
+
+            if (!string.IsNullOrEmpty(RequestCountryInput))
+            {
+                result = _tourRequestService.GetByCountry(CurrentUser, RequestCountryInput);
+            }
+            else
+            {
+                result = _tourRequestService.GetPendingRequests(CurrentUser);
+            }
+
+            if (!string.IsNullOrEmpty(RequestCityInput))
+            {
+                result = result.Intersect(_tourRequestService.GetByCity(CurrentUser, RequestCityInput)).ToList();
+            }
+            if (!string.IsNullOrEmpty(RequestLanguageInput))
+            {
+                result = result.Intersect(_tourRequestService.GetByLanguage(CurrentUser, RequestLanguageInput)).ToList();
+            }
+            if (!string.IsNullOrEmpty(RequestMaxGuestsInput) && int.TryParse(RequestMaxGuestsInput, out int integer))
+            {
+                result = result.Intersect(_tourRequestService.GetByMaxGuests(CurrentUser, int.Parse(RequestMaxGuestsInput))).ToList();
+            }
+            if (RequestStartDateInput != null)
+            {
+                result = result.Intersect(_tourRequestService.GetByStartDate(CurrentUser, RequestStartDateInput)).ToList();
+            }
+            if (RequestEndDateInput != null)
+            {
+                result = result.Intersect(_tourRequestService.GetByEndDate(CurrentUser, RequestEndDateInput)).ToList();
+            }
+
+            List<GuideRequestDTO> searchResults = ConvertToDTO(result);
+
+            foreach (GuideRequestDTO dto in searchResults)
+            {
+                PendingRequests.Add(dto);
+            }
+
+        }
+        public void CheckIfAllEmpty()
+        {
+            if (string.IsNullOrEmpty(RequestCountryInput) && string.IsNullOrEmpty(RequestCityInput) && string.IsNullOrEmpty(RequestLanguageInput) && string.IsNullOrEmpty(RequestMaxGuestsInput))
+            {
+                foreach (TourRequest request in _tourRequestService.GetPendingRequests(CurrentUser))
+                {
+                    PendingRequests.Add(ConvertToDTO(request));
+                }
+            }
+        }
+
+        private void PendingRequests_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (SelectedPendingRequestDTO != null)
+            {
+                TourRequest request = ConvertToRequest(SelectedPendingRequestDTO);
+                CreateTour createTour = new CreateTour(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService, request);
+                createTour.ShowDialog();
+            }
+        }
+        private void AddMessage(string text)
+        {
+            var messageGrid = new Grid();
+            messageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            messageGrid.ColumnDefinitions.Add(new ColumnDefinition());
+
+            var messageTextBlock = new TextBlock
+            {
+                Text = text,
+                VerticalAlignment = VerticalAlignment.Center,
+                Margin = new Thickness(10, 0, 10, 0)
+            };
+            Grid.SetColumn(messageTextBlock, 0);
+
+            var buttonPanel = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                HorizontalAlignment = HorizontalAlignment.Right,
+                Margin = new Thickness(10, 0, 10, 0)
+            };
+            Grid.SetColumn(buttonPanel, 1);
+
+            var acceptButton = new Button
+            {
+                Content = "Accept",
+                Margin = new Thickness(5),
+                Width = 75,
+                DataContext = messageGrid
+            };
+            acceptButton.Click += AcceptButton_Click;
+            buttonPanel.Children.Add(acceptButton);
+
+            var declineButton = new Button
+            {
+                Content = "Decline",
+                Margin = new Thickness(5),
+                Width = 75,
+                DataContext = messageGrid
+            };
+            declineButton.Click += DeclineButton_Click;
+            buttonPanel.Children.Add(declineButton);
+
+            messageGrid.Children.Add(messageTextBlock);
+            messageGrid.Children.Add(buttonPanel);
+            messageGrid.RenderTransform = new TranslateTransform { Y = 100 };
+
+            MessagesStackPanel.Children.Add(messageGrid);
+
+            var storyboard = new Storyboard();
+            var animation = new DoubleAnimation
+            {
+                From = 100,
+                To = 0,
+                Duration = TimeSpan.FromSeconds(1)
+            };
+            Storyboard.SetTarget(animation, messageGrid);
+            Storyboard.SetTargetProperty(animation, new PropertyPath("(FrameworkElement.RenderTransform).(TranslateTransform.Y)"));
+            storyboard.Children.Add(animation);
+            storyboard.Begin();
+        }
+        private void AcceptButton_Click(object sender, RoutedEventArgs e)
+        {
+            var messageGrid = ((sender as Button).DataContext as Grid);
+
+            // Get the index of the clicked message grid
+            int clickedIndex = MessagesStackPanel.Children.IndexOf(messageGrid);
+
+            // Remove the clicked message grid from the stack panel
+            MessagesStackPanel.Children.Remove(messageGrid);
+
+            // Move all the message grids above the clicked one up by the height of the clicked message grid
+            for (int i = clickedIndex - 1; i >= 0; i--)
+            {
+                var message = MessagesStackPanel.Children[i] as FrameworkElement;
+
+                // Create a storyboard to animate the message grid up
+                var storyboard = new Storyboard();
+                var animation = new DoubleAnimation
+                {
+                    To = -message.ActualHeight,
+                    Duration = TimeSpan.FromSeconds(0.5)
+                };
+                Storyboard.SetTarget(animation, message);
+                Storyboard.SetTargetProperty(animation, new PropertyPath("(FrameworkElement.RenderTransform).(TranslateTransform.Y)"));
+                storyboard.Children.Add(animation);
+
+                // Start the storyboard and adjust the message's margin
+                storyboard.Begin();
+                message.Margin = new Thickness(0, -message.ActualHeight, 0, 0);
+            }
+        }
+
+        private void DeclineButton_Click(object sender, RoutedEventArgs e)
+        {
+            var messageGrid = ((sender as Button).DataContext as Grid);
+
+            // Get the index of the clicked message grid
+            int clickedIndex = MessagesStackPanel.Children.IndexOf(messageGrid);
+
+            // Remove the clicked message grid from the stack panel
+            MessagesStackPanel.Children.Remove(messageGrid);
+
+            // Move all the message grids above the clicked one up by the height of the clicked message grid
+            for (int i = clickedIndex - 1; i >= 0; i--)
+            {
+                var message = MessagesStackPanel.Children[i] as FrameworkElement;
+
+                // Create a storyboard to animate the message grid up
+                var storyboard = new Storyboard();
+                var animation = new DoubleAnimation
+                {
+                    To = -message.ActualHeight,
+                    Duration = TimeSpan.FromSeconds(0.5)
+                };
+                Storyboard.SetTarget(animation, message);
+                Storyboard.SetTargetProperty(animation, new PropertyPath("(FrameworkElement.RenderTransform).(TranslateTransform.Y)"));
+                storyboard.Children.Add(animation);
+
+                // Start the storyboard and adjust the message's margin
+                storyboard.Begin();
+                message.Margin = new Thickness(0, -message.ActualHeight, 0, 0);
+            }
+
+        }
+
+        private void cbStatisticsYear_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (StatisticsYearInput == "Alltime")
+            {
+                IsMonthClickable = false;
+                StatisticsMonthInput = "-";
+            }
+            else
+                IsMonthClickable = true;
+
+
+            UpdateGridNames();
+            UpdateGridCounts();
+        }
+
+        private void cbStatisticsMonth_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateGridNames();
+            UpdateGridCounts();
+        }
+
+        private void cbStatisticsCity_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (StatisticsCityInput != "-")
+                StatisticsCountryInput = _locationService.GetCountryByCity(StatisticsCityInput);
+
+            UpdateGridNames();
+            UpdateGridCounts();
+        }
+
+        private void cbStatisticsCountry_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+            if (!_locationService.GetCitiesByCountry(StatisticsCountryInput).Contains(StatisticsCityInput))
+                StatisticsCityInput = "-";
+
+            UpdateGridNames();
+            UpdateGridCounts();
+
+        }
+
+        private void cbStatisticsLanguage_SelectionChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateGridNames();
+            UpdateGridCounts();
+        }
+
+        private void UpdateGridNames()
+        {
+            if (string.IsNullOrEmpty(StatisticsLanguageInput))
+                LanguageR = "No language selected.";
+            else
+                LanguageR = StatisticsLanguageInput;
+
+            if (StatisticsCityInput == "-" && StatisticsCountryInput == "-")
+                Location = "No location selected.";
+
+            if (StatisticsCityInput == "-" && StatisticsCountryInput != "-")
+                Location = StatisticsCountryInput;
+
+            if (StatisticsCityInput != "-" && StatisticsCountryInput != "-")
+                Location = StatisticsCityInput + ", " + StatisticsCountryInput;
+
+            if(string.IsNullOrEmpty(StatisticsLanguageInput) && Location == "No location selected.") 
+            {
+                LanguageAndLocation = "Language and Location not selected.";
+            }
+            if (string.IsNullOrEmpty(StatisticsLanguageInput) && Location != "No location selected.")
+            {
+                LanguageAndLocation = "Language not selected.";
+            }
+            if (!string.IsNullOrEmpty(StatisticsLanguageInput) && Location == "No location selected.")
+            {
+                LanguageAndLocation = "Location not selected.";
+            }
+            if (!string.IsNullOrEmpty(StatisticsLanguageInput) && Location != "No location selected.")
+            {
+                LanguageAndLocation = Location + " in " + LanguageR;
+            }
+        }
+        private void UpdateGridCounts()
+        {
+            LanguageRequestsCount = _tourRequestService.FilterRequests(GetYearValue(), GetMonthValue(), "/", "/", GetLanguageValue()).Count;
+            LocationRequestsCount = _tourRequestService.FilterRequests(GetYearValue(), GetMonthValue(), GetCityValue(), GetCountryValue(), "/").Count;
+            LanguageLocationRequestsCount = _tourRequestService.FilterRequests(GetYearValue(), GetMonthValue(), GetCityValue(), GetCountryValue(), GetLanguageValue()).Count;
+
+        }
+
+        private int GetMonthValue() 
+        {
+            switch (StatisticsMonthInput) 
+            {
+                case "JAN":
+                    return 1;
+                case "FEB":
+                    return 2;
+                case "MAR":
+                    return 3;
+                case "APR":
+                    return 4;
+                case "MAY":
+                    return 5;
+                case "JUN":
+                    return 6;
+                case "JUL":
+                    return 7;
+                case "AUG":
+                    return 8;
+                case "SEP":
+                    return 9;
+                case "OCT":
+                    return 10;
+                case "NOV":
+                    return 11;
+                case "DEC":
+                    return 12;
+                default:
+                    return -1;
+            }
+        }
+        private int GetYearValue() 
+        {
+            if (StatisticsYearInput == "Alltime")
+                return -1;
+            return int.Parse(StatisticsYearInput);
+        }   
+        private string GetCityValue() 
+        {
+            if (StatisticsCityInput != "-")
+                return StatisticsCityInput;
+
+            return "/";
+
+        }
+        private string GetCountryValue()
+        {
+            if (StatisticsCountryInput != "-")
+                return StatisticsCountryInput;
+
+            return "/";
+
+        }
+        private string GetLanguageValue()
+        {
+            if (!string.IsNullOrEmpty(StatisticsLanguageInput))
+                return StatisticsLanguageInput;
+
+            return "/";
+
         }
     }
 }

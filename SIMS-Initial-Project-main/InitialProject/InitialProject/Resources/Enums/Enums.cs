@@ -24,4 +24,10 @@
         approved,
         rejected
     }
+    public enum RequestStatus 
+    {
+        pending,
+        invalid,
+        accepted
+    }
 }

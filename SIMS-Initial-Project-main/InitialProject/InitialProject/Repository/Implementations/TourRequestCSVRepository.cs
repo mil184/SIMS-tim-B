@@ -32,16 +32,7 @@ namespace InitialProject.Repository.Implementations
                 return 1;
             }
             return _tourRequests.Max(c => c.Id) + 1;
-        }
-
-        
-
-        public List<TourRequest> Get_tourRequests()
-        {
-            return _tourRequests;
-        }
-
-        
+        }   
 
         public TourRequest Save(TourRequest tourRequest)
         {

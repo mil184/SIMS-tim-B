@@ -222,7 +222,7 @@ namespace InitialProject.View.Owner
                 }
 
                 cbCity.IsEnabled = true;
-                foreach (String city in _locationService.GetCities(cbCountry.SelectedItem.ToString()))
+                foreach (String city in _locationService.GetCitiesByCountry(cbCountry.SelectedItem.ToString()))
                 {
                     cbCity.Items.Add(city);
                 }

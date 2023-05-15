@@ -30,7 +30,18 @@ namespace InitialProject.Service
             }
             return countries;
         }
-        public List<string> GetCities(String country)
+        public List<string> GetCities()
+        {
+            List<string> cities = new List<string>();
+            foreach (Location location in _locationRepository.GetAll())
+            {
+                if (!cities.Contains(location.City))
+                    cities.Add(location.City);
+            }
+            return cities;
+        }
+
+        public List<string> GetCitiesByCountry(String country)
         {
             List<string> cities = new List<string>();
             foreach (Location location in _locationRepository.GetAll())
@@ -41,6 +52,19 @@ namespace InitialProject.Service
                 }
             }
             return cities;
+        }
+        public string GetCountryByCity(String city)
+        {
+            string country = string.Empty;
+
+            foreach (Location location in _locationRepository.GetAll())
+            {
+                if (location.City == city)
+                {
+                    country = location.Country;
+                }
+            }
+            return country;
         }
         public Location GetLocation(String country, string city)
         {

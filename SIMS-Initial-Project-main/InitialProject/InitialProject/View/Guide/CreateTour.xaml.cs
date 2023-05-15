@@ -23,6 +23,7 @@ namespace InitialProject.View.Guide
         private readonly LocationService _locationService;
         private readonly ImageRepository _imageRepository;
         private readonly CheckpointService _checkpointService;
+        private readonly TourRequestService _tourRequestService;
 
         private User LoggedInUser;
         public ObservableCollection<Checkpoint> Checkpoints { get; set; }
@@ -157,13 +158,18 @@ namespace InitialProject.View.Guide
             }
         }
 
+        public DateTime? LeftBoundary { get; set; }
+        public DateTime? RightBoundary { get; set; }
+
+        public TourRequest Request { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        public CreateTour(User user, TourService tourService, LocationService locationService, ImageRepository imageRepository, CheckpointService checkpointService)
+        public CreateTour(User user, TourService tourService, LocationService locationService, ImageRepository imageRepository, CheckpointService checkpointService, TourRequestService tourRequestService)
         {
             InitializeComponent();
             DataContext = this;
@@ -172,6 +178,11 @@ namespace InitialProject.View.Guide
             _locationService = locationService;
             _imageRepository = imageRepository;
             _checkpointService = checkpointService;
+            _tourRequestService = tourRequestService;
+
+            LeftBoundary = null;
+            RightBoundary = null;
+            Request = null;
 
             LoggedInUser = user;
             OrderCounter = 0;
@@ -180,6 +191,37 @@ namespace InitialProject.View.Guide
             InitializeComboBoxes();
             InitializeCountryDropdown();
             InitializeShortcuts();
+            //FillWithTestData();
+        }
+        public CreateTour(User user, TourService tourService, LocationService locationService, ImageRepository imageRepository, CheckpointService checkpointService, TourRequestService tourRequestService, TourRequest request)
+        {
+            InitializeComponent();
+            DataContext = this;
+
+            _tourService = tourService;
+            _locationService = locationService;
+            _imageRepository = imageRepository;
+            _checkpointService = checkpointService;
+            _tourRequestService = tourRequestService;
+
+            LoggedInUser = user;
+            OrderCounter = 0;
+
+            Description = request.Description;
+            TourLanguage = request.Language;
+            MaxGuests = request.MaxGuests.ToString();
+            Country = _locationService.GetById(request.LocationId).Country;
+            City = _locationService.GetById(request.LocationId).City;
+
+            LeftBoundary = request.StartTime;
+            RightBoundary = request.EndTime;
+            Request = request;
+
+            InitializeCollections();
+            InitializeComboBoxes();
+            InitializeCountryDropdown();
+            InitializeShortcuts();
+            _tourRequestService = tourRequestService;
             //FillWithTestData();
         }
         private void InitializeCollections()
@@ -209,6 +251,11 @@ namespace InitialProject.View.Guide
             {
                 cbCountry.Items.Add(country);
             }
+
+            if(Country != null)
+                cbCountry.SelectedItem = Country;
+            if (City != null)
+                cbCity.SelectedItem = City;
         }
         private void InitializeShortcuts()
         {
@@ -286,6 +333,8 @@ namespace InitialProject.View.Guide
                 tour = _tourService.Save(tour);
 
                 UpdateCheckpointsTourId(tour.Id);
+                UpdateRequest(Request);
+                
             }
         }
         private List<int> SaveImages()
@@ -313,6 +362,12 @@ namespace InitialProject.View.Guide
                 checkpoint.TourId = tourId;
                 _checkpointService.Update(checkpoint);
             }
+        }
+        private void UpdateRequest(TourRequest request)
+        {
+            request.Status = InitialProject.Resources.Enums.RequestStatus.accepted;
+            request.GuideId = LoggedInUser.Id;
+            _tourRequestService.Update(request);
         }
         private void Hours_cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -383,7 +438,7 @@ namespace InitialProject.View.Guide
         }
         private void LoadCitiesForSelectedCountry()
         {
-            foreach (string city in _locationService.GetCities(cbCountry.SelectedItem.ToString()).OrderBy(c => c))
+            foreach (string city in _locationService.GetCitiesByCountry(cbCountry.SelectedItem.ToString()).OrderBy(c => c))
             {
                 cbCity.Items.Add(city);
             }
@@ -407,6 +462,14 @@ namespace InitialProject.View.Guide
 
         private void AddDate() 
         {
+            if (LeftBoundary != null && RightBoundary != null)
+            {
+                if (GetSelectedDateTime() < LeftBoundary || GetSelectedDateTime() > RightBoundary)
+                {
+                    ShowBoundaryTimeWarning();
+                    return;
+                }
+            }
             if (IsDateTimeInputValid())
             {
                 DateTime selectedDateTime = GetSelectedDateTime();
@@ -707,6 +770,37 @@ namespace InitialProject.View.Guide
                 popup.IsOpen = false;
             };
         }
+
+        private void ShowBoundaryTimeWarning()
+        {
+            CustomMessageBox messageBox = new CustomMessageBox();
+            messageBox.Text = "Only choose from";
+
+            messageBox.TextAdditional = LeftBoundary.ToString() + " - " + RightBoundary.ToString();
+
+            Popup popup = new Popup();
+            popup.AllowsTransparency = true; // Allow the popup to have a transparent background
+            popup.Child = messageBox;
+            popup.PlacementTarget = Minutes_cb; // Set the placement target to the TextBox control
+            popup.Placement = PlacementMode.Right; // Set the placement mode to right
+            popup.VerticalOffset = -10;
+            popup.HorizontalOffset = 40;
+            popup.IsOpen = true;
+
+            // Hide the popup when the user starts typing again
+            Minutes_cb.SelectionChanged += (s, args) =>
+            {
+                popup.IsOpen = false;
+            };
+            Hours_cb.SelectionChanged += (s, args) =>
+            {
+                popup.IsOpen = false;
+            };
+            dpDate.SelectedDateChanged += (s, args) =>
+            {
+                popup.IsOpen = false;
+            };
+        }
         private void ShowInvalidDateTimeWarning()
         {
             CustomMessageBox messageBox = new CustomMessageBox();
@@ -808,6 +902,20 @@ namespace InitialProject.View.Guide
             Checkpoints.Add(new Checkpoint("The Tree", 8));
             Checkpoints.Add(new Checkpoint("The Tower", 9));
             Checkpoints.Add(new Checkpoint("The Field", 10));
+        }
+
+        private void CityFilter_Click(object sender, RoutedEventArgs e)
+        {
+            //cbCity.IsEnabled = true;
+            //cbCity.SelectedItem = _tourRequestService.GetMostRequestedCity();
+            //cbCountry.SelectedItem = _locationService.GetCountryByCity(cbCity.SelectedItem.ToString());
+        }
+        private void CountryFilter_Click(object sender, RoutedEventArgs e)
+        {
+        }
+        private void LanguageFilter_Click(object sender, RoutedEventArgs e)
+        {
+            txtTourLanguage.Text = _tourRequestService.GetMostRequestedLanguage();
         }
     }
 }
