@@ -31,7 +31,7 @@
             <TextBox Height="40" Width="300" Margin="5" Text="{Binding Language, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
             <TextBox Height="40" Width="300" Margin="5" Text="{Binding MaxGuests, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
             <StackPanel Orientation="Horizontal" Height="40" Margin="5">
-                <DatePicker Width="150" SelectedDate="{Binding StartDate, UpdateSourceTrigger=PropertyChanged}"/>
+                <DatePicker Width="150" SelectedDate="{Binding StartDate, UpdateSourceTrigger=PropertyChanged}" />
                 <ComboBox Name ="StartHour_cb" SelectedItem="{Binding StartHour, UpdateSourceTrigger=PropertyChanged}" Width="70" Margin="5, 0, 5, 0"/>
                 <ComboBox Name ="StartMinute_cb" SelectedItem="{Binding StartMinute, UpdateSourceTrigger=PropertyChanged}" Width="70" Margin="5, 0, 5, 0"/>
             </StackPanel>

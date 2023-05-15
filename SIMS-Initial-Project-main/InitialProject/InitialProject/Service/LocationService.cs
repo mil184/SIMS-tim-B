@@ -41,6 +41,22 @@ namespace InitialProject.Service
             return cities;
         }
 
+        public string GetCityById(int id)
+        {
+            string city = "";
+
+            foreach(Location location in _locationRepository.GetAll())
+            {
+                if (location.Id == id)
+                {
+                    city = location.City;
+                }
+            }
+
+            return city;
+        }
+
+
         public List<string> GetCitiesByCountry(String country)
         {
             List<string> cities = new List<string>();

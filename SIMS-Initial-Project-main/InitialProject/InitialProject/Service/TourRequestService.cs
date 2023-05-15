@@ -96,6 +96,150 @@ namespace InitialProject.Service
             }
             return requests;
         }
+        public List<TourRequest> GetByYear(User guest, string year)
+        {
+            List<TourRequest> requests = new List<TourRequest>();
+
+            foreach (TourRequest request in GetAll())
+            {
+                if (request.GuestId == guest.Id)
+                {
+                    if (year == "All time")
+                    {
+                        requests = GetAll();
+                    }
+                    else if (request.StartTime.Year.ToString() == year)
+                    {
+                        requests.Add(request);
+                    }
+                }
+            }
+
+            return requests;
+        }
+
+        public int GetTotalGuestCountForYear(List<TourRequest> tourRequests)
+        {
+            int counter = 0;
+
+            foreach(TourRequest tourRequest in tourRequests)
+            {
+                counter += tourRequest.MaxGuests;
+            }
+
+            return counter;
+        }
+
+        public List<TourRequest> GetAcceptedRequests(List<TourRequest> tourRequests)
+        {
+            List<TourRequest> requests = new List<TourRequest>();
+
+            foreach (TourRequest request in tourRequests)
+            {
+                if (request.Status.ToString() == "accepted")
+                {
+                    requests.Add(request);
+                }
+            }
+
+            return requests;
+        }
+
+        public List<TourRequest> GetDeniedRequests(List<TourRequest> tourRequests)
+        {
+            List<TourRequest> requests = new List<TourRequest>();
+
+            foreach (TourRequest request in tourRequests)
+            {
+                if (request.Status.ToString() == "invalid")
+                {
+                    requests.Add(request);
+                }
+            }
+
+            return requests;
+        }
+
+        public List<string> GetLanguages()
+        {
+            List<string> languages = new List<string>();
+
+            foreach(TourRequest tourRequest in GetAll())
+            {
+               languages.Add(tourRequest.Language);
+            }
+
+            return languages.Distinct().ToList();
+        }
+
+        public List<string> GetRequestedCities()
+        {
+            List<string> cities = new List<string>();
+
+            foreach (TourRequest tourRequest in GetAll())
+            {
+                string city = _locationService.GetCityById(tourRequest.LocationId);
+                cities.Add(city);
+            }
+
+            return cities.Distinct().ToList();
+        }
+
+        public int CountPerLanguage(string language)
+        {
+            int counter = 0;
+
+            foreach(TourRequest tourRequest in GetAll())
+            {
+                if (tourRequest.Language == language)
+                {
+                    counter++;
+                }
+            }
+
+            return counter;
+        }
+
+        public int CountPerCity(string city)
+        {
+            int counter = 0;
+
+            foreach (TourRequest tourRequest in GetAll())
+            {
+                string currentCity = _locationService.GetCityById(tourRequest.LocationId);
+                if (currentCity == city)
+                {
+                    counter++;
+                }
+            }
+
+            return counter;
+        }
+
+        public List<int> GetRequestCountForLanguage(List<string> languages)
+        {
+            List<int> counts = new List<int>();
+
+            foreach(string language in languages)
+            {
+                counts.Add(CountPerLanguage(language));
+            }
+
+            return counts;
+        }
+
+        public List<int> GetRequestCountForCity(List<string> cities)
+        {
+            List<int> counts = new List<int>();
+
+            foreach (string city in cities)
+            {
+                counts.Add(CountPerCity(city));
+            }
+
+            return counts;
+        }
+
         public List<TourRequest> GetByCountry(User user,string country)
         {
             List<TourRequest> requests = new List<TourRequest>();
