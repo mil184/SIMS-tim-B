@@ -43,6 +43,7 @@ namespace InitialProject.View.Guest2
         public TourRequestDTOConverter TourRequestDTOConverter { get; set; }
         public ObservableCollection<string> TourRequestYears { get; set; }
         public string StatusStatistic { get; set; }
+        public string GuestStatistic { get; set; }
         public string SelectedStatisticYear { get; set; }
         public string SelectedStatisticGuestYear { get; set; }
         public int AcceptedToursCount { get; set; }

@@ -30,11 +30,6 @@ namespace InitialProject.ViewModel.Guest2
             Cities = _tourRequestService.GetRequestedCities();
             RequestCounts = _tourRequestService.GetRequestCountForCity(Cities);
 
-            foreach (int city in RequestCounts)
-            {
-                MessageBox.Show(city.ToString());
-            }
-
             Random random = new Random();
 
             foreach (var city in Cities)
