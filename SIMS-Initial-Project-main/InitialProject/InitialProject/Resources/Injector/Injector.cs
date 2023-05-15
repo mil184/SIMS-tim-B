@@ -22,7 +22,7 @@ namespace InitialProject.Resources.Injector
             { typeof(IAccommodationReservationRepository), new AccommodationReservationCSVRepository() },
             { typeof(IGuestReviewRepository), new GuestReviewCSVRepository() },
             { typeof(IRescheduleRequestRepository), new RescheduleRequestCSVRepository() },
-            { typeof(IReservationCancellationRepository), new ReservationCancellationCSVRepository() }
+            { typeof(IReservationCancellationRepository), new ReservationCancellationCSVRepository() },
             { typeof(ITourRequestRepository), new TourRequestCSVRepository() }
 
         };

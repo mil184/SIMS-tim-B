@@ -172,7 +172,7 @@ namespace InitialProject.ViewModel.Owner
                 }
 
                 CurrentPage.cbCity.IsEnabled = true;
-                foreach (String city in _locationService.GetCities(CurrentPage.cbCountry.SelectedItem.ToString()))
+                foreach (String city in _locationService.GetCitiesByCountry(CurrentPage.cbCountry.SelectedItem.ToString()))
                 {
                     CurrentPage.cbCity.Items.Add(city);
                 }
