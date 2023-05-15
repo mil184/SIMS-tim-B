@@ -158,6 +158,45 @@ namespace InitialProject.Service
             return requests;
         }
 
+        public List<string> GetLanguages()
+        {
+            List<string> languages = new List<string>();
+
+            foreach(TourRequest tourRequest in GetAll())
+            {
+               languages.Add(tourRequest.Language);
+            }
+
+            return languages.Distinct().ToList();
+        }
+
+        public int CountPerLanguage(string language)
+        {
+            int counter = 0;
+
+            foreach(TourRequest tourRequest in GetAll())
+            {
+                if (tourRequest.Language == language)
+                {
+                    counter++;
+                }
+            }
+
+            return counter;
+        }
+
+        public List<int> GetRequestCountForLanguage(List<string> languages)
+        {
+            List<int> counts = new List<int>();
+
+            foreach(string language in languages)
+            {
+                counts.Add(CountPerLanguage(language));
+            }
+
+            return counts;
+        }
+
         public List<TourRequest> GetByCountry(User user,string country)
         {
             List<TourRequest> requests = new List<TourRequest>();

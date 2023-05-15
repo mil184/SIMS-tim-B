@@ -332,6 +332,7 @@ namespace InitialProject.View.Guide
                 tour = _tourService.Save(tour);
 
                 UpdateCheckpointsTourId(tour.Id);
+                if(Request != null)
                 UpdateRequest(Request);
                 
             }

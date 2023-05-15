@@ -182,6 +182,10 @@ namespace InitialProject.View.Guest2
             FormTourRequestYears();
 
             ConfirmArrival();
+
+            
+
+            
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -444,6 +448,11 @@ namespace InitialProject.View.Guest2
             requestTour.Show();
         }
 
-        
+        private void LanguageStatisicButton_Click(object sender, RoutedEventArgs e)
+        {
+            LanguageStatisticsViewModel languageStatisticsViewModel = new LanguageStatisticsViewModel(_tourRequestService);
+            LanguageStatistics languageStatistics = new LanguageStatistics(languageStatisticsViewModel);
+            languageStatistics.Show();
+        }
     }
 }
