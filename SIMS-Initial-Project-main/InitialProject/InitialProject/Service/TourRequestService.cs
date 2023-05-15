@@ -6,7 +6,9 @@ using InitialProject.Resources.Observer;
 using InitialProject.ViewModel.Guest2;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
+using System.Windows.Media;
 
 namespace InitialProject.Service
 {
@@ -160,18 +162,26 @@ namespace InitialProject.Service
             return requests;
         }
 
-        public List<TourRequest> FilterRequests(User user, int year, int month, string city, string country, string language)
+        public List<TourRequest> FilterRequests(int year, int month, string city, string country, string language)
         {
             var requests = GetAll(); // Get all requests
 
-            if (year != -1  && month == -1) // Year is selected
+            if (year == -2 && month == -2) // Year is selected
+            {
+                var end = DateTime.Now; // Start date
+                var start = end.AddYears(-1);
+
+                requests = requests.Where(r => r.CreationTime >= start && r.CreationTime <= end).ToList(); // Filter requests by date range
+            }
+
+            if (year != -1  && month == -1 && year != -2 && month != -2) // Year is selected
             {
                 var start = new DateTime(year, 1, 1); // Start date
                 var end = new DateTime(year, 12, 31, 23, 59, 59); // End date
 
                 requests = requests.Where(r => r.StartTime >= start && r.EndTime <= end).ToList(); // Filter requests by date range
             }
-            else if (year != -1 && month != -1) // Month is selected
+            else if (year != -1 && month != -1 && year != -2 && month != -2) // Month is selected
             {
                 var start = new DateTime(year, month,1); // Start date
                 var end = start.AddMonths(1).AddSeconds(-1); // End date
@@ -199,8 +209,67 @@ namespace InitialProject.Service
 
             return requests; // Return filtered requests
         }
+        public List<string> GetAllLanguages() 
+        {
+            List<string> languages = new List<string>();
 
+            foreach (TourRequest request in FilterRequests(-2, -2, "/", "/", "/")) 
+            {
+                if (!languages.Contains(request.Language)) 
+                {
+                    languages.Add(request.Language);
+                }
+            }
+            return languages;
+        }
+        public string GetMostRequestedLanguage()
+        {
+            int maxValue = 0;
+            string returnLanguage = "";
+            foreach (string language in GetAllLanguages()) 
+            {
+                int count = FilterRequests(-2, -2, "/", "/", language).Count;
 
+                if (count > maxValue)
+                {
+                    maxValue = count;
+                    returnLanguage = language;
+                }
+            }
+            return returnLanguage;
+        }
+        public string GetMostRequestedCity()
+        {
+            int maxValue = 0;
+            string returnCity = "";
+            foreach (string city in _locationService.GetCities())
+            {
+                string country = _locationService.GetCountryByCity(city);
+                int count = FilterRequests(-2, -2, city, country, "/").Count;
 
+                if (count > maxValue)
+                {
+                    maxValue = count;
+                    returnCity = city;
+                }
+            }
+            return returnCity;
+        }
+        public string GetMostRequestedCountry()
+        {
+            int maxValue = 0;
+            string returnCountry = "";
+            foreach (string country in _locationService.GetCountries())
+            {
+                int count = FilterRequests(-2, -2, "/", country, "/").Count;
+
+                if (count > maxValue)
+                {
+                    maxValue = count;
+                    returnCountry = country;
+                }
+            }
+            return returnCountry;
+        }
     }
 }

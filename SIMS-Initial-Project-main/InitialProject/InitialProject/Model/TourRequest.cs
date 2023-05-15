@@ -17,6 +17,7 @@ namespace InitialProject.Model
         public RequestStatus Status { get; set; }
         public int GuestId { get; set; }
         public int GuideId { get; set; }
+        public DateTime CreationTime { get; set; }
         public TourRequest()
         {
         }
@@ -32,11 +33,12 @@ namespace InitialProject.Model
             Status = RequestStatus.pending;
             GuestId = guestId;
             GuideId = -1;
+            CreationTime = DateTime.Now;
         }
 
         public string[] ToCSV()
         {
-            string[] csvValues = 
+            string[] csvValues =
             {
                 Id.ToString(),
                 LocationId.ToString(),
@@ -47,7 +49,8 @@ namespace InitialProject.Model
                 EndTime.ToString(),
                 Status.ToString(),
                 GuestId.ToString(),
-                GuideId.ToString()
+                GuideId.ToString(),
+                CreationTime.ToString()
             };
 
             return csvValues;
@@ -65,6 +68,7 @@ namespace InitialProject.Model
             Status = Enum.Parse<RequestStatus>(values[7]);
             GuestId = int.Parse(values[8]);
             GuideId = int.Parse(values[9]);
+            CreationTime = DateTime.Parse(values[10]);
         }
     }
 }

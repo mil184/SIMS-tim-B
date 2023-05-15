@@ -531,7 +531,7 @@ namespace InitialProject.View.Guide
         }
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
-            CreateTour createTour = new CreateTour(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService);
+            CreateTour createTour = new CreateTour(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService);
             createTour.ShowDialog();
         }
 
@@ -827,7 +827,7 @@ namespace InitialProject.View.Guide
             if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.A)
             {
                 e.Handled = true;
-                Window createTour = new CreateTour(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService);
+                Window createTour = new CreateTour(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService);
                 createTour.ShowDialog();
             }
         }
@@ -1480,9 +1480,9 @@ namespace InitialProject.View.Guide
         }
         private void UpdateGridCounts()
         {
-            LanguageRequestsCount = _tourRequestService.FilterRequests(CurrentUser, GetYearValue(), GetMonthValue(), "/", "/", GetLanguageValue()).Count;
-            LocationRequestsCount = _tourRequestService.FilterRequests(CurrentUser, GetYearValue(), GetMonthValue(), GetCityValue(), GetCountryValue(), "/").Count;
-            LanguageLocationRequestsCount = _tourRequestService.FilterRequests(CurrentUser, GetYearValue(), GetMonthValue(), GetCityValue(), GetCountryValue(), GetLanguageValue()).Count;
+            LanguageRequestsCount = _tourRequestService.FilterRequests(GetYearValue(), GetMonthValue(), "/", "/", GetLanguageValue()).Count;
+            LocationRequestsCount = _tourRequestService.FilterRequests(GetYearValue(), GetMonthValue(), GetCityValue(), GetCountryValue(), "/").Count;
+            LanguageLocationRequestsCount = _tourRequestService.FilterRequests(GetYearValue(), GetMonthValue(), GetCityValue(), GetCountryValue(), GetLanguageValue()).Count;
 
         }
 

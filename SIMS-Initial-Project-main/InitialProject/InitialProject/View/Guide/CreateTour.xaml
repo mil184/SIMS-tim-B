@@ -253,30 +253,7 @@
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
-                    <Button Content=" Most Requested&#x0a;     (CTRL + R)" Width="150" Height="60" Background="#007ACC" Foreground="White" FontSize="15" BorderThickness="0" Padding="5 0" Margin="5">
-                        <Button.Template>
-                            <ControlTemplate TargetType="Button">
-                                <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
-                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                </Border>
-                                <ControlTemplate.Triggers>
-                                    <EventTrigger RoutedEvent="Button.Click">
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </EventTrigger>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="border" Property="Background" Value="#005F8B" />
-                                    </Trigger>
-                                    <Trigger Property="IsPressed" Value="True">
-                                        <Setter TargetName="border" Property="Background" Value="#00415E" />
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
+
                     <Button Content=" Cancel&#x0a;  (ESC)" Width="100" Height="60" Background="#007ACC" Foreground="White" FontSize="15" BorderThickness="0" Padding="5 0" Click="CancelButton_Click" Margin="5">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
@@ -301,6 +278,17 @@
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Button/>
+                        <Button Content ="Language" Grid.Row="0" Width="100" Height="20" Click="LanguageFilter_Click"/>
+                        <Button Content ="Country" Grid.Row="1" Width="100" Height="20" Click="CountryFilter_Click"/>
+                        <Button Content ="City" Grid.Row="2" Width="100" Height="20" Click="CityFilter_Click"/>
+                    </Grid>
                 </StackPanel>
             </Grid>
         </Border>

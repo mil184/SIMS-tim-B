@@ -169,7 +169,7 @@ namespace InitialProject.View.Guide
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        public CreateTour(User user, TourService tourService, LocationService locationService, ImageRepository imageRepository, CheckpointService checkpointService)
+        public CreateTour(User user, TourService tourService, LocationService locationService, ImageRepository imageRepository, CheckpointService checkpointService, TourRequestService tourRequestService)
         {
             InitializeComponent();
             DataContext = this;
@@ -178,6 +178,7 @@ namespace InitialProject.View.Guide
             _locationService = locationService;
             _imageRepository = imageRepository;
             _checkpointService = checkpointService;
+            _tourRequestService = tourRequestService;
 
             LeftBoundary = null;
             RightBoundary = null;
@@ -901,6 +902,20 @@ namespace InitialProject.View.Guide
             Checkpoints.Add(new Checkpoint("The Tree", 8));
             Checkpoints.Add(new Checkpoint("The Tower", 9));
             Checkpoints.Add(new Checkpoint("The Field", 10));
+        }
+
+        private void CityFilter_Click(object sender, RoutedEventArgs e)
+        {
+            //cbCity.IsEnabled = true;
+            //cbCity.SelectedItem = _tourRequestService.GetMostRequestedCity();
+            //cbCountry.SelectedItem = _locationService.GetCountryByCity(cbCity.SelectedItem.ToString());
+        }
+        private void CountryFilter_Click(object sender, RoutedEventArgs e)
+        {
+        }
+        private void LanguageFilter_Click(object sender, RoutedEventArgs e)
+        {
+            txtTourLanguage.Text = _tourRequestService.GetMostRequestedLanguage();
         }
     }
 }
