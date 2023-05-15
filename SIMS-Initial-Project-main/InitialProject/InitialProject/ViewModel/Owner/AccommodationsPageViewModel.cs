@@ -18,6 +18,7 @@ namespace InitialProject.ViewModel.Owner
         private readonly AccommodationService _accommodationService;
 
         public RelayCommand AddAccommodationCommand { get; set; }
+        public RelayCommand NavigateToStatisticsPageCommand { get; set; }
         public RelayCommand RenovateAccommodationCommand { get; set; }
 
         private void Execute_NavigateToAddAccommodationPageCommand(object obj)
@@ -25,6 +26,13 @@ namespace InitialProject.ViewModel.Owner
             Page addAccommodation = new AddAccommodationPage(MainWindow, _accommodationService);
             MainWindow.Main.NavigationService.Navigate(addAccommodation);
             MainWindow.Title.Content = "Register an Accommodation";
+        }
+
+        private void Execute_NavigateToStatisticsPageCommand(object obj)
+        {
+            Page statistics = new StatisticsPage(SelectedAccommodation);
+            MainWindow.Main.NavigationService.Navigate(statistics);
+            MainWindow.Title.Content = "Stats";
         }
 
         private void Execute_NavigateToRenovateAccommodationPageCommand(object obj)
@@ -48,6 +56,7 @@ namespace InitialProject.ViewModel.Owner
             _accommodationService.Subscribe(this);
 
             AddAccommodationCommand = new RelayCommand(Execute_NavigateToAddAccommodationPageCommand, CanExecute_Command);
+            NavigateToStatisticsPageCommand = new RelayCommand(Execute_NavigateToStatisticsPageCommand, CanExecute_Command);
             RenovateAccommodationCommand = new RelayCommand(Execute_NavigateToRenovateAccommodationPageCommand, CanExecute_Command);
 
             InitializeAccommodations();

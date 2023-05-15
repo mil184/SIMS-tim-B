@@ -21,7 +21,8 @@ namespace InitialProject.Resources.Injector
             { typeof(IAccommodationRenovationRepository), new AccommodationRenovationCSVRepository() },
             { typeof(IAccommodationReservationRepository), new AccommodationReservationCSVRepository() },
             { typeof(IGuestReviewRepository), new GuestReviewCSVRepository() },
-            { typeof(IRescheduleRequestRepository), new RescheduleRequestCSVRepository() }
+            { typeof(IRescheduleRequestRepository), new RescheduleRequestCSVRepository() },
+            { typeof(IReservationCancellationRepository), new ReservationCancellationCSVRepository() }
         };
 
         public static T CreateInstance<T>() 

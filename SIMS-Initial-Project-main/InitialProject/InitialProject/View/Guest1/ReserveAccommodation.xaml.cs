@@ -241,10 +241,11 @@ namespace InitialProject.View.Guest1
         private ObservableCollection<DateTime> GetAllFreeDates()
         {
             int accommodationId = Reservation.AccommodationId;
+            int duration = NumberOfDays;
             DateTime startDate = StartDate;
             DateTime endDate = EndDate;
 
-            return new ObservableCollection<DateTime>(_accommodationReservationService.GetAvailableDates(accommodationId, startDate, endDate));
+            return new ObservableCollection<DateTime>(_accommodationReservationService.GetAvailableDates(accommodationId, duration, startDate, endDate));
         }
 
         private void AddDateRanges(List<DatesDTO> dateRanges)
@@ -323,11 +324,11 @@ namespace InitialProject.View.Guest1
             return true;
         }
 
-        private List<DatesDTO> FindDateRanges(ObservableCollection<DateTime> dates)
+        /*private List<DatesDTO> FindDateRanges(ObservableCollection<DateTime> dates)
         {
             var dateRanges = new List<DatesDTO>();
 
-            for (int i = 0; i < dates.Count - NumberOfDays + 1; i++)  
+            for (int i = 0; i < dates.Count - NumberOfDays + 1; i++)
             {
                 DateTime startDate = dates[i];
                 DateTime endDate = dates[i + NumberOfDays - 1];
@@ -336,6 +337,19 @@ namespace InitialProject.View.Guest1
                 {
                     dateRanges.Add(new DatesDTO { StartDate = startDate, EndDate = endDate });
                 }
+            }
+
+            return dateRanges;
+        }*/
+        private List<DatesDTO> FindDateRanges(ObservableCollection<DateTime> dates)
+        {
+            var dateRanges = new List<DatesDTO>();
+
+            for (int i = 0; i < dates.Count; i++)  
+            {
+                DateTime startDate = dates[i];
+                DateTime endDate = dates[i].AddDays(NumberOfDays - 1);
+                dateRanges.Add(new DatesDTO { StartDate = startDate, EndDate = endDate });
             }
 
             return dateRanges;

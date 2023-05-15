@@ -24,6 +24,7 @@ using InitialProject.Service;
 using System.Diagnostics.Metrics;
 using InitialProject.View.Guest2;
 using InitialProject.ViewModel.Guest1;
+using System.Windows.Automation.Peers;
 
 namespace InitialProject.View.Guest1
 {
@@ -57,6 +58,7 @@ namespace InitialProject.View.Guest1
         private readonly AccommodationRatingsRepository _accommodationRatingsRepository;
         private readonly RescheduleRequestRepository _rescheduleRequestRepository;
         private readonly GuestReviewRepository _guestReviewRepository;
+        private readonly ReservationCancellationService _reservationCancellationService;
 
         private string searchName;
         public string SearchName
@@ -176,6 +178,9 @@ namespace InitialProject.View.Guest1
 
             _guestReviewRepository  = new GuestReviewRepository();
             _guestReviewRepository.Subscribe(this);
+
+            _reservationCancellationService = new ReservationCancellationService();
+            _reservationCancellationService.Subscribe(this);
 
             AllAccommodations = new ObservableCollection<Accommodation>(_accommodationService.GetAll());
             PresentableAccommodations = ConvertToDTO(new List<Accommodation>(AllAccommodations));
@@ -385,6 +390,8 @@ namespace InitialProject.View.Guest1
                         return;
                     }
 
+                    ReservationCancellation cancellation = new ReservationCancellation(SelectedReservation.Id, SelectedReservation.AccommodationId, SelectedReservation.OwnerId, SelectedReservation.GuestId, DateTime.Now);
+                    _reservationCancellationService.Save(cancellation);
                     _accommodationReservationService.Remove(SelectedReservation);
                     MessageBox.Show("Reservation canceled successfully.");
 

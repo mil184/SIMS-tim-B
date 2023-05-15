@@ -1,0 +1,42 @@
+﻿<Page x:Class="InitialProject.View.Owner.StatisticsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:InitialProject.View.Owner"
+      xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+      mc:Ignorable="d" 
+      d:DesignHeight="700" d:DesignWidth="430"
+      Title="StatisticsPage">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal">
+            <Label></Label>
+            <ComboBox ItemsSource="{Binding Years}"></ComboBox>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Orientation="Vertical" Margin="10">
+            <lvc:CartesianChart Series="{Binding Series1}" LegendLocation="Right" Height="250">
+                <lvc:CartesianChart.AxisX>
+                    <lvc:Axis Title="Date" Labels="{Binding Labels1}" />
+                </lvc:CartesianChart.AxisX>
+                <lvc:CartesianChart.AxisY>
+                    <lvc:Axis Title="Count" />
+                </lvc:CartesianChart.AxisY>
+            </lvc:CartesianChart>
+            <lvc:CartesianChart Series="{Binding Series2}" LegendLocation="Right" Height="250">
+                <lvc:CartesianChart.AxisX>
+                    <lvc:Axis Title="Date" Labels="{Binding Labels2}" />
+                </lvc:CartesianChart.AxisX>
+                <lvc:CartesianChart.AxisY>
+                    <lvc:Axis Title="Count" />
+                </lvc:CartesianChart.AxisY>
+            </lvc:CartesianChart>
+        </StackPanel>
+    </Grid>
+</Page>

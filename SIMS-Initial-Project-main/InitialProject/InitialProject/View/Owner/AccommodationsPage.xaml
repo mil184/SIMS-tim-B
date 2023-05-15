@@ -36,7 +36,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Vertical">
-                                <Button Height="30" Background="Transparent" >
+                                <Button Height="30" Background="Transparent" Command="{Binding DataContext.NavigateToStatisticsPageCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}">
                                     <Image Source="/Resources/Images/OwnerIcons/stats.png"></Image>
                                 </Button>
                             </StackPanel>
