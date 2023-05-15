@@ -197,7 +197,7 @@ namespace InitialProject.ViewModel.Guest1
                 if (messageBoxResult == MessageBoxResult.Yes)
                 {
                     SetValuesForRenovationLevel();
-                    RenovationRecommendation renovationRecommendation = new RenovationRecommendation(Reservation.AccommodationId, Information, RenovationLevel, Reservation.GuestId);
+                    RenovationRecommendation renovationRecommendation = new RenovationRecommendation(Reservation.AccommodationId, Information, RenovationLevel, Reservation.GuestId, DateTime.Now);
                     _renovationRecommendationRepository.Save(renovationRecommendation);
                     MessageBox.Show("Recommendation for renovation sent successfully.");
                     var window = Application.Current.Windows.OfType<RecommendRenovation>().FirstOrDefault();

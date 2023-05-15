@@ -12,7 +12,7 @@ namespace InitialProject.View.Owner
         {
             InitializeComponent();
             SelectedAccommodation = accommodation;
-            _viewModel = new StatisticsPageViewModel(SelectedAccommodation);
+            _viewModel = new StatisticsPageViewModel(this, SelectedAccommodation);
             DataContext = _viewModel;
         }
     }

@@ -40,6 +40,38 @@ namespace InitialProject.Service
             return cancellationsThisYear;
         }
 
+        public List<ReservationCancellation> GetCancellationsByMonth(int accommodationId, int year, int month)
+        {
+            List<ReservationCancellation> cancellationsThisYear = new List<ReservationCancellation>();
+
+            int day;
+
+            if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12)
+            {
+                day = 31;
+            }
+            else if (month == 2)
+            {
+                day = 28;
+            }
+            else
+            {
+                day = 30;
+            }
+
+            DateTime LeftBoundary = new DateTime(year, month, 1);
+            DateTime RightBoundary = new DateTime(year, month, day);
+
+            foreach (ReservationCancellation cancellation in _reservationCancellationRepository.GetAll())
+            {
+                if (cancellation.AccommodationId == accommodationId && cancellation.CancellationDate >= LeftBoundary && cancellation.CancellationDate <= RightBoundary)
+                {
+                    cancellationsThisYear.Add(cancellation);
+                }
+            }
+            return cancellationsThisYear;
+        }
+
         public ReservationCancellation Save(ReservationCancellation reservationCancellation)
         {
             return _reservationCancellationRepository.Save(reservationCancellation);
