@@ -49,6 +49,47 @@ namespace InitialProject.View.Guide
 
         public ObservableCollection<string> StatisticsYears { get; set; }
         public ObservableCollection<string> StatisticsMonths { get; set; }
+
+
+        private int _locationRequestsCount;
+        public int LocationRequestsCount
+        {
+            get { return _locationRequestsCount; }
+            set
+            {
+                if (_locationRequestsCount != value)
+                {
+                    _locationRequestsCount = value;
+                    OnPropertyChanged(nameof(LocationRequestsCount));
+                }
+            }
+        }
+        private int _languageRequestsCount;
+        public int LanguageRequestsCount
+        {
+            get { return _languageRequestsCount; }
+            set
+            {
+                if (_languageRequestsCount != value)
+                {
+                    _languageRequestsCount = value;
+                    OnPropertyChanged(nameof(LanguageRequestsCount));
+                }
+            }
+        }
+        private int _languageLocationRequestsCount;
+        public int LanguageLocationRequestsCount
+        {
+            get { return _languageLocationRequestsCount; }
+            set
+            {
+                if (_languageLocationRequestsCount != value)
+                {
+                    _languageLocationRequestsCount = value;
+                    OnPropertyChanged(nameof(LanguageLocationRequestsCount));
+                }
+            }
+        }
         public bool TourActive { get; set; }
 
         public int CurrentSortIndex;
@@ -241,6 +282,58 @@ namespace InitialProject.View.Guide
                 }
             }
         }
+        private bool _isMonthClickable;
+        public bool IsMonthClickable
+        {
+            get => _isMonthClickable;
+            set
+            {
+                if (value != _isMonthClickable)
+                {
+                    _isMonthClickable = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private string _languageR;
+        public string LanguageR
+        {
+            get => _languageR;
+            set
+            {
+                if (value != _languageR)
+                {
+                    _languageR = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private string _location;
+        public string Location
+        {
+            get => _location;
+            set
+            {
+                if (value != _location)
+                {
+                    _location = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private string _languageAndLocation;
+        public string LanguageAndLocation
+        {
+            get => _languageAndLocation;
+            set
+            {
+                if (value != _languageAndLocation)
+                {
+                    _languageAndLocation = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         public GuideWindow(User user)
         {
             InitializeComponent();
@@ -291,6 +384,7 @@ namespace InitialProject.View.Guide
             //AddMessage("Do you want to grab lunch?");
             //AddMessage("Do you want to grab lunch?");
             //AddMessage("Do you want to grab lunch?");
+
         }
         private void InitializeCollections()
         {
@@ -331,36 +425,43 @@ namespace InitialProject.View.Guide
                 RequestCities.Add(city);
             }
 
-            StatisticsCountries.Add(string.Empty);
+            StatisticsCountries.Add("-");
             foreach (string country in _locationService.GetCountries())
             {
                 StatisticsCountries.Add(country);
             }
 
-            StatisticsCities.Add(string.Empty);
+            StatisticsCities.Add("-");
             foreach (string city in _locationService.GetCities())
             {
-               StatisticsCities.Add(city);
+                StatisticsCities.Add(city);
             }
 
-            StatisticsYears.Add(string.Empty);
-            for(int i = 2000; i < DateTime.Now.Year; i++)
+            StatisticsYears.Add("Alltime");
+            for (int i = 2000; i <= DateTime.Now.Year; i++)
             {
-                RequestCountries.Add(i.ToString());
+                StatisticsYears.Add(i.ToString());
             }
-            StatisticsYears.Add(string.Empty);
-            StatisticsYears.Add("JAN");
-            StatisticsYears.Add("FEB");
-            StatisticsYears.Add("MAR");
-            StatisticsYears.Add("APR");
-            StatisticsYears.Add("MAY");
-            StatisticsYears.Add("JUN");
-            StatisticsYears.Add("JUL");
-            StatisticsYears.Add("AUG");
-            StatisticsYears.Add("SEP");
-            StatisticsYears.Add("OCT");
-            StatisticsYears.Add("NOV");
-            StatisticsYears.Add("DEC");
+
+            StatisticsMonths.Add("-");
+            StatisticsMonths.Add("JAN");
+            StatisticsMonths.Add("FEB");
+            StatisticsMonths.Add("MAR");
+            StatisticsMonths.Add("APR");
+            StatisticsMonths.Add("MAY");
+            StatisticsMonths.Add("JUN");
+            StatisticsMonths.Add("JUL");
+            StatisticsMonths.Add("AUG");
+            StatisticsMonths.Add("SEP");
+            StatisticsMonths.Add("OCT");
+            StatisticsMonths.Add("NOV");
+            StatisticsMonths.Add("DEC");
+
+            StatisticsYearInput = "Alltime";
+            IsMonthClickable = false;
+            StatisticsCityInput = "-";
+            StatisticsCountryInput = "-";
+            StatisticsLanguageInput = string.Empty;
         }
         private void InitializeStartingSearchValues()
         {
@@ -1294,6 +1395,157 @@ namespace InitialProject.View.Guide
                 storyboard.Begin();
                 message.Margin = new Thickness(0, -message.ActualHeight, 0, 0);
             }
+
+        }
+
+        private void cbStatisticsYear_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (StatisticsYearInput == "Alltime")
+            {
+                IsMonthClickable = false;
+                StatisticsMonthInput = "-";
+            }
+            else
+                IsMonthClickable = true;
+
+
+            UpdateGridNames();
+            UpdateGridCounts();
+        }
+
+        private void cbStatisticsMonth_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateGridNames();
+            UpdateGridCounts();
+        }
+
+        private void cbStatisticsCity_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (StatisticsCityInput != "-")
+                StatisticsCountryInput = _locationService.GetCountryByCity(StatisticsCityInput);
+
+            UpdateGridNames();
+            UpdateGridCounts();
+        }
+
+        private void cbStatisticsCountry_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+            if (!_locationService.GetCitiesByCountry(StatisticsCountryInput).Contains(StatisticsCityInput))
+                StatisticsCityInput = "-";
+
+            UpdateGridNames();
+            UpdateGridCounts();
+
+        }
+
+        private void cbStatisticsLanguage_SelectionChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateGridNames();
+            UpdateGridCounts();
+        }
+
+        private void UpdateGridNames()
+        {
+            if (string.IsNullOrEmpty(StatisticsLanguageInput))
+                LanguageR = "No language selected.";
+            else
+                LanguageR = StatisticsLanguageInput;
+
+            if (StatisticsCityInput == "-" && StatisticsCountryInput == "-")
+                Location = "No location selected.";
+
+            if (StatisticsCityInput == "-" && StatisticsCountryInput != "-")
+                Location = StatisticsCountryInput;
+
+            if (StatisticsCityInput != "-" && StatisticsCountryInput != "-")
+                Location = StatisticsCityInput + ", " + StatisticsCountryInput;
+
+            if(string.IsNullOrEmpty(StatisticsLanguageInput) && Location == "No location selected.") 
+            {
+                LanguageAndLocation = "Language and Location not selected.";
+            }
+            if (string.IsNullOrEmpty(StatisticsLanguageInput) && Location != "No location selected.")
+            {
+                LanguageAndLocation = "Language not selected.";
+            }
+            if (!string.IsNullOrEmpty(StatisticsLanguageInput) && Location == "No location selected.")
+            {
+                LanguageAndLocation = "Location not selected.";
+            }
+            if (!string.IsNullOrEmpty(StatisticsLanguageInput) && Location != "No location selected.")
+            {
+                LanguageAndLocation = Location + " in " + LanguageR;
+            }
+        }
+        private void UpdateGridCounts()
+        {
+            LanguageRequestsCount = _tourRequestService.FilterRequests(CurrentUser, GetYearValue(), GetMonthValue(), "/", "/", GetLanguageValue()).Count;
+            LocationRequestsCount = _tourRequestService.FilterRequests(CurrentUser, GetYearValue(), GetMonthValue(), GetCityValue(), GetCountryValue(), "/").Count;
+            LanguageLocationRequestsCount = _tourRequestService.FilterRequests(CurrentUser, GetYearValue(), GetMonthValue(), GetCityValue(), GetCountryValue(), GetLanguageValue()).Count;
+
+        }
+
+        private int GetMonthValue() 
+        {
+            switch (StatisticsMonthInput) 
+            {
+                case "JAN":
+                    return 1;
+                case "FEB":
+                    return 2;
+                case "MAR":
+                    return 3;
+                case "APR":
+                    return 4;
+                case "MAY":
+                    return 5;
+                case "JUN":
+                    return 6;
+                case "JUL":
+                    return 7;
+                case "AUG":
+                    return 8;
+                case "SEP":
+                    return 9;
+                case "OCT":
+                    return 10;
+                case "NOV":
+                    return 11;
+                case "DEC":
+                    return 12;
+                default:
+                    return -1;
+            }
+        }
+        private int GetYearValue() 
+        {
+            if (StatisticsYearInput == "Alltime")
+                return -1;
+            return int.Parse(StatisticsYearInput);
+        }   
+        private string GetCityValue() 
+        {
+            if (StatisticsCityInput != "-")
+                return StatisticsCityInput;
+
+            return "/";
+
+        }
+        private string GetCountryValue()
+        {
+            if (StatisticsCountryInput != "-")
+                return StatisticsCountryInput;
+
+            return "/";
+
+        }
+        private string GetLanguageValue()
+        {
+            if (!string.IsNullOrEmpty(StatisticsLanguageInput))
+                return StatisticsLanguageInput;
+
+            return "/";
 
         }
     }

@@ -160,48 +160,47 @@ namespace InitialProject.Service
             return requests;
         }
 
-        public List<TourRequest> GetByAllParameters(User user,int year, int month, string city, string country, string language)
+        public List<TourRequest> FilterRequests(User user, int year, int month, string city, string country, string language)
         {
-            List<TourRequest> byLanguage = GetAll();
-            if (language != null)
-                byLanguage = GetByLanguage(user, language);
+            var requests = GetAll(); // Get all requests
 
-            List<TourRequest> byCountry = GetAll();
-            if (country != null)
-                byCountry = GetByCountry(user, country);
-
-            List<TourRequest> byCity = GetAll();
-            if (city != null)
-                byCity = GetByCity(user, city);
-
-            List<TourRequest> byYearMonth= GetAll();
-            if (year != null && month != null) 
+            if (year != -1  && month == -1) // Year is selected
             {
-                DateTime dateTimeYearMonthStart = new DateTime(year, month, 1, 0, 0, 0);
-                DateTime dateTimeYearMonthEnd = new DateTime(year, month, DateTime.DaysInMonth(year, month), 23, 59, 59);
+                var start = new DateTime(year, 1, 1); // Start date
+                var end = new DateTime(year, 12, 31, 23, 59, 59); // End date
 
-                byYearMonth = GetByStartDate(user,dateTimeYearMonthStart);
-                byYearMonth.Intersect(GetByEndDate(user, dateTimeYearMonthEnd)).ToList();
+                requests = requests.Where(r => r.StartTime >= start && r.EndTime <= end).ToList(); // Filter requests by date range
+            }
+            else if (year != -1 && month != -1) // Month is selected
+            {
+                var start = new DateTime(year, month,1); // Start date
+                var end = start.AddMonths(1).AddSeconds(-1); // End date
+
+                requests = requests.Where(r => r.StartTime >= start && r.EndTime <= end).ToList(); // Filter requests by date range
             }
 
-            List<TourRequest> byYear= GetAll();
-            if (year != null && month == null) 
+            // Filter by city
+            if (city != "/")
             {
-                DateTime dateTimeYearStart = new DateTime(year,1, 1, 0, 0, 0);
-                DateTime dateTimeYearEnd = new DateTime(year,12, DateTime.DaysInMonth(year, month), 23, 59, 59);
-
-                byYear = GetByStartDate(user, dateTimeYearStart);
-                byYear.Intersect(GetByEndDate(user, dateTimeYearEnd)).ToList();
+                requests = requests.Where(r => _locationService.GetById(r.LocationId).City == city).ToList(); // Filter requests by city
             }
 
-            List<TourRequest> result = byLanguage;
-            result = result.Intersect(byCountry).ToList();
-            result = result.Intersect(byCity).ToList();
-            result = result.Intersect(byYearMonth).ToList();
-            result = result.Intersect(byYear).ToList();
+            // Filter by country
+            if (country != "/")
+            {
+                requests = requests.Where(r => _locationService.GetById(r.LocationId).Country == country).ToList(); // Filter requests by country
+            }
 
-            return result;
+            // Filter by language
+            if (language != "/")
+            {
+                requests = requests.Where(r => r.Language == language).ToList(); // Filter requests by language
+            }
+
+            return requests; // Return filtered requests
         }
+
+
 
     }
 }
