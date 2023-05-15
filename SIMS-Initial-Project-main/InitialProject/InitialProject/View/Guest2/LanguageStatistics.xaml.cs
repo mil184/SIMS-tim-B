@@ -15,6 +15,5 @@ namespace InitialProject.View.Guest2
             _viewModel = viewModel;
             DataContext = _viewModel;   
         }
-
     }
 }

@@ -170,6 +170,19 @@ namespace InitialProject.Service
             return languages.Distinct().ToList();
         }
 
+        public List<string> GetRequestedCities()
+        {
+            List<string> cities = new List<string>();
+
+            foreach (TourRequest tourRequest in GetAll())
+            {
+                string city = _locationService.GetCityById(tourRequest.LocationId);
+                cities.Add(city);
+            }
+
+            return cities.Distinct().ToList();
+        }
+
         public int CountPerLanguage(string language)
         {
             int counter = 0;
@@ -185,6 +198,22 @@ namespace InitialProject.Service
             return counter;
         }
 
+        public int CountPerCity(string city)
+        {
+            int counter = 0;
+
+            foreach (TourRequest tourRequest in GetAll())
+            {
+                string currentCity = _locationService.GetCityById(tourRequest.LocationId);
+                if (currentCity == city)
+                {
+                    counter++;
+                }
+            }
+
+            return counter;
+        }
+
         public List<int> GetRequestCountForLanguage(List<string> languages)
         {
             List<int> counts = new List<int>();
@@ -192,6 +221,18 @@ namespace InitialProject.Service
             foreach(string language in languages)
             {
                 counts.Add(CountPerLanguage(language));
+            }
+
+            return counts;
+        }
+
+        public List<int> GetRequestCountForCity(List<string> cities)
+        {
+            List<int> counts = new List<int>();
+
+            foreach (string city in cities)
+            {
+                counts.Add(CountPerCity(city));
             }
 
             return counts;

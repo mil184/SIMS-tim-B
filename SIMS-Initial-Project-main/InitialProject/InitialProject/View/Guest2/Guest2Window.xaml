@@ -180,7 +180,7 @@
                             <Button Content="Language Chart" Width="100" Click="LanguageStatisicButton_Click"/>
 
                             <TextBlock  Width="200" Height="40" TextWrapping="WrapWithOverflow">Chart that displays number of requests for each location:</TextBlock>
-                            <Button Content="Location Chart" Width="100"/>
+                            <Button Content="Location Chart" Width="100" Click="LocationStatisicButton_Click"/>
                         </StackPanel>
                     </StackPanel>
 

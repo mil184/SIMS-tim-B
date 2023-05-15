@@ -3,6 +3,7 @@ using InitialProject.Repository;
 using InitialProject.Service;
 using LiveCharts;
 using LiveCharts.Wpf;
+using System;
 using System.Collections.Generic;
 using System.Windows.Media;
 
@@ -26,6 +27,8 @@ namespace InitialProject.ViewModel.Guest2
             Languages = _tourRequestService.GetLanguages();
             RequestCounts = _tourRequestService.GetRequestCountForLanguage(Languages);
 
+            Random random = new Random();
+
             foreach (var language in Languages)
             {
                 var columnSeries = new ColumnSeries
@@ -33,7 +36,7 @@ namespace InitialProject.ViewModel.Guest2
                     Title = language,
                     Values = new ChartValues<int> { _tourRequestService.CountPerLanguage(language) },
                     Stroke = Brushes.Black,
-                    Fill = Brushes.Black,
+                    Fill = new SolidColorBrush(Color.FromRgb((byte)random.Next(256), (byte)random.Next(256), (byte)random.Next(256))),
                     ColumnPadding = 30,
                     MaxColumnWidth = 120
                 };

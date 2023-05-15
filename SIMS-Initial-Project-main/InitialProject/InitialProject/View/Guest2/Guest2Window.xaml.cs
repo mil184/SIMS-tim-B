@@ -454,5 +454,12 @@ namespace InitialProject.View.Guest2
             LanguageStatistics languageStatistics = new LanguageStatistics(languageStatisticsViewModel);
             languageStatistics.Show();
         }
+
+        private void LocationStatisicButton_Click(object sender, RoutedEventArgs e)
+        {
+            LocationStatisticsViewModel locationStatisticsViewModel = new LocationStatisticsViewModel(_tourRequestService, _locationService);
+            LocationStatistics locationStatistics = new LocationStatistics(locationStatisticsViewModel);
+            locationStatistics.Show();
+        }
     }
 }
