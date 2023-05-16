@@ -28,13 +28,11 @@ namespace InitialProject.View.Guest1
     {
         public RecommendRenovationViewModel _viewModel { get; set; }
 
-        public RecommendRenovation(AccommodationRatingsDTO selectedUnratedAccommodation, RenovationRecommendationRepository renovationRecommendationRepository, AccommodationReservationService accommodationReservationService)
+        public RecommendRenovation(AccommodationRatingsDTO selectedUnratedAccommodation, RenovationRecommendationService renovationRecommendationService, AccommodationReservationService accommodationReservationService)
         {
             InitializeComponent();
-            _viewModel = new RecommendRenovationViewModel(selectedUnratedAccommodation, renovationRecommendationRepository, accommodationReservationService);
+            _viewModel = new RecommendRenovationViewModel(selectedUnratedAccommodation, renovationRecommendationService, accommodationReservationService);
             DataContext = _viewModel;
-
         }
-
     }
 }

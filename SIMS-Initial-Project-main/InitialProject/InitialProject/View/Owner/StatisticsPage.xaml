@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:InitialProject.View.Owner"
       xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+      xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
       mc:Ignorable="d" 
       d:DesignHeight="700" d:DesignWidth="430"
       Title="StatisticsPage">
@@ -16,8 +17,14 @@
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal">
-            <Label></Label>
-            <ComboBox ItemsSource="{Binding Years}"></ComboBox>
+            <ComboBox Name="Years">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged" >
+                        <i:InvokeCommandAction Command="{Binding ChangeYearCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ComboBox>
+            <Label Name="label"></Label>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Orientation="Vertical" Margin="10">
@@ -37,6 +44,10 @@
                     <lvc:Axis Title="Count" />
                 </lvc:CartesianChart.AxisY>
             </lvc:CartesianChart>
+            <Label Name="MonthlyReservations"></Label>
+            <Label Name="MonthlyCancellations"></Label>
+            <Label Name="MonthlyReschedules"></Label>
+            <Label Name="MonthlyRecommendations"></Label>
         </StackPanel>
     </Grid>
 </Page>

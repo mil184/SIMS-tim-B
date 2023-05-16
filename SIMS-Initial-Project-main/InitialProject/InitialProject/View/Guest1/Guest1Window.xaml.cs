@@ -57,7 +57,7 @@ namespace InitialProject.View.Guest1
         private readonly ImageRepository _imageRepository;
         private readonly AccommodationRatingsRepository _accommodationRatingsRepository;
         private readonly RescheduleRequestRepository _rescheduleRequestRepository;
-        private readonly GuestReviewRepository _guestReviewRepository;
+        private readonly GuestReviewService _guestReviewService;
         private readonly ReservationCancellationService _reservationCancellationService;
 
         private string searchName;
@@ -176,8 +176,8 @@ namespace InitialProject.View.Guest1
             _rescheduleRequestRepository = new RescheduleRequestRepository();
             _rescheduleRequestRepository.Subscribe(this);
 
-            _guestReviewRepository  = new GuestReviewRepository();
-            _guestReviewRepository.Subscribe(this);
+            _guestReviewService  = new GuestReviewService();
+            _guestReviewService.Subscribe(this);
 
             _reservationCancellationService = new ReservationCancellationService();
             _reservationCancellationService.Subscribe(this);
@@ -471,7 +471,7 @@ namespace InitialProject.View.Guest1
         public void FormGuestRatings()
         {
             GuestRatings.Clear();
-            foreach (GuestReview review in _guestReviewRepository.GetAll())
+            foreach (GuestReview review in _guestReviewService.GetAll())
             {
                 if (review.GuestId == LoggedInUser.Id && _accommodationReservationService.GetById(review.ReservationId).IsRated)
                 { 

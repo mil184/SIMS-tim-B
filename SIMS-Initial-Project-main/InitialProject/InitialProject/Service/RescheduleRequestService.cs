@@ -33,6 +33,38 @@ namespace InitialProject.Service
             return reschedulesThisYear;
         }
 
+        public List<RescheduleRequest> GetReschedulesByMonth(int accommodationId, int year, int month)
+        {
+            List<RescheduleRequest> reschedulesThisYear = new List<RescheduleRequest>();
+
+            int day;
+
+            if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12)
+            {
+                day = 31;
+            }
+            else if (month == 2)
+            {
+                day = 28;
+            }
+            else
+            {
+                day = 30;
+            }
+
+            DateTime LeftBoundary = new DateTime(year, month, 1);
+            DateTime RightBoundary = new DateTime(year, month, day);
+
+            foreach (RescheduleRequest request in _rescheduleRequestRepository.GetAll())
+            {
+                if (request.AccommodationId == accommodationId && request.NewStartDate >= LeftBoundary && request.NewStartDate <= RightBoundary)
+                {
+                    reschedulesThisYear.Add(request);
+                }
+            }
+            return reschedulesThisYear;
+        }
+
         public RescheduleRequest Save(RescheduleRequest rescheduleRequest)
         {
             return _rescheduleRequestRepository.Save(rescheduleRequest);

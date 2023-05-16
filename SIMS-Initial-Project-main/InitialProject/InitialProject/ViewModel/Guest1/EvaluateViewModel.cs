@@ -22,7 +22,7 @@ namespace InitialProject.ViewModel.Guest1
         private readonly AccommodationReservationService _accommodationReservationService;
         private readonly ImageRepository _imageRepository;
         private readonly UserRepository _userRepository;
-        private readonly RenovationRecommendationRepository _renovationRecommendationRepository;
+        private readonly RenovationRecommendationService _renovationRecommendationService;
 
         public AccommodationReservation Reservation { get; set; }
 
@@ -275,7 +275,7 @@ namespace InitialProject.ViewModel.Guest1
             _accommodationReservationService = accommodationReservationService;
             _imageRepository = imageRepository;
             _userRepository = new UserRepository();
-            _renovationRecommendationRepository = new RenovationRecommendationRepository();
+            _renovationRecommendationService = new RenovationRecommendationService();
 
             Reservation = _accommodationReservationService.GetById(SelectedUnratedAccommodation.ReservationId);
 
@@ -452,7 +452,7 @@ namespace InitialProject.ViewModel.Guest1
 
         private void Execute_RecommendRenovationCommand(object obj)
         {
-            RecommendRenovation recommendRenovation = new RecommendRenovation(SelectedUnratedAccommodation, _renovationRecommendationRepository, _accommodationReservationService);
+            RecommendRenovation recommendRenovation = new RecommendRenovation(SelectedUnratedAccommodation, _renovationRecommendationService, _accommodationReservationService);
             recommendRenovation.ShowDialog();
         }
     }

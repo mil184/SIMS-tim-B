@@ -18,6 +18,7 @@ namespace InitialProject.View.Guest2
     {
         public User LoggedInUser { get; set; }
 
+        #region Tours
         public Guest2TourDTO SelectedGuest2TourDTO { get; set; }
         public ObservableCollection<Guest2TourDTO> TourDTOs { get; set; }
         public ObservableCollection<Tour> Tours { get; set; }
@@ -25,18 +26,28 @@ namespace InitialProject.View.Guest2
         public ObservableCollection<Guest2TourDTO> FinishedTourDTOs { get; set; }
         public List<Tour> FinishedTours { get; set; }
 
-        public ObservableCollection<TourRequest> TourRequests { get; set; }
-        public ObservableCollection<Guest2TourRequestDTO> TourRequestDTOs { get; set; }
-        public TourRequestDTOConverter TourRequestDTOConverter { get; set; }
+        #endregion
+
+        #region Vouchers
 
         public List<Tour> CheckedTours { get; set; }
         public Tour CurrentlyActiveTour { get; set; }
         public Checkpoint CurrentlyActiveCheckpoint { get; set; }
         public ObservableCollection<Voucher> Vouchers { get; set; }
 
-        public ObservableCollection<Location> Locations;
+        #endregion
 
-        public ObservableCollection<Guest2TourDTO> NonReservedTours { get; set; }
+        public ObservableCollection<TourRequest> TourRequests { get; set; }
+        public ObservableCollection<TourRequest> TourRequestsForYear { get; set; }
+        public ObservableCollection<Guest2TourRequestDTO> TourRequestDTOs { get; set; }
+        public TourRequestDTOConverter TourRequestDTOConverter { get; set; }
+        public ObservableCollection<string> TourRequestYears { get; set; }
+        public string StatusStatistic { get; set; }
+        public string GuestStatistic { get; set; }
+        public string SelectedStatisticYear { get; set; }
+        public string SelectedStatisticGuestYear { get; set; }
+        public int AcceptedToursCount { get; set; }
+        public int DeniedToursCount { get; set; }
 
         private readonly TourService _tourService;
         private readonly LocationService _locationService;
@@ -48,6 +59,7 @@ namespace InitialProject.View.Guest2
         private readonly VoucherService _voucherService;
         private readonly TourRequestService _tourRequestService;
 
+        #region Properties
 
         private string country;
         public string Country
@@ -105,7 +117,7 @@ namespace InitialProject.View.Guest2
             }
         }
 
-
+        #endregion
 
         public Guest2Window(User user)
         {
@@ -148,6 +160,7 @@ namespace InitialProject.View.Guest2
 
             TourRequestDTOConverter = new TourRequestDTOConverter(_locationService);
             TourRequests = new ObservableCollection<TourRequest>(_tourRequestService.GetAll());
+            TourRequestsForYear = new ObservableCollection<TourRequest>();
             TourRequestDTOs = new ObservableCollection<Guest2TourRequestDTO>(TourRequestDTOConverter.ConvertToDTOList(_tourRequestService.GetAll()));
 
             CheckedTours = new List<Tour>();
@@ -166,7 +179,14 @@ namespace InitialProject.View.Guest2
             FinishedTours = _tourService.GetFinishedTours(UserTours);
             FinishedTourDTOs = ConvertToDTO(FinishedTours);
 
+            TourRequestYears = new ObservableCollection<string>();
+            FormTourRequestYears();
+
             ConfirmArrival();
+
+            
+
+            
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -187,6 +207,9 @@ namespace InitialProject.View.Guest2
 
             TourRequestDTOs.Clear();
             FormTourRequestDTOs();
+
+            TourRequestYears.Clear();
+            FormTourRequestYears();
         }
 
         public void ConfirmArrival()
@@ -246,6 +269,60 @@ namespace InitialProject.View.Guest2
             {
                 TourRequestDTOs.Add(TourRequestDTOConverter.ConvertToDTO(tourRequest));
             }
+        }
+
+        public void FormTourRequestYears()
+        {
+            TourRequestYears.Clear();
+            TourRequestYears.Add("All time");
+
+            foreach (TourRequest tourRequest in _tourRequestService.GetAll())
+            {
+                string year = tourRequest.StartTime.Year.ToString();
+                if (!TourRequestYears.Contains(year))
+                {
+                    TourRequestYears.Add(year);
+                }
+            }
+        }
+
+        private void YearStatisticSelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            List<TourRequest> tourRequestsForYear = _tourRequestService.GetByYear(LoggedInUser, SelectedStatisticYear);
+
+            List<TourRequest> acceptedTours = _tourRequestService.GetAcceptedRequests(tourRequestsForYear);
+            List<TourRequest> deniedTours = _tourRequestService.GetDeniedRequests(tourRequestsForYear);
+
+            AcceptedToursCount = acceptedTours.Count();
+            DeniedToursCount = deniedTours.Count();
+
+            int AcceptedPercentage = AcceptedToursCount * 100 / tourRequestsForYear.Count();
+            int DeniedPercentage = DeniedToursCount * 100 / tourRequestsForYear.Count();
+
+            MessageBox.Show(AcceptedToursCount + " of your tours were accepted. " + DeniedToursCount + " of your tours were denied. Total tours for year:" + tourRequestsForYear.Count() + ". " + AcceptedPercentage + "% of your tours were accepted. " + DeniedPercentage + "% of your tours were denied.");
+
+            StatusStatistic = AcceptedToursCount + "of your tours were accepted." + DeniedToursCount + "of your tours were denied.";
+
+        }
+
+        private void GuestYearStatisticSelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            List<TourRequest> tourRequestsForYear = _tourRequestService.GetByYear(LoggedInUser, SelectedStatisticGuestYear);
+            List<TourRequest> acceptedTourRequestsForYear = _tourRequestService.GetAcceptedRequests(tourRequestsForYear);
+
+            double totalGuests = _tourRequestService.GetTotalGuestCountForYear(acceptedTourRequestsForYear);
+            double totalTourRequests = acceptedTourRequestsForYear.Count();
+
+            if (totalTourRequests==0)
+            {
+                MessageBox.Show("No accepted tour in this year.");
+            }
+            else
+            {
+                double averageGuests = (double)totalGuests / (double)totalTourRequests;
+                MessageBox.Show("Average guests:" + averageGuests);
+            }
+            
         }
 
         public ObservableCollection<Guest2TourDTO> ConvertToDTO(List<Tour> tours)
@@ -367,11 +444,23 @@ namespace InitialProject.View.Guest2
 
         private void RequestButton_Click(object sender, RoutedEventArgs e)
         {
-           
-
             RequestTourViewModel requestTourViewModel = new RequestTourViewModel(_userRepository, _locationService, _tourRequestService, LoggedInUser);
             RequestTour requestTour = new RequestTour(requestTourViewModel);
             requestTour.Show();
+        }
+
+        private void LanguageStatisicButton_Click(object sender, RoutedEventArgs e)
+        {
+            LanguageStatisticsViewModel languageStatisticsViewModel = new LanguageStatisticsViewModel(_tourRequestService);
+            LanguageStatistics languageStatistics = new LanguageStatistics(languageStatisticsViewModel);
+            languageStatistics.Show();
+        }
+
+        private void LocationStatisicButton_Click(object sender, RoutedEventArgs e)
+        {
+            LocationStatisticsViewModel locationStatisticsViewModel = new LocationStatisticsViewModel(_tourRequestService, _locationService);
+            LocationStatistics locationStatistics = new LocationStatistics(locationStatisticsViewModel);
+            locationStatistics.Show();
         }
     }
 }

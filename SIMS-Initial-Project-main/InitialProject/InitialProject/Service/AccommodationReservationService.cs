@@ -23,6 +23,46 @@ namespace InitialProject.Service
             _accommodationRenovationService = new AccommodationRenovationService();
         }
 
+        public int GetBusiestYear(int accommodationId)
+        {
+            var yearCounts = new Dictionary<int, int>();
+
+            // Iterate over each reservation
+            foreach (var reservation in _accommodationReservationRepository.GetAll())
+            {
+                if (reservation.AccommodationId == accommodationId)
+                {
+                    // Extract the year from the reservation date
+                    int year = reservation.StartDate.Year;
+
+                    // Add the number of reserved days to the corresponding year's count
+                    if (yearCounts.ContainsKey(year))
+                    {
+                        yearCounts[year] += reservation.NumberDays;
+                    }
+                    else
+                    {
+                        yearCounts[year] = reservation.NumberDays;
+                    }
+                }
+            }
+
+            // Find the year with the maximum total number of reserved days
+            int maxYear = 0;
+            int maxCount = 0;
+
+            foreach (var entry in yearCounts)
+            {
+                if (entry.Value > maxCount)
+                {
+                    maxYear = entry.Key;
+                    maxCount = entry.Value;
+                }
+            }
+
+            return maxYear;
+        }
+
         public List<DateTime> GetAvailableDates(int accommodationId, int duration, DateTime startDate, DateTime endDate)
         {
             List<DateTime> reservedDates = new List<DateTime>();
@@ -98,6 +138,38 @@ namespace InitialProject.Service
 
             DateTime LeftBoundary = new DateTime(year, 1, 1);
             DateTime RightBoundary = new DateTime(year, 12, 31);
+
+            foreach (AccommodationReservation reservation in _accommodationReservationRepository.GetAll())
+            {
+                if (reservation.AccommodationId == accommodationId && reservation.StartDate >= LeftBoundary && reservation.StartDate <= RightBoundary)
+                {
+                    reservationsThisYear.Add(reservation);
+                }
+            }
+            return reservationsThisYear;
+        }
+
+        public List<AccommodationReservation> GetReservationsByMonth(int accommodationId, int year, int month)
+        {
+            List<AccommodationReservation> reservationsThisYear = new List<AccommodationReservation>();
+
+            int day;
+
+            if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12)
+            {
+                day = 31;
+            }
+            else if (month == 2)
+            {
+                day = 28;
+            }
+            else
+            {
+                day = 30;
+            }
+
+            DateTime LeftBoundary = new DateTime(year, month, 1);
+            DateTime RightBoundary = new DateTime(year, month, day);
 
             foreach (AccommodationReservation reservation in _accommodationReservationRepository.GetAll())
             {
