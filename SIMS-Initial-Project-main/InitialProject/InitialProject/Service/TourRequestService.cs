@@ -122,7 +122,17 @@ namespace InitialProject.Service
 
             return requests;
         }
-
+        public void UpdateInvalidRequests() 
+        {
+            foreach(TourRequest request in GetAll()) 
+            {
+                if(request.StartTime.AddDays(-2) < DateTime.Now && request.Status == Resources.Enums.RequestStatus.pending) 
+                {
+                    request.Status = Resources.Enums.RequestStatus.invalid;
+                    Update(request);
+                }
+            }
+        }
         public List<TourRequest> GetGuestRequests(User user)
         {
             List<TourRequest> requests = new List<TourRequest>();

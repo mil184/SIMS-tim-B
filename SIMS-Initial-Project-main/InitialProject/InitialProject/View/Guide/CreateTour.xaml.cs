@@ -369,6 +369,7 @@ namespace InitialProject.View.Guide
             request.Status = InitialProject.Resources.Enums.RequestStatus.accepted;
             request.GuideId = LoggedInUser.Id;
             tour.RequestId = request.Id;
+            request.ChosenDate = tour.StartTime;
             _tourRequestService.Update(request);
         }
         private void Hours_cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -496,9 +497,11 @@ namespace InitialProject.View.Guide
         private DateTime GetSelectedDateTime()
         {
             DateTime selectedDate = dpDate.SelectedDate.GetValueOrDefault();
-            DateTime selectedDateTime = new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, int.Parse(Hours), int.Parse(Minutes), 0);
-
-            return selectedDateTime;
+            
+                DateTime selectedDateTime = new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, int.Parse(Hours), int.Parse(Minutes), 0);
+                return selectedDateTime;
+            
+            
         }
         public string Error => null;
         public string this[string columnName]
