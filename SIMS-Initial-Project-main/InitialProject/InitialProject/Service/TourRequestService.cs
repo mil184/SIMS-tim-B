@@ -1,14 +1,12 @@
 ﻿using InitialProject.Model;
-using InitialProject.Repository;
 using InitialProject.Repository.Interfaces;
 using InitialProject.Resources.Injector;
 using InitialProject.Resources.Observer;
-using InitialProject.ViewModel.Guest2;
+using InitialProject.View.Guest2;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Metrics;
 using System.Linq;
-using System.Windows.Media;
+using System.Windows;
 
 namespace InitialProject.Service
 {
@@ -24,6 +22,107 @@ namespace InitialProject.Service
             _tourService = new TourService();
         }
 
+
+        public TourRequest GetSameDetailsTourRequest(User user)
+        {
+            List<TourRequest> acceptedOtherGuestRequests = GetStatusRequests(GetOtherGuestRequests(user), Resources.Enums.RequestStatus.accepted);
+
+            foreach (TourRequest guestRequest in GetInvalidandPendingRequests(user))
+            {
+                foreach (TourRequest otherGuestRequest in acceptedOtherGuestRequests)
+                {
+                    if (guestRequest.LocationId == otherGuestRequest.LocationId || guestRequest.Language == otherGuestRequest.Language)
+                    {
+                        return guestRequest;
+                    }
+                }
+            }
+
+            return null;
+        }
+        
+        public List<string> GetInvalidOrPendingLanguageRequests(User user) 
+        {
+            List<string> languages = new List<string>();
+
+            foreach (TourRequest request in GetInvalidandPendingRequests(user)) 
+            {
+                if (!languages.Contains(request.Language)) 
+                {
+                    languages.Add(request.Language);
+                }
+            }
+            return languages;
+        }
+        public List<int> GetInvalidOrPendingLocationRequests(User user)
+        {
+            List<int> locationIds = new List<int>();
+
+            foreach (TourRequest request in GetInvalidandPendingRequests(user))
+            {
+                if (!locationIds.Contains(request.LocationId))
+                {
+                    locationIds.Add(request.LocationId);
+                }
+            }
+            return locationIds;
+        }
+        public List<TourRequest> CheckForOthersAcceptedLanguage(User user) 
+        {
+            List<TourRequest> requests = new List<TourRequest>();
+
+            foreach (TourRequest request in GetOtherGuestRequests(user)) 
+            {
+                if (GetInvalidOrPendingLanguageRequests(user).Contains(request.Language) && request.Status == Resources.Enums.RequestStatus.accepted) 
+                {
+                    requests.Add(request);
+                }
+            }
+            return requests;
+        }
+        public List<TourRequest> CheckForOthersAcceptedLocation(User user)
+        {
+            List<TourRequest> requests = new List<TourRequest>();
+
+            foreach (TourRequest request in GetOtherGuestRequests(user))
+            {
+                if (GetInvalidOrPendingLocationRequests(user).Contains(request.LocationId) && request.Status == Resources.Enums.RequestStatus.accepted)
+                {
+                    requests.Add(request);
+                }
+            }
+            return requests;
+        }
+        public List<TourRequest> GetInvalidandPendingRequests(User user)
+        {
+            List<TourRequest> requests = GetStatusRequests(GetGuestRequests(user), Resources.Enums.RequestStatus.pending);
+
+            foreach (TourRequest request in GetAll())
+            {
+                if (request.Status == InitialProject.Resources.Enums.RequestStatus.invalid)
+                {
+                    requests.Add(request);
+                }
+            }
+
+            return requests;
+        }
+
+        public List<TourRequest> GetStatusRequests (List<TourRequest> tourRequests, InitialProject.Resources.Enums.RequestStatus requestStatus)
+        {
+            List<TourRequest> requests = new List<TourRequest>();
+
+            foreach (TourRequest request in tourRequests)
+            {
+                if (request.Status == requestStatus)
+                {
+                    requests.Add(request);
+                }
+            }
+
+            return requests;
+        }
+
         public List<TourRequest> GetGuestRequests(User user)
         {
             List<TourRequest> requests = new List<TourRequest>();
@@ -31,6 +130,21 @@ namespace InitialProject.Service
             foreach(var request in _tourRequestRepository.GetAll())
             {
                 if (request.GuestId == user.Id)
+                {
+                    requests.Add(request);
+                }
+            }
+
+            return requests;
+        }
+
+        public List<TourRequest> GetOtherGuestRequests(User user)
+        {
+            List<TourRequest> requests = new List<TourRequest>();
+
+            foreach (var request in _tourRequestRepository.GetAll())
+            {
+                if (request.GuestId != user.Id)
                 {
                     requests.Add(request);
                 }
@@ -111,35 +225,35 @@ namespace InitialProject.Service
             return counter;
         }
 
-        public List<TourRequest> GetAcceptedRequests(List<TourRequest> tourRequests)
-        {
-            List<TourRequest> requests = new List<TourRequest>();
+        //public List<TourRequest> GetAcceptedRequests(List<TourRequest> tourRequests)
+        //{
+        //    List<TourRequest> requests = new List<TourRequest>();
 
-            foreach (TourRequest request in tourRequests)
-            {
-                if (request.Status.ToString() == "accepted")
-                {
-                    requests.Add(request);
-                }
-            }
+        //    foreach (TourRequest request in tourRequests)
+        //    {
+        //        if (request.Status.ToString() == "accepted")
+        //        {
+        //            requests.Add(request);
+        //        }
+        //    }
 
-            return requests;
-        }
+        //    return requests;
+        //}
 
-        public List<TourRequest> GetDeniedRequests(List<TourRequest> tourRequests)
-        {
-            List<TourRequest> requests = new List<TourRequest>();
+        //public List<TourRequest> GetDeniedRequests(List<TourRequest> tourRequests)
+        //{
+        //    List<TourRequest> requests = new List<TourRequest>();
 
-            foreach (TourRequest request in tourRequests)
-            {
-                if (request.Status.ToString() == "invalid")
-                {
-                    requests.Add(request);
-                }
-            }
+        //    foreach (TourRequest request in tourRequests)
+        //    {
+        //        if (request.Status.ToString() == "invalid")
+        //        {
+        //            requests.Add(request);
+        //        }
+        //    }
 
-            return requests;
-        }
+        //    return requests;
+        //}
 
         public List<string> GetLanguages()
         {

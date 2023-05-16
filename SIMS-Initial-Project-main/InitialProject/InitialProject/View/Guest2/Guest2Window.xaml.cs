@@ -159,9 +159,9 @@ namespace InitialProject.View.Guest2
             Vouchers = new ObservableCollection<Voucher>(_voucherService.GetActiveVouchers(UserVouchers));
 
             TourRequestDTOConverter = new TourRequestDTOConverter(_locationService);
-            TourRequests = new ObservableCollection<TourRequest>(_tourRequestService.GetAll());
+            TourRequests = new ObservableCollection<TourRequest>(_tourRequestService.GetGuestRequests(LoggedInUser));
             TourRequestsForYear = new ObservableCollection<TourRequest>();
-            TourRequestDTOs = new ObservableCollection<Guest2TourRequestDTO>(TourRequestDTOConverter.ConvertToDTOList(_tourRequestService.GetAll()));
+            TourRequestDTOs = new ObservableCollection<Guest2TourRequestDTO>(TourRequestDTOConverter.ConvertToDTOList(_tourRequestService.GetGuestRequests(LoggedInUser)));
 
             CheckedTours = new List<Tour>();
             foreach (int id in _tourReservationService.GetCheckedTourIds(LoggedInUser))
@@ -169,7 +169,7 @@ namespace InitialProject.View.Guest2
                 CheckedTours.Add(_tourService.GetById(id));
             }
 
-            if(CheckedTours.Count != 0 && !CheckedTours[0].IsFinished)
+            if (CheckedTours.Count != 0 && !CheckedTours[0].IsFinished)
             {
                 CurrentlyActiveTour = CheckedTours[0];
                 CurrentlyActiveCheckpoint = _checkpointService.GetById(CurrentlyActiveTour.CurrentCheckpointId);
@@ -186,8 +186,75 @@ namespace InitialProject.View.Guest2
 
             NotifyOnAcceptedRequest();
 
+            NotifyAcceptedLanguages();
+            NotifyAcceptedLocations();
         }
 
+        private void NotifyAcceptedLanguages()
+        {
+            List<TourRequest> requestsAcceptedLanguages = _tourRequestService.CheckForOthersAcceptedLanguage(LoggedInUser);
+
+            if (requestsAcceptedLanguages.Count != 0)
+            {
+                List<string> languages = new List<string>();
+                string message = "Others have acepted the language(s): ";
+                foreach (TourRequest req in requestsAcceptedLanguages)
+                {
+                    message += req.Language + ", ";
+                    languages.Add(req.Language);
+                }
+                message = message.TrimEnd(',', ' ');
+                bool flag = false;
+                foreach (TourRequest req in _tourRequestService.GetInvalidandPendingRequests(LoggedInUser))
+                {
+                    if (languages.Contains(req.Language) && !req.SameDetailsMessageShownLanguage)
+                    {
+                        flag = true;
+                        TourRequest request = req;
+                        req.SameDetailsMessageShownLanguage = true;
+                        _tourRequestService.Update(req);
+                    }
+                }
+                if (flag)
+                    MessageBox.Show(message);
+            }
+        }
+        private void NotifyAcceptedLocations()
+        {
+            List<TourRequest> requestsAcceptedLocations = _tourRequestService.CheckForOthersAcceptedLocation(LoggedInUser);
+            
+            if (requestsAcceptedLocations.Count != 0)
+            {
+
+                List<int> locationIds = new List<int>();
+
+                string message = "Others have acepted the location(s): ";
+                foreach (TourRequest req in requestsAcceptedLocations)
+                {
+                    message += _locationService.GetById(req.LocationId).City + ", " + _locationService.GetById(req.LocationId).Country + " ,also ";
+                    locationIds.Add(req.LocationId);
+                }
+                int lastIndex = message.LastIndexOf("also");
+                if (lastIndex >= 0)
+                {
+                    message = message.Substring(0, lastIndex) + message.Substring(lastIndex + "also".Length);
+                }
+
+                bool flag = false;
+                foreach (TourRequest req in _tourRequestService.GetInvalidandPendingRequests(LoggedInUser))
+                {
+                    if (locationIds.Contains(req.LocationId) && !req.SameDetailsMessageShownLocation)
+                    {
+                        flag = true;
+                        TourRequest request = req;
+                        req.SameDetailsMessageShownLocation = true;
+                        _tourRequestService.Update(req);
+                    }
+                }
+                if (flag)
+                    MessageBox.Show(message);
+            }
+        }
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
@@ -220,10 +287,9 @@ namespace InitialProject.View.Guest2
                 if (tourRequest.Status == InitialProject.Resources.Enums.RequestStatus.accepted && !tourRequest.MessageShown)
                 {
                     MessageBox.Show("Your tour request in " + location + " has been accepted.");
+                    tourRequest.MessageShown = true;
+                    _tourRequestService.Update(tourRequest);
                 }
-
-                tourRequest.MessageShown = true;
-                _tourRequestService.Update(tourRequest);
             }
         }
 
@@ -280,7 +346,7 @@ namespace InitialProject.View.Guest2
 
         public void FormTourRequestDTOs()
         {
-            foreach(TourRequest tourRequest in _tourRequestService.GetAll())
+            foreach(TourRequest tourRequest in _tourRequestService.GetGuestRequests(LoggedInUser))
             {
                 TourRequestDTOs.Add(TourRequestDTOConverter.ConvertToDTO(tourRequest));
             }
@@ -291,7 +357,7 @@ namespace InitialProject.View.Guest2
             TourRequestYears.Clear();
             TourRequestYears.Add("All time");
 
-            foreach (TourRequest tourRequest in _tourRequestService.GetAll())
+            foreach (TourRequest tourRequest in _tourRequestService.GetGuestRequests(LoggedInUser))
             {
                 string year = tourRequest.StartTime.Year.ToString();
                 if (!TourRequestYears.Contains(year))
@@ -305,8 +371,8 @@ namespace InitialProject.View.Guest2
         {
             List<TourRequest> tourRequestsForYear = _tourRequestService.GetByYear(LoggedInUser, SelectedStatisticYear);
 
-            List<TourRequest> acceptedTours = _tourRequestService.GetAcceptedRequests(tourRequestsForYear);
-            List<TourRequest> deniedTours = _tourRequestService.GetDeniedRequests(tourRequestsForYear);
+            List<TourRequest> acceptedTours = _tourRequestService.GetStatusRequests(tourRequestsForYear, InitialProject.Resources.Enums.RequestStatus.accepted);
+            List<TourRequest> deniedTours = _tourRequestService.GetStatusRequests(tourRequestsForYear, InitialProject.Resources.Enums.RequestStatus.invalid);
 
             AcceptedToursCount = acceptedTours.Count();
             DeniedToursCount = deniedTours.Count();
@@ -323,7 +389,7 @@ namespace InitialProject.View.Guest2
         private void GuestYearStatisticSelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             List<TourRequest> tourRequestsForYear = _tourRequestService.GetByYear(LoggedInUser, SelectedStatisticGuestYear);
-            List<TourRequest> acceptedTourRequestsForYear = _tourRequestService.GetAcceptedRequests(tourRequestsForYear);
+            List<TourRequest> acceptedTourRequestsForYear = _tourRequestService.GetStatusRequests(tourRequestsForYear, InitialProject.Resources.Enums.RequestStatus.accepted);
 
             double totalGuests = _tourRequestService.GetTotalGuestCountForYear(acceptedTourRequestsForYear);
             double totalTourRequests = acceptedTourRequestsForYear.Count();
@@ -364,6 +430,7 @@ namespace InitialProject.View.Guest2
         }
         public Guest2TourDTO ConvertToDTO(Tour tour)
         {
+ 
             return new Guest2TourDTO(
                 tour.Id,
                 tour.Name,
@@ -376,6 +443,7 @@ namespace InitialProject.View.Guest2
                 tour.StartTime,
                 tour.Duration,
                 _userRepository.GetById(tour.GuideId).Username);
+
         }
 
         private void ReserveButton_Click(object sender, RoutedEventArgs e)
