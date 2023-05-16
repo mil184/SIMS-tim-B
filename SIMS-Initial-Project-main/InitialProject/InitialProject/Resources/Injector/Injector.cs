@@ -1,4 +1,5 @@
-﻿using InitialProject.Repository.Implementations;
+﻿using InitialProject.Repository;
+using InitialProject.Repository.Implementations;
 using InitialProject.Repository.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,10 @@ namespace InitialProject.Resources.Injector
             { typeof(IGuestReviewRepository), new GuestReviewCSVRepository() },
             { typeof(IRescheduleRequestRepository), new RescheduleRequestCSVRepository() },
             { typeof(IReservationCancellationRepository), new ReservationCancellationCSVRepository() },
-            { typeof(ITourRequestRepository), new TourRequestCSVRepository() }
+            { typeof(ITourRequestRepository), new TourRequestCSVRepository() },
+            { typeof(IRenovationRecommendationRepository), new RenovationRecommendationCSVRepository() },
+            { typeof(IUserRepository), new UserCSVRepository() },
+            { typeof(IImageRepository), new ImageCSVRepository() }
 
         };
 

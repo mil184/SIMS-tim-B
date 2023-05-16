@@ -13,15 +13,17 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using MenuNavigation.Commands;
+using InitialProject.Repository.Interfaces;
+using InitialProject.Resources.Injector;
 
 namespace InitialProject.ViewModel.Guest1
 {
     public class EvaluateViewModel: IDataErrorInfo
     {
-        private readonly AccommodationRatingsRepository _accommodationRatingsRepository;
+        private readonly AccommodationRatingService _accommodationRatingsService;
         private readonly AccommodationReservationService _accommodationReservationService;
-        private readonly ImageRepository _imageRepository;
-        private readonly UserRepository _userRepository;
+        private readonly IImageRepository _imageRepository;
+        private readonly IUserRepository _userRepository;
         private readonly RenovationRecommendationService _renovationRecommendationService;
 
         public AccommodationReservation Reservation { get; set; }
@@ -268,13 +270,13 @@ namespace InitialProject.ViewModel.Guest1
             get => SelectedUnratedAccommodation?.UserName;
         }
 
-        public EvaluateViewModel(AccommodationRatingsDTO selectedUnratedAccommodation, AccommodationRatingsRepository accommodationRatingsRepository, AccommodationReservationService accommodationReservationService, ImageRepository imageRepository)
+        public EvaluateViewModel(AccommodationRatingsDTO selectedUnratedAccommodation, AccommodationRatingService accommodationRatingsService, AccommodationReservationService accommodationReservationService, IImageRepository imageRepository)
         {
             SelectedUnratedAccommodation = selectedUnratedAccommodation;
-            _accommodationRatingsRepository = accommodationRatingsRepository;
+            _accommodationRatingsService = accommodationRatingsService;
             _accommodationReservationService = accommodationReservationService;
             _imageRepository = imageRepository;
-            _userRepository = new UserRepository();
+            _userRepository = Injector.CreateInstance<IUserRepository>();
             _renovationRecommendationService = new RenovationRecommendationService();
 
             Reservation = _accommodationReservationService.GetById(SelectedUnratedAccommodation.ReservationId);
@@ -351,7 +353,7 @@ namespace InitialProject.ViewModel.Guest1
                     AccommodationReservation reservation = _accommodationReservationService.GetById(Reservation.Id);
                     reservation.IsRated = true;
                     _accommodationReservationService.Update(reservation);
-                    _accommodationRatingsRepository.Save(accommodationRatings);
+                    _accommodationRatingsService.Save(accommodationRatings);
                     MessageBox.Show("Rating saved successfully.");
                     CheckForSuperOwnerPrivileges(Reservation.OwnerId);
                     var window = Application.Current.Windows.OfType<Evaluate>().FirstOrDefault();
@@ -362,9 +364,9 @@ namespace InitialProject.ViewModel.Guest1
 
         private void CheckForSuperOwnerPrivileges(int id)
         {
-            int numberOfRatings = _accommodationRatingsRepository.GetAll().Where(x => x.OwnerId == id).Count();
-            int cleanlinessSum = _accommodationRatingsRepository.GetAll().Where(x => x.OwnerId == id).Sum(x => x.Cleanliness);
-            int correctnessSum = _accommodationRatingsRepository.GetAll().Where(x => x.OwnerId == id).Sum(x => x.Correctness);
+            int numberOfRatings = _accommodationRatingsService.GetAll().Where(x => x.OwnerId == id).Count();
+            int cleanlinessSum = _accommodationRatingsService.GetAll().Where(x => x.OwnerId == id).Sum(x => x.Cleanliness);
+            int correctnessSum = _accommodationRatingsService.GetAll().Where(x => x.OwnerId == id).Sum(x => x.Correctness);
 
             double averageRating = (cleanlinessSum + correctnessSum) / (numberOfRatings * 2);
 

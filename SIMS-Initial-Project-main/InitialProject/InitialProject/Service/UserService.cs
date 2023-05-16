@@ -1,6 +1,8 @@
 ﻿using InitialProject.Model;
 using InitialProject.Repository;
+using InitialProject.Repository.Interfaces;
 using InitialProject.Resources.Enums;
+using InitialProject.Resources.Injector;
 using InitialProject.Resources.Observer;
 using InitialProject.Serializer;
 using System;
@@ -14,12 +16,12 @@ namespace InitialProject.Service
 {
     public class UserService
     {
-        private readonly UserRepository _userRepository;
+        private readonly IUserRepository _userRepository;
         private readonly AccommodationReservationService _accommodationReservationService;
 
         public UserService()
         {
-            _userRepository = new UserRepository();
+            _userRepository = Injector.CreateInstance<IUserRepository>();
             _accommodationReservationService = new AccommodationReservationService();
         }
 

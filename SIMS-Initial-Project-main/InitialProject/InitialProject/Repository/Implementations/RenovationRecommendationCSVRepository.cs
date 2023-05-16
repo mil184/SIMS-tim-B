@@ -1,4 +1,5 @@
 ﻿using InitialProject.Model;
+using InitialProject.Repository.Interfaces;
 using InitialProject.Resources.Observer;
 using InitialProject.Serializer;
 using System;
@@ -7,9 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace InitialProject.Repository
+namespace InitialProject.Repository.Implementations
 {
-    public class RenovationRecommendationRepository: ISubject
+    public class RenovationRecommendationCSVRepository: IRenovationRecommendationRepository
     {
         private const string FilePath = "../../../Resources/Data/renovationRecommendations.csv";
 
@@ -19,7 +20,7 @@ namespace InitialProject.Repository
 
         private readonly List<IObserver> _observers;
 
-        public RenovationRecommendationRepository()
+        public RenovationRecommendationCSVRepository()
         {
             _serializer = new Serializer<RenovationRecommendation>();
             _renovationRecommendations = _serializer.FromCSV(FilePath);

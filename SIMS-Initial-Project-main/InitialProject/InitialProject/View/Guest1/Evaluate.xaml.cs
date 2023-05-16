@@ -1,6 +1,7 @@
 ﻿using InitialProject.Model;
 using InitialProject.Model.DTO;
 using InitialProject.Repository;
+using InitialProject.Repository.Interfaces;
 using InitialProject.Service;
 using InitialProject.ViewModel.Guest1;
 using System;
@@ -32,10 +33,10 @@ namespace InitialProject.View.Guest1
     {
         public EvaluateViewModel _viewModel { get; set; }
 
-        public Evaluate(AccommodationRatingsDTO selectedUnratedAccommodation, AccommodationRatingsRepository accommodationRatingsRepository, AccommodationReservationService accommodationReservationService, ImageRepository imageRepository)
+        public Evaluate(AccommodationRatingsDTO selectedUnratedAccommodation, AccommodationRatingService accommodationRatingsService, AccommodationReservationService accommodationReservationService, IImageRepository imageRepository)
         {
             InitializeComponent();
-            _viewModel = new EvaluateViewModel(selectedUnratedAccommodation, accommodationRatingsRepository, accommodationReservationService, imageRepository);
+            _viewModel = new EvaluateViewModel(selectedUnratedAccommodation, accommodationRatingsService, accommodationReservationService, imageRepository);
             DataContext = _viewModel;
         }
 

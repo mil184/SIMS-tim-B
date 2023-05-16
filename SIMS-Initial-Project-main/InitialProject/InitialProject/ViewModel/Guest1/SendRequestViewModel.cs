@@ -1,5 +1,6 @@
 ﻿using InitialProject.Model;
 using InitialProject.Repository;
+using InitialProject.Service;
 using InitialProject.View.Guest1;
 using MenuNavigation.Commands;
 using System;
@@ -16,7 +17,7 @@ namespace InitialProject.ViewModel.Guest1
 {
     public class SendRequestViewModel
     {
-        private readonly RescheduleRequestRepository _rescheduleRequestRepository;
+        private readonly RescheduleRequestService _rescheduleRequestService;
         public AccommodationReservation SelectedReservation { get; set; }
 
         private DateTime _newStartDate;
@@ -50,10 +51,10 @@ namespace InitialProject.ViewModel.Guest1
         public RelayCommand SendRequestCommand { get; set; }
         public RelayCommand CancelRequestCommand { get; set; }
 
-        public SendRequestViewModel(AccommodationReservation selectedReservation, RescheduleRequestRepository rescheduleRequestRepository)
+        public SendRequestViewModel(AccommodationReservation selectedReservation, RescheduleRequestService rescheduleRequestService)
         {
             SelectedReservation = selectedReservation;
-            _rescheduleRequestRepository = rescheduleRequestRepository;
+            _rescheduleRequestService = rescheduleRequestService;
 
             _newStartDate = SelectedReservation.StartDate;
             _newEndDate = SelectedReservation.EndDate;
@@ -75,7 +76,7 @@ namespace InitialProject.ViewModel.Guest1
                 if (DatesValid(SelectedReservation) && NumberOfDaysValid(SelectedReservation))
                 {
                     var rescheduleRequest = new RescheduleRequest(SelectedReservation, NewStartDate, NewEndDate);
-                    _rescheduleRequestRepository.Save(rescheduleRequest);
+                    _rescheduleRequestService.Save(rescheduleRequest);
                     MessageBox.Show("Reschedule request sent successfully.", "Reschedule Request", MessageBoxButton.OK, MessageBoxImage.Information);
                     var window = Application.Current.Windows.OfType<SendRequest>().FirstOrDefault();
                     window.Close();

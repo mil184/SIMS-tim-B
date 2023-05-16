@@ -11,12 +11,12 @@ namespace InitialProject.Service
     public class AccommodationRatingService
     {
         private readonly IAccommodationRatingRepository _accommodationRatingRepository;
-        private readonly GuestReviewRepository _guestReviewRepository;
+        private readonly IGuestReviewRepository _guestReviewRepository;
 
         public AccommodationRatingService()
         {
             _accommodationRatingRepository = Injector.CreateInstance<IAccommodationRatingRepository>();
-            _guestReviewRepository = new GuestReviewRepository();
+            _guestReviewRepository = Injector.CreateInstance <IGuestReviewRepository>();
         }
 
         public List<AccommodationRatings> GetAvailableRatings(int ownerId)

@@ -1,6 +1,7 @@
 ﻿using InitialProject.Model;
 using InitialProject.Repository;
 using InitialProject.Repository.Interfaces;
+using InitialProject.Resources.Injector;
 using InitialProject.Resources.Observer;
 using System;
 using System.Collections.Generic;
@@ -9,11 +10,11 @@ namespace InitialProject.Service
 {
     public class RenovationRecommendationService
     {
-        private readonly RenovationRecommendationRepository _renovationRecommendationRepository;
+        private readonly IRenovationRecommendationRepository _renovationRecommendationRepository;
 
         public RenovationRecommendationService()
         {
-            _renovationRecommendationRepository= new RenovationRecommendationRepository();
+            _renovationRecommendationRepository= Injector.CreateInstance<IRenovationRecommendationRepository>();
         }
 
         public List<RenovationRecommendation> GetRecommendationsByYear(int accommodationId, int year)

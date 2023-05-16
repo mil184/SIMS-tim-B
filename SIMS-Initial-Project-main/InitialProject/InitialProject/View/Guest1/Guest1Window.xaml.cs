@@ -25,6 +25,8 @@ using System.Diagnostics.Metrics;
 using InitialProject.View.Guest2;
 using InitialProject.ViewModel.Guest1;
 using System.Windows.Automation.Peers;
+using InitialProject.Repository.Interfaces;
+using InitialProject.Resources.Injector;
 
 namespace InitialProject.View.Guest1
 {
@@ -54,9 +56,9 @@ namespace InitialProject.View.Guest1
         private readonly AccommodationReservationService _accommodationReservationService;
         private readonly LocationService _locationService;
         private readonly UserService _userService;
-        private readonly ImageRepository _imageRepository;
-        private readonly AccommodationRatingsRepository _accommodationRatingsRepository;
-        private readonly RescheduleRequestRepository _rescheduleRequestRepository;
+        private readonly IImageRepository _imageRepository;
+        private readonly AccommodationRatingService _accommodationRatingsService;
+        private readonly RescheduleRequestService _rescheduleRequestService;
         private readonly GuestReviewService _guestReviewService;
         private readonly ReservationCancellationService _reservationCancellationService;
 
@@ -167,14 +169,14 @@ namespace InitialProject.View.Guest1
             _userService = new UserService();
             _userService.Subscribe(this);
 
-            _imageRepository = new ImageRepository();
+            _imageRepository = Injector.CreateInstance<IImageRepository>();
             _imageRepository.Subscribe(this);
 
-            _accommodationRatingsRepository = new AccommodationRatingsRepository();
-            _accommodationRatingsRepository.Subscribe(this);
+            _accommodationRatingsService = new AccommodationRatingService();
+            _accommodationRatingsService.Subscribe(this);
 
-            _rescheduleRequestRepository = new RescheduleRequestRepository();
-            _rescheduleRequestRepository.Subscribe(this);
+            _rescheduleRequestService = new RescheduleRequestService();
+            _rescheduleRequestService.Subscribe(this);
 
             _guestReviewService  = new GuestReviewService();
             _guestReviewService.Subscribe(this);
@@ -190,7 +192,7 @@ namespace InitialProject.View.Guest1
             UnratedReservations = new ObservableCollection<AccommodationReservation>();
 
             PresentableReservations = new ObservableCollection<AccommodationReservation>(_accommodationReservationService.GetAll());
-            AllReschedules = new ObservableCollection<RescheduleRequest>(_rescheduleRequestRepository.GetAll());
+            AllReschedules = new ObservableCollection<RescheduleRequest>(_rescheduleRequestService.GetAll());
 
             GuestRatings = new ObservableCollection<Guest1RatingsDTO>();
             FormGuestRatings();
@@ -365,7 +367,7 @@ namespace InitialProject.View.Guest1
         {
             if (SelectedUnratedAccommodation != null)
             {
-                Evaluate evaluateAccommodation = new Evaluate(SelectedUnratedAccommodation, _accommodationRatingsRepository, _accommodationReservationService, _imageRepository);
+                Evaluate evaluateAccommodation = new Evaluate(SelectedUnratedAccommodation, _accommodationRatingsService, _accommodationReservationService, _imageRepository);
                 evaluateAccommodation.ShowDialog();
             }
         }
@@ -413,7 +415,7 @@ namespace InitialProject.View.Guest1
         {
             if (SelectedReservation != null)
             {
-                SendRequest sendRequest = new SendRequest(SelectedReservation, _rescheduleRequestRepository);
+                SendRequest sendRequest = new SendRequest(SelectedReservation, _rescheduleRequestService);
                 sendRequest.ShowDialog();
             }
         }
@@ -439,7 +441,7 @@ namespace InitialProject.View.Guest1
 
         private void CheckRescheduleRequestsStatus()
         {
-            var requests = _rescheduleRequestRepository.GetAll().Where(r => r.GuestId == LoggedInUser.Id);
+            var requests = _rescheduleRequestService.GetAll().Where(r => r.GuestId == LoggedInUser.Id);
 
             foreach (var request in requests)
             {

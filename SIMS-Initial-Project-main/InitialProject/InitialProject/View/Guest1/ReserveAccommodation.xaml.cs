@@ -387,8 +387,10 @@ namespace InitialProject.View.Guest1
                     _accommodationReservationService.Save(reservation);
 
                     MessageBox.Show("Reservation created successfully.");
-
-                    UpdateUserBonusPoints(LoggedInUser.Id);
+                    if (LoggedInUser.Type == UserType.superguest)
+                    {
+                        UpdateUserBonusPoints(LoggedInUser.Id);
+                    }
                     Close();
                 }
                 return;

@@ -1,6 +1,7 @@
 ﻿using InitialProject.Model;
 using InitialProject.Repository;
 using InitialProject.Repository.Interfaces;
+using InitialProject.Resources.Injector;
 using InitialProject.Resources.Observer;
 using System;
 using System.Collections.Generic;
@@ -14,12 +15,12 @@ namespace InitialProject.Service
     public class AccommodationReservationService
     {
 
-        private readonly AccommodationReservationRepository _accommodationReservationRepository;
+        private readonly IAccommodationReservationRepository _accommodationReservationRepository;
         private readonly AccommodationRenovationService _accommodationRenovationService;
 
         public AccommodationReservationService()
         {
-            _accommodationReservationRepository = new AccommodationReservationRepository();
+            _accommodationReservationRepository = Injector.CreateInstance<IAccommodationReservationRepository>();
             _accommodationRenovationService = new AccommodationRenovationService();
         }
 

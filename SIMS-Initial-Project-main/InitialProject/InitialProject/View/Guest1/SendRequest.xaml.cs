@@ -1,5 +1,6 @@
 ﻿using InitialProject.Model;
 using InitialProject.Repository;
+using InitialProject.Service;
 using InitialProject.ViewModel.Guest1;
 using System;
 using System.Collections.Generic;
@@ -26,10 +27,10 @@ namespace InitialProject.View.Guest1
     {
         private readonly SendRequestViewModel _viewModel;
 
-        public SendRequest(AccommodationReservation selectedReservation, RescheduleRequestRepository rescheduleRequestRepository)
+        public SendRequest(AccommodationReservation selectedReservation, RescheduleRequestService rescheduleRequestService)
         {
             InitializeComponent();
-            _viewModel = new SendRequestViewModel(selectedReservation, rescheduleRequestRepository);
+            _viewModel = new SendRequestViewModel(selectedReservation, rescheduleRequestService);
             DataContext = _viewModel;
         }
       
