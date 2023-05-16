@@ -86,8 +86,8 @@ namespace InitialProject.ViewModel.Guest2
             }
         }
 
-        private int _maxGuests;
-        public int MaxGuests
+        private string _maxGuests;
+        public string MaxGuests
         {
             get => _maxGuests;
             set
@@ -224,7 +224,7 @@ namespace InitialProject.ViewModel.Guest2
                 tourLocation.Id,
                 Description,
                 Language,
-                MaxGuests,
+                int.Parse(MaxGuests),
                 StartDateTime,
                 EndDateTime,
                 LoggedInUser.Id

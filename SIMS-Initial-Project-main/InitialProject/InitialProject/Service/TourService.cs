@@ -21,6 +21,21 @@ namespace InitialProject.Service
             _tourReservationRepository = new TourReservationRepository();
         }
 
+        public Tour GetTourByRequestId(int id)
+        {
+            Tour requestedTour = new Tour();
+
+            foreach (Tour tour in GetAll())
+            {
+                if (tour.RequestId == id)
+                {
+                    requestedTour = tour;
+                } 
+            }
+
+            return requestedTour;
+        }
+
         public List<Tour> GetUserTours(User user)
         {
             List<Tour> tours = new List<Tour>();

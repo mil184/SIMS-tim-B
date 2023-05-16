@@ -11,7 +11,7 @@ namespace InitialProject.Service
 {
     public class AccommodationRenovationService : ISubject
     {
-        private readonly IAccommodationRenovationRepository _accommodationRenovationRepository;
+        private readonly IAccommodationRenovationRepository _accommodationRenovationRepository; 
         private readonly AccommodationReservationRepository _accommodationReservationRepository;
 
         public AccommodationRenovationService()
