@@ -906,16 +906,17 @@ namespace InitialProject.View.Guide
 
         private void CityFilter_Click(object sender, RoutedEventArgs e)
         {
-            //cbCity.IsEnabled = true;
-            //cbCity.SelectedItem = _tourRequestService.GetMostRequestedCity();
-            //cbCountry.SelectedItem = _locationService.GetCountryByCity(cbCity.SelectedItem.ToString());
+            cbCity.IsEnabled = true;
+            Country = _locationService.GetCountryByCity(_tourRequestService.GetMostRequestedCity());
+            City = _tourRequestService.GetMostRequestedCity();
         }
         private void CountryFilter_Click(object sender, RoutedEventArgs e)
         {
+            Country = _tourRequestService.GetMostRequestedCountry();
         }
         private void LanguageFilter_Click(object sender, RoutedEventArgs e)
         {
-            txtTourLanguage.Text = _tourRequestService.GetMostRequestedLanguage();
+           TourLanguage = _tourRequestService.GetMostRequestedLanguage();
         }
     }
 }

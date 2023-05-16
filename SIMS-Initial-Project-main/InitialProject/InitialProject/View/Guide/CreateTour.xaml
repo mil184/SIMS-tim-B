@@ -83,13 +83,13 @@
              Margin="4"  Width="300" HorizontalAlignment="Left"/>
 
                 <TextBlock Text="Country:" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" FontSize="15" Margin="4" Foreground="#007ACC" FontWeight="Bold"/>
-                <ComboBox Name="cbCountry" Margin="4"   SelectionChanged="CbCountry_SelectionChanged" Grid.Row="6" Grid.Column="1"
+                <ComboBox Name="cbCountry" Margin="4"   SelectionChanged="CbCountry_SelectionChanged" Grid.Row="6" Grid.Column="1" SelectedItem="{Binding Path=Country, UpdateSourceTrigger=PropertyChanged}"
                           HorizontalAlignment="Left" Width="300">
                 </ComboBox>
 
                 <TextBlock Text="City:" Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" FontSize="15" Margin="4" Foreground="#007ACC" FontWeight="Bold"/>
                 <ComboBox Name="cbCity" Margin="4"   SelectionChanged="CbCity_SelectionChanged" IsEnabled="False" Grid.Row="7" Grid.Column="1"
-                          HorizontalAlignment="Left" Width="300">
+                          HorizontalAlignment="Left" Width="300" SelectedItem="{Binding Path=City, UpdateSourceTrigger=PropertyChanged}">
                 </ComboBox>
 
                 <TextBlock Text="Date and Time:" Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" FontSize="15" Margin="4" Foreground="#007ACC" FontWeight="Bold"/>
