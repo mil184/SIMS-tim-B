@@ -184,9 +184,8 @@ namespace InitialProject.View.Guest2
 
             ConfirmArrival();
 
-            
+            NotifyOnAcceptedRequest();
 
-            
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -210,6 +209,22 @@ namespace InitialProject.View.Guest2
 
             TourRequestYears.Clear();
             FormTourRequestYears();
+        }
+
+        public void NotifyOnAcceptedRequest()
+        {
+            foreach (TourRequest tourRequest in _tourRequestService.GetGuestRequests(LoggedInUser))
+            {
+                string location = _locationService.GetLocationStringbyId(tourRequest.LocationId);
+
+                if (tourRequest.Status == InitialProject.Resources.Enums.RequestStatus.accepted && !tourRequest.MessageShown)
+                {
+                    MessageBox.Show("Your tour request in " + location + " has been accepted.");
+                }
+
+                tourRequest.MessageShown = true;
+                _tourRequestService.Update(tourRequest);
+            }
         }
 
         public void ConfirmArrival()

@@ -18,6 +18,7 @@ namespace InitialProject.Model
         public int GuestId { get; set; }
         public int GuideId { get; set; }
         public DateTime CreationTime { get; set; }
+        public bool MessageShown { get; set; }
         public TourRequest()
         {
         }
@@ -34,6 +35,7 @@ namespace InitialProject.Model
             GuestId = guestId;
             GuideId = -1;
             CreationTime = DateTime.Now;
+            MessageShown = false;
         }
 
         public string[] ToCSV()
@@ -50,7 +52,8 @@ namespace InitialProject.Model
                 Status.ToString(),
                 GuestId.ToString(),
                 GuideId.ToString(),
-                CreationTime.ToString()
+                CreationTime.ToString(),
+                MessageShown.ToString()
             };
 
             return csvValues;
@@ -69,6 +72,7 @@ namespace InitialProject.Model
             GuestId = int.Parse(values[8]);
             GuideId = int.Parse(values[9]);
             CreationTime = DateTime.Parse(values[10]);
+            MessageShown = bool.Parse(values[11]);
         }
     }
 }

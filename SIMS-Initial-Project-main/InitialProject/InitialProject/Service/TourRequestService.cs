@@ -24,40 +24,21 @@ namespace InitialProject.Service
             _tourService = new TourService();
         }
 
-        public TourRequest GetById(int id)
+        public List<TourRequest> GetGuestRequests(User user)
         {
-            return _tourRequestRepository.GetById(id);
+            List<TourRequest> requests = new List<TourRequest>();
+
+            foreach(var request in _tourRequestRepository.GetAll())
+            {
+                if (request.GuestId == user.Id)
+                {
+                    requests.Add(request);
+                }
+            }
+
+            return requests;
         }
 
-        public void Update(TourRequest tourRequest)
-        {
-            _tourRequestRepository.Update(tourRequest);
-        }
-
-        public TourRequest Save(TourRequest tourRequest)
-        {
-            return _tourRequestRepository.Save(tourRequest);
-        }
-
-        internal List<TourRequest> GetAll()
-        {
-            return _tourRequestRepository.GetAll();
-        }
-
-        public void Subscribe(IObserver observer)
-        {
-            _tourRequestRepository.Subscribe(observer);
-        }
-
-        public void Unsubscribe(IObserver observer)
-        {
-            _tourRequestRepository.Unsubscribe(observer);
-        }
-
-        public void NotifyObservers()
-        {
-            _tourRequestRepository.NotifyObservers();
-        }
         public List<TourRequest> GetPendingRequests(User user)
         {
             List<TourRequest> pendingRequests = new List<TourRequest>();
@@ -414,6 +395,41 @@ namespace InitialProject.Service
                 }
             }
             return returnCountry;
+        }
+
+        public TourRequest GetById(int id)
+        {
+            return _tourRequestRepository.GetById(id);
+        }
+
+        public void Update(TourRequest tourRequest)
+        {
+            _tourRequestRepository.Update(tourRequest);
+        }
+
+        public TourRequest Save(TourRequest tourRequest)
+        {
+            return _tourRequestRepository.Save(tourRequest);
+        }
+
+        internal List<TourRequest> GetAll()
+        {
+            return _tourRequestRepository.GetAll();
+        }
+
+        public void Subscribe(IObserver observer)
+        {
+            _tourRequestRepository.Subscribe(observer);
+        }
+
+        public void Unsubscribe(IObserver observer)
+        {
+            _tourRequestRepository.Unsubscribe(observer);
+        }
+
+        public void NotifyObservers()
+        {
+            _tourRequestRepository.NotifyObservers();
         }
     }
 }
