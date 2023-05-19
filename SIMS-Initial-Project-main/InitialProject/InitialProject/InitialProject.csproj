@@ -76,6 +76,7 @@
     <None Remove="Resources\Images\rightArrow.png" />
     <None Remove="Resources\Images\search.jpg" />
     <None Remove="Resources\Images\tour-guide.png" />
+    <None Remove="Resources\Images\trash-can.png" />
     <None Remove="Resources\Images\traveler.png" />
     <None Remove="Resources\Images\upload.png" />
     <None Remove="Resources\Images\video.png" />
@@ -179,12 +180,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.5.0" />
     <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
     <PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Resources\Images\guest2.png" />
+    <Resource Include="Resources\Images\trash-can.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Images\upload.png" />
     <Resource Include="Resources\Images\warning.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
