@@ -87,10 +87,10 @@ namespace InitialProject
                     }
                     else if (user.Type == InitialProject.Resources.Enums.UserType.guide)
                     {
-                        //GuideWindow guideWindow = new GuideWindow(user);
-                        //guideWindow.Show();
-                        CreateTourWindow window = new CreateTourWindow();
-                        window.Show();
+                        GuideWindow guideWindow = new GuideWindow(user);
+                        guideWindow.Show();
+                        //CreateTourWindow window = new CreateTourWindow();
+                        //window.Show();
                         Close();
                      
                     }

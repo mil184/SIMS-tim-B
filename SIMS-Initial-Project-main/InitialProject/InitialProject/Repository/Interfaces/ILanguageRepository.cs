@@ -5,11 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Markup;
 
 namespace InitialProject.Repository.Interfaces
 {
-    public interface ILocationRepository : ISubject
+    public interface ILanguageRepository : ISubject
     {
         public int NextId();
         public Language Save(Language language);
