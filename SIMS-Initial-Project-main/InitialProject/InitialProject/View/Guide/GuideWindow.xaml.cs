@@ -24,6 +24,7 @@ namespace InitialProject.View.Guide
 {
     public partial class GuideWindow : Window, INotifyPropertyChanged, IObserver
     {
+        #region ContructorAndServices
         private readonly TourService _tourService;
         private readonly TourReservationService _tourReservationService;
         private readonly TourRatingService _tourRatingService;
@@ -35,69 +36,152 @@ namespace InitialProject.View.Guide
         private readonly TourRequestService _tourRequestService;
 
         public User CurrentUser { get; set; }
-        public ObservableCollection<GuideTourDTO> CurrentTours { get; set; }
-        public ObservableCollection<GuideTourDTO> UpcomingTours { get; set; }
-        public ObservableCollection<GuideTourDTO> FinishedTours { get; set; }
-        public ObservableCollection<GuideTourDTO> RatedTours { get; set; }
-        public ObservableCollection<GuideRequestDTO> PendingRequests { get; set; }
-
-        public ObservableCollection<string> RequestCountries { get; set; }
-        public ObservableCollection<string> RequestCities { get; set; }
-
-        public ObservableCollection<string> StatisticsCountries { get; set; }
-        public ObservableCollection<string> StatisticsCities { get; set; }
-
-        public ObservableCollection<string> StatisticsYears { get; set; }
-        public ObservableCollection<string> StatisticsMonths { get; set; }
-
-
-        private int _locationRequestsCount;
-        public int LocationRequestsCount
-        {
-            get { return _locationRequestsCount; }
-            set
-            {
-                if (_locationRequestsCount != value)
-                {
-                    _locationRequestsCount = value;
-                    OnPropertyChanged(nameof(LocationRequestsCount));
-                }
-            }
-        }
-        private int _languageRequestsCount;
-        public int LanguageRequestsCount
-        {
-            get { return _languageRequestsCount; }
-            set
-            {
-                if (_languageRequestsCount != value)
-                {
-                    _languageRequestsCount = value;
-                    OnPropertyChanged(nameof(LanguageRequestsCount));
-                }
-            }
-        }
-        private int _languageLocationRequestsCount;
-        public int LanguageLocationRequestsCount
-        {
-            get { return _languageLocationRequestsCount; }
-            set
-            {
-                if (_languageLocationRequestsCount != value)
-                {
-                    _languageLocationRequestsCount = value;
-                    OnPropertyChanged(nameof(LanguageLocationRequestsCount));
-                }
-            }
-        }
-        public bool TourActive { get; set; }
-
         public int CurrentSortIndex;
+        public GuideWindow(User user)
+        {
+            InitializeComponent();
+            DataContext = this;
+            CurrentUser = user;
+
+            _tourService = new TourService();
+            _tourService.Subscribe(this);
+
+            _imageRepository = new ImageRepository();
+            _imageRepository.Subscribe(this);
+
+            _locationService = new LocationService();
+            _locationService.Subscribe(this);
+
+            _checkpointService = new CheckpointService();
+            _checkpointService.Subscribe(this);
+
+            _tourReservationService = new TourReservationService();
+            _tourReservationService.Subscribe(this);
+
+            _userRepository = new UserRepository();
+            _userRepository.Subscribe(this);
+
+            _voucherRepository = new VoucherRepository();
+            _voucherRepository.Subscribe(this);
+
+            _tourRatingService = new TourRatingService();
+            _tourRatingService.Subscribe(this);
+
+            _tourRequestService = new TourRequestService();
+            _tourRequestService.Subscribe(this);
+
+            InitializeCollections();
+            InitializeStartingSearchValues();
+            InitializeComboBoxes();
+            InitializeShortcuts();
+            FindActiveTour();
+
+            RequestStartDateInput = null;
+            RequestEndDateInput = null;
+
+            CurrentUser.Username = "Gorana";
+            CurrentSortIndex = 0;
+
+        }
+        private void InitializeCollections()
+        {
+            CurrentTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourService.GetTodaysTours()));
+            UpcomingTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourService.GetUpcomingTours()));
+            FinishedTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourService.GetFinishedTours()));
+            RatedTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourService.GetRatedTours()));
+            PendingRequests = new ObservableCollection<GuideRequestDTO>(ConvertToDTO(_tourRequestService.GetPendingRequests(CurrentUser)));
+
+            RequestCountries = new ObservableCollection<string>();
+            RequestCities = new ObservableCollection<string>();
+
+            StatisticsCountries = new ObservableCollection<string>();
+            StatisticsCities = new ObservableCollection<string>();
+
+            StatisticsYears = new ObservableCollection<string>();
+            StatisticsMonths = new ObservableCollection<string>();
+        }
+
+        private void InitializeComboBoxes()
+        {
+            Years_cb.Items.Add("Alltime");
+            Years_cb.SelectedItem = Years_cb.Items[0];
+            for (int i = 2000; i <= DateTime.Now.Year; i++)
+            {
+                Years_cb.Items.Add(i.ToString());
+            }
+
+            RequestCountries.Add(string.Empty);
+            foreach (string country in _locationService.GetCountries())
+            {
+                RequestCountries.Add(country);
+            }
+
+            RequestCities.Add(string.Empty);
+            foreach (string city in _locationService.GetCities())
+            {
+                RequestCities.Add(city);
+            }
+
+            StatisticsCountries.Add("-");
+            foreach (string country in _locationService.GetCountries())
+            {
+                StatisticsCountries.Add(country);
+            }
+
+            StatisticsCities.Add("-");
+            foreach (string city in _locationService.GetCities())
+            {
+                StatisticsCities.Add(city);
+            }
+
+            StatisticsYears.Add("Alltime");
+            for (int i = 2000; i <= DateTime.Now.Year; i++)
+            {
+                StatisticsYears.Add(i.ToString());
+            }
+
+            StatisticsMonths.Add("-");
+            StatisticsMonths.Add("JAN");
+            StatisticsMonths.Add("FEB");
+            StatisticsMonths.Add("MAR");
+            StatisticsMonths.Add("APR");
+            StatisticsMonths.Add("MAY");
+            StatisticsMonths.Add("JUN");
+            StatisticsMonths.Add("JUL");
+            StatisticsMonths.Add("AUG");
+            StatisticsMonths.Add("SEP");
+            StatisticsMonths.Add("OCT");
+            StatisticsMonths.Add("NOV");
+            StatisticsMonths.Add("DEC");
+
+            StatisticsYearInput = "Alltime";
+            IsMonthClickable = false;
+            StatisticsCityInput = "-";
+            StatisticsCountryInput = "-";
+            StatisticsLanguageInput = string.Empty;
+        }
+        private void InitializeStartingSearchValues()
+        {
+            MostVisited = ConvertToDTO(_tourService.GetMostVisitedTour(_tourService.GetFinishedTours()));
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        private void LogOut_Click(object sender, RoutedEventArgs e)
+        {
+            SignInForm signInForm = new SignInForm();
+            signInForm.Show();
+            Close();
+
+        }
+        #endregion
+
+        #region TodaysToursTab
+        public ObservableCollection<GuideTourDTO> CurrentTours { get; set; }
         public GuideTourDTO SelectedCurrentTourDTO { get; set; }
-        public GuideTourDTO SelectedUpcomingTourDTO { get; set; }
-        public GuideTourDTO SelectedFinishedTourDTO { get; set; }
-        public GuideTourDTO SelectedRatedTourDTO { get; set; }
-        public GuideRequestDTO SelectedPendingRequestDTO { get; set; }
+        public bool TourActive { get; set; }
 
         private GuideTourDTO _activeTour;
         public GuideTourDTO ActiveTour
@@ -112,7 +196,186 @@ namespace InitialProject.View.Guide
                 }
             }
         }
+        private void FindActiveTour()
+        {
+            ActiveTour = null;
+            foreach (GuideTourDTO tourdto in CurrentTours)
+            {
+                Tour tour = ConvertToTour(tourdto);
 
+                if (tour.IsActive)
+                {
+                    ActiveTour = ConvertToDTO(tour);
+                    break;
+                }
+            }
+        }
+        private void CreateButton_Click(object sender, RoutedEventArgs e)
+        {
+            CreateTour createTour = new CreateTour(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService);
+            createTour.ShowDialog();
+        }
+        private void CurrentToursDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            SelectTodaysTour();
+        }
+
+        private void SelectTodaysTour()
+        {
+            CheckIfTourIsActive();
+            Tour selectedTour = ConvertToTour(SelectedCurrentTourDTO);
+
+            if (selectedTour != null)
+            {
+                HandleSelectedTour(selectedTour);
+            }
+        }
+        private void CheckIfTourIsActive()
+        {
+            TourActive = false;
+            ActiveTour = null;
+
+            foreach (Tour tour in _tourService.GetTodaysTours())
+            {
+                if (tour.IsActive)
+                {
+                    TourActive = true;
+                    ActiveTour = ConvertToDTO(tour);
+                    break;
+                }
+            }
+        }
+        private void HandleSelectedTour(Tour selectedTour)
+        {
+            if (selectedTour.IsActive)
+            {
+                ActiveTour = ConvertToDTO(selectedTour);
+                ShowCheckpoints showCheckpoints = new ShowCheckpoints(selectedTour, _checkpointService, _tourService, _tourReservationService, _userRepository, _tourRatingService);
+                showCheckpoints.ShowDialog();
+            }
+            else if (TourActive)
+            {
+                ShowActiveTourWarning();
+            }
+            else
+            {
+                StartTourConfirmation(selectedTour);
+            }
+        }
+        private void StartTourConfirmation(Tour selectedTour)
+        {
+            if (ConfirmStartTour(selectedTour))
+            {
+                StartSelectedTour(selectedTour);
+            }
+        }
+        private void StartSelectedTour(Tour selectedTour)
+        {
+            SetTourActive(selectedTour);
+            SetCurrentCheckpoint(selectedTour);
+            UpdateTour(selectedTour);
+            ShowCheckpointsForTour(selectedTour);
+        }
+        private void SetTourActive(Tour tour)
+        {
+            tour.IsActive = true;
+            TourActive = true;
+        }
+        private void SetCurrentCheckpoint(Tour tour)
+        {
+            tour.CurrentCheckpointId = tour.CheckpointIds.First();
+        }
+        private void UpdateTour(Tour tour)
+        {
+            _tourService.Update(tour);
+            ActiveTour = ConvertToDTO(tour);
+        }
+        private void ShowCheckpointsForTour(Tour tour)
+        {
+            ShowCheckpoints showCheckpoints = new ShowCheckpoints(tour, _checkpointService, _tourService, _tourReservationService, _userRepository, _tourRatingService);
+            showCheckpoints.ShowDialog();
+        }
+        private bool ConfirmStartTour(Tour selectedTour)
+        {
+            var messageBoxResult = MessageBox.Show($"Are you sure you want to start the {selectedTour.Name} tour?", "Start Tour Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            return messageBoxResult == MessageBoxResult.Yes;
+        }
+        private void StartTourButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedCurrentTourDTO != null)
+                SelectTodaysTour();
+        }
+        private void ShowActiveTourWarning()
+        {
+            MessageBox.Show("An active tour is already in progress. Please finish the current tour before starting a new one.", "Active Tour Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+        #endregion
+
+        #region UpcomingToursTab
+        public ObservableCollection<GuideTourDTO> UpcomingTours { get; set; }
+        public GuideTourDTO SelectedUpcomingTourDTO { get; set; }
+        private void UpcomingToursDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            SelectUpcomingTour();
+        }
+
+        private void SelectUpcomingTour()
+        {
+            List<int> vouchersAdded = new List<int>();
+            Tour tour = ConvertToTour(SelectedUpcomingTourDTO);
+
+            if (!_tourService.CheckIfTourCanBeAborted(tour))
+            {
+                ShowAbortTourWarning();
+                return;
+            }
+
+            if (ConfirmAbortTour(tour))
+            {
+                AddVouchersToUsers(tour, vouchersAdded);
+                AbortTour(tour);
+            }
+        }
+        private bool ConfirmAbortTour(Tour selectedTour)
+        {
+            var messageBoxResult = MessageBox.Show($"Are you sure you want to abort the {selectedTour.Name} tour?", "Abort Tour Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            return messageBoxResult == MessageBoxResult.Yes;
+        }
+        private void AddVouchersToUsers(Tour tour, List<int> vouchersAdded)
+        {
+            foreach (int userId in _tourReservationService.GetUncheckedUserIdsByTour(tour))
+            {
+                if (!vouchersAdded.Contains(userId))
+                {
+                    vouchersAdded.Add(userId);
+                    Voucher voucher = new Voucher(tour.Name, DateTime.Now, DateTime.Now.AddYears(1), userId);
+                    _voucherRepository.Save(voucher);
+                }
+            }
+        }
+        private void AbortTour(Tour tour)
+        {
+            tour.IsAborted = true;
+            _tourService.Update(tour);
+        }
+        private void GenerateReportButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void AbortButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedUpcomingTourDTO != null)
+                SelectUpcomingTour();
+        }
+        private void ShowAbortTourWarning()
+        {
+            MessageBox.Show("You may not abort this tour as you are breaking the 2 day rule.", "Abort Tour Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+        #endregion
+
+        #region FinishedToursTab
+        public ObservableCollection<GuideTourDTO> FinishedTours { get; set; }
+        public GuideTourDTO SelectedFinishedTourDTO { get; set; }
         private GuideTourDTO _mostVisited;
         public GuideTourDTO MostVisited
         {
@@ -139,6 +402,160 @@ namespace InitialProject.View.Guide
                 }
             }
         }
+
+        private void Years_cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (Years_cb.SelectedItem != null)
+            {
+                HandleSelection();
+            }
+        }
+
+        public void HandleSelection()
+        {
+            if (int.TryParse(Years_cb.SelectedItem.ToString(), out int year))
+            {
+                HandleYearSelection(year);
+            }
+            else if (Years_cb.SelectedItem.ToString() == "Alltime")
+            {
+                HandleAllTimeSelection();
+            }
+        }
+        private void HandleYearSelection(int year)
+        {
+            List<Tour> toursByYear = _tourService.GetToursByYear(year);
+            if (toursByYear.Count == 0)
+            {
+                MostVisited = new GuideTourDTO { Name = "No information", Location = "", NumberOfGuestsMessage = "" };
+            }
+            else
+            {
+                MostVisited = ConvertToDTO(_tourService.GetMostVisitedTour(toursByYear));
+            }
+        }
+        private void HandleAllTimeSelection()
+        {
+            MostVisited = ConvertToDTO(_tourService.GetMostVisitedTour(_tourService.GetFinishedTours()));
+        }
+        #region Update
+        public void Update()
+        {
+            UpdateUpcomingTours();
+            UpdateCurrentTours();
+            UpdateFinishedTours();
+            UpdateActiveTour();
+            UpdatePendingRequests();
+        }
+        private void UpdateUpcomingTours()
+        {
+            UpcomingTours.Clear();
+            foreach (Tour tour in _tourService.GetUpcomingTours())
+            {
+                UpcomingTours.Add(ConvertToDTO(tour));
+            }
+        }
+        private void UpdateCurrentTours()
+        {
+            CurrentTours.Clear();
+            foreach (Tour tour in _tourService.GetTodaysTours())
+            {
+                CurrentTours.Add(ConvertToDTO(tour));
+            }
+        }
+        private void UpdateFinishedTours()
+        {
+            FinishedTours.Clear();
+            foreach (Tour tour in _tourService.GetFinishedTours())
+            {
+                FinishedTours.Add(ConvertToDTO(tour));
+            }
+        }
+        private void UpdatePendingRequests()
+        {
+            PendingRequests.Clear();
+            foreach (TourRequest request in _tourRequestService.GetPendingRequests(CurrentUser))
+            {
+                PendingRequests.Add(ConvertToDTO(request));
+            }
+        }
+        private void UpdateActiveTour()
+        {
+            ActiveTour = null;
+            foreach (GuideTourDTO tourdto in CurrentTours)
+            {
+                Tour tour = ConvertToTour(tourdto);
+
+                if (tour.IsActive)
+                {
+                    ActiveTour = ConvertToDTO(tour);
+                    break;
+                }
+            }
+        }
+        #endregion
+        public List<GuideTourDTO> ConvertToDTO(List<Tour> tours)
+        {
+            List<GuideTourDTO> dto = new List<GuideTourDTO>();
+            foreach (Tour tour in tours)
+            {
+                dto.Add(new GuideTourDTO(
+                    tour.Id,
+                    tour.Name,
+                    _locationService.GetById(tour.LocationId).Country,
+                    _locationService.GetById(tour.LocationId).City,
+                    tour.StartTime,
+                    tour.CurrentGuestCount));
+            }
+            return dto;
+        }
+        private void FinishedToursDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            SelectFinishedTour();
+        }
+        private void SelectFinishedTour()
+        {
+            Tour selectedTour = ConvertToTour(SelectedFinishedTourDTO);
+            if (selectedTour != null)
+            {
+                StatisticsViewModel statisticsViewModel = new StatisticsViewModel(selectedTour, _tourReservationService);
+                Statistics statistics = new Statistics(statisticsViewModel);
+                statistics.Show();
+            }
+        }
+        private void StatisticsButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedFinishedTourDTO != null)
+                SelectFinishedTour();
+        }
+        #endregion
+
+        #region RatedToursTab
+        public ObservableCollection<GuideTourDTO> RatedTours { get; set; }
+        public GuideTourDTO SelectedRatedTourDTO { get; set; }
+        private void RatedToursDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            SelectRatedTour();
+        }
+        private void SelectRatedTour()
+        {
+            RatingsViewModel ratingsViewModel = new RatingsViewModel(_userRepository, _tourRatingService, _tourReservationService, _checkpointService, ConvertToTour(SelectedRatedTourDTO));
+            Ratings ratings = new Ratings(ratingsViewModel);
+            ratings.Show();
+        }
+        private void RatingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedRatedTourDTO != null)
+                SelectRatedTour();
+        }
+
+        #endregion
+
+        #region RequestsTab
+        public ObservableCollection<GuideRequestDTO> PendingRequests { get; set; }
+        public GuideRequestDTO SelectedPendingRequestDTO { get; set; }
+        public ObservableCollection<string> RequestCountries { get; set; }
+        public ObservableCollection<string> RequestCities { get; set; }
         private string _requestCity;
         public string RequestCityInput
         {
@@ -217,6 +634,156 @@ namespace InitialProject.View.Guide
                 }
             }
         }
+        private void CbCity_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            RequestCountryInput = _locationService.GetCountryByCity(RequestCityInput);
+            UpdateRequests();
+        }
+
+        private void CbCountry_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!_locationService.GetCitiesByCountry(RequestCountryInput).Contains(RequestCityInput))
+                RequestCityInput = string.Empty;
+
+            UpdateRequests();
+        }
+
+        private void txtGuests_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateRequests();
+        }
+
+        private void txtLanguage_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateRequests();
+        }
+
+        private void dpStartDate_DateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateRequests();
+        }
+
+        private void dpEndDate_DateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateRequests();
+        }
+
+        private void UpdateRequests()
+        {
+            CheckIfAllEmpty();
+
+            PendingRequests.Clear();
+
+            List<TourRequest> result = new List<TourRequest>();
+
+            if (!string.IsNullOrEmpty(RequestCountryInput))
+            {
+                result = _tourRequestService.GetByCountry(CurrentUser, RequestCountryInput);
+            }
+            else
+            {
+                result = _tourRequestService.GetPendingRequests(CurrentUser);
+            }
+
+            if (!string.IsNullOrEmpty(RequestCityInput))
+            {
+                result = result.Intersect(_tourRequestService.GetByCity(CurrentUser, RequestCityInput)).ToList();
+            }
+            if (!string.IsNullOrEmpty(RequestLanguageInput))
+            {
+                result = result.Intersect(_tourRequestService.GetByLanguage(CurrentUser, RequestLanguageInput)).ToList();
+            }
+            if (!string.IsNullOrEmpty(RequestMaxGuestsInput) && int.TryParse(RequestMaxGuestsInput, out int integer))
+            {
+                result = result.Intersect(_tourRequestService.GetByMaxGuests(CurrentUser, int.Parse(RequestMaxGuestsInput))).ToList();
+            }
+            if (RequestStartDateInput != null)
+            {
+                result = result.Intersect(_tourRequestService.GetByStartDate(CurrentUser, RequestStartDateInput)).ToList();
+            }
+            if (RequestEndDateInput != null)
+            {
+                result = result.Intersect(_tourRequestService.GetByEndDate(CurrentUser, RequestEndDateInput)).ToList();
+            }
+
+            List<GuideRequestDTO> searchResults = ConvertToDTO(result);
+
+            foreach (GuideRequestDTO dto in searchResults)
+            {
+                PendingRequests.Add(dto);
+            }
+
+        }
+        public void CheckIfAllEmpty()
+        {
+            if (string.IsNullOrEmpty(RequestCountryInput) && string.IsNullOrEmpty(RequestCityInput) && string.IsNullOrEmpty(RequestLanguageInput) && string.IsNullOrEmpty(RequestMaxGuestsInput))
+            {
+                foreach (TourRequest request in _tourRequestService.GetPendingRequests(CurrentUser))
+                {
+                    PendingRequests.Add(ConvertToDTO(request));
+                }
+            }
+        }
+
+        private void PendingRequests_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (SelectedPendingRequestDTO != null)
+            {
+                TourRequest request = ConvertToRequest(SelectedPendingRequestDTO);
+                CreateTour createTour = new CreateTour(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService, request);
+                createTour.ShowDialog();
+            }
+        }
+        #endregion
+
+        #region RequestStatisticsTab
+        public ObservableCollection<string> StatisticsCountries { get; set; }
+        public ObservableCollection<string> StatisticsCities { get; set; }
+
+        public ObservableCollection<string> StatisticsYears { get; set; }
+        public ObservableCollection<string> StatisticsMonths { get; set; }
+
+        private int _locationRequestsCount;
+        public int LocationRequestsCount
+        {
+            get { return _locationRequestsCount; }
+            set
+            {
+                if (_locationRequestsCount != value)
+                {
+                    _locationRequestsCount = value;
+                    OnPropertyChanged(nameof(LocationRequestsCount));
+                }
+            }
+        }
+        private int _languageRequestsCount;
+        public int LanguageRequestsCount
+        {
+            get { return _languageRequestsCount; }
+            set
+            {
+                if (_languageRequestsCount != value)
+                {
+                    _languageRequestsCount = value;
+                    OnPropertyChanged(nameof(LanguageRequestsCount));
+                }
+            }
+        }
+        private int _languageLocationRequestsCount;
+        public int LanguageLocationRequestsCount
+        {
+            get { return _languageLocationRequestsCount; }
+            set
+            {
+                if (_languageLocationRequestsCount != value)
+                {
+                    _languageLocationRequestsCount = value;
+                    OnPropertyChanged(nameof(LanguageLocationRequestsCount));
+                }
+            }
+        }
+
+ 
         private string _statisticsCity;
         public string StatisticsCityInput
         {
@@ -334,281 +901,159 @@ namespace InitialProject.View.Guide
                 }
             }
         }
-        public GuideWindow(User user)
+        private void cbStatisticsYear_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            InitializeComponent();
-            DataContext = this;
-            CurrentUser = user;
-
-            _tourService = new TourService();
-            _tourService.Subscribe(this);
-
-            _imageRepository = new ImageRepository();
-            _imageRepository.Subscribe(this);
-
-            _locationService = new LocationService();
-            _locationService.Subscribe(this);
-
-            _checkpointService = new CheckpointService();
-            _checkpointService.Subscribe(this);
-
-            _tourReservationService = new TourReservationService();
-            _tourReservationService.Subscribe(this);
-
-            _userRepository = new UserRepository();
-            _userRepository.Subscribe(this);
-
-            _voucherRepository = new VoucherRepository();
-            _voucherRepository.Subscribe(this);
-
-            _tourRatingService = new TourRatingService();
-            _tourRatingService.Subscribe(this);
-
-            _tourRequestService = new TourRequestService();
-            _tourRequestService.Subscribe(this);
-
-            InitializeCollections();
-            InitializeStartingSearchValues();
-            InitializeComboBoxes();
-            InitializeShortcuts();
-            FindActiveTour();
-
-            RequestStartDateInput = null;
-            RequestEndDateInput = null;
-
-            CurrentUser.Username = "Gorana";
-            CurrentSortIndex = 0;
-
-            //AddMessage("Hello, world!");
-            //AddMessage("How are you today?");
-            //AddMessage("Do you want to grab lunch?");
-            //AddMessage("Do you want to grab lunch?");
-            //AddMessage("Do you want to grab lunch?");
-
-        }
-        private void InitializeCollections()
-        {
-            CurrentTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourService.GetTodaysTours()));
-            UpcomingTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourService.GetUpcomingTours()));
-            FinishedTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourService.GetFinishedTours()));
-            RatedTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourService.GetRatedTours()));
-            PendingRequests = new ObservableCollection<GuideRequestDTO>(ConvertToDTO(_tourRequestService.GetPendingRequests(CurrentUser)));
-
-            RequestCountries = new ObservableCollection<string>();
-            RequestCities = new ObservableCollection<string>();
-
-            StatisticsCountries = new ObservableCollection<string>();
-            StatisticsCities = new ObservableCollection<string>();
-
-            StatisticsYears = new ObservableCollection<string>();
-            StatisticsMonths = new ObservableCollection<string>();
-        }
-
-        private void InitializeComboBoxes()
-        {
-            Years_cb.Items.Add("Alltime");
-            Years_cb.SelectedItem = Years_cb.Items[0];
-            for (int i = 2000; i <= DateTime.Now.Year; i++)
+            if (StatisticsYearInput == "Alltime")
             {
-                Years_cb.Items.Add(i.ToString());
-            }
-
-            RequestCountries.Add(string.Empty);
-            foreach (string country in _locationService.GetCountries())
-            {
-                RequestCountries.Add(country);
-            }
-
-            RequestCities.Add(string.Empty);
-            foreach (string city in _locationService.GetCities())
-            {
-                RequestCities.Add(city);
-            }
-
-            StatisticsCountries.Add("-");
-            foreach (string country in _locationService.GetCountries())
-            {
-                StatisticsCountries.Add(country);
-            }
-
-            StatisticsCities.Add("-");
-            foreach (string city in _locationService.GetCities())
-            {
-                StatisticsCities.Add(city);
-            }
-
-            StatisticsYears.Add("Alltime");
-            for (int i = 2000; i <= DateTime.Now.Year; i++)
-            {
-                StatisticsYears.Add(i.ToString());
-            }
-
-            StatisticsMonths.Add("-");
-            StatisticsMonths.Add("JAN");
-            StatisticsMonths.Add("FEB");
-            StatisticsMonths.Add("MAR");
-            StatisticsMonths.Add("APR");
-            StatisticsMonths.Add("MAY");
-            StatisticsMonths.Add("JUN");
-            StatisticsMonths.Add("JUL");
-            StatisticsMonths.Add("AUG");
-            StatisticsMonths.Add("SEP");
-            StatisticsMonths.Add("OCT");
-            StatisticsMonths.Add("NOV");
-            StatisticsMonths.Add("DEC");
-
-            StatisticsYearInput = "Alltime";
-            IsMonthClickable = false;
-            StatisticsCityInput = "-";
-            StatisticsCountryInput = "-";
-            StatisticsLanguageInput = string.Empty;
-        }
-        private void InitializeStartingSearchValues()
-        {
-            MostVisited = ConvertToDTO(_tourService.GetMostVisitedTour(_tourService.GetFinishedTours()));
-        }
-        private void InitializeShortcuts()
-        {
-            PreviewKeyDown += CreateTour_PreviewKeyDown;
-            PreviewKeyDown += LogOut_PreviewKeyDown;
-            PreviewKeyDown += Enter_PreviewKeyDown;
-            PreviewKeyDown += LeftRightArrowKeys_PreviewKeyDown;
-            PreviewKeyDown += UpDownArrowKeys_PreviewKeyDown;
-            PreviewKeyDown += DataGrid_PreviewKeyDown;
-            PreviewKeyDown += SortAsc_PreviewKeyDown;
-            PreviewKeyDown += SortDesc_PreviewKeyDown;
-        }
-        private void Years_cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (Years_cb.SelectedItem != null)
-            {
-                HandleSelection();
-            }
-        }
-
-        public void HandleSelection()
-        {
-            if (int.TryParse(Years_cb.SelectedItem.ToString(), out int year))
-            {
-                HandleYearSelection(year);
-            }
-            else if (Years_cb.SelectedItem.ToString() == "Alltime")
-            {
-                HandleAllTimeSelection();
-            }
-        }
-        private void HandleYearSelection(int year)
-        {
-            List<Tour> toursByYear = _tourService.GetToursByYear(year);
-            if (toursByYear.Count == 0)
-            {
-                MostVisited = new GuideTourDTO { Name = "No information", Location = "", NumberOfGuestsMessage = "" };
+                IsMonthClickable = false;
+                StatisticsMonthInput = "-";
             }
             else
-            {
-                MostVisited = ConvertToDTO(_tourService.GetMostVisitedTour(toursByYear));
-            }
-        }
-        private void HandleAllTimeSelection()
-        {
-            MostVisited = ConvertToDTO(_tourService.GetMostVisitedTour(_tourService.GetFinishedTours()));
-        }
+                IsMonthClickable = true;
 
 
-        private void FindActiveTour()
-        {
-            ActiveTour = null;
-            foreach (GuideTourDTO tourdto in CurrentTours)
-            {
-                Tour tour = ConvertToTour(tourdto);
-
-                if (tour.IsActive)
-                {
-                    ActiveTour = ConvertToDTO(tour);
-                    break;
-                }
-            }
-        }
-        private void CreateButton_Click(object sender, RoutedEventArgs e)
-        {
-            CreateTour createTour = new CreateTour(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService);
-            createTour.ShowDialog();
+            UpdateGridNames();
+            UpdateGridCounts();
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        private void cbStatisticsMonth_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            UpdateGridNames();
+            UpdateGridCounts();
         }
-        public void Update()
-        {
-            UpdateUpcomingTours();
-            UpdateCurrentTours();
-            UpdateFinishedTours();
-            UpdateActiveTour();
-            UpdatePendingRequests();
-        }
-        private void UpdateUpcomingTours()
-        {
-            UpcomingTours.Clear();
-            foreach (Tour tour in _tourService.GetUpcomingTours())
-            {
-                UpcomingTours.Add(ConvertToDTO(tour));
-            }
-        }
-        private void UpdateCurrentTours()
-        {
-            CurrentTours.Clear();
-            foreach (Tour tour in _tourService.GetTodaysTours())
-            {
-                CurrentTours.Add(ConvertToDTO(tour));
-            }
-        }
-        private void UpdateFinishedTours()
-        {
-            FinishedTours.Clear();
-            foreach (Tour tour in _tourService.GetFinishedTours())
-            {
-                FinishedTours.Add(ConvertToDTO(tour));
-            }
-        }
-        private void UpdatePendingRequests()
-        {
-            PendingRequests.Clear();
-            foreach (TourRequest request in _tourRequestService.GetPendingRequests(CurrentUser))
-            {
-                PendingRequests.Add(ConvertToDTO(request));
-            }
-        }
-        private void UpdateActiveTour()
-        {
-            ActiveTour = null;
-            foreach (GuideTourDTO tourdto in CurrentTours)
-            {
-                Tour tour = ConvertToTour(tourdto);
 
-                if (tour.IsActive)
-                {
-                    ActiveTour = ConvertToDTO(tour);
-                    break;
-                }
-            }
-        }
-        public List<GuideTourDTO> ConvertToDTO(List<Tour> tours)
+        private void cbStatisticsCity_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            List<GuideTourDTO> dto = new List<GuideTourDTO>();
-            foreach (Tour tour in tours)
-            {
-                dto.Add(new GuideTourDTO(
-                    tour.Id,
-                    tour.Name,
-                    _locationService.GetById(tour.LocationId).Country,
-                    _locationService.GetById(tour.LocationId).City,
-                    tour.StartTime,
-                    tour.CurrentGuestCount));
-            }
-            return dto;
+            if (StatisticsCityInput != "-")
+                StatisticsCountryInput = _locationService.GetCountryByCity(StatisticsCityInput);
+
+            UpdateGridNames();
+            UpdateGridCounts();
         }
+
+        private void cbStatisticsCountry_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+            if (!_locationService.GetCitiesByCountry(StatisticsCountryInput).Contains(StatisticsCityInput))
+                StatisticsCityInput = "-";
+
+            UpdateGridNames();
+            UpdateGridCounts();
+
+        }
+
+        private void cbStatisticsLanguage_SelectionChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateGridNames();
+            UpdateGridCounts();
+        }
+
+        private void UpdateGridNames()
+        {
+            if (string.IsNullOrEmpty(StatisticsLanguageInput))
+                LanguageR = "No language selected.";
+            else
+                LanguageR = StatisticsLanguageInput;
+
+            if (StatisticsCityInput == "-" && StatisticsCountryInput == "-")
+                Location = "No location selected.";
+
+            if (StatisticsCityInput == "-" && StatisticsCountryInput != "-")
+                Location = StatisticsCountryInput;
+
+            if (StatisticsCityInput != "-" && StatisticsCountryInput != "-")
+                Location = StatisticsCityInput + ", " + StatisticsCountryInput;
+
+            if (string.IsNullOrEmpty(StatisticsLanguageInput) && Location == "No location selected.")
+            {
+                LanguageAndLocation = "Language and Location not selected.";
+            }
+            if (string.IsNullOrEmpty(StatisticsLanguageInput) && Location != "No location selected.")
+            {
+                LanguageAndLocation = "Language not selected.";
+            }
+            if (!string.IsNullOrEmpty(StatisticsLanguageInput) && Location == "No location selected.")
+            {
+                LanguageAndLocation = "Location not selected.";
+            }
+            if (!string.IsNullOrEmpty(StatisticsLanguageInput) && Location != "No location selected.")
+            {
+                LanguageAndLocation = Location + " in " + LanguageR;
+            }
+        }
+        private void UpdateGridCounts()
+        {
+            LanguageRequestsCount = _tourRequestService.FilterRequests(GetYearValue(), GetMonthValue(), "/", "/", GetLanguageValue()).Count;
+            LocationRequestsCount = _tourRequestService.FilterRequests(GetYearValue(), GetMonthValue(), GetCityValue(), GetCountryValue(), "/").Count;
+            LanguageLocationRequestsCount = _tourRequestService.FilterRequests(GetYearValue(), GetMonthValue(), GetCityValue(), GetCountryValue(), GetLanguageValue()).Count;
+
+        }
+
+        private int GetMonthValue()
+        {
+            switch (StatisticsMonthInput)
+            {
+                case "JAN":
+                    return 1;
+                case "FEB":
+                    return 2;
+                case "MAR":
+                    return 3;
+                case "APR":
+                    return 4;
+                case "MAY":
+                    return 5;
+                case "JUN":
+                    return 6;
+                case "JUL":
+                    return 7;
+                case "AUG":
+                    return 8;
+                case "SEP":
+                    return 9;
+                case "OCT":
+                    return 10;
+                case "NOV":
+                    return 11;
+                case "DEC":
+                    return 12;
+                default:
+                    return -1;
+            }
+        }
+        private int GetYearValue()
+        {
+            if (StatisticsYearInput == "Alltime")
+                return -1;
+            return int.Parse(StatisticsYearInput);
+        }
+        private string GetCityValue()
+        {
+            if (StatisticsCityInput != "-")
+                return StatisticsCityInput;
+
+            return "/";
+
+        }
+        private string GetCountryValue()
+        {
+            if (StatisticsCountryInput != "-")
+                return StatisticsCountryInput;
+
+            return "/";
+
+        }
+        private string GetLanguageValue()
+        {
+            if (!string.IsNullOrEmpty(StatisticsLanguageInput))
+                return StatisticsLanguageInput;
+
+            return "/";
+
+        }
+        #endregion
+
+        #region DTOS
         public GuideTourDTO ConvertToDTO(Tour tour)
         {
 
@@ -661,157 +1106,18 @@ namespace InitialProject.View.Guide
                 return _tourRequestService.GetById(dto.Id);
             return null;
         }
-        private void CurrentToursDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            SelectTodaysTour();
-        }
+        #endregion
 
-        private void SelectTodaysTour()
+        #region Shortcuts
+        private void InitializeShortcuts()
         {
-            CheckIfTourIsActive();
-            Tour selectedTour = ConvertToTour(SelectedCurrentTourDTO);
-
-            if (selectedTour != null)
-            {
-                HandleSelectedTour(selectedTour);
-            }
-        }
-
-        private void FinishedToursDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            SelectFinishedTour();
-        }
-        private void SelectFinishedTour()
-        {
-            Tour selectedTour = ConvertToTour(SelectedFinishedTourDTO);
-            if (selectedTour != null)
-            {
-                StatisticsViewModel statisticsViewModel = new StatisticsViewModel(selectedTour, _tourReservationService);
-                Statistics statistics = new Statistics(statisticsViewModel);
-                statistics.Show();
-            }
-        }
-        private void UpcomingToursDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            SelectUpcomingTour();
-        }
-
-        private void SelectUpcomingTour()
-        {
-            List<int> vouchersAdded = new List<int>();
-            Tour tour = ConvertToTour(SelectedUpcomingTourDTO);
-
-            if (!_tourService.CheckIfTourCanBeAborted(tour))
-            {
-                ShowAbortTourWarning();
-                return;
-            }
-
-            if (ConfirmAbortTour(tour))
-            {
-                AddVouchersToUsers(tour, vouchersAdded);
-                AbortTour(tour);
-            }
-        }
-        private void AddVouchersToUsers(Tour tour, List<int> vouchersAdded)
-        {
-            foreach (int userId in _tourReservationService.GetUncheckedUserIdsByTour(tour))
-            {
-                if (!vouchersAdded.Contains(userId))
-                {
-                    vouchersAdded.Add(userId);
-                    Voucher voucher = new Voucher(tour.Name, DateTime.Now, DateTime.Now.AddYears(1), userId);
-                    _voucherRepository.Save(voucher);
-                }
-            }
-        }
-        private void AbortTour(Tour tour)
-        {
-            tour.IsAborted = true;
-            _tourService.Update(tour);
-        }
-
-        private void RatedToursDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            SelectRatedTour();
-        }
-        private void SelectRatedTour()
-        {
-            RatingsViewModel ratingsViewModel = new RatingsViewModel(_userRepository, _tourRatingService, _tourReservationService, _checkpointService, ConvertToTour(SelectedRatedTourDTO));
-            Ratings ratings = new Ratings(ratingsViewModel);
-            ratings.Show();
-        }
-        private void CheckIfTourIsActive()
-        {
-            TourActive = false;
-            ActiveTour = null;
-
-            foreach (Tour tour in _tourService.GetTodaysTours())
-            {
-                if (tour.IsActive)
-                {
-                    TourActive = true;
-                    ActiveTour = ConvertToDTO(tour);
-                    break;
-                }
-            }
-        }
-        private void HandleSelectedTour(Tour selectedTour)
-        {
-            if (selectedTour.IsActive)
-            {
-                ActiveTour = ConvertToDTO(selectedTour);
-                ShowCheckpoints showCheckpoints = new ShowCheckpoints(selectedTour, _checkpointService, _tourService, _tourReservationService, _userRepository, _tourRatingService);
-                showCheckpoints.ShowDialog();
-            }
-            else if (TourActive)
-            {
-                ShowActiveTourWarning();
-            }
-            else
-            {
-                StartTourConfirmation(selectedTour);
-            }
-        }
-        private void StartTourConfirmation(Tour selectedTour)
-        {
-            if (ConfirmStartTour(selectedTour))
-            {
-                StartSelectedTour(selectedTour);
-            }
-        }
-        private void StartSelectedTour(Tour selectedTour)
-        {
-            SetTourActive(selectedTour);
-            SetCurrentCheckpoint(selectedTour);
-            UpdateTour(selectedTour);
-            ShowCheckpointsForTour(selectedTour);
-        }
-        private void SetTourActive(Tour tour)
-        {
-            tour.IsActive = true;
-            TourActive = true;
-        }
-        private void SetCurrentCheckpoint(Tour tour)
-        {
-            tour.CurrentCheckpointId = tour.CheckpointIds.First();
-        }
-        private void UpdateTour(Tour tour)
-        {
-            _tourService.Update(tour);
-            ActiveTour = ConvertToDTO(tour);
-        }
-        private void ShowCheckpointsForTour(Tour tour)
-        {
-            ShowCheckpoints showCheckpoints = new ShowCheckpoints(tour, _checkpointService, _tourService, _tourReservationService, _userRepository, _tourRatingService);
-            showCheckpoints.ShowDialog();
-        }
-        private void LogOut_Click(object sender, RoutedEventArgs e)
-        {
-            SignInForm signInForm = new SignInForm();
-            signInForm.Show();
-            Close();
-
+            PreviewKeyDown += CreateTour_PreviewKeyDown;
+            PreviewKeyDown += LogOut_PreviewKeyDown;
+            PreviewKeyDown += Enter_PreviewKeyDown;
+            PreviewKeyDown += LeftRightArrowKeys_PreviewKeyDown;
+            PreviewKeyDown += DataGrid_PreviewKeyDown;
+            PreviewKeyDown += SortAsc_PreviewKeyDown;
+            PreviewKeyDown += SortDesc_PreviewKeyDown;
         }
         private void LogOut_PreviewKeyDown(object sender, KeyEventArgs e)
         {
@@ -907,119 +1213,7 @@ namespace InitialProject.View.Guide
                 dataGrid.Focus();
             }
         }
-        private void UpDownArrowKeys_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if ((e.Key == Key.Down || e.Key == Key.Up))
-            {
-                DataGrid currentDataGrid = GetCurrentDataGrid();
-                if (currentDataGrid == null) return;
-                if (currentDataGrid.Items.Count < 1) return;
 
-                int current_index = currentDataGrid.SelectedIndex;
-
-                if (current_index == -1 && currentDataGrid == FinishedToursDataGrid)
-                {
-                    Years_cb.Focus();
-                    e.Handled = true;
-                    return;
-                }
-                if (Keyboard.IsKeyDown(Key.Down))
-                {
-                    MoveToNextItem(currentDataGrid, current_index);
-                }
-                else if (Keyboard.IsKeyDown(Key.Up))
-                {
-                    MoveToPreviousItem(currentDataGrid, current_index);
-                }
-                e.Handled = true;
-            }
-        }
-
-        private void MoveToNextItem(DataGrid currentDataGrid, int current_index)
-        {
-            if (current_index < currentDataGrid.Items.Count - 1)
-            {
-                // Select the next item in the DataGrid
-                currentDataGrid.SelectedItem = currentDataGrid.Items[current_index + 1];
-                currentDataGrid.ScrollIntoView(currentDataGrid.SelectedItem);
-                currentDataGrid.Focus();
-            }
-            else
-            {
-                if (currentDataGrid != FinishedToursDataGrid)
-                {
-                    MoveToFirstItem(currentDataGrid);
-                }
-                else
-                {
-                    UnselectSelectedItem(currentDataGrid);
-                    FocusOnComboBox();
-                }
-            }
-        }
-
-
-        private void MoveToPreviousItem(DataGrid currentDataGrid, int current_index)
-        {
-            if (current_index > 0)
-            {
-                // Select the previous item in the DataGrid
-                currentDataGrid.SelectedItem = currentDataGrid.Items[current_index - 1];
-                currentDataGrid.ScrollIntoView(currentDataGrid.SelectedItem);
-                currentDataGrid.Focus();
-            }
-            else
-            {
-                if (currentDataGrid != FinishedToursDataGrid)
-                {
-                    MoveToLastItem(currentDataGrid);
-                }
-                else
-                {
-                    UnselectSelectedItem(currentDataGrid);
-                    FocusOnComboBox();
-                }
-            }
-        }
-
-        private void MoveToFirstItem(DataGrid currentDataGrid)
-        {
-            if (Years_cb.IsDropDownOpen)
-            {
-                // Move to the first item of the combo box
-                Years_cb.SelectedIndex = 0;
-            }
-            else
-            {
-                // Move to the first item of the data grid
-                currentDataGrid.SelectedItem = currentDataGrid.Items[0];
-                currentDataGrid.ScrollIntoView(currentDataGrid.SelectedItem);
-                currentDataGrid.Focus();
-            }
-        }
-        private void MoveToLastItem(DataGrid currentDataGrid)
-        {
-            if (Years_cb.IsDropDownOpen)
-            {
-                // Move to the last item of the combo box
-                Years_cb.SelectedIndex = Years_cb.Items.Count - 1;
-            }
-            else
-            {
-                // Move to the last item of the data grid
-                currentDataGrid.SelectedItem = currentDataGrid.Items[currentDataGrid.Items.Count - 1];
-                currentDataGrid.ScrollIntoView(currentDataGrid.SelectedItem);
-                currentDataGrid.Focus();
-            }
-        }
-        private void UnselectSelectedItem(DataGrid currentDataGrid)
-        {
-            currentDataGrid.SelectedItem = null;
-        }
-        private void FocusOnComboBox()
-        {
-            Years_cb.Focus();
-        }
         private void SortAsc_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (!Keyboard.IsKeyDown(Key.LeftShift) || !Keyboard.IsKeyDown(Key.A))
@@ -1129,424 +1323,7 @@ namespace InitialProject.View.Guide
                     return "";
             }
         }
-        private void ShowActiveTourWarning()
-        {
-            MessageBox.Show("An active tour is already in progress. Please finish the current tour before starting a new one.", "Active Tour Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-        }
-        private void ShowAbortTourWarning()
-        {
-            MessageBox.Show("You may not abort this tour as you are breaking the 2 day rule.", "Abort Tour Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-        }
-        private bool ConfirmStartTour(Tour selectedTour)
-        {
-            var messageBoxResult = MessageBox.Show($"Are you sure you want to start the {selectedTour.Name} tour?", "Start Tour Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
-            return messageBoxResult == MessageBoxResult.Yes;
-        }
-        private bool ConfirmAbortTour(Tour selectedTour)
-        {
-            var messageBoxResult = MessageBox.Show($"Are you sure you want to abort the {selectedTour.Name} tour?", "Abort Tour Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
-            return messageBoxResult == MessageBoxResult.Yes;
-        }
 
-        private void StartTourButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (SelectedCurrentTourDTO != null)
-                SelectTodaysTour();
-        }
-        private void GenerateReportButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-        private void AbortButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (SelectedUpcomingTourDTO != null)
-                SelectUpcomingTour();
-        }
-        private void StatisticsButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (SelectedFinishedTourDTO != null)
-                SelectFinishedTour();
-        }
-        private void RatingsButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (SelectedRatedTourDTO != null)
-                SelectRatedTour();
-        }
-
-        private void CbCity_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            RequestCountryInput = _locationService.GetCountryByCity(RequestCityInput);
-            UpdateRequests();
-        }
-
-        private void CbCountry_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (!_locationService.GetCitiesByCountry(RequestCountryInput).Contains(RequestCityInput))
-                RequestCityInput = string.Empty;
-
-            UpdateRequests();
-        }
-
-        private void txtGuests_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            UpdateRequests();
-        }
-
-        private void txtLanguage_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            UpdateRequests();
-        }
-
-        private void dpStartDate_DateChanged(object sender, SelectionChangedEventArgs e)
-        {
-            UpdateRequests();
-        }
-
-        private void dpEndDate_DateChanged(object sender, SelectionChangedEventArgs e)
-        {
-            UpdateRequests();
-        }
-
-        private void UpdateRequests()
-        {
-            CheckIfAllEmpty();
-
-            PendingRequests.Clear();
-
-            List<TourRequest> result = new List<TourRequest>();
-
-            if (!string.IsNullOrEmpty(RequestCountryInput))
-            {
-                result = _tourRequestService.GetByCountry(CurrentUser, RequestCountryInput);
-            }
-            else
-            {
-                result = _tourRequestService.GetPendingRequests(CurrentUser);
-            }
-
-            if (!string.IsNullOrEmpty(RequestCityInput))
-            {
-                result = result.Intersect(_tourRequestService.GetByCity(CurrentUser, RequestCityInput)).ToList();
-            }
-            if (!string.IsNullOrEmpty(RequestLanguageInput))
-            {
-                result = result.Intersect(_tourRequestService.GetByLanguage(CurrentUser, RequestLanguageInput)).ToList();
-            }
-            if (!string.IsNullOrEmpty(RequestMaxGuestsInput) && int.TryParse(RequestMaxGuestsInput, out int integer))
-            {
-                result = result.Intersect(_tourRequestService.GetByMaxGuests(CurrentUser, int.Parse(RequestMaxGuestsInput))).ToList();
-            }
-            if (RequestStartDateInput != null)
-            {
-                result = result.Intersect(_tourRequestService.GetByStartDate(CurrentUser, RequestStartDateInput)).ToList();
-            }
-            if (RequestEndDateInput != null)
-            {
-                result = result.Intersect(_tourRequestService.GetByEndDate(CurrentUser, RequestEndDateInput)).ToList();
-            }
-
-            List<GuideRequestDTO> searchResults = ConvertToDTO(result);
-
-            foreach (GuideRequestDTO dto in searchResults)
-            {
-                PendingRequests.Add(dto);
-            }
-
-        }
-        public void CheckIfAllEmpty()
-        {
-            if (string.IsNullOrEmpty(RequestCountryInput) && string.IsNullOrEmpty(RequestCityInput) && string.IsNullOrEmpty(RequestLanguageInput) && string.IsNullOrEmpty(RequestMaxGuestsInput))
-            {
-                foreach (TourRequest request in _tourRequestService.GetPendingRequests(CurrentUser))
-                {
-                    PendingRequests.Add(ConvertToDTO(request));
-                }
-            }
-        }
-
-        private void PendingRequests_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            if (SelectedPendingRequestDTO != null)
-            {
-                TourRequest request = ConvertToRequest(SelectedPendingRequestDTO);
-                CreateTour createTour = new CreateTour(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService, request);
-                createTour.ShowDialog();
-            }
-        }
-        private void AddMessage(string text)
-        {
-            var messageGrid = new Grid();
-            messageGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-            messageGrid.ColumnDefinitions.Add(new ColumnDefinition());
-
-            var messageTextBlock = new TextBlock
-            {
-                Text = text,
-                VerticalAlignment = VerticalAlignment.Center,
-                Margin = new Thickness(10, 0, 10, 0)
-            };
-            Grid.SetColumn(messageTextBlock, 0);
-
-            var buttonPanel = new StackPanel
-            {
-                Orientation = Orientation.Horizontal,
-                HorizontalAlignment = HorizontalAlignment.Right,
-                Margin = new Thickness(10, 0, 10, 0)
-            };
-            Grid.SetColumn(buttonPanel, 1);
-
-            var acceptButton = new Button
-            {
-                Content = "Accept",
-                Margin = new Thickness(5),
-                Width = 75,
-                DataContext = messageGrid
-            };
-            acceptButton.Click += AcceptButton_Click;
-            buttonPanel.Children.Add(acceptButton);
-
-            var declineButton = new Button
-            {
-                Content = "Decline",
-                Margin = new Thickness(5),
-                Width = 75,
-                DataContext = messageGrid
-            };
-            declineButton.Click += DeclineButton_Click;
-            buttonPanel.Children.Add(declineButton);
-
-            messageGrid.Children.Add(messageTextBlock);
-            messageGrid.Children.Add(buttonPanel);
-            messageGrid.RenderTransform = new TranslateTransform { Y = 100 };
-
-            MessagesStackPanel.Children.Add(messageGrid);
-
-            var storyboard = new Storyboard();
-            var animation = new DoubleAnimation
-            {
-                From = 100,
-                To = 0,
-                Duration = TimeSpan.FromSeconds(1)
-            };
-            Storyboard.SetTarget(animation, messageGrid);
-            Storyboard.SetTargetProperty(animation, new PropertyPath("(FrameworkElement.RenderTransform).(TranslateTransform.Y)"));
-            storyboard.Children.Add(animation);
-            storyboard.Begin();
-        }
-        private void AcceptButton_Click(object sender, RoutedEventArgs e)
-        {
-            var messageGrid = ((sender as Button).DataContext as Grid);
-
-            // Get the index of the clicked message grid
-            int clickedIndex = MessagesStackPanel.Children.IndexOf(messageGrid);
-
-            // Remove the clicked message grid from the stack panel
-            MessagesStackPanel.Children.Remove(messageGrid);
-
-            // Move all the message grids above the clicked one up by the height of the clicked message grid
-            for (int i = clickedIndex - 1; i >= 0; i--)
-            {
-                var message = MessagesStackPanel.Children[i] as FrameworkElement;
-
-                // Create a storyboard to animate the message grid up
-                var storyboard = new Storyboard();
-                var animation = new DoubleAnimation
-                {
-                    To = -message.ActualHeight,
-                    Duration = TimeSpan.FromSeconds(0.5)
-                };
-                Storyboard.SetTarget(animation, message);
-                Storyboard.SetTargetProperty(animation, new PropertyPath("(FrameworkElement.RenderTransform).(TranslateTransform.Y)"));
-                storyboard.Children.Add(animation);
-
-                // Start the storyboard and adjust the message's margin
-                storyboard.Begin();
-                message.Margin = new Thickness(0, -message.ActualHeight, 0, 0);
-            }
-        }
-
-        private void DeclineButton_Click(object sender, RoutedEventArgs e)
-        {
-            var messageGrid = ((sender as Button).DataContext as Grid);
-
-            // Get the index of the clicked message grid
-            int clickedIndex = MessagesStackPanel.Children.IndexOf(messageGrid);
-
-            // Remove the clicked message grid from the stack panel
-            MessagesStackPanel.Children.Remove(messageGrid);
-
-            // Move all the message grids above the clicked one up by the height of the clicked message grid
-            for (int i = clickedIndex - 1; i >= 0; i--)
-            {
-                var message = MessagesStackPanel.Children[i] as FrameworkElement;
-
-                // Create a storyboard to animate the message grid up
-                var storyboard = new Storyboard();
-                var animation = new DoubleAnimation
-                {
-                    To = -message.ActualHeight,
-                    Duration = TimeSpan.FromSeconds(0.5)
-                };
-                Storyboard.SetTarget(animation, message);
-                Storyboard.SetTargetProperty(animation, new PropertyPath("(FrameworkElement.RenderTransform).(TranslateTransform.Y)"));
-                storyboard.Children.Add(animation);
-
-                // Start the storyboard and adjust the message's margin
-                storyboard.Begin();
-                message.Margin = new Thickness(0, -message.ActualHeight, 0, 0);
-            }
-
-        }
-
-        private void cbStatisticsYear_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (StatisticsYearInput == "Alltime")
-            {
-                IsMonthClickable = false;
-                StatisticsMonthInput = "-";
-            }
-            else
-                IsMonthClickable = true;
-
-
-            UpdateGridNames();
-            UpdateGridCounts();
-        }
-
-        private void cbStatisticsMonth_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            UpdateGridNames();
-            UpdateGridCounts();
-        }
-
-        private void cbStatisticsCity_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (StatisticsCityInput != "-")
-                StatisticsCountryInput = _locationService.GetCountryByCity(StatisticsCityInput);
-
-            UpdateGridNames();
-            UpdateGridCounts();
-        }
-
-        private void cbStatisticsCountry_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-            if (!_locationService.GetCitiesByCountry(StatisticsCountryInput).Contains(StatisticsCityInput))
-                StatisticsCityInput = "-";
-
-            UpdateGridNames();
-            UpdateGridCounts();
-
-        }
-
-        private void cbStatisticsLanguage_SelectionChanged(object sender, TextChangedEventArgs e)
-        {
-            UpdateGridNames();
-            UpdateGridCounts();
-        }
-
-        private void UpdateGridNames()
-        {
-            if (string.IsNullOrEmpty(StatisticsLanguageInput))
-                LanguageR = "No language selected.";
-            else
-                LanguageR = StatisticsLanguageInput;
-
-            if (StatisticsCityInput == "-" && StatisticsCountryInput == "-")
-                Location = "No location selected.";
-
-            if (StatisticsCityInput == "-" && StatisticsCountryInput != "-")
-                Location = StatisticsCountryInput;
-
-            if (StatisticsCityInput != "-" && StatisticsCountryInput != "-")
-                Location = StatisticsCityInput + ", " + StatisticsCountryInput;
-
-            if(string.IsNullOrEmpty(StatisticsLanguageInput) && Location == "No location selected.") 
-            {
-                LanguageAndLocation = "Language and Location not selected.";
-            }
-            if (string.IsNullOrEmpty(StatisticsLanguageInput) && Location != "No location selected.")
-            {
-                LanguageAndLocation = "Language not selected.";
-            }
-            if (!string.IsNullOrEmpty(StatisticsLanguageInput) && Location == "No location selected.")
-            {
-                LanguageAndLocation = "Location not selected.";
-            }
-            if (!string.IsNullOrEmpty(StatisticsLanguageInput) && Location != "No location selected.")
-            {
-                LanguageAndLocation = Location + " in " + LanguageR;
-            }
-        }
-        private void UpdateGridCounts()
-        {
-            LanguageRequestsCount = _tourRequestService.FilterRequests(GetYearValue(), GetMonthValue(), "/", "/", GetLanguageValue()).Count;
-            LocationRequestsCount = _tourRequestService.FilterRequests(GetYearValue(), GetMonthValue(), GetCityValue(), GetCountryValue(), "/").Count;
-            LanguageLocationRequestsCount = _tourRequestService.FilterRequests(GetYearValue(), GetMonthValue(), GetCityValue(), GetCountryValue(), GetLanguageValue()).Count;
-
-        }
-
-        private int GetMonthValue() 
-        {
-            switch (StatisticsMonthInput) 
-            {
-                case "JAN":
-                    return 1;
-                case "FEB":
-                    return 2;
-                case "MAR":
-                    return 3;
-                case "APR":
-                    return 4;
-                case "MAY":
-                    return 5;
-                case "JUN":
-                    return 6;
-                case "JUL":
-                    return 7;
-                case "AUG":
-                    return 8;
-                case "SEP":
-                    return 9;
-                case "OCT":
-                    return 10;
-                case "NOV":
-                    return 11;
-                case "DEC":
-                    return 12;
-                default:
-                    return -1;
-            }
-        }
-        private int GetYearValue() 
-        {
-            if (StatisticsYearInput == "Alltime")
-                return -1;
-            return int.Parse(StatisticsYearInput);
-        }   
-        private string GetCityValue() 
-        {
-            if (StatisticsCityInput != "-")
-                return StatisticsCityInput;
-
-            return "/";
-
-        }
-        private string GetCountryValue()
-        {
-            if (StatisticsCountryInput != "-")
-                return StatisticsCountryInput;
-
-            return "/";
-
-        }
-        private string GetLanguageValue()
-        {
-            if (!string.IsNullOrEmpty(StatisticsLanguageInput))
-                return StatisticsLanguageInput;
-
-            return "/";
-
-        }
+        #endregion
     }
 }

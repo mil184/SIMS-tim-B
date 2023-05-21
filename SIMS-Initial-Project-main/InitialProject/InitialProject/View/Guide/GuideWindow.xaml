@@ -9,40 +9,6 @@
         Icon ="/Resources/Images/favicon.ico"
         Background="#F2F2F2"
         WindowStartupLocation="CenterScreen">
-    <Window.Resources>
-        <Style x:Key="AppFont" TargetType="TextBlock">
-            <Setter Property="FontFamily" Value="Fonts/Pacifico-Regular.ttf" />
-        </Style>
-        <DataTemplate x:Key="MessageTemplate">
-            <Grid Margin="5">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <TextBlock Grid.Column="0" Grid.Row="0" Text="{Binding Text}" />
-                <Grid Grid.Column="1" Grid.Row="0">
-                    <Grid.Style>
-                        <Style TargetType="Grid">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding Accepted}" Value="True">
-                                    <Setter Property="Visibility" Value="Collapsed" />
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding Accepted}" Value="False">
-                                    <Setter Property="Visibility" Value="Collapsed" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Grid.Style>
-                    <Button Content="Accept" Click="AcceptButton_Click" />
-                    <Button Content="Decline" Click="DeclineButton_Click" Grid.Column="1" />
-                </Grid>
-            </Grid>
-        </DataTemplate>
-    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -139,11 +105,7 @@
                     <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
                         <Image Source="/Resources/Images/info.png" Width="24" Height="24" Margin="0 0 10 0"/>
                         <TextBlock FontSize="12" FontStyle="Italic" Text="Navigate through data with" VerticalAlignment="Center" Foreground="#007ACC"/>
-                        <TextBlock FontSize="12" FontStyle="Italic" VerticalAlignment="Center" Foreground="#FFA500">
-                        <Run Text="  &#x25B2;"/>
-                        <LineBreak/>
-                        <Run Text="  &#x25BC;"/>
-                        </TextBlock>
+                        <TextBlock FontSize="12" FontStyle="Italic" VerticalAlignment="Center" Foreground="#FFA500" Text=" TAB"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
                         <Image Source="/Resources/Images/info.png" Width="24" Height="24" Margin="0 0 10 0"/>
