@@ -5,12 +5,17 @@ using InitialProject.Resources.Observer;
 using InitialProject.Resources.UIHelper;
 using InitialProject.Service;
 using InitialProject.ViewModel.Guide;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Diagnostics.Metrics;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -358,10 +363,6 @@ namespace InitialProject.View.Guide
             tour.IsAborted = true;
             _tourService.Update(tour);
         }
-        private void GenerateReportButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
         private void AbortButton_Click(object sender, RoutedEventArgs e)
         {
             if (SelectedUpcomingTourDTO != null)
@@ -371,6 +372,120 @@ namespace InitialProject.View.Guide
         {
             MessageBox.Show("You may not abort this tour as you are breaking the 2 day rule.", "Abort Tour Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
+        private void GenerateReportButton_Click(object sender, RoutedEventArgs e)
+        {
+            IntervalChooser intervalChooser = new IntervalChooser(_tourService, _locationService);
+            intervalChooser.ShowDialog();
+            //DateTime leftBoundary = DateTime.Now;
+            //DateTime rightBoundary = leftBoundary.AddMonths(5);
+            //PrintReceipt(UpcomingTours, leftBoundary, rightBoundary);
+        }
+
+        private static void PrintReceipt(ObservableCollection<GuideTourDTO> upcomingTours, DateTime leftBoundary, DateTime rightBoundary)
+        {
+            try
+            { 
+
+                PdfPTable pdfTable = new PdfPTable(3);
+                pdfTable.WidthPercentage = 80;  
+                pdfTable.DefaultCell.BorderWidth = 0.6f;
+
+                string logoPath = "../../../Resources/Images/logo.png";
+                iTextSharp.text.Image logoImage = iTextSharp.text.Image.GetInstance(logoPath);
+                logoImage.ScaleAbsolute(30f, 30f); // Adjust the size as per your requirements
+
+                // Add Company Name and Logo
+                PdfPCell companyCell = new PdfPCell(new Phrase("DMJM-Tours", FontFactory.GetFont("Times New Roman", 18, Font.BOLD, new BaseColor(64, 134, 170))));
+                companyCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+                companyCell.BorderWidth = 0;
+                companyCell.Colspan = 3;
+                companyCell.PaddingBottom = 10f;
+                pdfTable.AddCell(companyCell);
+
+                // Add Upcoming Tours Header
+                PdfPCell headerCell = new PdfPCell(new Phrase("Upcoming Tours", FontFactory.GetFont("Times New Roman", 14, Font.BOLD, BaseColor.WHITE)));
+                headerCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                headerCell.BackgroundColor = new BaseColor(64, 134, 170);
+                headerCell.BorderWidth = 0;
+                headerCell.Colspan = 3;
+                headerCell.Padding = 8f;
+                pdfTable.AddCell(headerCell);
+
+                // Add Date Range   
+
+                string dateRange = leftBoundary.ToString("d.M.yyyy") + " - " + rightBoundary.ToString("d.M.yyyy");
+                PdfPCell dateRangeCell = new PdfPCell(new Phrase(dateRange, FontFactory.GetFont("Times New Roman", 12, Font.NORMAL, BaseColor.WHITE)));
+                dateRangeCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                dateRangeCell.BackgroundColor = new BaseColor(64, 134, 170);
+                dateRangeCell.BorderWidth = 0;
+                dateRangeCell.Colspan = 3;
+                dateRangeCell.Padding = 8f;
+                pdfTable.AddCell(dateRangeCell);
+
+
+                // Table Header
+                PdfPCell cellHeader1 = new PdfPCell(new Phrase("Tour Name", FontFactory.GetFont("Times New Roman", 12, Font.BOLD)));
+                cellHeader1.BackgroundColor = new BaseColor(220, 220, 220);
+                cellHeader1.HorizontalAlignment = Element.ALIGN_CENTER;
+                pdfTable.AddCell(cellHeader1);
+
+                PdfPCell cellHeader2 = new PdfPCell(new Phrase("Location", FontFactory.GetFont("Times New Roman", 12, Font.BOLD)));
+                cellHeader2.BackgroundColor = new BaseColor(220, 220, 220);
+                cellHeader2.HorizontalAlignment = Element.ALIGN_CENTER;
+                pdfTable.AddCell(cellHeader2);
+
+                PdfPCell cellHeader3 = new PdfPCell(new Phrase("Start Time", FontFactory.GetFont("Times New Roman", 12, Font.BOLD)));
+                cellHeader3.BackgroundColor = new BaseColor(220, 220, 220);
+                cellHeader3.HorizontalAlignment = Element.ALIGN_CENTER;
+                pdfTable.AddCell(cellHeader3);
+
+                // Table Data
+                foreach (GuideTourDTO tour in upcomingTours)
+                {
+                    pdfTable.AddCell(new Phrase(tour.Name, FontFactory.GetFont("Times New Roman", 11)));
+                    pdfTable.AddCell(new Phrase(tour.Location, FontFactory.GetFont("Times New Roman", 11)));
+                    pdfTable.AddCell(new Phrase(tour.StartTime.ToString(), FontFactory.GetFont("Times New Roman", 11)));
+                }
+
+                #region Pdf Generation
+                string folderPath = "../../../Resources/Reports/Guide";
+                if (!Directory.Exists(folderPath))
+                {
+                    Directory.CreateDirectory(folderPath);
+                }
+
+                // File Name
+                int fileCount = Directory.GetFiles(folderPath).Length;
+                string strFileName = "UpcomingGuideTours" + (fileCount + 1) + ".pdf";
+                string filePath = Path.Combine(folderPath, strFileName);
+
+                using (FileStream stream = new FileStream(filePath, FileMode.Create))
+                {
+                    Document pdfDoc = new Document(PageSize.A4, 10f, 10f, 10f, 0f);
+                    PdfWriter.GetInstance(pdfDoc, stream);
+                    pdfDoc.Open();
+
+                    pdfDoc.Add(pdfTable);
+                    pdfDoc.Close();
+                    stream.Close();
+                }
+                #endregion
+
+                #region Display PDF
+                // Specify the default program to open the PDF file
+                ProcessStartInfo psi = new ProcessStartInfo(filePath);
+                psi.UseShellExecute = true;
+                psi.Verb = "open";
+
+                Process.Start(psi);
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         #endregion
 
         #region FinishedToursTab

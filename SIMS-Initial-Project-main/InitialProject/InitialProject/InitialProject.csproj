@@ -35,6 +35,7 @@
     <None Remove="Resources\Images\info.png" />
     <None Remove="Resources\Images\inspection.png" />
     <None Remove="Resources\Images\leftArrow.png" />
+    <None Remove="Resources\Images\logo.png" />
     <None Remove="Resources\Images\menu.png" />
     <None Remove="Resources\Images\mail.png" />
     <None Remove="Resources\Images\owner.png" />
@@ -117,6 +118,9 @@
     </Resource>
     <Resource Include="Resources\Images\inspection.png" />
     <Resource Include="Resources\Images\leftArrow.png" />
+    <Resource Include="Resources\Images\logo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
 
     <Resource Include="Resources\Images\menu.png" />
     <Resource Include="Resources\Images\mail.png">
@@ -181,6 +185,7 @@
 
   <ItemGroup>
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.5.0" />
+    <PackageReference Include="iTextSharp" Version="5.5.13.3" />
     <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
     <PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525" />
   </ItemGroup>
@@ -204,7 +209,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Resources\NewFolder\" />
     <Folder Include="ViewModel\Guest2\" />
     <Folder Include="ViewModel\Guest1\" />
     <Folder Include="ViewModel\Owner\" />
