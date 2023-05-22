@@ -224,6 +224,19 @@ namespace InitialProject.Service
             }
             return toursThisYear;
         }
+        public List<Tour> GetToursByTimeInterval(DateTime leftBoundary, DateTime rightBoundary)
+        {
+            List<Tour> tours = new List<Tour>();
+
+            foreach (Tour tour in GetUpcomingTours())
+            {
+                if (tour.StartTime >= leftBoundary.Date && tour.StartTime <= rightBoundary.Date)
+                {
+                    tours.Add(tour);
+                }
+            }
+            return tours;
+        }
         public Tour GetMostVisitedTour(List<Tour> toursThisYear) 
         {
             if (toursThisYear.Count == 0) 

@@ -36,8 +36,8 @@ namespace InitialProject.View.Guide
         private readonly LocationService _locationService;
         public ObservableCollection<GuideTourDTO> UpcomingTours { get; set; }
 
-        private DateTime _startDateInput;
-        public DateTime StartDateInput
+        private DateTime? _startDateInput;
+        public DateTime? StartDateInput
         {
             get => _startDateInput;
             set
@@ -49,8 +49,8 @@ namespace InitialProject.View.Guide
                 }
             }
         }
-        private DateTime _endDateInput;
-        public DateTime EndDateInput
+        private DateTime? _endDateInput;
+        public DateTime? EndDateInput
         {
             get => _endDateInput;
             set
@@ -71,16 +71,17 @@ namespace InitialProject.View.Guide
         public IntervalChooser(TourService tourService, LocationService locationService)
         {
             InitializeComponent();
+            DataContext = this;
 
             _tourService = tourService;
             _locationService = locationService;
 
-            StartDateInput = DateTime.Now;
-            EndDateInput = DateTime.Now;
+            //StartDateInput = DateTime.Now;
+            //EndDateInput = DateTime.Now;
 
             UpcomingTours = new ObservableCollection<GuideTourDTO>();
 
-            foreach(GuideTourDTO tour in GuideTourDTOConverter.ConvertToDTO(_tourService.GetUpcomingTours(), locationService)) 
+            foreach(GuideTourDTO tour in GuideTourDTOConverter.ConvertToDTO(_tourService.GetUpcomingTours(), _locationService)) 
             {
                 UpcomingTours.Add(tour);
             }
@@ -99,8 +100,10 @@ namespace InitialProject.View.Guide
                 MessageBox.Show("Please make sure the start date is before the end date.", "Date Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
+            if (StartDateInput == null || EndDateInput == null)
+                return;
 
-            PrintReceipt(UpcomingTours, StartDateInput, EndDateInput);
+            PrintReceipt(UpcomingTours, StartDateInput.Value, EndDateInput.Value);
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
@@ -214,7 +217,15 @@ namespace InitialProject.View.Guide
 
         private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (StartDateInput == null || EndDateInput == null)
+                return;
+
             UpcomingTours.Clear();
+
+            foreach (GuideTourDTO tour in GuideTourDTOConverter.ConvertToDTO(_tourService.GetToursByTimeInterval(StartDateInput.Value, EndDateInput.Value), _locationService))
+            {
+                UpcomingTours.Add(tour);
+            }
         }
     }
 }
