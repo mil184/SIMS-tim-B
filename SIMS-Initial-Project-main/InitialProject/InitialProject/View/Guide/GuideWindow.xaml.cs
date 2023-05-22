@@ -1,4 +1,5 @@
-﻿using InitialProject.Model;
+﻿using InitialProject.Converters;
+using InitialProject.Model;
 using InitialProject.Model.DTO;
 using InitialProject.Repository;
 using InitialProject.Resources.Observer;
@@ -90,11 +91,11 @@ namespace InitialProject.View.Guide
         }
         private void InitializeCollections()
         {
-            CurrentTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourService.GetTodaysTours(CurrentUser)));
-            UpcomingTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourService.GetUpcomingTours(CurrentUser)));
-            FinishedTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourService.GetFinishedTours(CurrentUser)));
-            RatedTours = new ObservableCollection<GuideTourDTO>(ConvertToDTO(_tourService.GetRatedTours(CurrentUser)));
-            PendingRequests = new ObservableCollection<GuideRequestDTO>(ConvertToDTO(_tourRequestService.GetPendingRequests(CurrentUser)));
+            CurrentTours = new ObservableCollection<GuideTourDTO>(GuideDTOConverter.ConvertToDTO(_tourService.GetTodaysTours(CurrentUser), _locationService));
+            UpcomingTours = new ObservableCollection<GuideTourDTO>(GuideDTOConverter.ConvertToDTO(_tourService.GetUpcomingTours(CurrentUser), _locationService));
+            FinishedTours = new ObservableCollection<GuideTourDTO>(GuideDTOConverter.ConvertToDTO(_tourService.GetFinishedTours(CurrentUser), _locationService));
+            RatedTours = new ObservableCollection<GuideTourDTO>(GuideDTOConverter.ConvertToDTO(_tourService.GetRatedTours(CurrentUser), _locationService));
+            PendingRequests = new ObservableCollection<GuideRequestDTO>(GuideDTOConverter.ConvertToDTO(_tourRequestService.GetPendingRequests(CurrentUser), _locationService));
 
             RequestCountries = new ObservableCollection<string>();
             RequestCities = new ObservableCollection<string>();
@@ -167,7 +168,7 @@ namespace InitialProject.View.Guide
         }
         private void InitializeStartingSearchValues()
         {
-            MostVisited = ConvertToDTO(_tourService.GetMostVisitedTour(_tourService.GetFinishedTours(CurrentUser)));
+            MostVisited = GuideDTOConverter.ConvertToDTO(_tourService.GetMostVisitedTour(_tourService.GetFinishedTours(CurrentUser)), _locationService);
         }
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -206,11 +207,11 @@ namespace InitialProject.View.Guide
             ActiveTour = null;
             foreach (GuideTourDTO tourdto in CurrentTours)
             {
-                Tour tour = ConvertToTour(tourdto);
+                Tour tour = GuideDTOConverter.ConvertToTour(tourdto, _tourService);
 
                 if (tour.IsActive)
                 {
-                    ActiveTour = ConvertToDTO(tour);
+                    ActiveTour = GuideDTOConverter.ConvertToDTO(tour, _locationService);
                     break;
                 }
             }
@@ -228,7 +229,7 @@ namespace InitialProject.View.Guide
         private void SelectTodaysTour()
         {
             CheckIfTourIsActive();
-            Tour selectedTour = ConvertToTour(SelectedCurrentTourDTO);
+            Tour selectedTour = GuideDTOConverter.ConvertToTour(SelectedCurrentTourDTO, _tourService);
 
             if (selectedTour != null)
             {
@@ -245,7 +246,7 @@ namespace InitialProject.View.Guide
                 if (tour.IsActive)
                 {
                     TourActive = true;
-                    ActiveTour = ConvertToDTO(tour);
+                    ActiveTour = GuideDTOConverter.ConvertToDTO(tour, _locationService);
                     break;
                 }
             }
@@ -254,7 +255,7 @@ namespace InitialProject.View.Guide
         {
             if (selectedTour.IsActive)
             {
-                ActiveTour = ConvertToDTO(selectedTour);
+                ActiveTour = GuideDTOConverter.ConvertToDTO(selectedTour, _locationService);
                 ShowCheckpoints showCheckpoints = new ShowCheckpoints(selectedTour, _checkpointService, _tourService, _tourReservationService, _userRepository, _tourRatingService);
                 showCheckpoints.ShowDialog();
             }
@@ -293,7 +294,7 @@ namespace InitialProject.View.Guide
         private void UpdateTour(Tour tour)
         {
             _tourService.Update(tour);
-            ActiveTour = ConvertToDTO(tour);
+            ActiveTour = GuideDTOConverter.ConvertToDTO(tour, _locationService);
         }
         private void ShowCheckpointsForTour(Tour tour)
         {
@@ -327,7 +328,7 @@ namespace InitialProject.View.Guide
         private void SelectUpcomingTour()
         {
             List<int> vouchersAdded = new List<int>();
-            Tour tour = ConvertToTour(SelectedUpcomingTourDTO);
+            Tour tour = GuideDTOConverter.ConvertToTour(SelectedUpcomingTourDTO, _tourService);
 
             if (!_tourService.CheckIfTourCanBeAborted(tour))
             {
@@ -438,12 +439,12 @@ namespace InitialProject.View.Guide
             }
             else
             {
-                MostVisited = ConvertToDTO(_tourService.GetMostVisitedTour(toursByYear));
+                MostVisited = GuideDTOConverter.ConvertToDTO(_tourService.GetMostVisitedTour(toursByYear), _locationService);
             }
         }
         private void HandleAllTimeSelection()
         {
-            MostVisited = ConvertToDTO(_tourService.GetMostVisitedTour(_tourService.GetFinishedTours(CurrentUser)));
+            MostVisited = GuideDTOConverter.ConvertToDTO(_tourService.GetMostVisitedTour(_tourService.GetFinishedTours(CurrentUser)), _locationService);
         }
         #region Update
         public void Update()
@@ -459,7 +460,7 @@ namespace InitialProject.View.Guide
             UpcomingTours.Clear();
             foreach (Tour tour in _tourService.GetUpcomingTours(CurrentUser))
             {
-                UpcomingTours.Add(ConvertToDTO(tour));
+                UpcomingTours.Add(GuideDTOConverter.ConvertToDTO(tour, _locationService));
             }
         }
         private void UpdateCurrentTours()
@@ -467,7 +468,7 @@ namespace InitialProject.View.Guide
             CurrentTours.Clear();
             foreach (Tour tour in _tourService.GetTodaysTours(CurrentUser))
             {
-                CurrentTours.Add(ConvertToDTO(tour));
+                CurrentTours.Add(GuideDTOConverter.ConvertToDTO(tour, _locationService));
             }
         }
         private void UpdateFinishedTours()
@@ -475,7 +476,7 @@ namespace InitialProject.View.Guide
             FinishedTours.Clear();
             foreach (Tour tour in _tourService.GetFinishedTours(CurrentUser))
             {
-                FinishedTours.Add(ConvertToDTO(tour));
+                FinishedTours.Add(GuideDTOConverter.ConvertToDTO(tour, _locationService));
             }
         }
         private void UpdatePendingRequests()
@@ -483,7 +484,7 @@ namespace InitialProject.View.Guide
             PendingRequests.Clear();
             foreach (TourRequest request in _tourRequestService.GetPendingRequests(CurrentUser))
             {
-                PendingRequests.Add(ConvertToDTO(request));
+                PendingRequests.Add(GuideDTOConverter.ConvertToDTO(request, _locationService));
             }
         }
         private void UpdateActiveTour()
@@ -491,38 +492,23 @@ namespace InitialProject.View.Guide
             ActiveTour = null;
             foreach (GuideTourDTO tourdto in CurrentTours)
             {
-                Tour tour = ConvertToTour(tourdto);
+                Tour tour = GuideDTOConverter.ConvertToTour(tourdto, _tourService);
 
                 if (tour.IsActive)
                 {
-                    ActiveTour = ConvertToDTO(tour);
+                    ActiveTour = GuideDTOConverter.ConvertToDTO(tour, _locationService);
                     break;
                 }
             }
         }
         #endregion
-        public List<GuideTourDTO> ConvertToDTO(List<Tour> tours)
-        {
-            List<GuideTourDTO> dto = new List<GuideTourDTO>();
-            foreach (Tour tour in tours)
-            {
-                dto.Add(new GuideTourDTO(
-                    tour.Id,
-                    tour.Name,
-                    _locationService.GetById(tour.LocationId).Country,
-                    _locationService.GetById(tour.LocationId).City,
-                    tour.StartTime,
-                    tour.CurrentGuestCount));
-            }
-            return dto;
-        }
         private void FinishedToursDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             SelectFinishedTour();
         }
         private void SelectFinishedTour()
         {
-            Tour selectedTour = ConvertToTour(SelectedFinishedTourDTO);
+            Tour selectedTour = GuideDTOConverter.ConvertToTour(SelectedFinishedTourDTO, _tourService);
             if (selectedTour != null)
             {
                 StatisticsViewModel statisticsViewModel = new StatisticsViewModel(selectedTour, _tourReservationService);
@@ -546,7 +532,7 @@ namespace InitialProject.View.Guide
         }
         private void SelectRatedTour()
         {
-            RatingsViewModel ratingsViewModel = new RatingsViewModel(_userRepository, _tourRatingService, _tourReservationService, _checkpointService, ConvertToTour(SelectedRatedTourDTO));
+            RatingsViewModel ratingsViewModel = new RatingsViewModel(_userRepository, _tourRatingService, _tourReservationService, _checkpointService, GuideDTOConverter.ConvertToTour(SelectedRatedTourDTO, _tourService));
             Ratings ratings = new Ratings(ratingsViewModel);
             ratings.Show();
         }
@@ -713,7 +699,7 @@ namespace InitialProject.View.Guide
                 result = result.Intersect(_tourRequestService.GetByEndDate(CurrentUser, RequestEndDateInput)).ToList();
             }
 
-            List<GuideRequestDTO> searchResults = ConvertToDTO(result);
+            List<GuideRequestDTO> searchResults = GuideDTOConverter.ConvertToDTO(result, _locationService);
 
             foreach (GuideRequestDTO dto in searchResults)
             {
@@ -727,7 +713,7 @@ namespace InitialProject.View.Guide
             {
                 foreach (TourRequest request in _tourRequestService.GetPendingRequests(CurrentUser))
                 {
-                    PendingRequests.Add(ConvertToDTO(request));
+                    PendingRequests.Add(GuideDTOConverter.ConvertToDTO(request, _locationService));
                 }
             }
         }
@@ -736,7 +722,7 @@ namespace InitialProject.View.Guide
         {
             if (SelectedPendingRequestDTO != null)
             {
-                TourRequest request = ConvertToRequest(SelectedPendingRequestDTO);
+                TourRequest request = GuideDTOConverter.ConvertToRequest(SelectedPendingRequestDTO, _tourRequestService);
                 CreateTour createTour = new CreateTour(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService, request);
                 createTour.ShowDialog();
             }
@@ -1057,61 +1043,6 @@ namespace InitialProject.View.Guide
 
             return "/";
 
-        }
-        #endregion
-
-        #region DTOS
-        public GuideTourDTO ConvertToDTO(Tour tour)
-        {
-
-            if (tour == null)
-                return null;
-
-            return new GuideTourDTO(
-                    tour.Id,
-                    tour.Name,
-                    _locationService.GetById(tour.LocationId).Country,
-                    _locationService.GetById(tour.LocationId).City,
-                    tour.StartTime,
-                    tour.CurrentGuestCount);
-        }
-        public Tour ConvertToTour(GuideTourDTO dto)
-        {
-            if (dto != null)
-                return _tourService.GetById(dto.Id);
-            return null;
-        }
-        public List<GuideRequestDTO> ConvertToDTO(List<TourRequest> requests)
-        {
-            List<GuideRequestDTO> dto = new List<GuideRequestDTO>();
-            foreach (TourRequest request in requests)
-            {
-                dto.Add(ConvertToDTO(request));
-            }
-            return dto;
-        }
-        public GuideRequestDTO ConvertToDTO(TourRequest request)
-        {
-
-            if (request == null)
-                return null;
-
-            return new GuideRequestDTO(
-                    request.Id,
-                    _locationService.GetById(request.LocationId).City + ", " +
-                    _locationService.GetById(request.LocationId).Country,
-                    request.Language,
-                    request.MaxGuests.ToString(),
-                    request.StartTime,
-                    request.EndTime,
-                    request.Description
-                    );
-        }
-        public TourRequest ConvertToRequest(GuideRequestDTO dto)
-        {
-            if (dto != null)
-                return _tourRequestService.GetById(dto.Id);
-            return null;
         }
         #endregion
 

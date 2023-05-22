@@ -85,7 +85,7 @@ namespace InitialProject.View.Guide
 
             UpcomingTours = new ObservableCollection<GuideTourDTO>();
 
-            foreach(GuideTourDTO tour in GuideTourDTOConverter.ConvertToDTO(_tourService.GetUpcomingTours(CurrentUser), _locationService)) 
+            foreach(GuideTourDTO tour in GuideDTOConverter.ConvertToDTO(_tourService.GetUpcomingTours(CurrentUser), _locationService)) 
             {
                 UpcomingTours.Add(tour);
             }
@@ -226,7 +226,7 @@ namespace InitialProject.View.Guide
 
             UpcomingTours.Clear();
 
-            foreach (GuideTourDTO tour in GuideTourDTOConverter.ConvertToDTO(_tourService.GetToursByTimeInterval(CurrentUser, StartDateInput.Value, EndDateInput.Value), _locationService))
+            foreach (GuideTourDTO tour in GuideDTOConverter.ConvertToDTO(_tourService.GetToursByTimeInterval(CurrentUser, StartDateInput.Value, EndDateInput.Value), _locationService))
             {
                 UpcomingTours.Add(tour);
             }

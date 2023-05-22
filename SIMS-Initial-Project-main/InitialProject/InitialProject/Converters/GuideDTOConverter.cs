@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace InitialProject.Converters
 {
-    public  class GuideTourDTOConverter
+    public  class GuideDTOConverter
     {
         static public GuideTourDTO ConvertToDTO(Tour tour, LocationService locationService)
         {
@@ -37,6 +37,38 @@ namespace InitialProject.Converters
         {
             if (dto != null)
                 return tourService.GetById(dto.Id);
+            return null;
+        }
+        static public List<GuideRequestDTO> ConvertToDTO(List<TourRequest> requests, LocationService locationService)
+        {
+            List<GuideRequestDTO> dto = new List<GuideRequestDTO>();
+            foreach (TourRequest request in requests)
+            {
+                dto.Add(ConvertToDTO(request, locationService));
+            }
+            return dto;
+        }
+        static public GuideRequestDTO ConvertToDTO(TourRequest request, LocationService locationService)
+        {
+
+            if (request == null)
+                return null;
+
+            return new GuideRequestDTO(
+                    request.Id,
+                    locationService.GetById(request.LocationId).City + ", " +
+                    locationService.GetById(request.LocationId).Country,
+                    request.Language,
+                    request.MaxGuests.ToString(),
+                    request.StartTime,
+                    request.EndTime,
+                    request.Description
+                    );
+        }
+        static public TourRequest ConvertToRequest(GuideRequestDTO dto, TourRequestService tourRequestService)
+        {
+            if (dto != null)
+                return tourRequestService.GetById(dto.Id);
             return null;
         }
     }
