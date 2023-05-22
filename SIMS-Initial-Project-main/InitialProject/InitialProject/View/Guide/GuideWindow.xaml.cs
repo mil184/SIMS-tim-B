@@ -42,7 +42,8 @@ namespace InitialProject.View.Guide
         private readonly TourRequestService _tourRequestService;
 
         public User CurrentUser { get; set; }
-        public int CurrentSortIndex;
+        public int CurrentTourSortIndex;
+        public int CurrentRequestSortIndex;
         public GuideWindow(User user)
         {
             InitializeComponent();
@@ -86,7 +87,8 @@ namespace InitialProject.View.Guide
             RequestEndDateInput = null;
 
             CurrentUser.Username = "Gorana";
-            CurrentSortIndex = 0;
+            CurrentTourSortIndex = 0;
+            CurrentRequestSortIndex = 0;
 
         }
         private void InitializeCollections()
@@ -720,6 +722,11 @@ namespace InitialProject.View.Guide
 
         private void PendingRequests_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            CreateTourBasedOnRequest();
+        }
+
+        private void CreateTourBasedOnRequest() 
+        {
             if (SelectedPendingRequestDTO != null)
             {
                 TourRequest request = GuideDTOConverter.ConvertToRequest(SelectedPendingRequestDTO, _tourRequestService);
@@ -1098,6 +1105,10 @@ namespace InitialProject.View.Guide
                         if (SelectedRatedTourDTO != null)
                             SelectRatedTour();
                         break;
+                    case 4:
+                        if (SelectedPendingRequestDTO != null)
+                            CreateTourBasedOnRequest();
+                        break;
                     default:
                         return;
                 }
@@ -1106,7 +1117,7 @@ namespace InitialProject.View.Guide
         }
         private void LeftRightArrowKeys_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Left || e.Key == Key.Right)
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) && (e.Key == Key.Left || e.Key == Key.Right))
             {
                 int index = tabControl.SelectedIndex;
                 int count = tabControl.Items.Count;
@@ -1162,7 +1173,17 @@ namespace InitialProject.View.Guide
                 return;
 
             var view = CollectionViewSource.GetDefaultView(grid.ItemsSource);
-            var sortColumn = GetNextSortColumn();
+
+            string sortColumn = "";
+
+            if (grid == PendingRequestsDataGrid)
+            {
+                sortColumn = GetNextSortColumnRequests();
+            }
+            else
+            {
+                sortColumn = GetNextSortColumnTours();
+            }
 
             // Check if the column is already sorted in ascending order
             var isAlreadySorted = view.SortDescriptions.Count > 0 && view.SortDescriptions[0].PropertyName == sortColumn && view.SortDescriptions[0].Direction == ListSortDirection.Ascending;
@@ -1200,10 +1221,19 @@ namespace InitialProject.View.Guide
                 return;
 
             var view = CollectionViewSource.GetDefaultView(grid.ItemsSource);
-            var sortColumn = GetNextSortColumn();
 
-            // Check if the column is already sorted in descending order
-            var isAlreadySorted = view.SortDescriptions.Count > 0 && view.SortDescriptions[0].PropertyName == sortColumn && view.SortDescriptions[0].Direction == ListSortDirection.Descending;
+            string sortColumn = "";
+
+            if (grid == PendingRequestsDataGrid) 
+            { 
+                sortColumn = GetNextSortColumnRequests();
+            }
+            else 
+            {
+                sortColumn = GetNextSortColumnTours();
+            }
+                // Check if the column is already sorted in descending order
+                var isAlreadySorted = view.SortDescriptions.Count > 0 && view.SortDescriptions[0].PropertyName == sortColumn && view.SortDescriptions[0].Direction == ListSortDirection.Descending;
 
             // Remove the arrow symbol from the previously sorted column header
             if (!isAlreadySorted)
@@ -1240,22 +1270,44 @@ namespace InitialProject.View.Guide
                     return FinishedToursDataGrid;
                 case 3:
                     return RatedToursDataGrid;
+                case 4:
+                    return PendingRequestsDataGrid;
                 default:
                     return null;
             }
         }
-        private string GetNextSortColumn()
+        private string GetNextSortColumnTours()
         {
-            switch (CurrentSortIndex)
+            switch (CurrentTourSortIndex)
             {
                 case 0:
-                    CurrentSortIndex++;
+                    CurrentTourSortIndex++;
                     return "Name";
                 case 1:
-                    CurrentSortIndex++;
+                    CurrentTourSortIndex++;
                     return "Location";
                 case 2:
-                    CurrentSortIndex = 0;
+                    CurrentTourSortIndex = 0;
+                    return "StartTime";
+                default:
+                    return "";
+            }
+        }
+        private string GetNextSortColumnRequests()
+        {
+            switch (CurrentRequestSortIndex)
+            {
+                case 0:
+                    CurrentRequestSortIndex++;
+                    return "Location";
+                case 1:
+                    CurrentRequestSortIndex++;
+                    return "Language";
+                case 2:
+                    CurrentRequestSortIndex++;
+                    return "MaximumGuests";
+                case 3:
+                    CurrentRequestSortIndex = 0;
                     return "StartTime";
                 default:
                     return "";

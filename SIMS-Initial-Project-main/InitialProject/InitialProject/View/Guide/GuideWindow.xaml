@@ -111,6 +111,7 @@
                         <Image Source="/Resources/Images/info.png" Width="24" Height="24" Margin="0 0 10 0"/>
                         <TextBlock FontSize="12" FontStyle="Italic" Text="Navigate through tabs with" VerticalAlignment="Center" Foreground="#007ACC"/>
                         <TextBlock FontSize="12" FontStyle="Italic" VerticalAlignment="Center" Foreground="#FFA500">
+                        <Run Text="CTRL +"/>
                         <Run Text=" &#x25C0;"/>
                         <Run Text=" &#x25B6;"/>
                         </TextBlock>
@@ -641,7 +642,14 @@
                                 <DataGridTextColumn Header="Location" Binding="{Binding Location}" Width="*" FontSize="18"/>
                                 <DataGridTextColumn Header="Language" Binding="{Binding Language}" Width="*" FontSize="18"/>
                                 <DataGridTextColumn Header="Guest Number" Binding="{Binding MaximumGuests}" Width="1*" FontSize="18"/>
-                                <DataGridTextColumn Header="Timespan" Binding="{Binding Interval}" Width="1.5*" FontSize="18"/>
+                                <DataGridTextColumn Header="Timespan" Width="1.5*" FontSize="18">
+                                    <DataGridTextColumn.Binding>
+                                        <MultiBinding StringFormat="{}{0:dd.MM.yyyy} - {1:dd.MM.yyyy}">
+                                            <Binding Path="StartTime"/>
+                                            <Binding Path="EndTime"/>
+                                        </MultiBinding>
+                                    </DataGridTextColumn.Binding>
+                                </DataGridTextColumn>
                             </DataGrid.Columns>
                         </DataGrid>
                     </GroupBox>
