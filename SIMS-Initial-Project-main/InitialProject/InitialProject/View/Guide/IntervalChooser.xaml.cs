@@ -24,6 +24,7 @@ using iTextSharp.text.pdf.parser.clipper;
 using Path = System.IO.Path;
 using InitialProject.Service;
 using InitialProject.Converters;
+using InitialProject.Model;
 
 namespace InitialProject.View.Guide
 {
@@ -35,6 +36,8 @@ namespace InitialProject.View.Guide
         private readonly TourService _tourService;
         private readonly LocationService _locationService;
         public ObservableCollection<GuideTourDTO> UpcomingTours { get; set; }
+
+        public User CurrentUser { get; set; }
 
         private DateTime? _startDateInput;
         public DateTime? StartDateInput
@@ -68,20 +71,21 @@ namespace InitialProject.View.Guide
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public IntervalChooser(TourService tourService, LocationService locationService)
+        public IntervalChooser(TourService tourService, LocationService locationService, User user)
         {
             InitializeComponent();
             DataContext = this;
 
             _tourService = tourService;
             _locationService = locationService;
+            CurrentUser = user;
 
             //StartDateInput = DateTime.Now;
             //EndDateInput = DateTime.Now;
 
             UpcomingTours = new ObservableCollection<GuideTourDTO>();
 
-            foreach(GuideTourDTO tour in GuideTourDTOConverter.ConvertToDTO(_tourService.GetUpcomingTours(), _locationService)) 
+            foreach(GuideTourDTO tour in GuideTourDTOConverter.ConvertToDTO(_tourService.GetUpcomingTours(CurrentUser), _locationService)) 
             {
                 UpcomingTours.Add(tour);
             }
@@ -222,7 +226,7 @@ namespace InitialProject.View.Guide
 
             UpcomingTours.Clear();
 
-            foreach (GuideTourDTO tour in GuideTourDTOConverter.ConvertToDTO(_tourService.GetToursByTimeInterval(StartDateInput.Value, EndDateInput.Value), _locationService))
+            foreach (GuideTourDTO tour in GuideTourDTOConverter.ConvertToDTO(_tourService.GetToursByTimeInterval(CurrentUser, StartDateInput.Value, EndDateInput.Value), _locationService))
             {
                 UpcomingTours.Add(tour);
             }

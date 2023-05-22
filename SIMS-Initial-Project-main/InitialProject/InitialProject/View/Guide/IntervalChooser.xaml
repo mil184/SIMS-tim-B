@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InitialProject.View.Guide"
         mc:Ignorable="d"
-        Title="IntervalChooser" Height="400" Width="800"
+        Title="IntervalChooser" Height="500" Width="800"
         Background="#F2F2F2"
         WindowStartupLocation="CenterScreen">
     <Grid>
