@@ -107,6 +107,9 @@ namespace InitialProject.View.Guide
 
             StatisticsYears = new ObservableCollection<string>();
             StatisticsMonths = new ObservableCollection<string>();
+
+            Parameters = new RequestFilterParameters();
+            Parameters.User = CurrentUser;
         }
 
         private void InitializeComboBoxes()
@@ -258,7 +261,7 @@ namespace InitialProject.View.Guide
             if (selectedTour.IsActive)
             {
                 ActiveTour = GuideDTOConverter.ConvertToDTO(selectedTour, _locationService);
-                ShowCheckpoints showCheckpoints = new ShowCheckpoints(selectedTour, _checkpointService, _tourService, _tourReservationService, _userRepository, _tourRatingService);
+                ShowCheckpoints showCheckpoints = new ShowCheckpoints(selectedTour, _checkpointService, _tourService, _tourReservationService, _userRepository);
                 showCheckpoints.ShowDialog();
             }
             else if (TourActive)
@@ -300,7 +303,7 @@ namespace InitialProject.View.Guide
         }
         private void ShowCheckpointsForTour(Tour tour)
         {
-            ShowCheckpoints showCheckpoints = new ShowCheckpoints(tour, _checkpointService, _tourService, _tourReservationService, _userRepository, _tourRatingService);
+            ShowCheckpoints showCheckpoints = new ShowCheckpoints(tour, _checkpointService, _tourService, _tourReservationService, _userRepository);
             showCheckpoints.ShowDialog();
         }
         private bool ConfirmStartTour(Tour selectedTour)
@@ -551,6 +554,9 @@ namespace InitialProject.View.Guide
         public GuideRequestDTO SelectedPendingRequestDTO { get; set; }
         public ObservableCollection<string> RequestCountries { get; set; }
         public ObservableCollection<string> RequestCities { get; set; }
+
+        public RequestFilterParameters Parameters { get; set; }
+
         private string _requestCity;
         public string RequestCityInput
         {
@@ -629,77 +635,50 @@ namespace InitialProject.View.Guide
                 }
             }
         }
-        private void CbCity_SelectionChanged(object sender, SelectionChangedEventArgs e)
+ 
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             RequestCountryInput = _locationService.GetCountryByCity(RequestCityInput);
-            UpdateRequests();
-        }
 
-        private void CbCountry_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
             if (!_locationService.GetCitiesByCountry(RequestCountryInput).Contains(RequestCityInput))
                 RequestCityInput = string.Empty;
 
+            UpdateSearchParameters();
             UpdateRequests();
         }
 
-        private void txtGuests_TextChanged(object sender, TextChangedEventArgs e)
+        private void Text_Changed(object sender, TextChangedEventArgs e)
         {
+            UpdateSearchParameters();
             UpdateRequests();
         }
-
-        private void txtLanguage_TextChanged(object sender, TextChangedEventArgs e)
+        private void Date_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            UpdateSearchParameters();
             UpdateRequests();
         }
-
-        private void dpStartDate_DateChanged(object sender, SelectionChangedEventArgs e)
+        private void UpdateSearchParameters()
         {
-            UpdateRequests();
-        }
+            int? maxGuests = null;
 
-        private void dpEndDate_DateChanged(object sender, SelectionChangedEventArgs e)
-        {
-            UpdateRequests();
-        }
+            if (int.TryParse(RequestMaxGuestsInput, out int parsedNumber)) 
+            {
+                maxGuests = parsedNumber;
+            }
 
+            Parameters.Language = RequestLanguageInput;
+            Parameters.StartDate = RequestStartDateInput;
+            Parameters.EndDate = RequestEndDateInput;
+            Parameters.MaxGuests = maxGuests;
+            Parameters.City = RequestCityInput;
+            Parameters.Country = RequestCountryInput;
+        }
         private void UpdateRequests()
         {
-            CheckIfAllEmpty();
 
             PendingRequests.Clear();
 
-            List<TourRequest> result = new List<TourRequest>();
-
-            if (!string.IsNullOrEmpty(RequestCountryInput))
-            {
-                result = _tourRequestService.GetByCountry(CurrentUser, RequestCountryInput);
-            }
-            else
-            {
-                result = _tourRequestService.GetPendingRequests(CurrentUser);
-            }
-
-            if (!string.IsNullOrEmpty(RequestCityInput))
-            {
-                result = result.Intersect(_tourRequestService.GetByCity(CurrentUser, RequestCityInput)).ToList();
-            }
-            if (!string.IsNullOrEmpty(RequestLanguageInput))
-            {
-                result = result.Intersect(_tourRequestService.GetByLanguage(CurrentUser, RequestLanguageInput)).ToList();
-            }
-            if (!string.IsNullOrEmpty(RequestMaxGuestsInput) && int.TryParse(RequestMaxGuestsInput, out int integer))
-            {
-                result = result.Intersect(_tourRequestService.GetByMaxGuests(CurrentUser, int.Parse(RequestMaxGuestsInput))).ToList();
-            }
-            if (RequestStartDateInput != null)
-            {
-                result = result.Intersect(_tourRequestService.GetByStartDate(CurrentUser, RequestStartDateInput)).ToList();
-            }
-            if (RequestEndDateInput != null)
-            {
-                result = result.Intersect(_tourRequestService.GetByEndDate(CurrentUser, RequestEndDateInput)).ToList();
-            }
+            List<TourRequest> result = _tourRequestService.FilterRequests(Parameters);
 
             List<GuideRequestDTO> searchResults = GuideDTOConverter.ConvertToDTO(result, _locationService);
 
@@ -709,17 +688,6 @@ namespace InitialProject.View.Guide
             }
 
         }
-        public void CheckIfAllEmpty()
-        {
-            if (string.IsNullOrEmpty(RequestCountryInput) && string.IsNullOrEmpty(RequestCityInput) && string.IsNullOrEmpty(RequestLanguageInput) && string.IsNullOrEmpty(RequestMaxGuestsInput))
-            {
-                foreach (TourRequest request in _tourRequestService.GetPendingRequests(CurrentUser))
-                {
-                    PendingRequests.Add(GuideDTOConverter.ConvertToDTO(request, _locationService));
-                }
-            }
-        }
-
         private void PendingRequests_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             CreateTourBasedOnRequest();

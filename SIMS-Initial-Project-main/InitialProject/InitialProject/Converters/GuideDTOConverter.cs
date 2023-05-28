@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using InitialProject.Repository;
 
 namespace InitialProject.Converters
 {
@@ -69,6 +70,34 @@ namespace InitialProject.Converters
         {
             if (dto != null)
                 return tourRequestService.GetById(dto.Id);
+            return null;
+        }
+        static public List<UserDTO> ConvertToDTO(List<User> users, TourReservationService tourReservationService, Tour tour, CheckpointService checkpointService)
+        {
+            List<UserDTO> dto = new List<UserDTO>();
+            foreach (User user in users)
+            {
+                dto.Add(ConvertToDTO(user, tourReservationService, tour, checkpointService));
+            }
+            return dto;
+        }
+        static public UserDTO ConvertToDTO(User user, TourReservationService tourReservationService, Tour tour, CheckpointService checkpointService)
+        {
+            TourReservation reservation = tourReservationService.GetReservationByGuestIdAndTourId(user.Id, tour.Id);
+
+            string currentCheckpoint = "Not Arrived Yet";
+
+            if(reservation.CheckpointArrivalId != -1) 
+            {
+                currentCheckpoint = checkpointService.GetById(reservation.CheckpointArrivalId).Name;
+            }
+
+            return new UserDTO(user.Id, user.Username, currentCheckpoint);
+        }
+        static public User ConvertToUser(UserDTO dto, UserRepository userRepository)
+        {
+            if (dto != null)
+                return userRepository.GetById(dto.UserId);
             return null;
         }
     }

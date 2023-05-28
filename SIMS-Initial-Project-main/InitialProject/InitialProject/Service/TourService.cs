@@ -285,7 +285,7 @@ namespace InitialProject.Service
             return _tourRepository.Save(tour);
         }
 
-        internal List<Tour> GetAll()
+        public List<Tour> GetAll()
         {
             return _tourRepository.GetAll();
         }

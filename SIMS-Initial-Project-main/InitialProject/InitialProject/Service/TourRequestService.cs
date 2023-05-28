@@ -1,4 +1,5 @@
 ﻿using InitialProject.Model;
+using InitialProject.Model.DTO;
 using InitialProject.Repository;
 using InitialProject.Repository.Interfaces;
 using InitialProject.Resources.Injector;
@@ -39,7 +40,7 @@ namespace InitialProject.Service
             return _tourRequestRepository.Save(tourRequest);
         }
 
-        internal List<TourRequest> GetAll()
+        public List<TourRequest> GetAll()
         {
             return _tourRequestRepository.GetAll();
         }
@@ -278,6 +279,42 @@ namespace InitialProject.Service
                 }
             }
             return requests;
+        }
+
+        public List<TourRequest> FilterRequests(RequestFilterParameters parameters) 
+        {
+            List<TourRequest> result = new List<TourRequest>();
+
+            if (!string.IsNullOrEmpty(parameters.Country))
+            {
+                result = GetByCountry(parameters.User, parameters.Country);
+            }
+            else
+            {
+                result = GetPendingRequests(parameters.User);
+            }
+
+            if (!string.IsNullOrEmpty(parameters.City))
+            {
+                result = result.Intersect(GetByCity(parameters.User, parameters.City)).ToList();
+            }
+            if (!string.IsNullOrEmpty(parameters.Language))
+            {
+                result = result.Intersect(GetByLanguage(parameters.User, parameters.Language)).ToList();
+            }
+            if (parameters.MaxGuests != null)
+            {
+                result = result.Intersect(GetByMaxGuests(parameters.User, parameters.MaxGuests.Value)).ToList();
+            }
+            if (parameters.StartDate != null)
+            {
+                result = result.Intersect(GetByStartDate(parameters.User, parameters.StartDate)).ToList();
+            }
+            if (parameters.EndDate != null)
+            {
+                result = result.Intersect(GetByEndDate(parameters.User, parameters.EndDate)).ToList();
+            }
+            return result;
         }
         public List<TourRequest> GetByStartDate(User user, DateTime? startDate)
         {

@@ -266,6 +266,16 @@ namespace InitialProject.View.Guide
 
         private void TourCreation() 
         {
+
+            if (Valid())
+            {
+                SaveTour();
+
+                Close();
+            }
+        }
+        private bool Valid() 
+        {
             bool valid = true;
 
             if (!IsValid)
@@ -299,13 +309,8 @@ namespace InitialProject.View.Guide
                 ShowLocationWarning();
                 valid = false;
             }
+            return valid;
 
-            if (valid)
-            {
-                SaveTour();
-
-                Close();
-            }
         }
         private void btnCreateTour_Click(object sender, RoutedEventArgs e)
         {
