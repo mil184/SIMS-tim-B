@@ -334,7 +334,7 @@ namespace InitialProject.View.Guide
 
                 UpdateCheckpointsTourId(tour.Id);
                 if(Request != null)
-                UpdateRequest(Request);
+                UpdateRequest(Request,tour);
                 
             }
         }
@@ -364,10 +364,11 @@ namespace InitialProject.View.Guide
                 _checkpointService.Update(checkpoint);
             }
         }
-        private void UpdateRequest(TourRequest request)
+        private void UpdateRequest(TourRequest request, Tour tour)
         {
             request.Status = InitialProject.Resources.Enums.RequestStatus.accepted;
             request.GuideId = LoggedInUser.Id;
+            tour.RequestId = request.Id;
             _tourRequestService.Update(request);
         }
         private void Hours_cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
