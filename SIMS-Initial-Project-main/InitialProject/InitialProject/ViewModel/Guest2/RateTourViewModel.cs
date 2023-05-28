@@ -2,6 +2,8 @@
 using InitialProject.Model.DTO;
 using InitialProject.Repository;
 using InitialProject.Service;
+using MenuNavigation.Commands;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -19,10 +21,14 @@ namespace InitialProject.ViewModel.Guest2
         private readonly TourService _tourService;
         private readonly ImageRepository _imageRepository;
 
+        public RelayCommand SubmitRatingCommand { get; set; }
+
         public int LanguageButtonClickCount { get; set; }
         private App app;
         private const string SRB = "sr-Latn-RS";
         private const string ENG = "en-US";
+
+        #region Properties
 
         private int _guideKnowledge;
         public int GuideKnowledge
@@ -96,6 +102,204 @@ namespace InitialProject.ViewModel.Guest2
 
         private ObservableCollection<int> _imageIds = new ObservableCollection<int>();
 
+        private bool _knowledge1IsChecked;
+        public bool Knowledge1IsChecked
+        {
+            get => _knowledge1IsChecked;
+            set
+            {
+                if (value != _knowledge1IsChecked)
+                {
+                    _knowledge1IsChecked = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private bool _knowledge2IsChecked;
+        public bool Knowledge2IsChecked
+        {
+            get => _knowledge2IsChecked;
+            set
+            {
+                if (value != _knowledge2IsChecked)
+                {
+                    _knowledge2IsChecked = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private bool _knowledge3IsChecked;
+        public bool Knowledge3IsChecked
+        {
+            get => _knowledge3IsChecked;
+            set
+            {
+                if (value != _knowledge3IsChecked)
+                {
+                    _knowledge3IsChecked = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private bool _knowledge4IsChecked;
+        public bool Knowledge4IsChecked
+        {
+            get => _knowledge4IsChecked;
+            set
+            {
+                if (value != _knowledge4IsChecked)
+                {
+                    _knowledge4IsChecked = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private bool _knowledge5IsChecked;
+        public bool Knowledge5IsChecked
+        {
+            get => _knowledge5IsChecked;
+            set
+            {
+                if (value != _knowledge5IsChecked)
+                {
+                    _knowledge5IsChecked = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private bool _interesting1IsChecked;
+        public bool Interesting1IsChecked
+        {
+            get => _interesting1IsChecked;
+            set
+            {
+                if (value != _interesting1IsChecked)
+                {
+                    _interesting1IsChecked = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private bool _interesting2IsChecked;
+        public bool Interesting2IsChecked
+        {
+            get => _interesting2IsChecked;
+            set
+            {
+                if (value != _interesting2IsChecked)
+                {
+                    _interesting2IsChecked = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private bool _interesting3IsChecked;
+        public bool Interesting3IsChecked
+        {
+            get => _interesting3IsChecked;
+            set
+            {
+                if (value != _interesting3IsChecked)
+                {
+                    _interesting3IsChecked = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private bool _interesting4IsChecked;
+        public bool Interesting4IsChecked
+        {
+            get => _interesting4IsChecked;
+            set
+            {
+                if (value != _interesting4IsChecked)
+                {
+                    _interesting4IsChecked = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private bool _interesting5IsChecked;
+        public bool Interesting5IsChecked
+        {
+            get => _interesting5IsChecked;
+            set
+            {
+                if (value != _interesting5IsChecked)
+                {
+                    _interesting5IsChecked = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private bool _language1IsChecked;
+        public bool Language1IsChecked
+        {
+            get => _language1IsChecked;
+            set
+            {
+                if (value != _language1IsChecked)
+                {
+                    _language1IsChecked = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private bool _language2IsChecked;
+        public bool Language2IsChecked
+        {
+            get => _language2IsChecked;
+            set
+            {
+                if (value != _language2IsChecked)
+                {
+                    _language2IsChecked = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private bool _language3IsChecked;
+        public bool Language3IsChecked
+        {
+            get => _language3IsChecked;
+            set
+            {
+                if (value != _language3IsChecked)
+                {
+                    _language3IsChecked = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private bool _language4IsChecked;
+        public bool Language4IsChecked
+        {
+            get => _language4IsChecked;
+            set
+            {
+                if (value != _language4IsChecked)
+                {
+                    _language4IsChecked = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private bool _language5IsChecked;
+        public bool Language5IsChecked
+        {
+            get => _language5IsChecked;
+            set
+            {
+                if (value != _language5IsChecked)
+                {
+                    _language5IsChecked = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        #endregion
+
         public RateTourViewModel(Guest2TourDTO selectedTour, Model.User user, TourRatingService tourRatingService, TourReservationService tourReservationService, TourService tourService, ImageRepository imageRepository)
         {
             SelectedTour = selectedTour;
@@ -106,11 +310,45 @@ namespace InitialProject.ViewModel.Guest2
             _tourService = tourService;
             _imageRepository = imageRepository;
 
+            SubmitRatingCommand = new RelayCommand(Execute_SubmitRatingCommand, CanExecute_SubmitRatingCommand);
+
             app = (App)Application.Current;
             app.ChangeLanguage(SRB);
             LanguageButtonClickCount = 0;
         }
 
+        private bool CanExecute_SubmitRatingCommand(object obj)
+        {
+            return GuideKnowledge != 0 && Interestingness != 0 && GuideLanguage != 0 && Comment != null && ImageUrls.Count != 0;
+        }
+
+        private void Execute_SubmitRatingCommand(object obj)
+        {
+            SetRatingsForGuideKnowledge();
+            SetRatingsForInterestingness();
+            SetRatingsForGuideLanguage();
+
+            TourRating tourRating = new TourRating(
+                    SelectedTour.TourId,
+                    GuideKnowledge,
+                    GuideLanguage,
+                    Interestingness,
+                    Comment,
+                    _imageIds,
+                    LoggedInUser.Id);
+
+            Tour tour = _tourService.GetById(tourRating.TourId);
+            tour.IsRated = true;
+            _tourService.Update(tour);
+
+            TourReservation tourReservation = _tourReservationService.GetReservationByGuestIdAndTourId(LoggedInUser.Id, SelectedTour.TourId);
+            tourReservation.IsRated = true;
+            _tourReservationService.Update(tourReservation);
+
+            _tourRatingService.Save(tourRating);
+
+            MessageBox.Show("Tour successfuly rated!");
+        }
 
         public event PropertyChangedEventHandler? PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -151,28 +389,100 @@ namespace InitialProject.ViewModel.Guest2
             //}
              
 
-            TourRating tourRating = new TourRating(
-                    SelectedTour.TourId,
-                    GuideKnowledge,
-                    GuideLanguage,
-                    Interestingness,
-                    Comment,
-                    _imageIds,
-                    LoggedInUser.Id);
+            //TourRating tourRating = new TourRating(
+            //        SelectedTour.TourId,
+            //        GuideKnowledge,
+            //        GuideLanguage,
+            //        Interestingness,
+            //        Comment,
+            //        _imageIds,
+            //        LoggedInUser.Id);
 
-            Tour tour = _tourService.GetById(tourRating.TourId);
-            tour.IsRated = true;
-            _tourService.Update(tour);
+            //Tour tour = _tourService.GetById(tourRating.TourId);
+            //tour.IsRated = true;
+            //_tourService.Update(tour);
 
-            TourReservation tourReservation = _tourReservationService.GetReservationByGuestIdAndTourId(LoggedInUser.Id, SelectedTour.TourId);
-            tourReservation.IsRated = true;
-            _tourReservationService.Update(tourReservation);
+            //TourReservation tourReservation = _tourReservationService.GetReservationByGuestIdAndTourId(LoggedInUser.Id, SelectedTour.TourId);
+            //tourReservation.IsRated = true;
+            //_tourReservationService.Update(tourReservation);
 
-            _tourRatingService.Save(tourRating);
+            //_tourRatingService.Save(tourRating);
 
-            MessageBox.Show("Tour successfuly rated!");
+            //MessageBox.Show("Tour successfuly rated!");
 
             
+        }
+
+        private void SetRatingsForGuideKnowledge()
+        {
+            if (Knowledge1IsChecked)
+            {
+                GuideKnowledge = 1;
+            }
+            else if (Knowledge2IsChecked)
+            {
+                GuideKnowledge = 2;
+            }
+            else if (Knowledge3IsChecked)
+            {
+                GuideKnowledge = 3;
+            }
+            else if (Knowledge4IsChecked)
+            {
+                GuideKnowledge = 4;
+            }
+            else if (Knowledge5IsChecked)
+            {
+                GuideKnowledge = 5;
+            }
+        }
+
+        private void SetRatingsForInterestingness()
+        {
+            if (Interesting1IsChecked)
+            {
+                Interestingness = 1;
+            }
+            else if (Interesting2IsChecked)
+            {
+                Interestingness = 2;
+            }
+            else if (Interesting3IsChecked)
+            {
+                Interestingness = 3;
+            }
+            else if (Interesting4IsChecked)
+            {
+                Interestingness = 4;
+            }
+            else if (Interesting5IsChecked)
+            {
+                Interestingness = 5;
+            }
+        }
+
+        private void SetRatingsForGuideLanguage()
+        {
+            if (Language1IsChecked)
+            {
+                GuideLanguage = 1;
+            }
+            else if (Language2IsChecked)
+            {
+                GuideLanguage = 2;
+            }
+            else if (Language3IsChecked)
+            {
+                GuideLanguage = 3;
+            }
+            else if (Language4IsChecked)
+            {
+                GuideLanguage = 4;
+            }
+            else if (Language5IsChecked)
+            {
+                GuideLanguage = 5;
+            }
         }
 
         public void AddImage(string urlTextBox)

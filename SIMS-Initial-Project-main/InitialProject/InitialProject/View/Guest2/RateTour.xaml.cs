@@ -22,19 +22,19 @@ namespace InitialProject.View.Guest2
             DataContext = _viewModel;
         }
 
-        private void SetRatingForGuideKnowledge(object sender, RoutedEventArgs e)
-        {
-            if (knowledge1.IsChecked == true)
-                _viewModel.GuideKnowledge = 1;
-            else if (knowledge2.IsChecked == true)
-                _viewModel.GuideKnowledge = 2;
-            else if (knowledge3.IsChecked == true)
-                _viewModel.GuideKnowledge = 3;
-            else if (knowledge4.IsChecked == true)
-                _viewModel.GuideKnowledge = 4;
-            else if (knowledge5.IsChecked == true)
-                _viewModel.GuideKnowledge = 5;
-        }
+        //private void SetRatingForGuideKnowledge(object sender, RoutedEventArgs e)
+        //{
+        //    if (knowledge1.IsChecked == true)
+        //        _viewModel.GuideKnowledge = 1;
+        //    else if (knowledge2.IsChecked == true)
+        //        _viewModel.GuideKnowledge = 2;
+        //    else if (knowledge3.IsChecked == true)
+        //        _viewModel.GuideKnowledge = 3;
+        //    else if (knowledge4.IsChecked == true)
+        //        _viewModel.GuideKnowledge = 4;
+        //    else if (knowledge5.IsChecked == true)
+        //        _viewModel.GuideKnowledge = 5;
+        //}
 
         private void SetRatingForInterestingness(object sender, RoutedEventArgs e)
         {
@@ -64,11 +64,11 @@ namespace InitialProject.View.Guest2
                 _viewModel.GuideLanguage = 5;
         }
 
-        private void Submit_Click(object sender, RoutedEventArgs e)
-        {
-            _viewModel.Submit();
-            Close();
-        }
+        //private void Submit_Click(object sender, RoutedEventArgs e)
+        //{
+        //    _viewModel.Submit();
+        //    Close();
+        //}
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
@@ -85,7 +85,5 @@ namespace InitialProject.View.Guest2
         {
             _viewModel.LanguageButton_Click(sender, e);
         }
-
-        
     }
 }

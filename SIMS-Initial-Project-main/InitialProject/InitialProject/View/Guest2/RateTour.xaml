@@ -67,11 +67,17 @@
 
         <Label Grid.Row="1" FontSize="20" Margin="10" Content ="{ns:Loc KnowledgeQuestion}" />
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10,40,0,0">
-            <RadioButton Name="knowledge1" Content="1" Checked="SetRatingForGuideKnowledge" FontSize="20" Margin="10"/>
+            <!--<RadioButton Name="knowledge1" Content="1" Checked="SetRatingForGuideKnowledge" FontSize="20" Margin="10"/>
             <RadioButton Name="knowledge2" Content="2" Checked="SetRatingForGuideKnowledge" FontSize="20" Margin="10"/>
             <RadioButton Name="knowledge3" Content="3" Checked="SetRatingForGuideKnowledge" FontSize="20" Margin="10"/>
             <RadioButton Name="knowledge4" Content="4" Checked="SetRatingForGuideKnowledge" FontSize="20" Margin="10"/>
-            <RadioButton Name="knowledge5" Content="5" Checked="SetRatingForGuideKnowledge" FontSize="20" Margin="10"/>
+            <RadioButton Name="knowledge5" Content="5" Checked="SetRatingForGuideKnowledge" FontSize="20" Margin="10"/>-->
+
+            <RadioButton Content="1" IsChecked="{Binding Knowledge1IsChecked, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" FontSize="20" Margin="10"/>
+            <RadioButton Content="2" IsChecked="{Binding Knowledge2IsChecked, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" FontSize="20" Margin="10"/>
+            <RadioButton Content="3" IsChecked="{Binding Knowledge3IsChecked, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" FontSize="20" Margin="10"/>
+            <RadioButton Content="4" IsChecked="{Binding Knowledge4IsChecked, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" FontSize="20" Margin="10"/>
+            <RadioButton Content="5" IsChecked="{Binding Knowledge5IsChecked, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" FontSize="20" Margin="10"/>
         </StackPanel>
         <Label Grid.Row="1" Margin="10,70,0,0" Content="{ns:Loc VeryBad}"/>
         <Label Grid.Row="1" Margin="210,70,0,0" Content="{ns:Loc VeryGood}"/>
@@ -100,7 +106,7 @@
 
         <StackPanel Grid.Row="4">
             <Label  FontSize="20" Margin="10" Content="{ns:Loc CommentQuestion}" />
-            <TextBox  x:Name="commentTextBox" Width="350" Height="65" Margin="10, 5, 5, 5" HorizontalAlignment="Left" Text="{Binding Path=Comment, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox  x:Name="commentTextBox" Width="469" Height="65" Margin="10, 5, 5, 5" HorizontalAlignment="Left" Text="{Binding Path=Comment, UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
         
         <StackPanel Grid.Row="5"  Margin="10" Orientation="Vertical" >
@@ -111,11 +117,11 @@
                     <Image Source="/Resources/Images/upload.png" Height="15" Width="30" />
                 </Button>
             </StackPanel>
-            <ListBox x:Name="UrlListBox" Width="350" Height="65" Margin="10, 5, 5, 5" HorizontalAlignment="Left" ItemsSource="{Binding ImageUrls}" />
+            <ListBox x:Name="UrlListBox" Width="458" Height="65" Margin="10, 5, 5, 5" HorizontalAlignment="Left" ItemsSource="{Binding ImageUrls}" />
         </StackPanel>
 
         <StackPanel Grid.Row="6" Margin="10" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="{ns:Loc Submit}" Click="Submit_Click" FontSize="20" Height="40" Width="150" Margin="5, 5, 10, 5"/>
+            <Button Content="{ns:Loc Submit}" Command="{Binding SubmitRatingCommand}" FontSize="20" Height="40" Width="150" Margin="5, 5, 10, 5" />
             <Button Click="Cancel_Click" FontSize="20" Height="40" Width="150" Margin="5, 5, 10, 5">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">

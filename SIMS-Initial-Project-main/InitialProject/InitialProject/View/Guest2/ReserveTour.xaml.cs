@@ -59,7 +59,7 @@ namespace InitialProject.View.Guest2
 
         public ReserveTour(Guest2TourDTO selectedTour, User user, TourService tourService, TourReservationService tourReservationService, VoucherService voucherService, LocationService locationService, UserRepository userRepository)
         {
-            InitializeComponent();
+            //InitializeComponent();
             DataContext = this;
 
             SelectedTour = selectedTour;
@@ -115,7 +115,8 @@ namespace InitialProject.View.Guest2
 
         private bool IsVoucherValid()
         {
-            return SelectedVoucher != null ^ NoVoucherBtn.IsChecked == true;
+            //return SelectedVoucher != null ^ NoVoucherBtn.IsChecked == true;
+            return true;
         }
 
         private void ShowSpacesLeftMessage(int spacesLeft)
