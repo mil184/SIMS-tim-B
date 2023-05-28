@@ -24,6 +24,9 @@ using InitialProject.Service;
 using System.Diagnostics.Metrics;
 using InitialProject.View.Guest2;
 using InitialProject.ViewModel.Guest1;
+using System.Windows.Automation.Peers;
+using InitialProject.Repository.Interfaces;
+using InitialProject.Resources.Injector;
 
 namespace InitialProject.View.Guest1
 {
@@ -35,35 +38,29 @@ namespace InitialProject.View.Guest1
         public User LoggedInUser { get; set; }
         public ObservableCollection<Accommodation> AllAccommodations { get; set; }
         public ObservableCollection<GuestAccommodationDTO> PresentableAccommodations { get; set; }
-
         public ObservableCollection<Location> Locations;
         public GuestAccommodationDTO SelectedAccommodation { get; set; }
-
 
         public AccommodationRatingsDTO SelectedUnratedAccommodation { get; set; }
         public ObservableCollection<AccommodationRatings> AccommodationRatings { get; set; }
         public AccommodationRatings SelectedAccommodationRatings { get; set; }
         public ObservableCollection<AccommodationReservation> UnratedReservations { get; set; }
 
-
         public ObservableCollection<AccommodationReservation> PresentableReservations { get; set; }
         public AccommodationReservation SelectedReservation { get; set; }
         public ObservableCollection<RescheduleRequest> AllReschedules { get; set; }
 
-
-      //  private readonly AccommodationRepository _accommodationRepository;
-
-        private readonly LocationService _locationService;
-
-        private readonly UserRepository _userRepository;
-
-        private readonly ImageRepository _imageRepository;
-
-        private readonly AccommodationRatingsRepository _accommodationRatingsRepository;
-        private readonly RescheduleRequestRepository _rescheduleRequestRepository;
+        public ObservableCollection<Guest1RatingsDTO> GuestRatings { get; set; }
 
         private readonly AccommodationService _accommodationService;
         private readonly AccommodationReservationService _accommodationReservationService;
+        private readonly LocationService _locationService;
+        private readonly UserService _userService;
+        private readonly IImageRepository _imageRepository;
+        private readonly AccommodationRatingService _accommodationRatingsService;
+        private readonly RescheduleRequestService _rescheduleRequestService;
+        private readonly GuestReviewService _guestReviewService;
+        private readonly ReservationCancellationService _reservationCancellationService;
 
         private string searchName;
         public string SearchName
@@ -151,7 +148,6 @@ namespace InitialProject.View.Guest1
             }
         }
 
-
         public Guest1Window(User user)
         {
             InitializeComponent();
@@ -170,18 +166,23 @@ namespace InitialProject.View.Guest1
             _locationService = new LocationService();
             _locationService.Subscribe(this);
 
-            _userRepository = new UserRepository();
-            _userRepository.Subscribe(this);
+            _userService = new UserService();
+            _userService.Subscribe(this);
 
-            _imageRepository = new ImageRepository();
+            _imageRepository = Injector.CreateInstance<IImageRepository>();
             _imageRepository.Subscribe(this);
 
-            _accommodationRatingsRepository = new AccommodationRatingsRepository();
-            _accommodationRatingsRepository.Subscribe(this);
+            _accommodationRatingsService = new AccommodationRatingService();
+            _accommodationRatingsService.Subscribe(this);
 
-            _rescheduleRequestRepository = new RescheduleRequestRepository();
-            _rescheduleRequestRepository.Subscribe(this);
+            _rescheduleRequestService = new RescheduleRequestService();
+            _rescheduleRequestService.Subscribe(this);
 
+            _guestReviewService  = new GuestReviewService();
+            _guestReviewService.Subscribe(this);
+
+            _reservationCancellationService = new ReservationCancellationService();
+            _reservationCancellationService.Subscribe(this);
 
             AllAccommodations = new ObservableCollection<Accommodation>(_accommodationService.GetAll());
             PresentableAccommodations = ConvertToDTO(new List<Accommodation>(AllAccommodations));
@@ -191,8 +192,10 @@ namespace InitialProject.View.Guest1
             UnratedReservations = new ObservableCollection<AccommodationReservation>();
 
             PresentableReservations = new ObservableCollection<AccommodationReservation>(_accommodationReservationService.GetAll());
-            AllReschedules = new ObservableCollection<RescheduleRequest>(_rescheduleRequestRepository.GetAll());
+            AllReschedules = new ObservableCollection<RescheduleRequest>(_rescheduleRequestService.GetAll());
 
+            GuestRatings = new ObservableCollection<Guest1RatingsDTO>();
+            FormGuestRatings();
         }
 
         private void ReserveButton_Click(object sender, RoutedEventArgs e)
@@ -292,7 +295,7 @@ namespace InitialProject.View.Guest1
         public AccommodationRatingsDTO ConvertToDTO(AccommodationReservation reservation)
         {
             return new AccommodationRatingsDTO(reservation.Id,
-                _userRepository.GetById(reservation.OwnerId).Username,
+                _userService.GetById(reservation.OwnerId).Username,
                 _accommodationService.GetById(reservation.AccommodationId).Name);
 
         }
@@ -309,6 +312,7 @@ namespace InitialProject.View.Guest1
         public void Update() 
         {
             FormUnratedReservation();
+            FormGuestRatings();
         }
 
         private void ImagesButton_Click(object sender, RoutedEventArgs e)
@@ -363,7 +367,7 @@ namespace InitialProject.View.Guest1
         {
             if (SelectedUnratedAccommodation != null)
             {
-                Evaluate evaluateAccommodation = new Evaluate(SelectedUnratedAccommodation, _accommodationRatingsRepository, _accommodationReservationService, _imageRepository);
+                Evaluate evaluateAccommodation = new Evaluate(SelectedUnratedAccommodation, _accommodationRatingsService, _accommodationReservationService, _imageRepository);
                 evaluateAccommodation.ShowDialog();
             }
         }
@@ -372,7 +376,6 @@ namespace InitialProject.View.Guest1
         {
             Close();
         }
-
 
         private void CancelReservation_Click(object sender, RoutedEventArgs e)
         {
@@ -389,6 +392,8 @@ namespace InitialProject.View.Guest1
                         return;
                     }
 
+                    ReservationCancellation cancellation = new ReservationCancellation(SelectedReservation.Id, SelectedReservation.AccommodationId, SelectedReservation.OwnerId, SelectedReservation.GuestId, DateTime.Now);
+                    _reservationCancellationService.Save(cancellation);
                     _accommodationReservationService.Remove(SelectedReservation);
                     MessageBox.Show("Reservation canceled successfully.");
 
@@ -410,8 +415,7 @@ namespace InitialProject.View.Guest1
         {
             if (SelectedReservation != null)
             {
-                SendRequestViewModel sendRequestViewModel = new SendRequestViewModel(SelectedReservation, _rescheduleRequestRepository);
-                SendRequest sendRequest = new SendRequest(sendRequestViewModel);
+                SendRequest sendRequest = new SendRequest(SelectedReservation, _rescheduleRequestService);
                 sendRequest.ShowDialog();
             }
         }
@@ -437,7 +441,7 @@ namespace InitialProject.View.Guest1
 
         private void CheckRescheduleRequestsStatus()
         {
-            var requests = _rescheduleRequestRepository.GetAll().Where(r => r.GuestId == LoggedInUser.Id);
+            var requests = _rescheduleRequestService.GetAll().Where(r => r.GuestId == LoggedInUser.Id);
 
             foreach (var request in requests)
             {
@@ -452,6 +456,7 @@ namespace InitialProject.View.Guest1
         private void GuestWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
             CheckRescheduleRequestsStatus();
+            CheckSuperGuestStatus();
         }
 
 
@@ -464,5 +469,35 @@ namespace InitialProject.View.Guest1
         {
             MessageBox.Show($"Cannot cancel reservation. Less than {SelectedReservation.CancellationPeriod} left before start date.", "Cancel reservation warning", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
+
+        public void FormGuestRatings()
+        {
+            GuestRatings.Clear();
+            foreach (GuestReview review in _guestReviewService.GetAll())
+            {
+                if (review.GuestId == LoggedInUser.Id && _accommodationReservationService.GetById(review.ReservationId).IsRated)
+                { 
+                   Guest1RatingsDTO dto = new Guest1RatingsDTO(review.Cleanness, review.Behavior, review.Comment, _userService.GetById(_accommodationReservationService.GetById(review.ReservationId).OwnerId).Username);
+                   GuestRatings.Add(dto);
+                }
+            }
+        }
+
+        private void CheckSuperGuestStatus()
+        {
+            User currentUser = _userService.GetById(LoggedInUser.Id);
+            int numberOfReservations = _accommodationReservationService.GetAll().Where(i => i.GuestId == currentUser.Id).Count();
+
+            if (currentUser.Type == UserType.guest1 && numberOfReservations >= 10)
+            {
+                _userService.PromoteToSuperGuest(LoggedInUser.Id);
+                string message = $"Congratulations, you have become a super guest! You have received 5 bonus points that you can use in future accommodation reservations.";
+                MessageBox.Show(message, "Promote to super guest status", MessageBoxButton.OK, MessageBoxImage.Information);
+                RegularUserText.Visibility = Visibility.Collapsed;
+                SuperGuestText.Visibility = Visibility.Visible;
+            }
+        }
+
+
     }
 }

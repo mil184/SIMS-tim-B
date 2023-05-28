@@ -1,4 +1,5 @@
-﻿using InitialProject.Repository.Implementations;
+﻿using InitialProject.Repository;
+using InitialProject.Repository.Implementations;
 using InitialProject.Repository.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,18 @@ namespace InitialProject.Resources.Injector
         {
             { typeof(ITourRepository), new TourCSVRepository() },
             { typeof(ICheckpointRepository), new CheckpointCSVRepository() },
-            { typeof(ILocationRepository), new LocationCSVRepository() }
+            { typeof(ILocationRepository), new LocationCSVRepository() },
+            { typeof(IAccommodationRepository), new AccommodationCSVRepository() },
+            { typeof(IAccommodationRatingRepository), new AccommodationRatingCSVRepository() },
+            { typeof(IAccommodationRenovationRepository), new AccommodationRenovationCSVRepository() },
+            { typeof(IAccommodationReservationRepository), new AccommodationReservationCSVRepository() },
+            { typeof(IGuestReviewRepository), new GuestReviewCSVRepository() },
+            { typeof(IRescheduleRequestRepository), new RescheduleRequestCSVRepository() },
+            { typeof(IReservationCancellationRepository), new ReservationCancellationCSVRepository() },
+            { typeof(ITourRequestRepository), new TourRequestCSVRepository() },
+            { typeof(IRenovationRecommendationRepository), new RenovationRecommendationCSVRepository() },
+            { typeof(IUserRepository), new UserCSVRepository() },
+            { typeof(IImageRepository), new ImageCSVRepository() }
 
         };
 

@@ -20,20 +20,63 @@ namespace InitialProject.Service
         {
            _locationRepository = Injector.CreateInstance<ILocationRepository>();    
         }
+
+        public string GetLocationStringbyId(int id)
+        {
+            string locationString = "";
+
+            foreach(Location location in GetAll())
+            {
+                if (location.Id == id)
+                {
+                    locationString = location.City + ", " + location.Country;
+                }
+            }
+
+            return locationString;
+        }
+
         public List<string> GetCountries()
         {
             List<string> countries = new List<string>();
-            foreach (Location location in _locationRepository.GetAll())
+            foreach (Location location in GetAll())
             {
                 if (!countries.Contains(location.Country))
                     countries.Add(location.Country);
             }
             return countries;
         }
-        public List<string> GetCities(String country)
+        public List<string> GetCities()
         {
             List<string> cities = new List<string>();
-            foreach (Location location in _locationRepository.GetAll())
+            foreach (Location location in GetAll())
+            {
+                if (!cities.Contains(location.City))
+                    cities.Add(location.City);
+            }
+            return cities;
+        }
+
+        public string GetCityById(int id)
+        {
+            string city = "";
+
+            foreach(Location location in GetAll())
+            {
+                if (location.Id == id)
+                {
+                    city = location.City;
+                }
+            }
+
+            return city;
+        }
+
+
+        public List<string> GetCitiesByCountry(String country)
+        {
+            List<string> cities = new List<string>();
+            foreach (Location location in GetAll())
             {
                 if (location.Country == country)
                 {
@@ -42,9 +85,22 @@ namespace InitialProject.Service
             }
             return cities;
         }
+        public string GetCountryByCity(String city)
+        {
+            string country = string.Empty;
+
+            foreach (Location location in GetAll())
+            {
+                if (location.City == city)
+                {
+                    country = location.Country;
+                }
+            }
+            return country;
+        }
         public Location GetLocation(String country, string city)
         {
-            foreach (Location location in _locationRepository.GetAll())
+            foreach (Location location in GetAll())
             {
                 if (location.Country == country && location.City == city)
                 {
@@ -56,6 +112,11 @@ namespace InitialProject.Service
         public Location GetById(int id)
         {
             return _locationRepository.GetById(id);
+        }
+
+        public List<Location> GetAll()
+        {
+            return _locationRepository.GetAll();
         }
 
         public void NotifyObservers()

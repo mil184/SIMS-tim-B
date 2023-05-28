@@ -280,8 +280,99 @@
                 </Grid>
             </TabItem>
 
-            <!-- Tour Tracking tab -->
-            <TabItem Header="{ns:Loc TourTrackingTab}" FontSize="20">
+            <!-- Ratings tab -->
+            <TabItem Header="Tour Ratings">
+                <StackPanel Margin="10">
+
+                    <!-- Tour overview section -->
+                    <GroupBox Grid.Row="1" Header="Finished Tours" Margin="0 0 0 10" Height="221" Width="532">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <DataGrid ItemsSource="{Binding FinishedTourDTOs}" 
+                                      SelectedItem="{Binding Path=SelectedGuest2TourDTO}"
+                                      AutoGenerateColumns="False" IsReadOnly="True" Height="200" Width="500">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+                                    <DataGridTextColumn Header="Country" Binding="{Binding Country}" Width="*"/>
+                                    <DataGridTextColumn Header="City" Binding="{Binding City}" Width="*"/>
+                                    <DataGridTextColumn Header="Date and Time" Binding="{Binding Guide}" Width="*"/>
+                                    <DataGridTemplateColumn Header="Show more" Width="*">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Click="ShowMoreButton_Click">
+                                                    <Image Height="10px" Source="/Resources/Images/inspection.png" />
+                                                </Button>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ScrollViewer>
+                    </GroupBox>
+
+                    <!-- Rate Tour -->
+                    <StackPanel Orientation="Horizontal" Margin="0, 10,0,0">
+                        <Button Content="Rate This Tour" Width="100" Height="40" HorizontalAlignment="Center" Margin="300,0,40,0" Click="RateButton_Click"/>
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+
+            <!-- Requests tab -->
+            <TabItem Header="Tour Requests">
+
+                <StackPanel>
+                    
+                <StackPanel Orientation="Horizontal"  Margin="10">
+                    <StackPanel Orientation="Horizontal" Margin="10">
+                        <Button Content="Request a tour" Width="100" Height="40" VerticalAlignment="Center" Click="RequestButton_Click"/>
+                    </StackPanel>
+
+                    <GroupBox Grid.Row="1" Header="My Tour Requests" Height="150" Width="532" HorizontalAlignment="Right">
+                       
+                            <DataGrid ItemsSource="{Binding TourRequestDTOs}"
+                                      AutoGenerateColumns="False" IsReadOnly="True">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Country" Binding="{Binding Country}" Width="*"/>
+                                    <DataGridTextColumn Header="City" Binding="{Binding City}" Width="*"/>
+                                    <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
+                                    <DataGridTextColumn Header="Language" Binding="{Binding Language}" Width="*"/>
+                                    <DataGridTextColumn Header="Start Date" Binding="{Binding StartTime, StringFormat={}{0:MM/dd/yyyy}}" Width="*"/>
+                                    <DataGridTextColumn Header="End Date" Binding="{Binding EndTime, StringFormat={}{0:MM/dd/yyyy}}" Width="*"/>
+                                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                       
+                    </GroupBox>
+                </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel Margin="10, 0, 10, 10">
+
+                            <TextBlock Margin="5">Show tour request status statistics for chosen year:</TextBlock>
+                            <ComboBox Margin="5" Width="70" ItemsSource="{Binding TourRequestYears}" SelectedItem="{Binding SelectedStatisticYear}" SelectionChanged="YearStatisticSelectionChanged"/>
+                            <TextBlock Height ="60" Text="{Binding StatusStatistic, UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>
+                        <StackPanel Margin="10, 0, 10, 10">
+
+                            <TextBlock Margin="5">Show average guest count for chosen year:</TextBlock>
+                            <ComboBox Margin="5" Width="70" ItemsSource="{Binding TourRequestYears}" SelectedItem="{Binding SelectedStatisticGuestYear}" SelectionChanged="GuestYearStatisticSelectionChanged"/>
+                            <TextBlock Height ="60" Text="{Binding GuestStatistic, UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>
+                        <StackPanel Margin="10, 0, 10, 10">
+
+                            <TextBlock  Width="200" Height="40" TextWrapping="WrapWithOverflow">Chart that displays number of requests for each language:</TextBlock>
+                            <Button Content="Language Chart" Width="100" Click="LanguageStatisicButton_Click"/>
+
+                            <TextBlock  Width="200" Height="40" TextWrapping="WrapWithOverflow">Chart that displays number of requests for each location:</TextBlock>
+                            <Button Content="Location Chart" Width="100" Click="LocationStatisicButton_Click"/>
+                        </StackPanel>
+                    </StackPanel>
+
+
+                </StackPanel>
+            </TabItem>
+
+            <!-- Currently Active Tour tab -->
+            <TabItem Header="Currently Active Tour">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>

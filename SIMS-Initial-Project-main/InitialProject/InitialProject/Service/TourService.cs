@@ -1,15 +1,10 @@
 ﻿using InitialProject.Model;
 using InitialProject.Repository;
-using InitialProject.Repository.Implementations;
 using InitialProject.Repository.Interfaces;
 using InitialProject.Resources.Injector;
 using InitialProject.Resources.Observer;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace InitialProject.Service
 {
@@ -26,6 +21,21 @@ namespace InitialProject.Service
             _tourReservationRepository = new TourReservationRepository();
         }
 
+        public Tour GetTourByRequestId(int id)
+        {
+            Tour requestedTour = new Tour();
+
+            foreach (Tour tour in GetAll())
+            {
+                if (tour.RequestId == id)
+                {
+                    requestedTour = tour;
+                } 
+            }
+
+            return requestedTour;
+        }
+
         public List<Tour> GetUserTours(User user)
         {
             List<Tour> tours = new List<Tour>();
@@ -38,10 +48,21 @@ namespace InitialProject.Service
                     tours.Add(GetById(tourReservation.TourId));
                 }
             }
-
             return tours;
         }
-
+        public List<Tour> GetGuideTours(User user)
+        {
+            List<Tour> tours = new List<Tour>();
+  
+            foreach (Tour tour in GetAll())
+            {
+                if (tour.GuideId == user.Id && !tour.IsAborted)
+                {
+                    tours.Add(tour);
+                }
+            }
+            return tours;
+        }
         public List<Tour> GetFinishedTours(List<Tour> tours)
         {
             return tours.FindAll(tour => tour.IsFinished);

@@ -1,6 +1,7 @@
-﻿using InitialProject.Model;
+﻿    using InitialProject.Model;
 using InitialProject.Repository;
 using InitialProject.Service;
+using InitialProject.View.Guide.UserControls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,57 +10,28 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 using Image = InitialProject.Model.Image;
 
 namespace InitialProject.View.Guide
 {
     public partial class CreateTour : Window,INotifyPropertyChanged,IDataErrorInfo
     {
-        const int NO_TOUR_ASSIGNED = -1;
 
         private readonly TourService _tourService;
         private readonly LocationService _locationService;
         private readonly ImageRepository _imageRepository;
         private readonly CheckpointService _checkpointService;
+        private readonly TourRequestService _tourRequestService;
 
-        private ObservableCollection<int> ImageIds;
-        private ObservableCollection<int> CheckpointIds;
         private User LoggedInUser;
-        public ObservableCollection<Checkpoint> MiddleCheckpoints { get; set; }
+        public ObservableCollection<Checkpoint> Checkpoints { get; set; }
         public ObservableCollection<string> ImageUrls { get; set; }
         public ObservableCollection<DateTime> DateTimes { get; set; }
         public Location TourLocation { get; set; }
 
         public int OrderCounter { get; set; }
-
-        private Checkpoint _startCheckpoint;
-        public Checkpoint StartCheckpoint
-
-        {
-            get { return _startCheckpoint; }
-            set
-            {
-                if (_startCheckpoint != value)
-                {
-                    _startCheckpoint = value;
-                    OnPropertyChanged(nameof(StartCheckpoint));
-                }
-            }
-        }
-
-        private Checkpoint _endCheckpoint;
-        public Checkpoint EndCheckpoint
-        {
-            get { return _endCheckpoint; }
-            set
-            {
-                if (_endCheckpoint != value)
-                {
-                    _endCheckpoint = value;
-                    OnPropertyChanged(nameof(EndCheckpoint));
-                }
-            }
-        }
 
         private string _name;
         public string TourName
@@ -186,13 +158,18 @@ namespace InitialProject.View.Guide
             }
         }
 
+        public DateTime? LeftBoundary { get; set; }
+        public DateTime? RightBoundary { get; set; }
+
+        public TourRequest Request { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        public CreateTour(User user, TourService tourService, LocationService locationService, ImageRepository imageRepository, CheckpointService checkpointService)
+        public CreateTour(User user, TourService tourService, LocationService locationService, ImageRepository imageRepository, CheckpointService checkpointService, TourRequestService tourRequestService)
         {
             InitializeComponent();
             DataContext = this;
@@ -201,24 +178,58 @@ namespace InitialProject.View.Guide
             _locationService = locationService;
             _imageRepository = imageRepository;
             _checkpointService = checkpointService;
+            _tourRequestService = tourRequestService;
+
+            LeftBoundary = null;
+            RightBoundary = null;
+            Request = null;
 
             LoggedInUser = user;
-            OrderCounter = 1;
+            OrderCounter = 0;
 
             InitializeCollections();
             InitializeComboBoxes();
             InitializeCountryDropdown();
-            DisableCheckpointButtons();
+            InitializeShortcuts();
+            //FillWithTestData();
+        }
+        public CreateTour(User user, TourService tourService, LocationService locationService, ImageRepository imageRepository, CheckpointService checkpointService, TourRequestService tourRequestService, TourRequest request)
+        {
+            InitializeComponent();
+            DataContext = this;
+
+            _tourService = tourService;
+            _locationService = locationService;
+            _imageRepository = imageRepository;
+            _checkpointService = checkpointService;
+            _tourRequestService = tourRequestService;
+
+            LoggedInUser = user;
+            OrderCounter = 0;
+
+            Description = request.Description;
+            TourLanguage = request.Language;
+            MaxGuests = request.MaxGuests.ToString();
+            Country = _locationService.GetById(request.LocationId).Country;
+            City = _locationService.GetById(request.LocationId).City;
+
+            LeftBoundary = request.StartTime;
+            RightBoundary = request.EndTime;
+            Request = request;
+
+            InitializeCollections();
+            InitializeComboBoxes();
+            InitializeCountryDropdown();
+            InitializeShortcuts();
+            _tourRequestService = tourRequestService;
+            //FillWithTestData();
         }
         private void InitializeCollections()
         {
-            ImageIds = new ObservableCollection<int>();
-            CheckpointIds = new ObservableCollection<int>();
-            MiddleCheckpoints = new ObservableCollection<Checkpoint>();
+            Checkpoints = new ObservableCollection<Checkpoint>();
             ImageUrls = new ObservableCollection<string>();
             DateTimes = new ObservableCollection<DateTime>();
-            StartCheckpoint = null;
-            EndCheckpoint = null;
+
         }
         private void InitializeComboBoxes()
         {
@@ -240,42 +251,45 @@ namespace InitialProject.View.Guide
             {
                 cbCountry.Items.Add(country);
             }
+
+            if(Country != null)
+                cbCountry.SelectedItem = Country;
+            if (City != null)
+                cbCity.SelectedItem = City;
         }
-        private void DisableCheckpointButtons()
+        private void InitializeShortcuts()
         {
-            AddFinalCheckpointButton.IsEnabled = false;
-            AddMiddleCheckpointButton.IsEnabled = false;
+            PreviewKeyDown += Escape_PreviewKeyDown;
+            PreviewKeyDown += Create_PreviewKeyDown;
+            PreviewKeyDown += Enter_PreviewKeyDown;
         }
-        private void btnCreateTour_Click(object sender, RoutedEventArgs e)
+
+        private void TourCreation() 
         {
+            bool valid = true;
+
             if (!IsValid)
             {
                 ShowInvalidInfoWarning();
-                return;
+                valid = false;
             }
 
             if (ImageUrls.Count() < 1)
             {
                 ShowImageWarning();
-                return;
+                valid = false;
+            }
+
+            if (Checkpoints.Count() < 2)
+            {
+                ShowCheckpointWarning();
+                valid = false;
             }
 
             if (DateTimes.Count() < 1)
             {
                 ShowNoDateTimeWarning();
-                return;
-            }
-
-            if (StartCheckpoint == null)
-            {
-                ShowStartCheckpointWarning();
-                return;
-            }
-
-            if (EndCheckpoint == null)
-            {
-                ShowEndCheckpointWarning();
-                return;
+                valid = false;
             }
 
             TourLocation = _locationService.GetLocation(Country, City);
@@ -283,12 +297,19 @@ namespace InitialProject.View.Guide
             if (TourLocation == null)
             {
                 ShowLocationWarning();
-                return;
+                valid = false;
             }
 
-            SaveTour();
+            if (valid)
+            {
+                SaveTour();
 
-            Close();
+                Close();
+            }
+        }
+        private void btnCreateTour_Click(object sender, RoutedEventArgs e)
+        {
+            TourCreation();
         }
         private void SaveTour()
         {
@@ -312,6 +333,9 @@ namespace InitialProject.View.Guide
                 tour = _tourService.Save(tour);
 
                 UpdateCheckpointsTourId(tour.Id);
+                if(Request != null)
+                UpdateRequest(Request,tour);
+                
             }
         }
         private List<int> SaveImages()
@@ -326,27 +350,26 @@ namespace InitialProject.View.Guide
         private List<int> SaveCheckpoints()
         {
             List<int> checkpointIds = new List<int>();
-            checkpointIds.Add(_checkpointService.Save(StartCheckpoint).Id);
-            foreach (Checkpoint checkpoint in MiddleCheckpoints)
+            foreach (Checkpoint checkpoint in Checkpoints)
             {
                 checkpointIds.Add(_checkpointService.Save(checkpoint).Id);
             }
-            checkpointIds.Add(_checkpointService.Save(EndCheckpoint).Id);
             return checkpointIds;
         }
         private void UpdateCheckpointsTourId(int tourId)
         {
-            StartCheckpoint.TourId = tourId;
-            _checkpointService.Update(StartCheckpoint);
-
-            foreach (Checkpoint checkpoint in MiddleCheckpoints)
+            foreach (Checkpoint checkpoint in Checkpoints)
             {
                 checkpoint.TourId = tourId;
                 _checkpointService.Update(checkpoint);
             }
-
-            EndCheckpoint.TourId = tourId;
-            _checkpointService.Update(EndCheckpoint);
+        }
+        private void UpdateRequest(TourRequest request, Tour tour)
+        {
+            request.Status = InitialProject.Resources.Enums.RequestStatus.accepted;
+            request.GuideId = LoggedInUser.Id;
+            tour.RequestId = request.Id;
+            _tourRequestService.Update(request);
         }
         private void Hours_cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -357,6 +380,10 @@ namespace InitialProject.View.Guide
             Minutes = ((ComboBox)sender).SelectedItem.ToString();
         }
         private void AddImageButton_Click(object sender, RoutedEventArgs e)
+        {
+            AddImage();
+        }
+        private void AddImage() 
         {
             string imageUrl = UrlTextBox.Text;
             if (!string.IsNullOrEmpty(imageUrl))
@@ -369,63 +396,26 @@ namespace InitialProject.View.Guide
         {
             Close();
         }
-        private void AddStartingCheckpoint_Click(object sender, RoutedEventArgs e)
+
+        private void AddCheckpointButton_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(StartingCheckpointName.Text))
-                return;
-
-            StartCheckpoint = CreateCheckpoint(StartingCheckpointName.Text, 1);
-
-            SetCheckpointButtonsState(false, true, false);
-            SetCheckpointInputsState(false, true);
-
-            StartingCheckpointName.Text = string.Empty;
+            AddCheckpoint();
         }
 
-        private void AddFinalCheckpoint_Click(object sender, RoutedEventArgs e)
+        private void AddCheckpoint() 
         {
-            if (string.IsNullOrEmpty(FinalCheckpointName.Text))
+            if (string.IsNullOrEmpty(CheckpointTextBox.Text))
                 return;
 
-            EndCheckpoint = CreateCheckpoint(FinalCheckpointName.Text, 2);
+            Checkpoint checkpoint = CreateCheckpoint(CheckpointTextBox.Text, ++OrderCounter);
+            Checkpoints.Add(checkpoint);
 
-            SetCheckpointButtonsState(false, false, true);
-            SetCheckpointInputsState(true, true);
-
-            FinalCheckpointName.Text = string.Empty;
-        }
-
-        private void AddMiddleCheckpoint_Click(object sender, RoutedEventArgs e)
-        {
-            if (string.IsNullOrEmpty(MiddleCheckpointName.Text))
-                return;
-
-            Checkpoint checkpoint = CreateCheckpoint(MiddleCheckpointName.Text, ++OrderCounter);
-            MiddleCheckpoints.Add(checkpoint);
-
-            EndCheckpoint.Order = MiddleCheckpoints.Count() + 2;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EndCheckpoint)));
-
-            MiddleCheckpointName.Text = string.Empty;
-
-            SetCheckpointButtonsState(false, false, true);
+            CheckpointTextBox.Text = string.Empty;
         }
 
         private Checkpoint CreateCheckpoint(string name, int order)
         {
-            return new Checkpoint(name, order, false, NO_TOUR_ASSIGNED);
-        }
-        private void SetCheckpointButtonsState(bool starting, bool final, bool middle)
-        {
-            AddStartingCheckpointButton.IsEnabled = starting;
-            AddFinalCheckpointButton.IsEnabled = final;
-            AddMiddleCheckpointButton.IsEnabled = middle;
-        }
-        private void SetCheckpointInputsState(bool starting, bool middle)
-        {
-            StartingCheckpointName.IsEnabled = starting;
-            FinalCheckpointName.IsEnabled = true;
-            MiddleCheckpointName.IsEnabled = middle;
+            return new Checkpoint(name, order);
         }
 
         private void CbCountry_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -450,7 +440,7 @@ namespace InitialProject.View.Guide
         }
         private void LoadCitiesForSelectedCountry()
         {
-            foreach (string city in _locationService.GetCities(cbCountry.SelectedItem.ToString()).OrderBy(c => c))
+            foreach (string city in _locationService.GetCitiesByCountry(cbCountry.SelectedItem.ToString()).OrderBy(c => c))
             {
                 cbCity.Items.Add(city);
             }
@@ -469,13 +459,26 @@ namespace InitialProject.View.Guide
         }
         private void addDateButton_Click(object sender, RoutedEventArgs e)
         {
+            AddDate();
+        }
+
+        private void AddDate() 
+        {
+            if (LeftBoundary != null && RightBoundary != null)
+            {
+                if (GetSelectedDateTime() < LeftBoundary || GetSelectedDateTime() > RightBoundary)
+                {
+                    ShowBoundaryTimeWarning();
+                    return;
+                }
+            }
             if (IsDateTimeInputValid())
             {
                 DateTime selectedDateTime = GetSelectedDateTime();
                 DateTimes.Add(selectedDateTime);
                 return;
-            }             
-            
+            }
+
             ShowInvalidDateTimeWarning();
         }
         private bool IsDateTimeInputValid()
@@ -564,33 +567,358 @@ namespace InitialProject.View.Guide
                 return true;
             }
         }
+        private void Escape_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                this.Close();
+            }
+        }
+        private void Enter_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                if (Hours_cb.IsFocused || Minutes_cb.IsFocused || dpDate.IsKeyboardFocusWithin) 
+                {
+                    AddDate();
+                }
+                else if (UrlTextBox.IsFocused || UrlBtn.IsFocused) 
+                {
+                    AddImage();
+                }
+                else if(CheckpointTextBox.IsFocused || CheckpointBtn.IsFocused) 
+                {
+                    AddCheckpoint();
+                }
+            }
+        }
+        private void Create_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.S)
+            {
+                TourCreation();
+            }
+        }
         private void ShowInvalidInfoWarning()
         {
-            MessageBox.Show("Please enter valid information.", "Info warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            if (string.IsNullOrEmpty(txtTourName.Text))
+            {
+                CustomMessageBox messageBox = new CustomMessageBox();
+                messageBox.Text = "Tour Name is required.";
+
+                Popup popup = new Popup();
+                popup.AllowsTransparency = true; // Allow the popup to have a transparent background
+                popup.Child = messageBox;
+                popup.PlacementTarget = txtTourName; // Set the placement target to the TextBox control
+                popup.Placement = PlacementMode.Right; // Set the placement mode to right
+                popup.VerticalOffset = -23;
+                popup.IsOpen = true;
+
+                // Hide the popup when the user starts typing again
+                txtTourName.TextChanged += (s, args) =>
+                {
+                    popup.IsOpen = false;
+                };
+            }
+            if (string.IsNullOrEmpty(txtTourDescription.Text))
+            {
+                CustomMessageBox messageBox = new CustomMessageBox();
+                messageBox.Text = "Tour Description is required.";
+
+                Popup popup = new Popup();
+                popup.AllowsTransparency = true; // Allow the popup to have a transparent background
+                popup.Child = messageBox;
+                popup.PlacementTarget = txtTourDescription; // Set the placement target to the TextBox control
+                popup.Placement = PlacementMode.Right; // Set the placement mode to right
+                popup.IsOpen = true;
+
+                // Hide the popup when the user starts typing again
+                txtTourDescription.TextChanged += (s, args) =>
+                {
+                    popup.IsOpen = false;
+                };
+            }
+            if (string.IsNullOrEmpty(txtTourLanguage.Text))
+            {
+                CustomMessageBox messageBox = new CustomMessageBox();
+                messageBox.Text = "Tour Language is required.";
+
+                Popup popup = new Popup();
+                popup.AllowsTransparency = true; // Allow the popup to have a transparent background
+                popup.Child = messageBox;
+                popup.PlacementTarget = txtTourLanguage; // Set the placement target to the TextBox control
+                popup.Placement = PlacementMode.Right; // Set the placement mode to right
+                popup.VerticalOffset = -27;
+                popup.IsOpen = true;
+
+                // Hide the popup when the user starts typing again
+                txtTourLanguage.TextChanged += (s, args) =>
+                {
+                    popup.IsOpen = false;
+                };
+            }
+           
+            if (string.IsNullOrEmpty(txtMaxGuests.Text) || !int.TryParse(MaxGuests, out int TryParseNumber) || int.Parse(MaxGuests) <= 0)
+            {
+                CustomMessageBox messageBox = new CustomMessageBox();
+                messageBox.Text = GetMessageForMaxGuests();
+
+                Popup popup = new Popup();
+                popup.AllowsTransparency = true; // Allow the popup to have a transparent background
+                popup.Child = messageBox;
+                popup.PlacementTarget = txtMaxGuests; // Set the placement target to the TextBox control
+                popup.Placement = PlacementMode.Right; // Set the placement mode to right
+                popup.VerticalOffset = -20;
+                popup.IsOpen = true;
+
+                // Hide the popup when the user starts typing again
+                txtMaxGuests.TextChanged += (s, args) =>
+                {
+                    popup.IsOpen = false;
+                };
+            }
+            if (string.IsNullOrEmpty(txtDuration.Text) || !double.TryParse(Duration, out double tryParseNumber) || double.Parse(Duration) <= 0)
+            {
+                CustomMessageBox messageBox = new CustomMessageBox();
+                messageBox.Text = GetMessageForDuration();
+
+                Popup popup = new Popup();
+                popup.AllowsTransparency = true; // Allow the popup to have a transparent background
+                popup.Child = messageBox;
+                popup.PlacementTarget = txtDuration; // Set the placement target to the TextBox control
+                popup.Placement = PlacementMode.Right; // Set the placement mode to right
+                popup.VerticalOffset = -10;
+                popup.IsOpen = true;
+
+                // Hide the popup when the user starts typing again
+                txtDuration.TextChanged += (s, args) =>
+                {
+                    popup.IsOpen = false;
+                };
+            }
+        }
+        private string GetMessageForMaxGuests() 
+        {
+            if (string.IsNullOrEmpty(txtMaxGuests.Text))
+               return "Max Guest Number is required.";
+
+            if (!int.TryParse(MaxGuests, out int tryParseNumber))
+                return "Not a number value.";
+
+            if (int.TryParse(MaxGuests, out int TryParseNumber) && int.Parse(MaxGuests) <= 0)
+               return "Invalid number value.";
+
+            return "";
+        }
+        private string GetMessageForDuration()
+        {
+            if (string.IsNullOrEmpty(txtDuration.Text))
+                return "Duration is required.";
+
+            if (!double.TryParse(Duration, out double tryParseNumber))
+                return "Not a number value.";
+
+            if (double.TryParse(Duration, out double TryParseNumber) && double.Parse(Duration) <= 0)
+                return "Invalid number value.";
+
+            return "";
         }
         private void ShowImageWarning()
         {
-            MessageBox.Show("Please enter at least one image.", "Image warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            CustomMessageBox messageBox = new CustomMessageBox();
+            messageBox.Text = "At least one image is required";
+
+            Popup popup = new Popup();
+            popup.AllowsTransparency = true; // Allow the popup to have a transparent background
+            popup.Child = messageBox;
+            popup.PlacementTarget = UrlTextBox; // Set the placement target to the TextBox control
+            popup.Placement = PlacementMode.Right; // Set the placement mode to right
+            popup.VerticalOffset = -10;
+            popup.HorizontalOffset = 40;
+            popup.IsOpen = true;
+
+            // Hide the popup when the user starts typing again
+            UrlTextBox.TextChanged += (s, args) =>
+            {
+                popup.IsOpen = false;
+            };
         }
         private void ShowNoDateTimeWarning()
         {
-            MessageBox.Show("Please enter at least one date and time.", "Date and time warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            CustomMessageBox messageBox = new CustomMessageBox();
+            messageBox.Text = "At least one date";
+            messageBox.TextAdditional = "and time is required";
+
+            Popup popup = new Popup();
+            popup.AllowsTransparency = true; // Allow the popup to have a transparent background
+            popup.Child = messageBox;
+            popup.PlacementTarget = Minutes_cb; // Set the placement target to the TextBox control
+            popup.Placement = PlacementMode.Right; // Set the placement mode to right
+            popup.VerticalOffset = -10;
+            popup.HorizontalOffset = 40;
+            popup.IsOpen = true;
+
+            // Hide the popup when the user starts typing again
+            Minutes_cb.SelectionChanged += (s, args) =>
+            {
+                popup.IsOpen = false;
+            };
+            Hours_cb.SelectionChanged += (s, args) =>
+            {
+                popup.IsOpen = false;
+            };
+            dpDate.SelectedDateChanged += (s, args) =>
+            {
+                popup.IsOpen = false;
+            };
+        }
+
+        private void ShowBoundaryTimeWarning()
+        {
+            CustomMessageBox messageBox = new CustomMessageBox();
+            messageBox.Text = "Only choose from";
+
+            messageBox.TextAdditional = LeftBoundary.ToString() + " - " + RightBoundary.ToString();
+
+            Popup popup = new Popup();
+            popup.AllowsTransparency = true; // Allow the popup to have a transparent background
+            popup.Child = messageBox;
+            popup.PlacementTarget = Minutes_cb; // Set the placement target to the TextBox control
+            popup.Placement = PlacementMode.Right; // Set the placement mode to right
+            popup.VerticalOffset = -10;
+            popup.HorizontalOffset = 40;
+            popup.IsOpen = true;
+
+            // Hide the popup when the user starts typing again
+            Minutes_cb.SelectionChanged += (s, args) =>
+            {
+                popup.IsOpen = false;
+            };
+            Hours_cb.SelectionChanged += (s, args) =>
+            {
+                popup.IsOpen = false;
+            };
+            dpDate.SelectedDateChanged += (s, args) =>
+            {
+                popup.IsOpen = false;
+            };
         }
         private void ShowInvalidDateTimeWarning()
         {
-            MessageBox.Show("Please choose a valid date and time.", "Date and time warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            CustomMessageBox messageBox = new CustomMessageBox();
+            messageBox.Text = "Invalid date and time values";
+  
+            Popup popup = new Popup();
+            popup.AllowsTransparency = true; // Allow the popup to have a transparent background
+            popup.Child = messageBox;
+            popup.PlacementTarget = Minutes_cb; // Set the placement target to the TextBox control
+            popup.Placement = PlacementMode.Right; // Set the placement mode to right
+            popup.VerticalOffset = -10;
+            popup.HorizontalOffset = 40;
+            popup.IsOpen = true;
+
+            // Hide the popup when the user starts typing again
+            Minutes_cb.SelectionChanged += (s, args) =>
+            {
+                popup.IsOpen = false;
+            };
+            Hours_cb.SelectionChanged += (s, args) =>
+            {
+                popup.IsOpen = false;
+            };
+            dpDate.SelectedDateChanged += (s, args) =>
+            {
+                popup.IsOpen = false;
+            };
         }
-        private void ShowStartCheckpointWarning()
+        private void ShowCheckpointWarning()
         {
-            MessageBox.Show("Please enter the starting checkpoint.", "Start checkpoint warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-        }
-        private void ShowEndCheckpointWarning()
-        {
-            MessageBox.Show("Please enter the ending checkpoint.", "End checkpoint warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            CustomMessageBox messageBox = new CustomMessageBox();
+            messageBox.Text = "At least two checkpoints";
+             messageBox.TextAdditional = "are required";
+
+            Popup popup = new Popup();
+            popup.AllowsTransparency = true; // Allow the popup to have a transparent background
+            popup.Child = messageBox;
+            popup.PlacementTarget = CheckpointTextBox; // Set the placement target to the TextBox control
+            popup.Placement = PlacementMode.Right; // Set the placement mode to right
+            popup.VerticalOffset = -10;
+            popup.HorizontalOffset = 40;
+            popup.IsOpen = true;
+
+            // Hide the popup when the user starts typing again
+            CheckpointTextBox.TextChanged += (s, args) =>
+            {
+                popup.IsOpen = false;
+            };
         }
         private void ShowLocationWarning()
         {
-            MessageBox.Show("Please enter the location.", "Location warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+
+            CustomMessageBox messageBox = new CustomMessageBox();
+            messageBox.Text = "Location is required";
+
+            Popup popup = new Popup();
+            popup.AllowsTransparency = true; // Allow the popup to have a transparent background
+            popup.Child = messageBox;
+            popup.PlacementTarget = cbCity; // Set the placement target to the TextBox control
+            popup.Placement = PlacementMode.Right; // Set the placement mode to right
+            popup.VerticalOffset = -20;
+            popup.IsOpen = true;
+
+            // Hide the popup when the user starts typing again
+            cbCity.SelectionChanged += (s, args) =>
+            {
+                popup.IsOpen = false;
+            };
+            cbCountry.SelectionChanged += (s, args) =>
+            {
+                popup.IsOpen = false;
+            };
+
+        }
+        private void FillWithTestData()
+        {
+            TourName = "Osaka Food Tour";
+            Description = "Embark on a great Japanese journey and try our famous food!";
+            TourLanguage = "Japanese";
+            MaxGuests = "100";
+            Duration = "50";
+
+            cbCountry.SelectedItem = "Japan";
+            cbCity.SelectedItem = "Osaka";
+
+            DateTimes.Add(new DateTime(2023, 5, 8, 23, 59, 59));
+
+            ImageUrls.Add("test1");
+            ImageUrls.Add("test2");
+            ImageUrls.Add("test3");
+
+            Checkpoints.Add(new Checkpoint("The Bridge", 1));
+            Checkpoints.Add(new Checkpoint("The Castle", 2));
+            Checkpoints.Add(new Checkpoint("The Volcano", 3));
+            Checkpoints.Add(new Checkpoint("The X", 4));
+            Checkpoints.Add(new Checkpoint("The Something", 5));
+            Checkpoints.Add(new Checkpoint("The House", 6));
+            Checkpoints.Add(new Checkpoint("The Hotel", 7));
+            Checkpoints.Add(new Checkpoint("The Tree", 8));
+            Checkpoints.Add(new Checkpoint("The Tower", 9));
+            Checkpoints.Add(new Checkpoint("The Field", 10));
+        }
+
+        private void CityFilter_Click(object sender, RoutedEventArgs e)
+        {
+            cbCity.IsEnabled = true;
+            Country = _locationService.GetCountryByCity(_tourRequestService.GetMostRequestedCity());
+            City = _tourRequestService.GetMostRequestedCity();
+        }
+        private void CountryFilter_Click(object sender, RoutedEventArgs e)
+        {
+            Country = _tourRequestService.GetMostRequestedCountry();
+        }
+        private void LanguageFilter_Click(object sender, RoutedEventArgs e)
+        {
+           TourLanguage = _tourRequestService.GetMostRequestedLanguage();
         }
     }
 }

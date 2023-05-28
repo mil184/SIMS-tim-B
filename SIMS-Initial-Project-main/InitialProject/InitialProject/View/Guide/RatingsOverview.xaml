@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:InitialProject.View.Guide"
         mc:Ignorable="d"
         Title="RatingsOverview" Height="800" Width="500"
-        Background="#F2F2F2">
+        Background="#F2F2F2"
+        WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

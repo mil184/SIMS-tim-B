@@ -7,7 +7,8 @@
         guest1,
         guest2,
         guide,
-        superowner
+        superowner,
+        superguest
     }
 
     public enum AccommodationType
@@ -22,5 +23,11 @@
         onhold,
         approved,
         rejected
+    }
+    public enum RequestStatus 
+    {
+        pending,
+        invalid,
+        accepted
     }
 }

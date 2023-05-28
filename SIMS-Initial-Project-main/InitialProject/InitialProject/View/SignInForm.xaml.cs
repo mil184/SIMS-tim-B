@@ -9,6 +9,8 @@ using System.Windows;
 using InitialProject.View.Guest2;
 using InitialProject.View.Guest1;
 using System.Windows.Input;
+using InitialProject.Service;
+using System;
 
 namespace InitialProject
 {
@@ -18,7 +20,7 @@ namespace InitialProject
     public partial class SignInForm : Window
     {
 
-        private readonly UserRepository _repository;
+        private readonly UserService _userService;
 
         private string _username;
         public string Username
@@ -45,7 +47,7 @@ namespace InitialProject
         {
             InitializeComponent();
             DataContext = this;
-            _repository = new UserRepository();
+            _userService = new UserService();
         }
         private void PasswordBox_PreviewKeyDown(object sender, KeyEventArgs e)
         {
@@ -57,7 +59,7 @@ namespace InitialProject
         }
         private void SignIn(object sender, RoutedEventArgs e)
         {
-            User user = _repository.GetByUsername(Username);
+            User user = _userService.GetByUsername(Username);
             if (user != null)
             {
                 if(user.Password == txtPassword.Password)
@@ -70,11 +72,14 @@ namespace InitialProject
                     }
                     else if (user.Type == InitialProject.Resources.Enums.UserType.owner || user.Type == InitialProject.Resources.Enums.UserType.superowner) 
                     {
-                        OwnerWindow ownerWindow = new OwnerWindow(user);
+                        /*OwnerWindow ownerWindow = new OwnerWindow(user);
                         ownerWindow.Show();
+                        Close();*/
+                        OwnerMainWindow ownerMainWindow = new OwnerMainWindow(user);
+                        ownerMainWindow.Show();
                         Close();
                     }
-                    else if (user.Type == InitialProject.Resources.Enums.UserType.guest1)
+                    else if (user.Type == InitialProject.Resources.Enums.UserType.guest1 || user.Type == InitialProject.Resources.Enums.UserType.superguest)
                     {
                         Guest1Window guest1Window = new Guest1Window(user);
                         guest1Window.Show();

@@ -21,12 +21,12 @@ namespace InitialProject.Model
         public bool IsActive { get; set; }
 
         public Checkpoint() { }
-        public Checkpoint(string name, int order, bool isActive, int tourId)
+        public Checkpoint(string name, int order)
         {
             Name = name;
             Order = order;
-            IsActive = isActive;
-            TourId = tourId;
+            IsActive = false;
+            TourId = -1;
         }
 
         public string[] ToCSV()

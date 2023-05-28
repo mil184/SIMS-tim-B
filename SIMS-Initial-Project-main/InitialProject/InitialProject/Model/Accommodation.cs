@@ -2,6 +2,8 @@
 using InitialProject.Serializer;
 using System;
 using System.Collections.ObjectModel;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
 
 namespace InitialProject.Model
 {
@@ -15,6 +17,7 @@ namespace InitialProject.Model
         public int MaxGuests { get; set; }
         public int MinReservationDays { get; set; }
         public int CancellationPeriod { get; set; }
+        public bool IsRenovated { get; set; }
         public ObservableCollection<int> ImageIds = new ObservableCollection<int>();
 
         public Accommodation() { }
@@ -28,12 +31,13 @@ namespace InitialProject.Model
             MaxGuests = maxGuests;
             MinReservationDays = minReservationDays;
             CancellationPeriod = cancellationPeriod;
+            IsRenovated = false;
             ImageIds = imageIds;
         }
 
         public string[] ToCSV()
         {
-            string[] csvValues = { Id.ToString(), OwnerId.ToString(), Name, LocationId.ToString(), Type.ToString(), MaxGuests.ToString(), MinReservationDays.ToString(), CancellationPeriod.ToString(), string.Join(",", ImageIds) };
+            string[] csvValues = { Id.ToString(), OwnerId.ToString(), Name, LocationId.ToString(), Type.ToString(), MaxGuests.ToString(), MinReservationDays.ToString(), CancellationPeriod.ToString(), IsRenovated.ToString(), string.Join(",", ImageIds) };
             return csvValues;
         }
 
@@ -47,9 +51,32 @@ namespace InitialProject.Model
             MaxGuests = Convert.ToInt32(values[5]);
             MinReservationDays = Convert.ToInt32(values[6]);
             CancellationPeriod = Convert.ToInt32(values[7]);
-            foreach (string id in values[8].Split(','))
+            IsRenovated = Convert.ToBoolean(values[8]);
+            foreach (string id in values[9].Split(','))
             {
                 ImageIds.Add(int.Parse(id));
+            }
+        }
+
+        public ImageSource TypeImage
+        {
+            get
+            {
+                string imagePath;
+                if (Type == AccommodationType.House)
+                {
+                    imagePath = "/Resources/Images/OwnerIcons/house.png";
+                }
+                else if (Type == AccommodationType.Hut)
+                {
+                    imagePath = "/Resources/Images/OwnerIcons/hut.png";
+                }
+                else
+                {
+                    imagePath = "/Resources/Images/OwnerIcons/apartment.png";
+                }
+
+                return new BitmapImage(new Uri(imagePath, UriKind.Relative));
             }
         }
     }

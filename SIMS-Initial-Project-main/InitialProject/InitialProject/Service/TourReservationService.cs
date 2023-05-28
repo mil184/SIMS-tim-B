@@ -14,7 +14,7 @@ namespace InitialProject.Service
             _tourReservationRepository = new TourReservationRepository();
         }
 
-        public List<int> GetUserIdsByTour(Tour tour)
+        public List<int> GetUncheckedUserIdsByTour(Tour tour)
         {
             List<int> userIds = new List<int>();
             List <TourReservation> _tourReservations = _tourReservationRepository.GetAll();
@@ -28,7 +28,20 @@ namespace InitialProject.Service
             }
             return userIds;
         }
+        public List<int> GetAllUserIdsByTour(Tour tour)
+        {
+            List<int> userIds = new List<int>();
+            List<TourReservation> _tourReservations = _tourReservationRepository.GetAll();
 
+            foreach (TourReservation reservation in _tourReservations)
+            {
+                if (reservation.TourId == tour.Id)
+                {
+                    userIds.Add(reservation.UserId);
+                }
+            }
+            return userIds;
+        }
         public List<int> GetCheckedTourIds(User user)
         {
             List<int> tourIds = new List<int>();

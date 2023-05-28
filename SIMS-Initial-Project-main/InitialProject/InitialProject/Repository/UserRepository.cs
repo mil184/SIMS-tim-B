@@ -23,12 +23,6 @@ namespace InitialProject.Repository
             _observers = new List<IObserver>();
         }
 
-        public User GetByUsername(string username)
-        {
-            _users = _serializer.FromCSV(FilePath);
-            return _users.FirstOrDefault(u => u.Username == username);
-        }
-
         public User GetById(int id)
         {
             _users = _serializer.FromCSV(FilePath);
@@ -44,6 +38,33 @@ namespace InitialProject.Repository
             _users.Insert(index, user);       // keep ascending order of ids in file 
             _serializer.ToCSV(FilePath, _users);
             return user;
+        }
+
+        public User Save(User user)
+        {
+            user.Id = NextId();
+
+            _users = _serializer.FromCSV(FilePath);
+            _users.Add(user);
+            _serializer.ToCSV(FilePath, _users);
+            NotifyObservers();
+
+            return user;
+        }
+
+        public int NextId()
+        {
+            _users = _serializer.FromCSV(FilePath);
+            if (_users.Count < 1)
+            {
+                return 1;
+            }
+            return _users.Max(c => c.Id) + 1;
+        }
+
+        public List<User> GetAll()
+        {
+            return _users;
         }
 
         public void Subscribe(IObserver observer)

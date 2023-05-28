@@ -1,10 +1,13 @@
-﻿using InitialProject.Serializer;
+﻿using InitialProject.Resources.Enums;
+using InitialProject.Serializer;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
 
 namespace InitialProject.Model
 {
@@ -52,6 +55,25 @@ namespace InitialProject.Model
             foreach (string id in values[7].Split(','))
             {
                 ImageIds.Add(int.Parse(id));
+            }
+        }
+
+        public ImageSource TypeImage
+        {
+            get
+            {
+                string imagePath;
+                double averageGrade = (Cleanliness + Correctness) / 2;
+                if (averageGrade >= 3)
+                {
+                    imagePath = "/Resources/Images/OwnerIcons/like.png";
+                }
+                else
+                {
+                    imagePath = "/Resources/Images/OwnerIcons/dislike.png";
+                }
+
+                return new BitmapImage(new Uri(imagePath, UriKind.Relative));
             }
         }
     }

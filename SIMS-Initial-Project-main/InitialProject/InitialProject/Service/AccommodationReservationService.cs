@@ -1,25 +1,70 @@
 ﻿using InitialProject.Model;
 using InitialProject.Repository;
+using InitialProject.Repository.Interfaces;
+using InitialProject.Resources.Injector;
 using InitialProject.Resources.Observer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace InitialProject.Service
 {
     public class AccommodationReservationService
     {
 
-        private readonly AccommodationReservationRepository _accommodationReservationRepository;
+        private readonly IAccommodationReservationRepository _accommodationReservationRepository;
+        private readonly AccommodationRenovationService _accommodationRenovationService;
 
         public AccommodationReservationService()
         {
-            _accommodationReservationRepository = new AccommodationReservationRepository();
+            _accommodationReservationRepository = Injector.CreateInstance<IAccommodationReservationRepository>();
+            _accommodationRenovationService = new AccommodationRenovationService();
         }
 
-        public List<DateTime> GetAvailableDates(int accommodationId, DateTime startDate, DateTime endDate)
+        public int GetBusiestYear(int accommodationId)
+        {
+            var yearCounts = new Dictionary<int, int>();
+
+            // Iterate over each reservation
+            foreach (var reservation in _accommodationReservationRepository.GetAll())
+            {
+                if (reservation.AccommodationId == accommodationId)
+                {
+                    // Extract the year from the reservation date
+                    int year = reservation.StartDate.Year;
+
+                    // Add the number of reserved days to the corresponding year's count
+                    if (yearCounts.ContainsKey(year))
+                    {
+                        yearCounts[year] += reservation.NumberDays;
+                    }
+                    else
+                    {
+                        yearCounts[year] = reservation.NumberDays;
+                    }
+                }
+            }
+
+            // Find the year with the maximum total number of reserved days
+            int maxYear = 0;
+            int maxCount = 0;
+
+            foreach (var entry in yearCounts)
+            {
+                if (entry.Value > maxCount)
+                {
+                    maxYear = entry.Key;
+                    maxCount = entry.Value;
+                }
+            }
+
+            return maxYear;
+        }
+
+        public List<DateTime> GetAvailableDates(int accommodationId, int duration, DateTime startDate, DateTime endDate)
         {
             List<DateTime> reservedDates = new List<DateTime>();
             foreach (AccommodationReservation reservation in _accommodationReservationRepository.GetAll())
@@ -32,6 +77,29 @@ namespace InitialProject.Service
                     }
                 }
             }
+            #region renovation
+            AccommodationRenovation renovation = _accommodationRenovationService.GetByAccommodationId(accommodationId);     // renovation of requested accommodation
+            if (renovation.StartDate >= startDate && renovation.StartDate <= endDate)                                       // adds to reserved dates all renovation dates
+            { 
+                for (DateTime date = renovation.StartDate; date <= renovation.EndDate; date = date.AddDays(1))
+                {
+                    if (!reservedDates.Contains(date))
+                    {
+                        reservedDates.Add(date);
+                    }
+                }
+            }
+            if (renovation.EndDate >= startDate && renovation.EndDate <= endDate)
+            {
+                for (DateTime date = renovation.StartDate; date <= renovation.EndDate; date = date.AddDays(1))
+                {
+                    if (!reservedDates.Contains(date))
+                    {
+                        reservedDates.Add(date);
+                    }
+                }
+            }
+            #endregion
             List<DateTime> availableDates = new List<DateTime>();
             for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
             {
@@ -40,7 +108,78 @@ namespace InitialProject.Service
                     availableDates.Add(date);
                 }
             }
-            return availableDates;
+
+            List<DateTime> filteredDates = new List<DateTime>();
+
+            foreach (DateTime date in availableDates)
+            {
+                bool isAvailable = true;
+
+                for (int i = 0; i < duration; i++)
+                {
+                    if (!availableDates.Contains(date.AddDays(i)))
+                    {
+                        isAvailable = false;
+                        break;
+                    }
+                }
+
+                if (isAvailable)
+                {
+                    filteredDates.Add(date);
+                }
+            }
+
+            return filteredDates;
+        }
+
+        public List<AccommodationReservation> GetReservationsByYear(int accommodationId, int year)
+        {
+            List<AccommodationReservation> reservationsThisYear = new List<AccommodationReservation>();
+
+            DateTime LeftBoundary = new DateTime(year, 1, 1);
+            DateTime RightBoundary = new DateTime(year, 12, 31);
+
+            foreach (AccommodationReservation reservation in _accommodationReservationRepository.GetAll())
+            {
+                if (reservation.AccommodationId == accommodationId && reservation.StartDate >= LeftBoundary && reservation.StartDate <= RightBoundary)
+                {
+                    reservationsThisYear.Add(reservation);
+                }
+            }
+            return reservationsThisYear;
+        }
+
+        public List<AccommodationReservation> GetReservationsByMonth(int accommodationId, int year, int month)
+        {
+            List<AccommodationReservation> reservationsThisYear = new List<AccommodationReservation>();
+
+            int day;
+
+            if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12)
+            {
+                day = 31;
+            }
+            else if (month == 2)
+            {
+                day = 28;
+            }
+            else
+            {
+                day = 30;
+            }
+
+            DateTime LeftBoundary = new DateTime(year, month, 1);
+            DateTime RightBoundary = new DateTime(year, month, day);
+
+            foreach (AccommodationReservation reservation in _accommodationReservationRepository.GetAll())
+            {
+                if (reservation.AccommodationId == accommodationId && reservation.StartDate >= LeftBoundary && reservation.StartDate <= RightBoundary)
+                {
+                    reservationsThisYear.Add(reservation);
+                }
+            }
+            return reservationsThisYear;
         }
 
         public List<AccommodationReservation> GetUnratedAccommodations()
