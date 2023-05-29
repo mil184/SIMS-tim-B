@@ -223,7 +223,7 @@ namespace InitialProject.View.Guide
         }
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
-            CreateTourViewModel createTourViewModel = new CreateTourViewModel(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService, null);
+            CreateTourViewModel createTourViewModel = new CreateTourViewModel(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService, null, false);
             CreateTourWindow createTour = new CreateTourWindow(createTourViewModel);
             createTour.ShowDialog();
         }
@@ -1028,6 +1028,7 @@ namespace InitialProject.View.Guide
             PreviewKeyDown += CreateTour_PreviewKeyDown;
             PreviewKeyDown += LogOut_PreviewKeyDown;
             PreviewKeyDown += Enter_PreviewKeyDown;
+            PreviewKeyDown += Demo_PreviewKeyDown;
             PreviewKeyDown += LeftRightArrowKeys_PreviewKeyDown;
             PreviewKeyDown += DataGrid_PreviewKeyDown;
             PreviewKeyDown += SortAsc_PreviewKeyDown;
@@ -1083,6 +1084,29 @@ namespace InitialProject.View.Guide
                 }
                 e.Handled = true;
             }
+        }
+        private void Demo_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+
+            if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.D)
+            {
+                switch (tabControl.SelectedIndex)
+                {
+                    case 0:
+                        StartCreateTourDemo();
+                        break;
+                    default:
+                        return;
+                }
+                e.Handled = true;
+            }
+        }
+        private void StartCreateTourDemo() 
+        {
+            CreateTourViewModel createTourViewModel = new CreateTourViewModel(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService, null, true);
+            Window createTour = new CreateTourWindow(createTourViewModel);
+            createTour.ShowDialog();
+            createTour.IsEnabled = false;
         }
         private void LeftRightArrowKeys_PreviewKeyDown(object sender, KeyEventArgs e)
         {

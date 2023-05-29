@@ -9,7 +9,8 @@
         mc:Ignorable="d"
         Title="CreateTourWindow" Height="800" Width="1024"
         Background="#F2F2F2"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        IsEnabled="{Binding Path=IsWindowEnabled}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>

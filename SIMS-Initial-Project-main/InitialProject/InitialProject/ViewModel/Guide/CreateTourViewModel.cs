@@ -12,6 +12,7 @@ using System.Runtime.CompilerServices;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -236,6 +237,7 @@ namespace InitialProject.ViewModel.Guide
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public bool StopDemo { get; set; }
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -292,7 +294,20 @@ namespace InitialProject.ViewModel.Guide
                 }
             }
         }
-        public CreateTourViewModel(User user, TourService tourService, LocationService locationService, ImageRepository imageRepository, CheckpointService checkpointService, TourRequestService tourRequestService, TourRequest request)
+        private bool _isWindowEnabled;
+        public bool IsWindowEnabled
+        {
+            get => _isWindowEnabled;
+            set
+            {
+                if (value != _isWindowEnabled)
+                {
+                    _isWindowEnabled = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        public CreateTourViewModel(User user, TourService tourService, LocationService locationService, ImageRepository imageRepository, CheckpointService checkpointService, TourRequestService tourRequestService, TourRequest request, bool isDemo)
         {
             _tourService = tourService;
             _locationService = locationService;
@@ -303,7 +318,9 @@ namespace InitialProject.ViewModel.Guide
             InitializeCollections();
             InitializeComboboxes();
 
-            //IsImageTextBoxFocused = true;
+            StopDemo = false;
+            if (isDemo)
+                StartDemoAsync();
 
             //LeftBoundary = null;
             //RightBoundary = null;
@@ -419,6 +436,56 @@ namespace InitialProject.ViewModel.Guide
                 BitmapImage defaultImage = new BitmapImage(new Uri("/Resources/Images/image_unavailable.png", UriKind.Relative));
                 ImageSource = defaultImage;
             }
+        }
+        private async Task StartDemoAsync() 
+        {
+            IsWindowEnabled = false;
+            await StartTourNameAnimation();
+            await StartTourDescriptionAnimation();
+            await StartTourLanguageAnimation();
+        }
+
+        private async Task StartTourNameAnimation()
+        {
+            string targetText = "Osaka Food and Culture";
+            int durationPerCharacter =  25; // Duration (in milliseconds) for each character to appear
+            int delayBetweenCharacters = 25; // Delay (in milliseconds) between each character
+
+            foreach (char c in targetText)
+            {
+                TourName += c;
+                await Task.Delay(durationPerCharacter);
+            }
+
+            await Task.Delay(delayBetweenCharacters);
+        }
+        private async Task StartTourDescriptionAnimation()
+        {
+            string targetText = "Explore the unique culture and delicious cuisine of Osaka, known as Japan's \"Kitchen\", with a local guide who will take you to the best hidden food spots and show you the city's historic landmarks.";
+            int durationPerCharacter = 25; // Duration (in milliseconds) for each character to appear
+            int delayBetweenCharacters = 25; // Delay (in milliseconds) between each character
+
+            foreach (char c in targetText)
+            {
+                TourDescription += c;
+                await Task.Delay(durationPerCharacter);
+            }
+
+            await Task.Delay(delayBetweenCharacters);
+        }
+        private async Task StartTourLanguageAnimation()
+        {
+            string targetText = "Japanese";
+            int durationPerCharacter = 25; // Duration (in milliseconds) for each character to appear
+            int delayBetweenCharacters = 25; // Delay (in milliseconds) between each character
+
+            foreach (char c in targetText)
+            {
+                TourLanguage += c;
+                await Task.Delay(durationPerCharacter);
+            }
+
+            await Task.Delay(delayBetweenCharacters);
         }
     }
 }
