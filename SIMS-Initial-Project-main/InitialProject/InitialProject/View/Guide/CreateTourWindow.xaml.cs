@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -61,6 +62,8 @@ namespace InitialProject.View.Guide
         private void InitializeShortcuts()
         {
             PreviewKeyDown += Enter_PreviewKeyDown;
+            PreviewKeyDown += Demo_PreviewKeyDown;
+            PreviewKeyDown += OnKeyDown;
         }
         private void Enter_PreviewKeyDown(object sender, KeyEventArgs e)
         {
@@ -71,6 +74,15 @@ namespace InitialProject.View.Guide
                 {
                     _viewModel.AddImageUrl();
                 }
+
+                if (_viewModel.IsDatePickerFocused || _viewModel.IsHoursComboBoxFocused || _viewModel.IsMinutesComboBoxFocused)
+                {
+                    _viewModel.AddDateTime();
+                }
+                if (_viewModel.IsCheckpointTextBoxFocused)
+                {
+                    _viewModel.AddCheckpoint();
+                }   
                 e.Handled = true;
             }
         }
@@ -82,6 +94,66 @@ namespace InitialProject.View.Guide
         private void ImageTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             _viewModel.IsImageTextBoxFocused = false;
+        }
+
+        private void DatePicker_GotFocus(object sender, RoutedEventArgs e)
+        {
+            _viewModel.IsDatePickerFocused = true;
+        }
+        private void DatePicker_LostFocus(object sender, RoutedEventArgs e)
+        {
+            _viewModel.IsDatePickerFocused = false;
+        }
+        private void HoursComboBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            _viewModel.IsHoursComboBoxFocused = true;
+        }
+        private void HoursComboBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            _viewModel.IsHoursComboBoxFocused = false;
+        }
+        private void MinutesComboBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            _viewModel.IsMinutesComboBoxFocused = true;
+        }
+        private void MinutesComboBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            _viewModel.IsMinutesComboBoxFocused = false;
+        }
+
+        private void CheckpointTextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            _viewModel.IsCheckpointTextBoxFocused = true;
+        }
+        private void CheckpointTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            _viewModel.IsCheckpointTextBoxFocused = false;
+        }
+        private void Demo_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+
+            if (!_viewModel.IsDemo && Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.D)
+            {
+                _viewModel.StartDemoAsync();
+                e.Handled = true;
+            }
+        }
+        private void OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.LeftCtrl)
+            {
+                return;
+            }
+
+            if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.D){
+                return;
+            }
+            if (_viewModel.IsDemo)
+            {
+                _viewModel.StopDemo = true;
+                e.Handled = true;
+
+            }
         }
     }
 }
