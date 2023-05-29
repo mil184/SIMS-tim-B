@@ -196,6 +196,19 @@ namespace InitialProject.Service
             return unratedAccommodations;
         }
 
+        public List<AccommodationReservation> GetByAccommodationId(int accommodationId)
+        {
+            List<AccommodationReservation> reservations = new List<AccommodationReservation>();
+            foreach(AccommodationReservation reservation in _accommodationReservationRepository.GetAll())
+            {
+                if(reservation.AccommodationId == accommodationId)
+                {
+                    reservations.Add(reservation);
+                }
+            }
+            return reservations;
+        }
+
         public AccommodationReservation GetById(int id)
         {
             return _accommodationReservationRepository.GetById(id);
