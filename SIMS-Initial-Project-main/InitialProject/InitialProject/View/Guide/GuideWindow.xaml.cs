@@ -223,7 +223,8 @@ namespace InitialProject.View.Guide
         }
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
-            CreateTour createTour = new CreateTour(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService);
+            CreateTourViewModel createTourViewModel = new CreateTourViewModel(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService, null);
+            CreateTourWindow createTour = new CreateTourWindow(createTourViewModel);
             createTour.ShowDialog();
         }
         private void CurrentToursDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)

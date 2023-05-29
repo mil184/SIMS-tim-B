@@ -5,13 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InitialProject.View.Guide"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:focus="clr-namespace:InitialProject.Resources.FocusBehaviour"
         mc:Ignorable="d"
         Title="CreateTourWindow" Height="800" Width="1024"
+        Background="#F2F2F2"
         WindowStartupLocation="CenterScreen">
     <Grid>
-        <Grid.ColumnDefinitions>    
+        <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
+
         </Grid.ColumnDefinitions>
         <StackPanel>
             <GroupBox Header="Basic Info" Margin="10" FontSize="18" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2">
@@ -49,7 +52,7 @@
                            Foreground="#007ACC" 
                            FontWeight="Bold"
                            Margin="10"/>
-                    <TextBox Text="{Binding Path=TourDecription, UpdateSourceTrigger=PropertyChanged}"
+                    <TextBox Text="{Binding Path=TourDescription, UpdateSourceTrigger=PropertyChanged}"
                          Grid.Row="1" 
                          Grid.Column="1"
                          Margin="10"
@@ -79,6 +82,7 @@
                            Margin="10"/>
                     <ComboBox SelectedItem="{Binding Path=TourCountry, UpdateSourceTrigger=PropertyChanged}"
                           ItemsSource="{Binding Path=Countries, UpdateSourceTrigger=PropertyChanged}"
+                          SelectionChanged="Country_SelectionChanged"
                           Grid.Row="3" 
                           Grid.Column="1"
                           Margin="10"
@@ -96,7 +100,8 @@
                           Grid.Row="4" 
                           Grid.Column="1"
                           Margin="10"
-                          FontSize="13"/>
+                          FontSize="13"
+                          IsEnabled="{Binding Path=CityComboBoxIsEnabled}"/>
 
                     <TextBlock Text="Maximum Guests:" 
                            Grid.Row="5" 
@@ -105,12 +110,11 @@
                            Foreground="#007ACC" 
                            FontWeight="Bold"
                            Margin="10"/>
-                    <xctk:IntegerUpDown 
-                           Grid.Row="5" 
-                           Grid.Column="1"
-                           Minimum="0"
-                           Margin="10"
-                           FontSize="13"/>
+                    <TextBox Text="{Binding Path=MaximumGuests, UpdateSourceTrigger=PropertyChanged}"
+                         Grid.Row="5" 
+                         Grid.Column="1"
+                         Margin="10"
+                         FontSize="13"/>
 
                     <TextBlock Text="Druation:" 
                            Grid.Row="6" 
@@ -119,12 +123,11 @@
                            Foreground="#007ACC" 
                            FontWeight="Bold"
                            Margin="10"/>
-                    <xctk:IntegerUpDown 
-                           Grid.Row="6" 
-                           Grid.Column="1"
-                           Minimum="0"
-                           Margin="10"
-                           FontSize="13"/>
+                    <TextBox Text="{Binding Path=TourDuration, UpdateSourceTrigger=PropertyChanged}"
+                         Grid.Row="6" 
+                         Grid.Column="1"
+                         Margin="10"
+                         FontSize="13"/>
                 </Grid>
             </GroupBox>
 
@@ -168,8 +171,8 @@
                           Width="100"
                           FontSize="13"/>
                         <ComboBox 
-                          SelectedItem="{Binding Path=SelectedHour, UpdateSourceTrigger=PropertyChanged}"
-                          ItemsSource="{Binding Path=Hours, UpdateSourceTrigger=PropertyChanged}"
+                          SelectedItem="{Binding Path=SelectedMinute, UpdateSourceTrigger=PropertyChanged}"
+                          ItemsSource="{Binding Path=Minutes, UpdateSourceTrigger=PropertyChanged}"
                           Margin="10"
                           Width="100"
                           FontSize="13"/>
@@ -196,7 +199,7 @@
                 </Grid>
             </GroupBox>
         </StackPanel>
-        <StackPanel Grid.Column="1">
+        <StackPanel Grid.Column="2">
             <GroupBox Header="Checkpoint Info" Margin="10" FontSize="18" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -221,12 +224,12 @@
                          Grid.Column="1"
                          Margin="10"
                          FontSize="13"/>
-
                     <ListBox Grid.Row="1"
                          Grid.ColumnSpan="2"
                          Height="150" 
                          Margin="10" 
                          ItemsSource="{Binding TourCheckpoints}" 
+                         SelectedItem="{Binding Path=SelectedCheckpoint}"
                          ScrollViewer.VerticalScrollBarVisibility="Visible">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
@@ -273,11 +276,13 @@
                          Grid.Row="0" 
                          Grid.Column="1"
                          Margin="10"
-                         FontSize="13"/>
+                         FontSize="13"
+                         GotFocus="ImageTextBox_GotFocus"
+                         LostFocus="ImageTextBox_LostFocus"/>
 
                     <StackPanel Orientation="Vertical" Grid.Row="1" Grid.ColumnSpan="2">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
-                            <Button Content="&lt;" Height="50" Width="50" FontSize="20" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Left" Click="BackButton_Click">
+                            <Button Content="&lt;" Height="50" Width="50" FontSize="20" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Left" Click="BackButton_Click" focus:FocusBehavior.IsFocused="{Binding IsLeftButtonFocused}">
                                 <Button.Template>
                                     <ControlTemplate TargetType="Button">
                                         <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -302,7 +307,7 @@
                                 </Button.Template>
                             </Button>
                             <Border BorderBrush="#007ACC" BorderThickness="3" Margin="5" CornerRadius="5">
-                                <Image Width="300" Height="200" Stretch="Fill" Source="{Binding ImageSource}"/>
+                                <Image Width="250" Height="200" Stretch="Fill" Source="{Binding ImageSource}"/>
                             </Border>
                             <Button Content=">" Margin="0 0 10 0" Height="50" Width="50" FontSize="20" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Left" Click="NextButton_Click">
                                 <Button.Template>
