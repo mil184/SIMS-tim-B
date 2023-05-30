@@ -2,6 +2,7 @@
 using InitialProject.Model.DTO;
 using InitialProject.Repository;
 using InitialProject.Service;
+using InitialProject.View.Guest2;
 using Org.BouncyCastle.Asn1.Ocsp;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Image = InitialProject.Model.Image;
@@ -32,6 +34,7 @@ namespace InitialProject.ViewModel.Guide
         private readonly TourRequestService _tourRequestService;
 
         public User LoggedInUser { get; set; }
+        public TourRequest Request { get; set; }
         public CreateTourViewModel(User user, TourService tourService, LocationService locationService, ImageRepository imageRepository, CheckpointService checkpointService, TourRequestService tourRequestService, TourRequest request)
         {
             _tourService = tourService;
@@ -44,19 +47,16 @@ namespace InitialProject.ViewModel.Guide
 
             InitializeCollections();
             InitializeComboboxes();
-
-
             Enable();
-
-            IsDemo = false; 
-            StopDemo = false;
 
             if (IsDemo)
                 StartDemoAsync();
 
-            //LoggedInUser = user;
- 
+            Request = request;
+            if (Request != null)
+                HandleRequest();
 
+            ImageListBorderColor = (SolidColorBrush)(new BrushConverter().ConvertFrom("#007ACC"));
             SetImage(ImageIndex);
         }
         private void InitializeCollections()
@@ -80,6 +80,15 @@ namespace InitialProject.ViewModel.Guide
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void HandleRequest() 
+        {
+            TourDescription = Request.Description;
+            TourLanguage = Request.Language;
+            MaximumGuests = Request.MaxGuests.ToString();
+            TourCountry = _locationService.GetById(Request.LocationId).Country;
+            TourCity = _locationService.GetById(Request.LocationId).City;
         }
         #endregion
 
@@ -390,13 +399,42 @@ namespace InitialProject.ViewModel.Guide
         }
         public void AddDateTime() 
         {
-            DateTime time = new DateTime(SelectedDateInDatePicker.Value.Date.Year, SelectedDateInDatePicker.Value.Date.Month, SelectedDateInDatePicker.Value.Date.Day, int.Parse(SelectedHour), int.Parse(SelectedMinute), 0);
-            TourDates.Add(time);
+            DateValidation = string.Empty;
+            DateBorderColor = new SolidColorBrush(Colors.Transparent);
+
+
+            if (SelectedDateInDatePicker == null || string.IsNullOrEmpty(SelectedHour) || string.IsNullOrEmpty(SelectedMinute))
+            {
+                DateValidation = "Please Enter Date And Time Values!";
+                DateBorderColor = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFA500"));
+                return;
+            }
+
+            DateTime dateTime = new DateTime(SelectedDateInDatePicker.Value.Date.Year, SelectedDateInDatePicker.Value.Date.Month, SelectedDateInDatePicker.Value.Date.Day, int.Parse(SelectedHour), int.Parse(SelectedMinute), 0);
+           
+            if (Request != null && (dateTime < Request.StartTime || dateTime > Request.EndTime))
+            {
+                DateValidation = "The Request Interval Is (" + Request.StartTime.Date.ToString() + " - " + Request.EndTime.Date.ToString() + ")";
+                DateBorderColor = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFA500"));
+                return;
+            }
+            if (dateTime < DateTime.Now)
+            {
+                DateValidation = "Please Enter Correct Date Value! (After Today)";
+                DateBorderColor = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFA500"));
+                return;
+            }
+
+            TourDates.Add(dateTime);
 
             SelectedDateInDatePicker = null;
             SelectedHour = null;
             SelectedMinute = null;
 
+        }
+        public void RemoveSelectedDate() 
+        {
+            TourDates.Remove(SelectedDateInList.Value);
         }
 
         #endregion
@@ -418,10 +456,9 @@ namespace InitialProject.ViewModel.Guide
                     OnPropertyChanged();
                 }
             }
-
         }
-        private string _selectedCheckpoint;
-        public string SelectedCheckpoint
+        private Checkpoint _selectedCheckpoint;
+        public Checkpoint SelectedCheckpoint
         {
             get => _selectedCheckpoint;
             set
@@ -432,10 +469,12 @@ namespace InitialProject.ViewModel.Guide
                     OnPropertyChanged();
                 }
             }
-
         }
         public void AddCheckpoint()
         {
+            if (string.IsNullOrEmpty(CheckpointName))
+                return;
+                
             Checkpoint checkpoint = new Checkpoint(CheckpointName, ++OrderCounter);
             TourCheckpoints.Add(checkpoint);
             CheckpointName = string.Empty;
@@ -453,6 +492,28 @@ namespace InitialProject.ViewModel.Guide
                 }
             }
         }
+        public void RemoveSelectedCheckpoint()
+        {
+            TourCheckpoints.Remove(SelectedCheckpoint);
+
+            int counter = 0;
+
+            List<Checkpoint> newCheckpoints = new List<Checkpoint>();
+
+            foreach(Checkpoint c in TourCheckpoints) 
+            {
+                c.Order = ++counter;
+                newCheckpoints.Add(c);
+            }
+
+            TourCheckpoints.Clear();
+
+            foreach(Checkpoint c in newCheckpoints) 
+            {
+                TourCheckpoints.Add(c);
+            }
+        }
+        
         #endregion
 
         #region Images
@@ -471,7 +532,46 @@ namespace InitialProject.ViewModel.Guide
                 }
             }
         }
-        public int ImageIndex { get; set; }
+        private string _currentImageUrl;
+        public string CurrentImageUrl
+        {
+            get => _currentImageUrl;
+            set
+            {
+                if (value != _currentImageUrl)
+                {
+                    _currentImageUrl = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private string _currentImageIndexToShow;
+        public string CurrentImageIndexToShow
+        {
+            get => _currentImageIndexToShow;
+            set
+            {
+                if (value != _currentImageIndexToShow)
+                {
+                    _currentImageIndexToShow = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private int _imageIndex;
+
+        public int ImageIndex
+        {
+            get => _imageIndex;
+            set
+            {
+                if (_imageIndex != value)
+                {
+                    _imageIndex = value;
+                    OnPropertyChanged(nameof(ImageIndex));
+                }
+            }
+        }
 
         private ImageSource _imageSource;
         public ImageSource ImageSource
@@ -485,6 +585,9 @@ namespace InitialProject.ViewModel.Guide
         }
         public void AddImageUrl() 
         {
+            if (string.IsNullOrEmpty(ImageUrl))
+                return;
+
             ImageUrls.Add(ImageUrl);
             ImageUrl = string.Empty;
 
@@ -519,6 +622,13 @@ namespace InitialProject.ViewModel.Guide
             {
                 var fullFilePath = ImageUrls[index];
 
+                if (ImageUrls.Count != 0)
+                {
+                    int number = ++index;
+                    CurrentImageIndexToShow = number.ToString();
+                    CurrentImageUrl = fullFilePath;
+                }
+           
                 BitmapImage bitmap = new BitmapImage();
                 bitmap.BeginInit();
                 bitmap.UriSource = new Uri(fullFilePath, UriKind.Absolute);
@@ -531,6 +641,12 @@ namespace InitialProject.ViewModel.Guide
                 // Handle the exception by setting the Source to a default image
                 BitmapImage defaultImage = new BitmapImage(new Uri("/Resources/Images/image_unavailable.png", UriKind.Relative));
                 ImageSource = defaultImage;
+
+                if (ImageUrls.Count == 0)
+                {
+                    CurrentImageIndexToShow = string.Empty;
+                    CurrentImageUrl = string.Empty;
+                }
             }
         }
         private bool _isImageTextBoxFocused;
@@ -558,6 +674,12 @@ namespace InitialProject.ViewModel.Guide
                     OnPropertyChanged();
                 }
             }
+        }
+
+        public void RemoveSelectedImage() 
+        {
+            ImageUrls.Remove(CurrentImageUrl);
+            NextImage();
         }
         #endregion
 
@@ -635,18 +757,20 @@ namespace InitialProject.ViewModel.Guide
             TourName = string.Empty;
             TourDescription = string.Empty;
             TourLanguage = string.Empty;
-            TourCountry = string.Empty;
-            TourCity = string.Empty;
+            TourCountry = null;
+            TourCity = null;
             IsEnabledCityComboBox = false;
             MaximumGuests = string.Empty;
             TourDuration = string.Empty;
             SelectedDateInDatePicker = null;
-            SelectedHour = string.Empty;
-            SelectedMinute = string.Empty;
+            SelectedHour = null;
+            SelectedMinute = null;
             TourDates.Clear();
             CheckpointName = string.Empty;
             TourCheckpoints.Clear();
             ImageUrl = string.Empty;
+            CurrentImageIndexToShow = string.Empty;
+            CurrentImageUrl = string.Empty;
             ImageUrls.Clear();
             OrderCounter = 0;
             ImageSource = new BitmapImage(new Uri("/Resources/Images/image_unavailable.png", UriKind.Relative));
@@ -676,7 +800,7 @@ namespace InitialProject.ViewModel.Guide
             IsEnabledTourDescriptionTextBox = true;
             IsEnabledTourLanguageTextBox = true;
             IsEnabledCountryComboBox = true;
-            IsEnabledCityComboBox = true;
+            IsEnabledCityComboBox = false;
             IsEnabledMaximumGuestsTextBox = true;
             IsEnabledTourDurationTextBox = true;
             IsEnabledDatePicker = true;
@@ -1105,6 +1229,11 @@ namespace InitialProject.ViewModel.Guide
         }
         public void Save() 
         {
+
+            if (!Validate()) 
+            {
+                return;
+            }
             foreach(DateTime date in TourDates) 
             {
 
@@ -1114,9 +1243,12 @@ namespace InitialProject.ViewModel.Guide
                 imageIds = SaveImages();
                 checkpointIds = SaveCheckpoints();
 
-                Tour tour = new Tour(TourName, GetLocation().Id, TourDescription, TourLanguage, int.Parse(MaximumGuests), date, int.Parse(TourDuration), LoggedInUser.Id, imageIds, checkpointIds);
+                Tour tour = new Tour(TourName, GetLocation().Id, TourDescription, TourLanguage, int.Parse(MaximumGuests), date, double.Parse(TourDuration), LoggedInUser.Id, imageIds, checkpointIds);
                 Tour savedTour = _tourService.Save(tour);
                 UpdateCheckpoints(savedTour, savedTour.CheckpointIds);
+
+                if (Request != null)
+                    UpdateRequest();
 
             }
         }
@@ -1129,12 +1261,441 @@ namespace InitialProject.ViewModel.Guide
                 _checkpointService.Update(checkpoint);
             }
         }
-        private void Validate()
+        private void UpdateRequest()
         {
-
+            Request.GuideId = LoggedInUser.Id;
+            Request.Status = Resources.Enums.RequestStatus.accepted;
+            _tourRequestService.Update(Request);
         }
         #endregion
 
-  
+        #region Validation
+
+        private string _tourNameValidation;
+        public string TourNameValidation
+        {
+            get => _tourNameValidation;
+            set
+            {
+                if (value != _tourNameValidation)
+                {
+                    _tourNameValidation = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private SolidColorBrush _tourNameBorderColor;
+        public SolidColorBrush TourNameBorderColor
+        {
+            get => _tourNameBorderColor;
+            set
+            {
+                if (_tourNameBorderColor != value)
+                {
+                    _tourNameBorderColor = value;
+                    OnPropertyChanged(nameof(TourNameBorderColor));
+                }
+            }
+        }
+        private string _tourDescriptionValidation;
+        public string TourDescriptionValidation
+        {
+            get => _tourDescriptionValidation;
+            set
+            {
+                if (value != _tourDescriptionValidation)
+                {
+                    _tourDescriptionValidation = value;
+                    OnPropertyChanged(nameof(TourDescriptionValidation));
+                }
+            }
+        }
+        private SolidColorBrush _tourDescriptionBorderColor;
+        public SolidColorBrush TourDescriptionBorderColor
+        {
+            get => _tourDescriptionBorderColor;
+            set
+            {
+                if (_tourDescriptionBorderColor != value)
+                {
+                    _tourDescriptionBorderColor = value;
+                    OnPropertyChanged(nameof(TourDescriptionBorderColor));
+                }
+            }
+        }
+        private string _tourLanguageValidation;
+        public string TourLanguageValidation
+        {
+            get => _tourLanguageValidation;
+            set
+            {
+                if (value != _tourLanguageValidation)
+                {
+                    _tourLanguageValidation = value;
+                    OnPropertyChanged(nameof(TourLanguageValidation));
+                }
+            }
+        }
+        private SolidColorBrush _tourLanguageBorderColor;
+        public SolidColorBrush TourLanguageBorderColor
+        {
+            get => _tourLanguageBorderColor;
+            set
+            {
+                if (_tourLanguageBorderColor != value)
+                {
+                    _tourLanguageBorderColor = value;
+                    OnPropertyChanged(nameof(TourLanguageBorderColor));
+                }
+            }
+        }
+
+        private string _tourCountryValidation;
+        public string TourCountryValidation
+        {
+            get => _tourCountryValidation;
+            set
+            {
+                if (value != _tourCountryValidation)
+                {
+                    _tourCountryValidation = value;
+                    OnPropertyChanged(nameof(TourCountryValidation));
+                }
+            }
+        }
+        private SolidColorBrush _tourCountryBorderColor;
+        public SolidColorBrush TourCountryBorderColor
+        {
+            get => _tourCountryBorderColor;
+            set
+            {
+                if (_tourCountryBorderColor != value)
+                {
+                    _tourCountryBorderColor = value;
+                    OnPropertyChanged(nameof(TourCountryBorderColor));
+                }
+            }
+        }
+
+        private string _tourCityValidation;
+        public string TourCityValidation
+        {
+            get => _tourCityValidation;
+            set
+            {
+                if (value != _tourCityValidation)
+                {
+                    _tourCityValidation = value;
+                    OnPropertyChanged(nameof(TourCityValidation));
+                }
+            }
+        }
+        private SolidColorBrush _tourCityBorderColor;
+        public SolidColorBrush TourCityBorderColor
+        {
+            get => _tourCityBorderColor;
+            set
+            {
+                if (_tourCityBorderColor != value)
+                {
+                    _tourCityBorderColor = value;
+                    OnPropertyChanged(nameof(TourCityBorderColor));
+                }
+            }
+        }
+
+        private string _maximumGuestsValidation;
+        public string MaximumGuestsValidation
+        {
+            get => _maximumGuestsValidation;
+            set
+            {
+                if (value != _maximumGuestsValidation)
+                {
+                    _maximumGuestsValidation = value;
+                    OnPropertyChanged(nameof(MaximumGuestsValidation));
+                }
+            }
+        }
+        private SolidColorBrush _maximumGuestsBorderColor;
+        public SolidColorBrush MaximumGuestsBorderColor
+        {
+            get => _maximumGuestsBorderColor;
+            set
+            {
+                if (_maximumGuestsBorderColor != value)
+                {
+                    _maximumGuestsBorderColor = value;
+                    OnPropertyChanged(nameof(MaximumGuestsBorderColor));
+                }
+            }
+        }
+
+        private string _durationValidation;
+        public string DurationValidation
+        {
+            get => _durationValidation;
+            set
+            {
+                if (value != _durationValidation)
+                {
+                    _durationValidation = value;
+                    OnPropertyChanged(nameof(DurationValidation));
+                }
+            }
+        }
+        private SolidColorBrush _durationBorderColor;
+        public SolidColorBrush DurationBorderColor
+        {
+            get => _durationBorderColor;
+            set
+            {
+                if (_durationBorderColor != value)
+                {
+                    _durationBorderColor = value;
+                    OnPropertyChanged(nameof(DurationBorderColor));
+                }
+            }
+        }
+        private string _dateValidation;
+        public string DateValidation
+        {
+            get => _dateValidation;
+            set
+            {
+                if (value != _dateValidation)
+                {
+                    _dateValidation = value;
+                    OnPropertyChanged(nameof(DateValidation));
+                }
+            }
+        }
+        private SolidColorBrush _dateBorderColor;
+        public SolidColorBrush DateBorderColor
+        {
+            get => _dateBorderColor;
+            set
+            {
+                if (_dateBorderColor != value)
+                {
+                    _dateBorderColor = value;
+                    OnPropertyChanged(nameof(DateBorderColor));
+                }
+            }
+        }
+        private string _dateListValidation;
+        public string DateListValidation
+        {
+            get => _dateListValidation;
+            set
+            {
+                if (value != _dateListValidation)
+                {
+                    _dateListValidation = value;
+                    OnPropertyChanged(nameof(DateListValidation));
+                }
+            }
+        }
+        private SolidColorBrush _dateListBorderColor;
+        public SolidColorBrush DateListBorderColor
+        {
+            get => _dateListBorderColor;
+            set
+            {
+                if (_dateListBorderColor != value)
+                {
+                    _dateListBorderColor = value;
+                    OnPropertyChanged(nameof(DateListBorderColor));
+                }
+            }
+        }
+        private string _checkpointListValidation;
+        public string CheckpointListValidation
+        {
+            get => _checkpointListValidation;
+            set
+            {
+                if (value != _checkpointListValidation)
+                {
+                    _checkpointListValidation = value;
+                    OnPropertyChanged(nameof(CheckpointListValidation));
+                }
+            }
+        }
+        private SolidColorBrush _checkpointListBorderColor;
+        public SolidColorBrush CheckpointListBorderColor
+        {
+            get => _checkpointListBorderColor;
+            set
+            {
+                if (_checkpointListBorderColor != value)
+                {
+                    _checkpointListBorderColor = value;
+                    OnPropertyChanged(nameof(CheckpointListBorderColor));
+                }
+            }
+        }
+        private string _imageListValidation;
+        public string ImageListValidation
+        {
+            get => _imageListValidation;
+            set
+            {
+                if (value != _imageListValidation)
+                {
+                    _imageListValidation = value;
+                    OnPropertyChanged(nameof(ImageListValidation));
+                }
+            }
+        }
+        private SolidColorBrush _imageListBorderColor;
+        public SolidColorBrush ImageListBorderColor
+        {
+            get => _imageListBorderColor;
+            set
+            {
+                if (_imageListBorderColor != value)
+                {
+                    _imageListBorderColor = value;
+                    OnPropertyChanged(nameof(ImageListBorderColor));
+                }
+            }
+        }
+        public void ClearAllValidations()
+        {
+            TourNameValidation = string.Empty;
+            TourDescriptionValidation = string.Empty;
+            TourLanguageValidation = string.Empty;
+            TourCountryValidation = string.Empty;
+            TourCityValidation = string.Empty;
+            MaximumGuestsValidation = string.Empty;
+            DurationValidation = string.Empty;
+            DateValidation = string.Empty;
+            DateListValidation = string.Empty;
+            CheckpointListValidation = string.Empty;
+            ImageListValidation = string.Empty;
+
+            SolidColorBrush borderColor = new SolidColorBrush(Colors.Transparent);
+
+            TourNameBorderColor = borderColor;
+            TourDescriptionBorderColor = borderColor;
+            TourLanguageBorderColor = borderColor;
+            TourCountryBorderColor = borderColor;
+            TourCityBorderColor = borderColor;
+            MaximumGuestsBorderColor = borderColor;
+            DurationBorderColor = borderColor;
+            DateBorderColor = borderColor;
+            DateListBorderColor = borderColor;
+            CheckpointListBorderColor = borderColor;
+            ImageListBorderColor = (SolidColorBrush)(new BrushConverter().ConvertFrom("#007ACC"));
+        }
+
+        private bool Validate()
+        {
+            ClearAllValidations();
+            bool valid = true;
+
+            if (string.IsNullOrEmpty(TourName))
+            {
+                valid = false;
+                TourNameValidation = "Tour Name Required!";
+                TourNameBorderColor = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFA500"));
+            }
+            if (string.IsNullOrEmpty(TourDescription))
+            {
+                valid = false;
+                TourDescriptionValidation = "Tour Description Required!";
+                TourDescriptionBorderColor = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFA500"));
+            }
+            if (string.IsNullOrEmpty(TourLanguage))
+            {
+                valid = false;
+                TourLanguageValidation = "Tour Language Required!";
+                TourLanguageBorderColor = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFA500"));
+            }
+            if (string.IsNullOrEmpty(TourCountry))
+            {
+                valid = false;
+                TourCountryValidation = "Tour Country Required!";
+                TourCountryBorderColor = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFA500"));
+            }
+            if (string.IsNullOrEmpty(TourCity))
+            {
+                valid = false;
+                TourCityValidation = "Tour City Required!";
+                TourCityBorderColor = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFA500"));
+            }
+            if (string.IsNullOrEmpty(MaximumGuests))
+            {
+                valid = false;
+                MaximumGuestsValidation = "Maximum Guests Number Required!";
+                MaximumGuestsBorderColor = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFA500"));
+            }
+            else
+            {
+                if(!int.TryParse(MaximumGuests, out int number)) 
+                {
+                    valid = false;
+                    MaximumGuestsValidation = "Maximum Guest Number Should Be A Whole Number!";
+                    MaximumGuestsBorderColor = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFA500"));
+                }
+            }
+            if (string.IsNullOrEmpty(TourDuration))
+            {
+                valid = false;
+                DurationValidation = "Duration Number required!";
+                DurationBorderColor = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFA500"));
+            }
+            else 
+            {
+                if (!double.TryParse(TourDuration, out double number))
+                {
+                    valid = false;
+                    DurationValidation = "Duration Number Should Be A Real Number!";
+                    DurationBorderColor = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFA500"));
+                }
+            }
+            if (TourDates.Count < 1)
+            {
+                valid = false;
+                DateListValidation = "At Least One Date Is Required!";
+                DateListBorderColor = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFA500"));
+            }
+            if (TourCheckpoints.Count < 2)
+            {
+                valid = false;
+                CheckpointListValidation = "At Least Two Checkpoints Required!";
+                CheckpointListBorderColor = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFA500"));
+            }
+            if (ImageUrls.Count < 1)
+            {
+                valid = false;
+                ImageListValidation = "At Least One Image Url Is Required!";
+                ImageListBorderColor = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFA500"));
+            }
+            return valid;
+        }
+        #endregion
+
+        #region MostRequested
+
+        public void SetMostRequestedCountry() 
+        {
+            TourCountry  = _tourRequestService.GetMostRequestedCountry();
+            
+            if(TourCity != null && !_locationService.GetCitiesByCountry(TourCountry).Contains(TourCity))    
+                TourCity = null;
+
+        }
+        public void SetMostRequestedCity()
+        {
+            TourCity = _tourRequestService.GetMostRequestedCity();
+            TourCountry = _locationService.GetCountryByCity(TourCity);
+        }
+        public void SetMostRequestedLanguage()
+        {
+            TourLanguage = _tourRequestService.GetMostRequestedLanguage();
+        }
+        #endregion
     }
 }

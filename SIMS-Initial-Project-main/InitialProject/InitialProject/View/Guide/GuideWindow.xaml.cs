@@ -699,7 +699,8 @@ namespace InitialProject.View.Guide
             if (SelectedPendingRequestDTO != null)
             {
                 TourRequest request = GuideDTOConverter.ConvertToRequest(SelectedPendingRequestDTO, _tourRequestService);
-                CreateTour createTour = new CreateTour(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService, request);
+                CreateTourViewModel createTourViewModel = new CreateTourViewModel(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService, request);
+                CreateTourWindow createTour = new CreateTourWindow(createTourViewModel);
                 createTour.ShowDialog();
             }
         }
@@ -1046,9 +1047,10 @@ namespace InitialProject.View.Guide
         {
             if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.A)
             {
-                e.Handled = true;
-                Window createTour = new CreateTour(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService);
+                CreateTourViewModel createTourViewModel = new CreateTourViewModel(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService, null);
+                CreateTourWindow createTour = new CreateTourWindow(createTourViewModel);
                 createTour.ShowDialog();
+                e.Handled = true;
             }
         }
         private void Enter_PreviewKeyDown(object sender, KeyEventArgs e)

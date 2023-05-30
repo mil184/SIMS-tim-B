@@ -62,8 +62,14 @@ namespace InitialProject.View.Guide
         private void InitializeShortcuts()
         {
             PreviewKeyDown += Enter_PreviewKeyDown;
+            PreviewKeyDown += Escape_PreviewKeyDown;
+            PreviewKeyDown += Create_PreviewKeyDown;
             PreviewKeyDown += Demo_PreviewKeyDown;
             PreviewKeyDown += OnKeyDown;
+            PreviewKeyDown += Country_PreviewKeyDown;
+            PreviewKeyDown += City_PreviewKeyDown;
+            PreviewKeyDown += Language_PreviewKeyDown;
+            PreviewKeyDown += Delete_PreviewKeyDown;
         }
         private void Enter_PreviewKeyDown(object sender, KeyEventArgs e)
         {
@@ -153,6 +159,66 @@ namespace InitialProject.View.Guide
                 _viewModel.StopDemo = true;
                 e.Handled = true;
 
+            }
+        }
+        private void Escape_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (!_viewModel.IsDemo && e.Key == Key.Escape)
+            {
+                this.Close();
+            }
+        }
+        private void Create_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (!_viewModel.IsDemo && Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.S)
+            {
+                _viewModel.Save();
+            }
+        }
+        private void Country_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+
+            if (!_viewModel.IsDemo && Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.D1)
+            {
+                _viewModel.SetMostRequestedCountry();
+                e.Handled = true;
+            }
+        }
+        private void City_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+
+            if (!_viewModel.IsDemo && Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.D2)
+            {
+                _viewModel.SetMostRequestedCity();
+                e.Handled = true;
+            }
+        }
+        private void Language_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+
+            if (!_viewModel.IsDemo && Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.D3)
+            {
+                _viewModel.SetMostRequestedLanguage();
+                e.Handled = true;
+            }
+        }
+        private void Delete_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (!_viewModel.IsDemo && e.Key == Key.Delete)
+            {
+                if (_viewModel.SelectedCheckpoint != null) 
+                {
+                    _viewModel.RemoveSelectedCheckpoint();
+                }
+                if (_viewModel.SelectedDateInList != null)
+                {
+                    _viewModel.RemoveSelectedDate();
+                }
+                else
+                {
+                    _viewModel.RemoveSelectedImage();
+                }
+                e.Handled = true;
             }
         }
     }
