@@ -13,6 +13,7 @@ namespace InitialProject.ViewModel.Guest2
 {
     public class RateTourViewModel : INotifyPropertyChanged
     {
+        public Action CloseAction { get; set; }
         public User LoggedInUser { get; set; }
         public Guest2TourDTO SelectedTour { get; set; }
 
@@ -22,6 +23,9 @@ namespace InitialProject.ViewModel.Guest2
         private readonly ImageRepository _imageRepository;
 
         public RelayCommand SubmitRatingCommand { get; set; }
+        public RelayCommand ExitCommand { get; set; }
+        public RelayCommand AddImageCommand { get; set; }
+        public RelayCommand ChangeLanguageCommand { get; set; }
 
         public int LanguageButtonClickCount { get; set; }
         private App app;
@@ -29,6 +33,20 @@ namespace InitialProject.ViewModel.Guest2
         private const string ENG = "en-US";
 
         #region Properties
+
+        public string _imageUrl;
+        public string ImageUrl
+        {
+            get => _imageUrl;
+            set
+            {
+                if (_imageUrl != value)
+                {
+                    _imageUrl = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         private int _guideKnowledge;
         public int GuideKnowledge
@@ -310,30 +328,116 @@ namespace InitialProject.ViewModel.Guest2
             _tourService = tourService;
             _imageRepository = imageRepository;
 
+            
             SubmitRatingCommand = new RelayCommand(Execute_SubmitRatingCommand, CanExecute_SubmitRatingCommand);
+            ExitCommand = new RelayCommand(Execute_ExitCommand, CanExecute_ExitCommand);
+            AddImageCommand = new RelayCommand(Execute_AddImageCommand, CanExecute_AddImageCommand);
+            ChangeLanguageCommand = new RelayCommand(Execute_ChangeLanguageCommand, CanExecute_ChangeLanguageCommand);
 
             app = (App)Application.Current;
             app.ChangeLanguage(SRB);
             LanguageButtonClickCount = 0;
         }
 
+        private bool CanExecute_ChangeLanguageCommand(object obj)
+        {
+            return true;
+        }
+
+        private void Execute_ChangeLanguageCommand(object obj)
+        {
+            LanguageButtonClickCount++;
+
+            if (LanguageButtonClickCount % 2 == 1)
+            {
+                app.ChangeLanguage(ENG);
+                return;
+            }
+
+            app.ChangeLanguage(SRB);
+        }
+
+        private bool CanExecute_AddImageCommand(object obj)
+        {
+            //return ImageUrl != string.Empty;
+            return true;
+        }
+
+        private void Execute_AddImageCommand(object obj)
+        {
+            AddImage(ImageUrl);
+            ImageUrl = string.Empty;
+        }
+
+        public void AddImage(string urlTextBox)
+        {
+            string imageUrl = urlTextBox;
+
+            if (!string.IsNullOrEmpty(imageUrl))
+            {
+                ImageUrls.Add(imageUrl);
+                Image image = new Image(imageUrl);
+                _imageRepository.Save(image);
+                _imageIds.Add(image.Id);
+            }
+        }
+
+        private bool CanExecute_ExitCommand(object obj)
+        {
+            return true;
+        }
+
+        private void Execute_ExitCommand(object obj)
+        {
+            CloseAction();
+        }
+
         private bool CanExecute_SubmitRatingCommand(object obj)
         {
-            return GuideKnowledge != 0 && Interestingness != 0 && GuideLanguage != 0 && Comment != null && ImageUrls.Count != 0;
+            //return GuideKnowledge != 0 && Interestingness != 0 && GuideLanguage != 0 && Comment != null && ImageUrls.Count != 0;
+            return true;
         }
 
         private void Execute_SubmitRatingCommand(object obj)
         {
-            SetRatingsForGuideKnowledge();
-            SetRatingsForInterestingness();
-            SetRatingsForGuideLanguage();
+            SetRatingsForNumberProperties();
+
+            if (GuideKnowledge == null)
+            {
+                MessageBox.Show("Please rate your guide's knowledge!", "Guide knowledge warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                // return;
+            }
+
+            else if (Interestingness == null)
+            {
+                MessageBox.Show("Please rate tour interestingness!", "Interestingness warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                // return;
+            }
+
+            else if (GuideLanguage == null)
+            {
+                MessageBox.Show("Please rate your guide's language!", "Guide language warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                //return;
+            }
+
+            else if (Comment == null)
+            {
+                MessageBox.Show("Please add a comment!", "Comment warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                //return;
+            }
+
+            else if (ImageUrls.Count == 0)
+            {
+                MessageBox.Show("Please add at least one image!", "Images warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+               //return;
+            }
 
             TourRating tourRating = new TourRating(
                     SelectedTour.TourId,
                     GuideKnowledge,
                     GuideLanguage,
                     Interestingness,
-                    Comment,
+                    Comment, 
                     _imageIds,
                     LoggedInUser.Id);
 
@@ -348,6 +452,7 @@ namespace InitialProject.ViewModel.Guest2
             _tourRatingService.Save(tourRating);
 
             MessageBox.Show("Tour successfuly rated!");
+            CloseAction();
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -411,6 +516,15 @@ namespace InitialProject.ViewModel.Guest2
             //MessageBox.Show("Tour successfuly rated!");
 
             
+        }
+
+        #region NumberPropertySetters
+
+        private void SetRatingsForNumberProperties()
+        {
+            SetRatingsForGuideKnowledge();
+            SetRatingsForInterestingness();
+            SetRatingsForGuideLanguage();
         }
 
         private void SetRatingsForGuideKnowledge()
@@ -485,30 +599,6 @@ namespace InitialProject.ViewModel.Guest2
             }
         }
 
-        public void AddImage(string urlTextBox)
-        {
-            string imageUrl = urlTextBox;
-
-            if (!string.IsNullOrEmpty(imageUrl))
-            {
-                ImageUrls.Add(imageUrl);
-                Image image = new Image(imageUrl);
-                _imageRepository.Save(image);
-                _imageIds.Add(image.Id);
-            }
-        }
-
-        public void LanguageButton_Click(object sender, RoutedEventArgs e)
-        {
-            LanguageButtonClickCount++;
-
-            if (LanguageButtonClickCount % 2 == 1)
-            {
-                app.ChangeLanguage(ENG);
-                return;
-            }
-
-            app.ChangeLanguage(SRB);
-        }
+        #endregion
     }
 }
