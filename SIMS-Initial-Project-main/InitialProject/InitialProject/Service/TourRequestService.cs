@@ -1,12 +1,15 @@
 ﻿using InitialProject.Model;
+using InitialProject.Model.DTO;
+using InitialProject.Repository;
 using InitialProject.Repository.Interfaces;
 using InitialProject.Resources.Injector;
 using InitialProject.Resources.Observer;
-using InitialProject.View.Guest2;
+using InitialProject.ViewModel.Guest2;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
-using System.Windows;
+using System.Windows.Media;
 
 namespace InitialProject.Service
 {
@@ -22,137 +25,40 @@ namespace InitialProject.Service
             _tourService = new TourService();
         }
 
-
-        public TourRequest GetSameDetailsTourRequest(User user)
+        public TourRequest GetById(int id)
         {
-            List<TourRequest> acceptedOtherGuestRequests = GetStatusRequests(GetOtherGuestRequests(user), Resources.Enums.RequestStatus.accepted);
-
-            foreach (TourRequest guestRequest in GetInvalidandPendingRequests(user))
-            {
-                foreach (TourRequest otherGuestRequest in acceptedOtherGuestRequests)
-                {
-                    if (guestRequest.LocationId == otherGuestRequest.LocationId || guestRequest.Language == otherGuestRequest.Language)
-                    {
-                        return guestRequest;
-                    }
-                }
-            }
-
-            return null;
-        }
-        
-        public List<string> GetInvalidOrPendingLanguageRequests(User user) 
-        {
-            List<string> languages = new List<string>();
-
-            foreach (TourRequest request in GetInvalidandPendingRequests(user)) 
-            {
-                if (!languages.Contains(request.Language)) 
-                {
-                    languages.Add(request.Language);
-                }
-            }
-            return languages;
-        }
-        public List<int> GetInvalidOrPendingLocationRequests(User user)
-        {
-            List<int> locationIds = new List<int>();
-
-            foreach (TourRequest request in GetInvalidandPendingRequests(user))
-            {
-                if (!locationIds.Contains(request.LocationId))
-                {
-                    locationIds.Add(request.LocationId);
-                }
-            }
-            return locationIds;
-        }
-        public List<TourRequest> CheckForOthersAcceptedLanguage(User user) 
-        {
-            List<TourRequest> requests = new List<TourRequest>();
-
-            foreach (TourRequest request in GetOtherGuestRequests(user)) 
-            {
-                if (GetInvalidOrPendingLanguageRequests(user).Contains(request.Language) && request.Status == Resources.Enums.RequestStatus.accepted) 
-                {
-                    requests.Add(request);
-                }
-            }
-            return requests;
-        }
-        public List<TourRequest> CheckForOthersAcceptedLocation(User user)
-        {
-            List<TourRequest> requests = new List<TourRequest>();
-
-            foreach (TourRequest request in GetOtherGuestRequests(user))
-            {
-                if (GetInvalidOrPendingLocationRequests(user).Contains(request.LocationId) && request.Status == Resources.Enums.RequestStatus.accepted)
-                {
-                    requests.Add(request);
-                }
-            }
-            return requests;
-        }
-        public List<TourRequest> GetInvalidandPendingRequests(User user)
-        {
-            List<TourRequest> requests = GetStatusRequests(GetGuestRequests(user), Resources.Enums.RequestStatus.pending);
-
-            foreach (TourRequest request in GetAll())
-            {
-                if (request.Status == InitialProject.Resources.Enums.RequestStatus.invalid)
-                {
-                    requests.Add(request);
-                }
-            }
-
-            return requests;
+            return _tourRequestRepository.GetById(id);
         }
 
-        public List<TourRequest> GetStatusRequests (List<TourRequest> tourRequests, InitialProject.Resources.Enums.RequestStatus requestStatus)
+        public void Update(TourRequest tourRequest)
         {
-            List<TourRequest> requests = new List<TourRequest>();
-
-            foreach (TourRequest request in tourRequests)
-            {
-                if (request.Status == requestStatus)
-                {
-                    requests.Add(request);
-                }
-            }
-
-            return requests;
+            _tourRequestRepository.Update(tourRequest);
         }
 
-        public List<TourRequest> GetGuestRequests(User user)
+        public TourRequest Save(TourRequest tourRequest)
         {
-            List<TourRequest> requests = new List<TourRequest>();
-
-            foreach(var request in _tourRequestRepository.GetAll())
-            {
-                if (request.GuestId == user.Id)
-                {
-                    requests.Add(request);
-                }
-            }
-
-            return requests;
+            return _tourRequestRepository.Save(tourRequest);
         }
 
-        public List<TourRequest> GetOtherGuestRequests(User user)
+        public List<TourRequest> GetAll()
         {
-            List<TourRequest> requests = new List<TourRequest>();
-
-            foreach (var request in _tourRequestRepository.GetAll())
-            {
-                if (request.GuestId != user.Id)
-                {
-                    requests.Add(request);
-                }
-            }
-
-            return requests;
+            return _tourRequestRepository.GetAll();
         }
 
+        public void Subscribe(IObserver observer)
+        {
+            _tourRequestRepository.Subscribe(observer);
+        }
+
+        public void Unsubscribe(IObserver observer)
+        {
+            _tourRequestRepository.Unsubscribe(observer);
+        }
+
+        public void NotifyObservers()
+        {
+            _tourRequestRepository.NotifyObservers();
+        }
         public List<TourRequest> GetPendingRequests(User user)
         {
             List<TourRequest> pendingRequests = new List<TourRequest>();
@@ -162,7 +68,7 @@ namespace InitialProject.Service
                 if (request.Status == Resources.Enums.RequestStatus.pending)
                 {
                     bool canBeAdded = true;
-                    foreach (Tour tour in _tourService.GetGuideTours(user))
+                    foreach (Tour tour in _tourService.GetAllUnabortedGuideTours(user))
                     {
                         if (!(request.EndTime <= tour.StartTime || request.StartTime >= tour.StartTime.AddHours(tour.Duration)))
                         {
@@ -225,35 +131,35 @@ namespace InitialProject.Service
             return counter;
         }
 
-        //public List<TourRequest> GetAcceptedRequests(List<TourRequest> tourRequests)
-        //{
-        //    List<TourRequest> requests = new List<TourRequest>();
+        public List<TourRequest> GetAcceptedRequests(List<TourRequest> tourRequests)
+        {
+            List<TourRequest> requests = new List<TourRequest>();
 
-        //    foreach (TourRequest request in tourRequests)
-        //    {
-        //        if (request.Status.ToString() == "accepted")
-        //        {
-        //            requests.Add(request);
-        //        }
-        //    }
+            foreach (TourRequest request in tourRequests)
+            {
+                if (request.Status.ToString() == "accepted")
+                {
+                    requests.Add(request);
+                }
+            }
 
-        //    return requests;
-        //}
+            return requests;
+        }
 
-        //public List<TourRequest> GetDeniedRequests(List<TourRequest> tourRequests)
-        //{
-        //    List<TourRequest> requests = new List<TourRequest>();
+        public List<TourRequest> GetDeniedRequests(List<TourRequest> tourRequests)
+        {
+            List<TourRequest> requests = new List<TourRequest>();
 
-        //    foreach (TourRequest request in tourRequests)
-        //    {
-        //        if (request.Status.ToString() == "invalid")
-        //        {
-        //            requests.Add(request);
-        //        }
-        //    }
+            foreach (TourRequest request in tourRequests)
+            {
+                if (request.Status.ToString() == "invalid")
+                {
+                    requests.Add(request);
+                }
+            }
 
-        //    return requests;
-        //}
+            return requests;
+        }
 
         public List<string> GetLanguages()
         {
@@ -373,6 +279,42 @@ namespace InitialProject.Service
                 }
             }
             return requests;
+        }
+
+        public List<TourRequest> FilterRequests(RequestFilterParameters parameters) 
+        {
+            List<TourRequest> result = new List<TourRequest>();
+
+            if (!string.IsNullOrEmpty(parameters.Country))
+            {
+                result = GetByCountry(parameters.User, parameters.Country);
+            }
+            else
+            {
+                result = GetPendingRequests(parameters.User);
+            }
+
+            if (!string.IsNullOrEmpty(parameters.City))
+            {
+                result = result.Intersect(GetByCity(parameters.User, parameters.City)).ToList();
+            }
+            if (!string.IsNullOrEmpty(parameters.Language))
+            {
+                result = result.Intersect(GetByLanguage(parameters.User, parameters.Language)).ToList();
+            }
+            if (parameters.MaxGuests != null)
+            {
+                result = result.Intersect(GetByMaxGuests(parameters.User, parameters.MaxGuests.Value)).ToList();
+            }
+            if (parameters.StartDate != null)
+            {
+                result = result.Intersect(GetByStartDate(parameters.User, parameters.StartDate)).ToList();
+            }
+            if (parameters.EndDate != null)
+            {
+                result = result.Intersect(GetByEndDate(parameters.User, parameters.EndDate)).ToList();
+            }
+            return result;
         }
         public List<TourRequest> GetByStartDate(User user, DateTime? startDate)
         {
@@ -509,41 +451,6 @@ namespace InitialProject.Service
                 }
             }
             return returnCountry;
-        }
-
-        public TourRequest GetById(int id)
-        {
-            return _tourRequestRepository.GetById(id);
-        }
-
-        public void Update(TourRequest tourRequest)
-        {
-            _tourRequestRepository.Update(tourRequest);
-        }
-
-        public TourRequest Save(TourRequest tourRequest)
-        {
-            return _tourRequestRepository.Save(tourRequest);
-        }
-
-        internal List<TourRequest> GetAll()
-        {
-            return _tourRequestRepository.GetAll();
-        }
-
-        public void Subscribe(IObserver observer)
-        {
-            _tourRequestRepository.Subscribe(observer);
-        }
-
-        public void Unsubscribe(IObserver observer)
-        {
-            _tourRequestRepository.Unsubscribe(observer);
-        }
-
-        public void NotifyObservers()
-        {
-            _tourRequestRepository.NotifyObservers();
         }
     }
 }
