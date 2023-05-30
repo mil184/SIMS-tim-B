@@ -18,6 +18,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Image = InitialProject.Model.Image;
 
 namespace InitialProject.ViewModel.Guide
 {
@@ -29,13 +30,17 @@ namespace InitialProject.ViewModel.Guide
         private readonly ImageRepository _imageRepository;
         private readonly CheckpointService _checkpointService;
         private readonly TourRequestService _tourRequestService;
+
+        public User LoggedInUser { get; set; }
         public CreateTourViewModel(User user, TourService tourService, LocationService locationService, ImageRepository imageRepository, CheckpointService checkpointService, TourRequestService tourRequestService, TourRequest request)
         {
             _tourService = tourService;
             _locationService = locationService;
             _imageRepository = imageRepository;
             _checkpointService = checkpointService;
-            _tourRequestService = tourRequestService;   
+            _tourRequestService = tourRequestService;
+
+            LoggedInUser = user;
 
             InitializeCollections();
             InitializeComboboxes();
@@ -630,8 +635,8 @@ namespace InitialProject.ViewModel.Guide
             TourName = string.Empty;
             TourDescription = string.Empty;
             TourLanguage = string.Empty;
-            TourCountry = null;
-            TourCity = null;
+            TourCountry = string.Empty;
+            TourCity = string.Empty;
             MaximumGuests = string.Empty;
             TourDuration = string.Empty;
             SelectedDateInDatePicker = null;
@@ -1072,5 +1077,63 @@ namespace InitialProject.ViewModel.Guide
             }
         }
         #endregion
+
+        #region SaveTour
+
+        private ObservableCollection<int> SaveImages() 
+        {
+            ObservableCollection<int> ids = new ObservableCollection<int>();
+            foreach (string url in ImageUrls) 
+            {
+                ids.Add(_imageRepository.Save(new Image(url)).Id);
+            }
+            return ids;
+        }
+        private ObservableCollection<int> SaveCheckpoints()
+        {
+            ObservableCollection<int> ids = new ObservableCollection<int>();
+            foreach (Checkpoint checkpoint in TourCheckpoints)
+            {
+               ids.Add(_checkpointService.Save(checkpoint).Id);
+            }
+            return ids;
+        }
+        private Location GetLocation() 
+        {
+            return _locationService.GetLocation(TourCountry, TourCity);
+        }
+        public void Save() 
+        {
+            foreach(DateTime date in TourDates) 
+            {
+
+                ObservableCollection<int> imageIds = new ObservableCollection<int>();
+                ObservableCollection<int> checkpointIds = new ObservableCollection<int>();
+
+                imageIds = SaveImages();
+                checkpointIds = SaveCheckpoints();
+
+                Tour tour = new Tour(TourName, GetLocation().Id, TourDescription, TourLanguage, int.Parse(MaximumGuests), date, int.Parse(TourDuration), LoggedInUser.Id, imageIds, checkpointIds);
+                Tour savedTour = _tourService.Save(tour);
+                UpdateCheckpoints(savedTour, savedTour.CheckpointIds);
+
+            }
+        }
+        private void UpdateCheckpoints(Tour tour, ObservableCollection<int> checkpointIds) 
+        {
+            foreach(int id in checkpointIds) 
+            {
+                Checkpoint checkpoint = _checkpointService.GetById(id);
+                checkpoint.TourId = tour.Id;
+                _checkpointService.Update(checkpoint);
+            }
+        }
+        private void Validate()
+        {
+
+        }
+        #endregion
+
+  
     }
 }

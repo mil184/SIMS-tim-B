@@ -27,14 +27,14 @@ namespace InitialProject.Model
         public bool IsAborted { get; set; }
         public bool IsRated { get; set; }
         public Tour() { ImageIds = new ObservableCollection<int>(); CheckpointIds = new ObservableCollection<int>(); }
-        public Tour(string name, int locationId, string description, string language, int maxGuests, int currentGuestCount, DateTime startTime, double duration, int guideId, ObservableCollection<int> imageIds, ObservableCollection<int> checkpointIds)
+        public Tour(string name, int locationId, string description, string language, int maxGuests,  DateTime startTime, double duration, int guideId, ObservableCollection<int> imageIds, ObservableCollection<int> checkpointIds)
         {
             Name = name;
             LocationId = locationId;
             Description = description;
             Language = language;
             MaxGuests = maxGuests;
-            CurrentGuestCount = currentGuestCount;
+            CurrentGuestCount = 0;
             StartTime = startTime;
             Duration = duration;
             GuideId = guideId;

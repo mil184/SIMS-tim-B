@@ -318,30 +318,30 @@ namespace InitialProject.View.Guide
         }
         private void SaveTour()
         {
-            List<int> imageIds = SaveImages();
-            List<int> checkpointIds = SaveCheckpoints();
+            //List<int> imageIds = SaveImages();
+            //List<int> checkpointIds = SaveCheckpoints();
 
-            foreach (DateTime dateTime in DateTimes)
-            {
-                Tour tour = new Tour(TourName,
-                    TourLocation.Id,
-                    Description, 
-                    TourLanguage, 
-                    int.Parse(MaxGuests), 
-                    0, 
-                    dateTime,
-                    double.Parse(Duration), 
-                    LoggedInUser.Id,
-                    new ObservableCollection<int>(imageIds),
-                    new ObservableCollection<int>(checkpointIds)); 
+            //foreach (DateTime dateTime in DateTimes)
+            //{
+            //    Tour tour = new Tour(TourName,
+            //        TourLocation.Id,
+            //        Description, 
+            //        TourLanguage, 
+            //        int.Parse(MaxGuests), 
+            //        0, 
+            //        dateTime,
+            //        double.Parse(Duration), 
+            //        LoggedInUser.Id,
+            //        new ObservableCollection<int>(imageIds),
+            //        new ObservableCollection<int>(checkpointIds)); 
 
-                tour = _tourService.Save(tour);
+            //    tour = _tourService.Save(tour);
 
-                UpdateCheckpointsTourId(tour.Id);
-                if(Request != null)
-                UpdateRequest(Request);
+            //    UpdateCheckpointsTourId(tour.Id);
+            //    if(Request != null)
+            //    UpdateRequest(Request);
                 
-            }
+            //}
         }
         private List<int> SaveImages()
         {
