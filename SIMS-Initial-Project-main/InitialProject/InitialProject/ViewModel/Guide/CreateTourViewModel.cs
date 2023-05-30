@@ -637,6 +637,7 @@ namespace InitialProject.ViewModel.Guide
             TourLanguage = string.Empty;
             TourCountry = string.Empty;
             TourCity = string.Empty;
+            IsEnabledCityComboBox = false;
             MaximumGuests = string.Empty;
             TourDuration = string.Empty;
             SelectedDateInDatePicker = null;
