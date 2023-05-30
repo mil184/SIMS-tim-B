@@ -595,6 +595,10 @@ namespace InitialProject.ViewModel.Guide
             {
                 SetImage(0);
             }
+            else 
+            {
+                SetImage(ImageUrls.Count -1);
+            }
         }
         public void PreviousImage()
         {
@@ -993,7 +997,7 @@ namespace InitialProject.ViewModel.Guide
         private async Task StartTourImagesAnimation()
         {
             ImageUrl = "https://planetofhotels.com/guide/sites/default/files/styles/paragraph__hero_banner__hb_image__1880bp/public/hero_banner/shitennoji-temple_optimized.jpg";
-            await Task.Delay(Duration*50);
+            await Task.Delay(Duration*25);
             AddImageUrl();
             await Task.Delay(Duration * 150);
 

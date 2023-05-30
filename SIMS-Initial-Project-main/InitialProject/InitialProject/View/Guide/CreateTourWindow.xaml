@@ -7,7 +7,7 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:focus="clr-namespace:InitialProject.Resources.FocusBehaviour"
         mc:Ignorable="d"
-        Title="CreateTourWindow" Height="820" Width="1024"
+        Title="CreateTourWindow" Height="830" Width="1024"
         Background="#F2F2F2"
         WindowStartupLocation="CenterScreen">
     <Grid>
@@ -251,6 +251,30 @@
                           IsDropDownOpen="{Binding Path=IsMinutesComboBoxDropDown}"
                           IsEnabled="{Binding Path = IsEnabledMinutesComboBox}"/>
                             </Border>
+                            <Button Content="Add (ENTER)" Height="30" Width="80" FontSize="11" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2"  Click="AddDate_Click"  IsEnabled="{Binding IsEnabledButton}" Margin="20 0 0 0">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <EventTrigger RoutedEvent="Button.Click">
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="border" Property="Background" Value="#005F8B" />
+                                            </Trigger>
+                                            <Trigger Property="IsPressed" Value="True">
+                                                <Setter TargetName="border" Property="Background" Value="#00415E" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
                         </StackPanel>
                     </StackPanel>
                     <StackPanel Orientation="Vertical" Grid.Row="2" Grid.ColumnSpan="2">
@@ -307,14 +331,40 @@
                            FontSize="13" 
                            Foreground="#007ACC" 
                            FontWeight="Bold"
-                               Margin="0 0 10 0 "/>
-                    <TextBox Text="{Binding Path=CheckpointName, UpdateSourceTrigger=PropertyChanged}"
-                         Grid.Row="0" 
-                         Grid.Column="1"
+                               Margin="0 0 10 0 "
+                               VerticalAlignment="Center"/>
+                    <StackPanel Orientation="Horizontal"  Grid.Row="0"  Grid.Column="1" HorizontalAlignment="Stretch">
+                        <TextBox Text="{Binding Path=CheckpointName, UpdateSourceTrigger=PropertyChanged}"
                          FontSize="13"
                          GotFocus="CheckpointTextBox_GotFocus"
                          LostFocus="CheckpointTextBox_LostFocus"
+                         Width="200"              
                          IsEnabled="{Binding Path = IsEnabledCheckpointNameTextBox}"/>
+                        <Button Content="Add (ENTER)" Height="30" Width="80" FontSize="11" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2"  Click="AddCheckpoint_Click"  IsEnabled="{Binding IsEnabledButton}" Margin="20 0 0 0" HorizontalAlignment="Right">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <EventTrigger RoutedEvent="Button.Click">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="#005F8B" />
+                                        </Trigger>
+                                        <Trigger Property="IsPressed" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="#00415E" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </StackPanel>
                     <StackPanel Orientation="Vertical" Grid.Row="1" Grid.ColumnSpan="2">
                         <TextBox                         
                          FontSize="13"
@@ -351,6 +401,7 @@
                     </StackPanel>
                 </Grid>
             </GroupBox>
+            
             <GroupBox Grid.Row="0" Grid.Column="1" Header="Images" Margin="5" FontSize="20" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2" Padding="5">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -370,14 +421,40 @@
                            FontSize="13" 
                            Foreground="#007ACC" 
                            FontWeight="Bold"
-                               Margin="0 0 10 0"/>
-                    <TextBox Text="{Binding Path=ImageUrl, UpdateSourceTrigger=PropertyChanged}"
-                         Grid.Row="0" 
-                         Grid.Column="1"
+                           Margin="0 0 10 0"
+                            VerticalAlignment="Center"/>
+                    <StackPanel Orientation="Horizontal"  Grid.Row="0"  Grid.Column="1">
+                        <TextBox Text="{Binding Path=ImageUrl, UpdateSourceTrigger=PropertyChanged}"
                          FontSize="13"
                          GotFocus="ImageTextBox_GotFocus"
                          LostFocus="ImageTextBox_LostFocus"
+                                 Width="250"
                          IsEnabled="{Binding Path = IsEnabledImageUrlTextBox}"/>
+                        <Button Content="Add (ENTER)" Height="30" Width="80" FontSize="11" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2"  Click="AddImage_Click"  IsEnabled="{Binding IsEnabledButton}" Margin="20 0 0 0">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <EventTrigger RoutedEvent="Button.Click">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="#005F8B" />
+                                        </Trigger>
+                                        <Trigger Property="IsPressed" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="#00415E" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </StackPanel>
                     <StackPanel Orientation="Vertical" Grid.Row="1" Grid.ColumnSpan="2">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
                             <Button Content="&lt;" Height="50" Width="50" FontSize="20" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Left" Click="BackButton_Click" focus:FocusBehavior.IsFocused="{Binding IsLeftButtonFocused}" IsEnabled="{Binding IsEnabledButton}" Margin="0 0 10 0">
@@ -440,8 +517,8 @@
                         </StackPanel>
                     </StackPanel>
                     <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
-                        <TextBox Text="{Binding Path=CurrentImageIndexToShow,UpdateSourceTrigger=PropertyChanged}"  FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" Width="20" Height="20" TextAlignment="Center"/>
-                        <TextBox Text="{Binding Path=CurrentImageUrl,UpdateSourceTrigger=PropertyChanged}"  Margin="5" TextWrapping="Wrap" Width="400" Height="20" FontSize="11" TextAlignment="Left" />
+                        <TextBox Text="{Binding Path=CurrentImageIndexToShow,UpdateSourceTrigger=PropertyChanged}"  FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" Width="20" Height="20" TextAlignment="Center" IsHitTestVisible="False" IsReadOnly="True" IsEnabled="False"/>
+                        <TextBox Text="{Binding Path=CurrentImageUrl,UpdateSourceTrigger=PropertyChanged}"  Margin="5" TextWrapping="Wrap" Width="400" Height="20" FontSize="11" TextAlignment="Left" IsHitTestVisible="False" IsReadOnly="True" IsEnabled="False"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="3" Grid.ColumnSpan="2">
                         <Image 

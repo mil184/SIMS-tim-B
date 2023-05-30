@@ -52,7 +52,7 @@ namespace InitialProject.View.Guide
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-
+            Close();
         }
 
         private void Country_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -220,6 +220,21 @@ namespace InitialProject.View.Guide
                 }
                 e.Handled = true;
             }
+        }
+
+        private void AddDate_Click(object sender, RoutedEventArgs e)
+        {
+            _viewModel.AddDateTime();
+        }
+
+        private void AddCheckpoint_Click(object sender, RoutedEventArgs e)
+        {
+            _viewModel.AddCheckpoint();
+        }
+
+        private void AddImage_Click(object sender, RoutedEventArgs e)
+        {
+            _viewModel.AddImageUrl();
         }
     }
 }
