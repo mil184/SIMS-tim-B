@@ -22,6 +22,7 @@ namespace InitialProject.Model
         public bool SameDetailsMessageShownLanguage { get; set; }
         public bool SameDetailsMessageShownLocation { get; set; }
 
+        public DateTime ChosenDate { get; set; }
         public TourRequest()
         {
         }
@@ -41,6 +42,7 @@ namespace InitialProject.Model
             MessageShown = false;
             SameDetailsMessageShownLanguage = false;
             SameDetailsMessageShownLocation = false;
+            ChosenDate = new DateTime(1, 1, 1, 1, 1, 1);
         }
 
         public string[] ToCSV()
@@ -60,7 +62,8 @@ namespace InitialProject.Model
                 CreationTime.ToString(),
                 MessageShown.ToString(),
                 SameDetailsMessageShownLanguage.ToString(),
-                SameDetailsMessageShownLocation.ToString()
+                SameDetailsMessageShownLocation.ToString(),
+                ChosenDate.ToString()
             };
 
             return csvValues;
@@ -82,6 +85,7 @@ namespace InitialProject.Model
             MessageShown = bool.Parse(values[11]);
             SameDetailsMessageShownLanguage = bool.Parse(values[12]);
             SameDetailsMessageShownLocation = bool.Parse(values[13]);
+            ChosenDate = DateTime.Parse(values[14]);
         }
     }
 }
