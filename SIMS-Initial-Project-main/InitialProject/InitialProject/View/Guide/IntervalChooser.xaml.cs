@@ -121,12 +121,12 @@ namespace InitialProject.View.Guide
 
                 PdfPTable pdfTable = new PdfPTable(3);
                 pdfTable.WidthPercentage = 80;
-                pdfTable.DefaultCell.BorderWidth = 0.6f;
+                pdfTable.DefaultCell.BorderWidth = 1.0f;
 
                 string logoPath = "../../../Resources/Images/logo.png";
                 iTextSharp.text.Image logoImage = iTextSharp.text.Image.GetInstance(logoPath);
-                logoImage.ScaleAbsolute(30f, 30f); // Adjust the size as per your requirements
-
+                logoImage.ScaleAbsolute(20f, 20f); // Adjust the size as per your requirements
+                
                 // Add Company Name and Logo
                 PdfPCell companyCell = new PdfPCell(new Phrase("DMJM-Tours", FontFactory.GetFont("Times New Roman", 18, Font.BOLD, new BaseColor(64, 134, 170))));
                 companyCell.HorizontalAlignment = Element.ALIGN_RIGHT;

@@ -377,7 +377,7 @@ namespace InitialProject.View.Guide
         }
         private void ShowAbortTourWarning()
         {
-            MessageBox.Show("You may not abort this tour as you are breaking the 2 day rule.", "Abort Tour Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show("You may not abort this tour since it starts in less than two days. You may only abort tours that are more than two days away.", "Abort Tour Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
         private void GenerateReportButton_Click(object sender, RoutedEventArgs e)
         {
