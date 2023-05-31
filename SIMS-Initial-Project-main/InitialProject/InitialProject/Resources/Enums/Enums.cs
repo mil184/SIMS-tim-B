@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace InitialProject.Resources.Enums
+﻿namespace InitialProject.Resources.Enums
 {
     public enum UserType
     { 
@@ -12,13 +6,28 @@ namespace InitialProject.Resources.Enums
         owner,
         guest1,
         guest2,
-        guide
+        guide,
+        superowner,
+        superguest
     }
 
     public enum AccommodationType
     {
-        apartment,
-        house,
-        hut
+        Apartment,
+        House,
+        Hut
+    }
+
+    public enum RescheduleRequestStatus
+    {
+        onhold,
+        approved,
+        rejected
+    }
+    public enum RequestStatus 
+    {
+        pending,
+        invalid,
+        accepted
     }
 }

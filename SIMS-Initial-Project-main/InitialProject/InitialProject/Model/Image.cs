@@ -13,10 +13,8 @@ namespace InitialProject.Model
         public string Url { get; set; }
 
         public Image() { }
-
-        public Image(int id, string url)
+        public Image(string url)
         {
-            Id = id;
             Url = url;
         }
 

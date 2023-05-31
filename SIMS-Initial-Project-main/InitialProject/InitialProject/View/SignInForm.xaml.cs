@@ -1,9 +1,16 @@
 ﻿using InitialProject.Forms;
 using InitialProject.Model;
 using InitialProject.Repository;
+using InitialProject.View.Owner;
+using InitialProject.View.Guide;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using InitialProject.View.Guest2;
+using InitialProject.View.Guest1;
+using System.Windows.Input;
+using InitialProject.Service;
+using System;
 
 namespace InitialProject
 {
@@ -13,7 +20,7 @@ namespace InitialProject
     public partial class SignInForm : Window
     {
 
-        private readonly UserRepository _repository;
+        private readonly UserService _userService;
 
         private string _username;
         public string Username
@@ -40,12 +47,19 @@ namespace InitialProject
         {
             InitializeComponent();
             DataContext = this;
-            _repository = new UserRepository();
+            _userService = new UserService();
         }
-
+        private void PasswordBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                SignIn(sender, e);
+                e.Handled = true;
+            }
+        }
         private void SignIn(object sender, RoutedEventArgs e)
         {
-            User user = _repository.GetByUsername(Username);
+            User user = _userService.GetByUsername(Username);
             if (user != null)
             {
                 if(user.Password == txtPassword.Password)
@@ -56,21 +70,36 @@ namespace InitialProject
                         commentsOverview.Show();
                         Close();
                     }
-                    else if (user.Type == InitialProject.Resources.Enums.UserType.owner) 
-                    { 
-
-                    }
-                    else if (user.Type == InitialProject.Resources.Enums.UserType.guest1)
+                    else if (user.Type == InitialProject.Resources.Enums.UserType.owner || user.Type == InitialProject.Resources.Enums.UserType.superowner) 
                     {
-
+                        /*OwnerWindow ownerWindow = new OwnerWindow(user);
+                        ownerWindow.Show();
+                        Close();*/
+                        OwnerMainWindow ownerMainWindow = new OwnerMainWindow(user);
+                        ownerMainWindow.Show();
+                        Close();
+                    }
+                    else if (user.Type == InitialProject.Resources.Enums.UserType.guest1 || user.Type == InitialProject.Resources.Enums.UserType.superguest)
+                    {
+                        Guest1Window guest1Window = new Guest1Window(user);
+                        guest1Window.Show();
+                        Close();
                     }
                     else if (user.Type == InitialProject.Resources.Enums.UserType.guide)
                     {
-
+                        GuideWindow guideWindow = new GuideWindow(user);
+                        guideWindow.Show();
+                        //CreateTourWindow window = new CreateTourWindow();
+                        //window.Show();
+                        Close();
+                     
                     }
                     else if (user.Type == InitialProject.Resources.Enums.UserType.guest2)
                     {
-                        //
+                        Guest2Window guest2Window = new Guest2Window(user);
+                        guest2Window.Show();
+                        Close();
+                       
                     }
                 } 
                 else

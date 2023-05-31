@@ -1,0 +1,161 @@
+1|Dotonbori Bridge|1|False|1
+2|Kuromon Ichiba Market|2|False|1
+3|Shitennoji Temple|3|False|1
+4|Osaka Castle Park|4|False|1
+5|START|1|False|3
+6|MID|2|False|3
+7|END|3|False|3
+8|Dotonbori Bridge|1|False|4
+9|Kuromon Ichiba Market|2|False|4
+10|Shitennoji Temple|3|False|4
+11|Osaka Castle Park|4|False|4
+12|Plaza Bolivar|1|False|1
+13|Parque Fernando Penalver|2|False|1
+14|Mercado Central|3|False|1
+15|c1|1|False|2
+16|c2|2|False|2
+17|c3|3|False|2
+18|fds|1|False|3
+19|fsd|2|False|3
+20|fds|3|False|3
+21|fds|1|False|4
+22|dfs|2|False|4
+23|fdsafa|1|False|5
+24|fdsa|2|False|5
+25|Harpa Concert Hall|1|False|6
+26|Thingvellir National Park|2|False|6
+27|Gullfoss Waterfall|3|False|6
+28|Geysir Hot Springs Area|4|False|6
+29|Reykjanes Peninsula|5|False|6
+30|Hallgrimskirkja Church|6|False|6
+31|fsaas|1|False|7
+32|dfsaas|2|False|7
+33|dfs|1|False|8
+34|fds|2|False|8
+35|fdf|1|False|9
+36|fsdfsd|2|False|9
+37|Dotonbori Bridge|1|False|2
+38|Kuromon Ichiba Market|2|False|2
+39|Shitennoji Temple|3|False|2
+40|Osaka Castle Park|4|False|2
+41|Khan el-Khalili Bazaar|1|False|4
+42|Egyptian Museum|2|False|4
+43|Al-Azhar Mosque|3|False|4
+44|Bab Zuweila|4|False|4
+45|Coptic Cairo|5|False|4
+46|Saladin Citadel|6|False|4
+47|Nile River Cruise|7|False|4
+48|Tahrir Square|8|False|4
+49|11|1|False|5
+50|12|2|False|5
+51|13|3|False|5
+52|122|1|False|6
+53|123|2|False|6
+54|t|1|False|7
+55|t2|2|False|7
+56|hh|1|False|8
+57|hh|2|False|8
+58|gg|1|False|9
+59|gg|2|False|9
+60|ggg|1|False|10
+61|ggg|2|False|10
+62|qswad|1|False|11
+63|asxzcdxv|2|False|11
+64|asxc|3|False|11
+65|Start|1|False|12
+66|Mid|2|False|12
+67|End|3|False|12
+68|number one|1|False|13
+69|nm t|2|False|13
+70|First|1|False|14
+71|Lat|2|False|14
+72|wswd|1|False|15
+73|sdd|2|False|15
+74|dsds|3|False|15
+75|sddsds|4|False|15
+76|START|1|False|17
+77|MID|2|False|17
+78|END|3|False|17
+79|FID|4|False|17
+80|wdqe|1|False|19
+81|2wd|2|False|19
+82|wed|3|False|19
+83|wqedfsr|4|False|19
+84|wadesf|5|False|19
+85|wqdae|6|False|19
+86|one|1|False|20
+87|two|2|False|20
+88|three|3|False|20
+89|four|4|False|20
+90|five|5|False|20
+91|six|6|False|20
+92|wddd|1|False|21
+93|weef|2|False|21
+94|wdefs|3|False|21
+95|wdaefs|4|False|21
+96|wdaefs|5|False|21
+97|SDACZXSWAD|1|False|22
+98|QSDAFC|2|False|22
+99|JMGHBF|3|False|22
+100|DAFS|4|False|22
+101|DSAFS|5|False|22
+102|WDSAFS|6|False|22
+103|1|1|False|1
+104|2|2|False|1
+105|3|3|False|1
+106|1|1|False|2
+107|2|2|False|2
+108|wde|1|False|3
+109|edw|2|False|3
+110|ewqde|1|False|4
+111|wqef|2|False|4
+112|check|1|False|5
+113|check|2|False|5
+114|cp1|1|False|6
+115|cp2|2|False|6
+116|The Bridge|1|True|10
+117|The Castle|2|False|10
+118|The Volcano|3|False|10
+119|The X|4|False|10
+120|The Something|5|False|10
+121|The House|6|False|10
+122|The Hotel|7|False|10
+123|The Tree|8|False|10
+124|The Tower|9|False|10
+125|The Field|10|False|10
+126|The Bridge|1|False|10
+127|The Castle|2|False|10
+128|The Volcano|3|False|10
+129|The X|4|False|9
+130|The Something|5|True|9
+131|The House|6|False|9
+132|The Hotel|7|False|9
+133|The Tree|8|False|9
+134|The Tower|9|False|9
+135|The Field|10|False|9
+136|wdefa|1|False|10
+137|wds|2|False|10
+138|eqwf|1|True|11
+139|e3efw|2|False|11
+140|Some|1|False|-1
+141|thing|2|False|-1
+142|here|3|False|-1
+143|is|4|False|-1
+144|new|5|False|-1
+145|djkq|1|False|12
+146|jefdl|2|False|12
+147|djdjdj|3|False|12
+148|djdjdjd|4|False|12
+149|djdjd|5|False|12
+150|djkq|1|False|13
+151|jefdl|2|False|13
+152|djdjdj|3|False|13
+153|djdjdjd|4|False|13
+154|djdjd|5|False|13
+155|LOL|1|False|-1
+156|dd|2|False|-1
+157|wdea|1|False|14
+158|OMG|2|False|14
+159|One|1|False|15
+160|Two|2|False|15
+161|Three|3|False|15
