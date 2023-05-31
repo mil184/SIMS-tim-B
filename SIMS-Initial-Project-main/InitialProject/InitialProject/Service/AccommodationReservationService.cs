@@ -79,23 +79,26 @@ namespace InitialProject.Service
             }
             #region renovation
             AccommodationRenovation renovation = _accommodationRenovationService.GetByAccommodationId(accommodationId);     // renovation of requested accommodation
-            if (renovation.StartDate >= startDate && renovation.StartDate <= endDate)                                       // adds to reserved dates all renovation dates
-            { 
-                for (DateTime date = renovation.StartDate; date <= renovation.EndDate; date = date.AddDays(1))
+            if(renovation != null)
+            {
+                if (renovation.StartDate >= startDate && renovation.StartDate <= endDate)                                       // adds to reserved dates all renovation dates
                 {
-                    if (!reservedDates.Contains(date))
+                    for (DateTime date = renovation.StartDate; date <= renovation.EndDate; date = date.AddDays(1))
                     {
-                        reservedDates.Add(date);
+                        if (!reservedDates.Contains(date))
+                        {
+                            reservedDates.Add(date);
+                        }
                     }
                 }
-            }
-            if (renovation.EndDate >= startDate && renovation.EndDate <= endDate)
-            {
-                for (DateTime date = renovation.StartDate; date <= renovation.EndDate; date = date.AddDays(1))
+                if (renovation.EndDate >= startDate && renovation.EndDate <= endDate)
                 {
-                    if (!reservedDates.Contains(date))
+                    for (DateTime date = renovation.StartDate; date <= renovation.EndDate; date = date.AddDays(1))
                     {
-                        reservedDates.Add(date);
+                        if (!reservedDates.Contains(date))
+                        {
+                            reservedDates.Add(date);
+                        }
                     }
                 }
             }

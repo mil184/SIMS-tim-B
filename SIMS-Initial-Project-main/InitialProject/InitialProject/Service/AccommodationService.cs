@@ -172,6 +172,22 @@ namespace InitialProject.Service
             return true;
         }
 
+        public List<Accommodation> GetAvailable(int numberOfGuests, int numberOfDays)
+        {
+            List<Accommodation> availableAccommodations = new List<Accommodation>();
+            foreach (Accommodation accommodation in _accommodationRepository.GetAll())
+            {
+                bool hasEnoughGuestCapacity = accommodation.MaxGuests >= numberOfGuests;
+                bool meetsMinReservationDays = accommodation.MinReservationDays >= numberOfDays;
+
+                if (hasEnoughGuestCapacity && meetsMinReservationDays)
+                {
+                    availableAccommodations.Add(accommodation);
+                }
+            }
+            return availableAccommodations;
+        }
+
         public Accommodation GetById(int id)
         {
             return _accommodationRepository.GetById(id);

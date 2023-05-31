@@ -200,7 +200,6 @@ namespace InitialProject.View.Guest1
             FormGuestRatings();
 
             AvailableAccommodations = new ObservableCollection<AvailableAccommodationsDTO>();
-
         }
 
         private void ReserveButton_Click(object sender, RoutedEventArgs e)
@@ -521,17 +520,31 @@ namespace InitialProject.View.Guest1
 
         private void SearchAccommodation_Click(object sender, RoutedEventArgs e)
         {
-            DateTime startDate = startDatePicker.SelectedDate ?? DateTime.MinValue;  
-            DateTime endDate = endDatePicker.SelectedDate ?? DateTime.MaxValue;
-            int numberOfGuests = int.Parse(maxGuestsTextBox.Text);
-            int numberOfDays = int.Parse(numDaysTextBox.Text);
+             int numberOfGuests = int.Parse(maxGuestsTextBox.Text);
+             int numberOfDays = int.Parse(numDaysTextBox.Text);
 
-            List <Accommodation> availableAccommodations = _accommodationService.GetAvailableAccommodations(startDate, endDate, numberOfGuests, numberOfDays);
-            AvailableAccommodations.Clear();
-            ObservableCollection<AvailableAccommodationsDTO> accommodationDTOs = ConvertDTO(new ObservableCollection<Accommodation>(availableAccommodations));
-            foreach (AvailableAccommodationsDTO accommodationDTO in accommodationDTOs)
+            if (startDatePicker.SelectedDate != null && endDatePicker.SelectedDate != null)
             {
-                AvailableAccommodations.Add(accommodationDTO);
+                DateTime startDate = startDatePicker.SelectedDate.Value;
+                DateTime endDate = endDatePicker.SelectedDate.Value;
+
+                List<Accommodation> availableAccommodations = _accommodationService.GetAvailableAccommodations(startDate, endDate, numberOfGuests, numberOfDays);
+                AvailableAccommodations.Clear();
+                ObservableCollection<AvailableAccommodationsDTO> accommodationDTOs = ConvertDTO(new ObservableCollection<Accommodation>(availableAccommodations));
+                foreach (AvailableAccommodationsDTO accommodationDTO in accommodationDTOs)
+                {
+                    AvailableAccommodations.Add(accommodationDTO);
+                }
+            }
+            else
+            {
+                List<Accommodation> availableAccommodations = _accommodationService.GetAvailable(numberOfGuests, numberOfDays);
+                AvailableAccommodations.Clear();
+                ObservableCollection<AvailableAccommodationsDTO> accommodationDTOs = ConvertDTO(new ObservableCollection<Accommodation>(availableAccommodations));
+                foreach (AvailableAccommodationsDTO accommodationDTO in accommodationDTOs)
+                {
+                    AvailableAccommodations.Add(accommodationDTO);
+                }
             }
         }
 
@@ -548,8 +561,29 @@ namespace InitialProject.View.Guest1
                     _accommodationReservationService.Save(reservation);
 
                     MessageBox.Show("Reservation created successfully.");
+                    ResetFields();
                 }
                 return;
+            }
+        }
+
+        private void ResetFields()
+        {
+            maxGuestsTextBox.Text = string.Empty;
+            numDaysTextBox.Text = string.Empty;
+            startDatePicker.SelectedDate = null;
+            endDatePicker.SelectedDate = null;
+        }
+
+        private void ShowDates_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedAvailableAccommodation != null)
+            {
+                int numberOfDays = int.Parse(numDaysTextBox.Text);
+                int numberOfGuests = int.Parse(maxGuestsTextBox.Text);
+
+                AvailableDates availableDates = new AvailableDates(SelectedAvailableAccommodation, _accommodationService, _accommodationReservationService, numberOfDays, numberOfGuests, LoggedInUser);
+                availableDates.ShowDialog();
             }
         }
     }
