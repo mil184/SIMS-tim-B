@@ -16,12 +16,14 @@ namespace InitialProject.Service
         private readonly AccommodationRepository _accommodationRepository;
         private readonly LocationService _locationService;
         private readonly AccommodationRenovationService _accommodationRenovationService;
+        private readonly AccommodationReservationService _accommodationReservationService;
 
         public AccommodationService()
         {
             _accommodationRepository = new AccommodationRepository();
             _locationService = new LocationService();
             _accommodationRenovationService = new AccommodationRenovationService();
+            _accommodationReservationService = new AccommodationReservationService();
 
             SetRenovatedStatus();
         }
@@ -138,6 +140,52 @@ namespace InitialProject.Service
             }
 
             return accommodations;
+        }
+
+        public List<Accommodation> GetAvailableAccommodations(DateTime startDate, DateTime endDate, int numberOfGuests, int numberOfDays)
+        {
+            List<Accommodation> availableAccommodations = new List<Accommodation>();
+            foreach (Accommodation accommodation in _accommodationRepository.GetAll())
+            {
+                bool isAvailable = IsAccommodationAvailable(accommodation, startDate, endDate);
+                bool hasEnoughGuestCapacity = accommodation.MaxGuests >= numberOfGuests;
+                bool meetsMinReservationDays = accommodation.MinReservationDays >= numberOfDays;
+
+                if (isAvailable && hasEnoughGuestCapacity && meetsMinReservationDays)
+                {
+                    availableAccommodations.Add(accommodation);
+                }
+            }
+            return availableAccommodations;
+        }
+
+        public bool IsAccommodationAvailable(Accommodation accommodation, DateTime startDate, DateTime endDate)
+        {
+            List<AccommodationReservation> reservations = _accommodationReservationService.GetByAccommodationId(accommodation.Id);
+            foreach(AccommodationReservation reservation in reservations)
+            {
+                if(startDate <= reservation.EndDate && endDate >= reservation.StartDate)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public List<Accommodation> GetAvailable(int numberOfGuests, int numberOfDays)
+        {
+            List<Accommodation> availableAccommodations = new List<Accommodation>();
+            foreach (Accommodation accommodation in _accommodationRepository.GetAll())
+            {
+                bool hasEnoughGuestCapacity = accommodation.MaxGuests >= numberOfGuests;
+                bool meetsMinReservationDays = accommodation.MinReservationDays >= numberOfDays;
+
+                if (hasEnoughGuestCapacity && meetsMinReservationDays)
+                {
+                    availableAccommodations.Add(accommodation);
+                }
+            }
+            return availableAccommodations;
         }
 
         public Accommodation GetById(int id)
