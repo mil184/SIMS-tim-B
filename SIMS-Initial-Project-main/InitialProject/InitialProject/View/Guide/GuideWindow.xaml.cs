@@ -8,6 +8,8 @@ using InitialProject.Service;
 using InitialProject.ViewModel.Guide;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using iTextSharp.text.pdf.parser.clipper;
+using Org.BouncyCastle.Asn1.Crmf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -40,7 +42,7 @@ namespace InitialProject.View.Guide
         private readonly UserRepository _userRepository;
         private readonly VoucherRepository _voucherRepository;
         private readonly TourRequestService _tourRequestService;
-
+        private readonly ComplexTourService _complexTourService;
         public User CurrentUser { get; set; }
         public int CurrentTourSortIndex;
         public int CurrentRequestSortIndex;
@@ -77,6 +79,9 @@ namespace InitialProject.View.Guide
             _tourRequestService = new TourRequestService();
             _tourRequestService.Subscribe(this);
 
+            _complexTourService = new ComplexTourService();
+            _complexTourService.Subscribe(this);
+
             InitializeCollections();
             InitializeStartingSearchValues();
             InitializeComboBoxes();
@@ -90,6 +95,13 @@ namespace InitialProject.View.Guide
             CurrentTourSortIndex = 0;
             CurrentRequestSortIndex = 0;
 
+            //ComplexTour ct = new ComplexTour();
+
+            //ct.AvailableTourRequestIds.Add(1);
+            //ct.AvailableTourRequestIds.Add(2);
+
+            //_complexTourService.Save(ct);
+
         }
         private void InitializeCollections()
         {
@@ -98,6 +110,7 @@ namespace InitialProject.View.Guide
             FinishedTours = new ObservableCollection<GuideTourDTO>(GuideDTOConverter.ConvertToDTO(_tourService.GetFinishedTours(CurrentUser), _locationService));
             RatedTours = new ObservableCollection<GuideTourDTO>(GuideDTOConverter.ConvertToDTO(_tourService.GetRatedTours(CurrentUser), _locationService));
             PendingRequests = new ObservableCollection<GuideRequestDTO>(GuideDTOConverter.ConvertToDTO(_tourRequestService.GetPendingRequests(CurrentUser), _locationService));
+            ComplexTourRequests = new ObservableCollection<GuideComplexTourDTO>(GuideDTOConverter.ConvertToDTO(_complexTourService.GetAll(), _tourRequestService, _locationService, _complexTourService));
 
             RequestCountries = new ObservableCollection<string>();
             RequestCities = new ObservableCollection<string>();
@@ -110,6 +123,11 @@ namespace InitialProject.View.Guide
 
             Parameters = new RequestFilterParameters();
             Parameters.User = CurrentUser;
+
+            Messages = new ObservableCollection<GuideMessage>();
+
+            Messages.Add( new GuideMessage("You have become a superguide for the language: ENGLISH"));
+            Messages.Add(new GuideMessage("You have become a superguide for the language: GERMAN"));
         }
 
         private void InitializeComboBoxes()
@@ -679,14 +697,14 @@ namespace InitialProject.View.Guide
 
             PendingRequests.Clear();
 
-            List<TourRequest> result = _tourRequestService.FilterRequests(Parameters);
+            //List<TourRequest> result = _tourRequestService.FilterRequests(Parameters);
 
-            List<GuideRequestDTO> searchResults = GuideDTOConverter.ConvertToDTO(result, _locationService);
+           // List<GuideRequestDTO> searchResults = GuideDTOConverter.ConvertToDTO(result, _locationService);
 
-            foreach (GuideRequestDTO dto in searchResults)
-            {
-                PendingRequests.Add(dto);
-            }
+            //foreach (GuideRequestDTO dto in searchResults)
+            //{
+            //    PendingRequests.Add(dto);
+            //}
 
         }
         private void PendingRequests_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -703,6 +721,16 @@ namespace InitialProject.View.Guide
                 CreateTourWindow createTour = new CreateTourWindow(createTourViewModel);
                 createTour.ShowDialog();
             }
+        }
+        #endregion
+
+        #region CompexTours
+        public ObservableCollection<GuideComplexTourDTO> ComplexTourRequests { get; set; }
+        public GuideComplexTourDTO SelectedComplexTourDTO { get; set; }
+        
+        private void ComplexTourRequestsDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+
         }
         #endregion
 
@@ -1286,5 +1314,14 @@ namespace InitialProject.View.Guide
         }
 
         #endregion
+
+        #region MessagesGrid
+        public ObservableCollection<GuideMessage> Messages { get; set; }
+        private void OkButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        #endregion
+
     }
 }

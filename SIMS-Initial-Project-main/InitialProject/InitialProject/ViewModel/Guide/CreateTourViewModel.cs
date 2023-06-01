@@ -49,9 +49,6 @@ namespace InitialProject.ViewModel.Guide
             InitializeComboboxes();
             Enable();
 
-            if (IsDemo)
-                StartDemoAsync();
-
             Request = request;
             if (Request != null)
                 HandleRequest();

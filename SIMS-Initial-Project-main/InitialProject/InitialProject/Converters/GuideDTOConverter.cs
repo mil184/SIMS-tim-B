@@ -100,5 +100,57 @@ namespace InitialProject.Converters
                 return userRepository.GetById(dto.UserId);
             return null;
         }
+        static public List<GuideComplexTourDTO> ConvertToDTO(List<ComplexTour> complexTours, TourRequestService tourRequestService, LocationService locationService, ComplexTourService complexTourService)
+        {
+            List<GuideComplexTourDTO> dto = new List<GuideComplexTourDTO>();
+            foreach (ComplexTour complexTour in complexTours)
+            {
+                dto.Add(ConvertToDTO(complexTour, tourRequestService, locationService, complexTourService));
+            }
+            return dto;
+        }
+        static public GuideComplexTourDTO ConvertToDTO(ComplexTour complexTour, TourRequestService tourRequestService, LocationService locationService, ComplexTourService complexTourService)
+        {
+            string locations = "";
+            string languages = "";
+            int numberOfTours = 0;
+
+            List<int> addedLocationIds = new List<int>();
+            List<string> addedLanguages = new List<string>();
+            numberOfTours = complexTourService.GetNumberOfAvailableTours(complexTour);
+
+            foreach (int requestId in complexTour.AvailableTourRequestIds)
+            {
+                Location location = locationService.GetById(tourRequestService.GetById(requestId).LocationId);
+                if (!addedLocationIds.Contains(location.Id))
+                {
+                    locations += location.City + ", " + location.Country + "\n";
+                    addedLocationIds.Add(location.Id);
+                }
+
+                string language = tourRequestService.GetById(requestId).Language;
+                if (!addedLanguages.Contains(language))
+                {
+                    languages += language += "\n";
+                    addedLanguages.Add(language);
+                }
+            }
+
+            // Remove the last "\n" from locations and languages if they are not empty
+            if (!string.IsNullOrEmpty(locations))
+                locations = locations.TrimEnd('\n');
+
+            if (!string.IsNullOrEmpty(languages))
+                languages = languages.TrimEnd('\n');
+
+            return new GuideComplexTourDTO(complexTour.Id, locations, languages, numberOfTours.ToString());
+        }
+
+        static public ComplexTour ConvertToComplexTour(GuideComplexTourDTO dto, ComplexTourService complexTourService)
+        {
+            if (dto != null)
+                return complexTourService.GetById(dto.Id);
+            return null;
+        }
     }
 }

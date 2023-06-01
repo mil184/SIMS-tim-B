@@ -25,6 +25,7 @@ namespace InitialProject.Resources.Injector
             { typeof(IRescheduleRequestRepository), new RescheduleRequestCSVRepository() },
             { typeof(IReservationCancellationRepository), new ReservationCancellationCSVRepository() },
             { typeof(ITourRequestRepository), new TourRequestCSVRepository() },
+            { typeof(IComplexTourRepository), new ComplexTourCSVRepository() },
             { typeof(IRenovationRecommendationRepository), new RenovationRecommendationCSVRepository() },
             { typeof(IUserRepository), new UserCSVRepository() },
             { typeof(IImageRepository), new ImageCSVRepository() }
