@@ -719,6 +719,7 @@ namespace InitialProject.ViewModel.Guide
         {
             Empty();
             Disable();
+            ClearAllValidations();
             IsDemo = true;
 
             while (true)

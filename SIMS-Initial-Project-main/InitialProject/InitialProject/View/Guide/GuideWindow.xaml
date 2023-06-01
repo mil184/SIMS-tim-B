@@ -46,7 +46,7 @@
                             <TextBlock Grid.Row="1" FontSize="18" Text="{Binding CurrentUser.Username, FallbackValue=BidningNotWorking}" HorizontalAlignment="Center" Foreground="#FFA500"/>
                             <TextBlock Grid.Row="2" FontSize="14" Text="Guide" HorizontalAlignment="Center" Margin="0 5 0 0" Foreground="#FFA500" FontWeight="Bold"/>
                         </Grid>
-                        <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="20 0">
+                        <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="20 0" HorizontalAlignment="Right">
                             <Button Content="  Resign&#x0a;(ALT + Q)" Width="100" Height="60" Margin="0 0 0 10" Background="#007ACC" Foreground="White" FontSize="16" BorderThickness="0" Padding="5 0">
                                 <Button.Template>
                                     <ControlTemplate TargetType="Button">
@@ -142,7 +142,10 @@
                         <RowDefinition Height ="Auto"/>
                         <RowDefinition Height ="*"/>
                     </Grid.RowDefinitions>
-                    <Image Source="/Resources/Images/mail.png" Width="24" Height="24" Margin="5" HorizontalAlignment="Center"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Image Source="/Resources/Images/mail.png" Width="24" Height="24" Margin="5" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Messages" VerticalAlignment="Center" FontSize="18" Foreground="#007ACC" FontWeight="Bold"/>
+                    </StackPanel>
                     <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="2" VerticalAlignment="Stretch">
                         <ListBox  ItemsSource="{Binding Messages}" Background="#E9F1F7" BorderThickness="3" BorderBrush="Transparent">
                             <ListBox.Resources>
