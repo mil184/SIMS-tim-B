@@ -8,6 +8,8 @@ using InitialProject.Service;
 using InitialProject.ViewModel.Guide;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using iTextSharp.text.pdf.parser.clipper;
+using Org.BouncyCastle.Asn1.Crmf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -40,7 +42,7 @@ namespace InitialProject.View.Guide
         private readonly UserRepository _userRepository;
         private readonly VoucherRepository _voucherRepository;
         private readonly TourRequestService _tourRequestService;
-
+        private readonly ComplexTourService _complexTourService;
         public User CurrentUser { get; set; }
         public int CurrentTourSortIndex;
         public int CurrentRequestSortIndex;
@@ -77,6 +79,9 @@ namespace InitialProject.View.Guide
             _tourRequestService = new TourRequestService();
             _tourRequestService.Subscribe(this);
 
+            _complexTourService = new ComplexTourService();
+            _complexTourService.Subscribe(this);
+
             InitializeCollections();
             InitializeStartingSearchValues();
             InitializeComboBoxes();
@@ -90,6 +95,13 @@ namespace InitialProject.View.Guide
             CurrentTourSortIndex = 0;
             CurrentRequestSortIndex = 0;
 
+            //ComplexTour ct = new ComplexTour();
+
+            //ct.AvailableTourRequestIds.Add(1);
+            //ct.AvailableTourRequestIds.Add(2);
+
+            //_complexTourService.Save(ct);
+
         }
         private void InitializeCollections()
         {
@@ -98,6 +110,7 @@ namespace InitialProject.View.Guide
             FinishedTours = new ObservableCollection<GuideTourDTO>(GuideDTOConverter.ConvertToDTO(_tourService.GetFinishedTours(CurrentUser), _locationService));
             RatedTours = new ObservableCollection<GuideTourDTO>(GuideDTOConverter.ConvertToDTO(_tourService.GetRatedTours(CurrentUser), _locationService));
             PendingRequests = new ObservableCollection<GuideRequestDTO>(GuideDTOConverter.ConvertToDTO(_tourRequestService.GetPendingRequests(CurrentUser), _locationService));
+            ComplexTourRequests = new ObservableCollection<GuideComplexTourDTO>(GuideDTOConverter.ConvertToDTO(_complexTourService.GetAll(), _tourRequestService, _locationService, _complexTourService));
 
             RequestCountries = new ObservableCollection<string>();
             RequestCities = new ObservableCollection<string>();
@@ -108,8 +121,13 @@ namespace InitialProject.View.Guide
             StatisticsYears = new ObservableCollection<string>();
             StatisticsMonths = new ObservableCollection<string>();
 
-            Parameters = new RequestFilterParameters();
-            Parameters.User = CurrentUser;
+            RequestParameters = new RequestFilterParameters();
+            RequestStatisticsParameters = new RequestFilterParameters();
+
+            Messages = new ObservableCollection<GuideMessage>();
+
+            Messages.Add( new GuideMessage("You have become a superguide for the language: ENGLISH"));
+            Messages.Add(new GuideMessage("You have become a superguide for the language: GERMAN"));
         }
 
         private void InitializeComboBoxes()
@@ -556,7 +574,7 @@ namespace InitialProject.View.Guide
         public ObservableCollection<string> RequestCountries { get; set; }
         public ObservableCollection<string> RequestCities { get; set; }
 
-        public RequestFilterParameters Parameters { get; set; }
+        public RequestFilterParameters RequestParameters { get; set; }
 
         private string _requestCity;
         public string RequestCityInput
@@ -639,6 +657,7 @@ namespace InitialProject.View.Guide
  
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if(!string.IsNullOrEmpty(RequestCityInput))
             RequestCountryInput = _locationService.GetCountryByCity(RequestCityInput);
 
             if (!_locationService.GetCitiesByCountry(RequestCountryInput).Contains(RequestCityInput))
@@ -667,19 +686,19 @@ namespace InitialProject.View.Guide
                 maxGuests = parsedNumber;
             }
 
-            Parameters.Language = RequestLanguageInput;
-            Parameters.StartDate = RequestStartDateInput;
-            Parameters.EndDate = RequestEndDateInput;
-            Parameters.MaxGuests = maxGuests;
-            Parameters.City = RequestCityInput;
-            Parameters.Country = RequestCountryInput;
+            RequestParameters.Language = RequestLanguageInput;
+            RequestParameters.StartDate = RequestStartDateInput;
+            RequestParameters.EndDate = RequestEndDateInput;
+            RequestParameters.MaxGuests = maxGuests;
+            RequestParameters.City = RequestCityInput;
+            RequestParameters.Country = RequestCountryInput;
         }
         private void UpdateRequests()
         {
 
             PendingRequests.Clear();
 
-            List<TourRequest> result = _tourRequestService.FilterRequests(Parameters);
+            List<TourRequest> result = _tourRequestService.Filter(RequestParameters, _tourRequestService.GetPendingRequests(CurrentUser));
 
             List<GuideRequestDTO> searchResults = GuideDTOConverter.ConvertToDTO(result, _locationService);
 
@@ -706,12 +725,24 @@ namespace InitialProject.View.Guide
         }
         #endregion
 
+        #region CompexTours
+        public ObservableCollection<GuideComplexTourDTO> ComplexTourRequests { get; set; }
+        public GuideComplexTourDTO SelectedComplexTourDTO { get; set; }
+        
+        private void ComplexTourRequestsDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+        #endregion
+
         #region RequestStatisticsTab
         public ObservableCollection<string> StatisticsCountries { get; set; }
         public ObservableCollection<string> StatisticsCities { get; set; }
 
         public ObservableCollection<string> StatisticsYears { get; set; }
         public ObservableCollection<string> StatisticsMonths { get; set; }
+
+        public RequestFilterParameters RequestStatisticsParameters { get; set; }
 
         private int _locationRequestsCount;
         public int LocationRequestsCount
@@ -953,13 +984,69 @@ namespace InitialProject.View.Guide
         }
         private void UpdateGridCounts()
         {
-            LanguageRequestsCount = _tourRequestService.FilterRequests(GetYearValue(), GetMonthValue(), "/", "/", GetLanguageValue()).Count;
-            LocationRequestsCount = _tourRequestService.FilterRequests(GetYearValue(), GetMonthValue(), GetCityValue(), GetCountryValue(), "/").Count;
-            LanguageLocationRequestsCount = _tourRequestService.FilterRequests(GetYearValue(), GetMonthValue(), GetCityValue(), GetCountryValue(), GetLanguageValue()).Count;
+
+            RequestStatisticsParameters.Country = StatisticsCountryInput == "-" ? null : StatisticsCountryInput;
+            RequestStatisticsParameters.City = StatisticsCityInput == "-" ? null : StatisticsCityInput;
+            RequestStatisticsParameters.Language = StatisticsLanguageInput == "-" ? null : StatisticsLanguageInput;
+
+
+            RequestStatisticsParameters.StartDate = GetStartDate();
+            RequestStatisticsParameters.EndDate = GetEndDate();
+
+            LanguageRequestsCount = _tourRequestService.Filter(UpdateForLanguages(RequestStatisticsParameters), _tourRequestService.GetAll()).Count;
+            LocationRequestsCount = _tourRequestService.Filter(UpdateForLocations(RequestStatisticsParameters), _tourRequestService.GetAll()).Count;
+            LanguageLocationRequestsCount = _tourRequestService.Filter(RequestStatisticsParameters, _tourRequestService.GetAll()).Count;
 
         }
 
-        private int GetMonthValue()
+        private RequestFilterParameters UpdateForLanguages(RequestFilterParameters parameters) 
+        {
+            parameters.Country = null;
+            parameters.City = null;
+            return parameters;
+        }
+        private RequestFilterParameters UpdateForLocations(RequestFilterParameters parameters)
+        {
+            parameters.Language = null;
+            return parameters;
+        }
+        private DateTime? GetStartDate() 
+        {
+
+            if(StatisticsYearInput == "Alltime") 
+            {
+                return new DateTime(1, 1, 1, 0, 0, 0);
+            }
+            if(StatisticsYearInput != "Alltime" && StatisticsMonthInput == "-") 
+            {
+                return new DateTime(int.Parse(StatisticsYearInput), 1, 1, 0, 0, 0);
+            }
+            if (StatisticsYearInput != "Alltime" && StatisticsMonthInput != "-")
+            {
+                return new DateTime(int.Parse(StatisticsYearInput), int.Parse(StatisticsMonthInput), 1, 0, 0, 0);
+            }
+
+            return null;
+        }
+        private DateTime? GetEndDate()
+        {
+
+            if (StatisticsYearInput == "Alltime")
+            {
+                return new DateTime(3000, 12, 31, 23, 59, 59);
+            }
+            if (StatisticsYearInput != "Alltime" && StatisticsMonthInput == "-")
+            {
+                return new DateTime(int.Parse(StatisticsYearInput), 12, 31, 23, 59, 59);
+            }
+            if (StatisticsYearInput != "Alltime" && StatisticsMonthInput != "-")
+            {
+                return new DateTime(int.Parse(StatisticsYearInput), GetMonthValue().Value, DateTime.DaysInMonth(int.Parse(StatisticsYearInput), int.Parse(StatisticsMonthInput)), 23, 59, 59);
+            }
+
+            return null;
+        }
+        private int? GetMonthValue()
         {
             switch (StatisticsMonthInput)
             {
@@ -988,7 +1075,7 @@ namespace InitialProject.View.Guide
                 case "DEC":
                     return 12;
                 default:
-                    return -1;
+                    return null;
             }
         }
         private int GetYearValue()
@@ -1286,5 +1373,14 @@ namespace InitialProject.View.Guide
         }
 
         #endregion
+
+        #region MessagesGrid
+        public ObservableCollection<GuideMessage> Messages { get; set; }
+        private void OkButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        #endregion
+
     }
 }

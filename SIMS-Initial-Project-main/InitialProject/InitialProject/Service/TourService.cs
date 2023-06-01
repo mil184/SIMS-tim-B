@@ -50,6 +50,19 @@ namespace InitialProject.Service
             }
             return tours;
         }
+        public List<Tour> GetGuideTours(User user)
+        {
+            List<Tour> tours = new List<Tour>();
+
+            foreach (Tour tour in GetAll())
+            {
+                if (tour.GuideId == user.Id)
+                {
+                    tours.Add(tour);
+                }
+            }
+            return tours;
+        }
         public List<Tour> GetAllUnabortedGuideTours(User user)
         {
             List<Tour> tours = new List<Tour>();

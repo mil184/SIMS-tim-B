@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,16 +9,15 @@ namespace InitialProject.Model.DTO
 {
     public class RequestFilterParameters
     {
-        public string Country;
-        public string City;
-        public string Language;
+        public string? Country;
+        public string? City;
+        public string? Language;
         public int? MaxGuests;
         public DateTime? StartDate;
         public DateTime? EndDate;
-        public User User;
 
         public RequestFilterParameters() { }
-        public RequestFilterParameters(string country, string city, string language, int? maxGuests, DateTime? startTime, DateTime? endTime, User user)
+        public RequestFilterParameters(string? country, string? city, string? language, int? maxGuests, DateTime? startTime, DateTime? endTime)
         {
             Country = country;
             City = city;
@@ -25,7 +25,6 @@ namespace InitialProject.Model.DTO
             MaxGuests = maxGuests;
             StartDate = startTime;
             EndDate = endTime;
-            User = user;   
         }
     }
 }

@@ -48,6 +48,7 @@ namespace InitialProject.View.Guide
         private void btnCreateTour_Click(object sender, RoutedEventArgs e)
         {
             _viewModel.Save();
+            Close();
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)

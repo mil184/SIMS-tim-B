@@ -49,9 +49,6 @@ namespace InitialProject.ViewModel.Guide
             InitializeComboboxes();
             Enable();
 
-            if (IsDemo)
-                StartDemoAsync();
-
             Request = request;
             if (Request != null)
                 HandleRequest();
@@ -722,6 +719,7 @@ namespace InitialProject.ViewModel.Guide
         {
             Empty();
             Disable();
+            ClearAllValidations();
             IsDemo = true;
 
             while (true)
