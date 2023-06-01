@@ -121,8 +121,8 @@ namespace InitialProject.View.Guide
             StatisticsYears = new ObservableCollection<string>();
             StatisticsMonths = new ObservableCollection<string>();
 
-            Parameters = new RequestFilterParameters();
-            Parameters.User = CurrentUser;
+            RequestParameters = new RequestFilterParameters();
+            RequestStatisticsParameters = new RequestFilterParameters();
 
             Messages = new ObservableCollection<GuideMessage>();
 
@@ -574,7 +574,7 @@ namespace InitialProject.View.Guide
         public ObservableCollection<string> RequestCountries { get; set; }
         public ObservableCollection<string> RequestCities { get; set; }
 
-        public RequestFilterParameters Parameters { get; set; }
+        public RequestFilterParameters RequestParameters { get; set; }
 
         private string _requestCity;
         public string RequestCityInput
@@ -657,6 +657,7 @@ namespace InitialProject.View.Guide
  
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if(!string.IsNullOrEmpty(RequestCityInput))
             RequestCountryInput = _locationService.GetCountryByCity(RequestCityInput);
 
             if (!_locationService.GetCitiesByCountry(RequestCountryInput).Contains(RequestCityInput))
@@ -685,26 +686,26 @@ namespace InitialProject.View.Guide
                 maxGuests = parsedNumber;
             }
 
-            Parameters.Language = RequestLanguageInput;
-            Parameters.StartDate = RequestStartDateInput;
-            Parameters.EndDate = RequestEndDateInput;
-            Parameters.MaxGuests = maxGuests;
-            Parameters.City = RequestCityInput;
-            Parameters.Country = RequestCountryInput;
+            RequestParameters.Language = RequestLanguageInput;
+            RequestParameters.StartDate = RequestStartDateInput;
+            RequestParameters.EndDate = RequestEndDateInput;
+            RequestParameters.MaxGuests = maxGuests;
+            RequestParameters.City = RequestCityInput;
+            RequestParameters.Country = RequestCountryInput;
         }
         private void UpdateRequests()
         {
 
             PendingRequests.Clear();
 
-            //List<TourRequest> result = _tourRequestService.FilterRequests(Parameters);
+            List<TourRequest> result = _tourRequestService.Filter(RequestParameters, _tourRequestService.GetPendingRequests(CurrentUser));
 
-           // List<GuideRequestDTO> searchResults = GuideDTOConverter.ConvertToDTO(result, _locationService);
+            List<GuideRequestDTO> searchResults = GuideDTOConverter.ConvertToDTO(result, _locationService);
 
-            //foreach (GuideRequestDTO dto in searchResults)
-            //{
-            //    PendingRequests.Add(dto);
-            //}
+            foreach (GuideRequestDTO dto in searchResults)
+            {
+                PendingRequests.Add(dto);
+            }
 
         }
         private void PendingRequests_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -740,6 +741,8 @@ namespace InitialProject.View.Guide
 
         public ObservableCollection<string> StatisticsYears { get; set; }
         public ObservableCollection<string> StatisticsMonths { get; set; }
+
+        public RequestFilterParameters RequestStatisticsParameters { get; set; }
 
         private int _locationRequestsCount;
         public int LocationRequestsCount
@@ -981,13 +984,69 @@ namespace InitialProject.View.Guide
         }
         private void UpdateGridCounts()
         {
-            LanguageRequestsCount = _tourRequestService.FilterRequests(GetYearValue(), GetMonthValue(), "/", "/", GetLanguageValue()).Count;
-            LocationRequestsCount = _tourRequestService.FilterRequests(GetYearValue(), GetMonthValue(), GetCityValue(), GetCountryValue(), "/").Count;
-            LanguageLocationRequestsCount = _tourRequestService.FilterRequests(GetYearValue(), GetMonthValue(), GetCityValue(), GetCountryValue(), GetLanguageValue()).Count;
+
+            RequestStatisticsParameters.Country = StatisticsCountryInput == "-" ? null : StatisticsCountryInput;
+            RequestStatisticsParameters.City = StatisticsCityInput == "-" ? null : StatisticsCityInput;
+            RequestStatisticsParameters.Language = StatisticsLanguageInput == "-" ? null : StatisticsLanguageInput;
+
+
+            RequestStatisticsParameters.StartDate = GetStartDate();
+            RequestStatisticsParameters.EndDate = GetEndDate();
+
+            LanguageRequestsCount = _tourRequestService.Filter(UpdateForLanguages(RequestStatisticsParameters), _tourRequestService.GetAll()).Count;
+            LocationRequestsCount = _tourRequestService.Filter(UpdateForLocations(RequestStatisticsParameters), _tourRequestService.GetAll()).Count;
+            LanguageLocationRequestsCount = _tourRequestService.Filter(RequestStatisticsParameters, _tourRequestService.GetAll()).Count;
 
         }
 
-        private int GetMonthValue()
+        private RequestFilterParameters UpdateForLanguages(RequestFilterParameters parameters) 
+        {
+            parameters.Country = null;
+            parameters.City = null;
+            return parameters;
+        }
+        private RequestFilterParameters UpdateForLocations(RequestFilterParameters parameters)
+        {
+            parameters.Language = null;
+            return parameters;
+        }
+        private DateTime? GetStartDate() 
+        {
+
+            if(StatisticsYearInput == "Alltime") 
+            {
+                return new DateTime(1, 1, 1, 0, 0, 0);
+            }
+            if(StatisticsYearInput != "Alltime" && StatisticsMonthInput == "-") 
+            {
+                return new DateTime(int.Parse(StatisticsYearInput), 1, 1, 0, 0, 0);
+            }
+            if (StatisticsYearInput != "Alltime" && StatisticsMonthInput != "-")
+            {
+                return new DateTime(int.Parse(StatisticsYearInput), int.Parse(StatisticsMonthInput), 1, 0, 0, 0);
+            }
+
+            return null;
+        }
+        private DateTime? GetEndDate()
+        {
+
+            if (StatisticsYearInput == "Alltime")
+            {
+                return new DateTime(3000, 12, 31, 23, 59, 59);
+            }
+            if (StatisticsYearInput != "Alltime" && StatisticsMonthInput == "-")
+            {
+                return new DateTime(int.Parse(StatisticsYearInput), 12, 31, 23, 59, 59);
+            }
+            if (StatisticsYearInput != "Alltime" && StatisticsMonthInput != "-")
+            {
+                return new DateTime(int.Parse(StatisticsYearInput), GetMonthValue().Value, DateTime.DaysInMonth(int.Parse(StatisticsYearInput), int.Parse(StatisticsMonthInput)), 23, 59, 59);
+            }
+
+            return null;
+        }
+        private int? GetMonthValue()
         {
             switch (StatisticsMonthInput)
             {
@@ -1016,7 +1075,7 @@ namespace InitialProject.View.Guide
                 case "DEC":
                     return 12;
                 default:
-                    return -1;
+                    return null;
             }
         }
         private int GetYearValue()
