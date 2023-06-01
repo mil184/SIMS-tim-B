@@ -48,6 +48,7 @@ namespace InitialProject.View.Guest1
         private readonly RescheduleRequestService _rescheduleRequestService;
         private readonly GuestReviewService _guestReviewService;
         private readonly ReservationCancellationService _reservationCancellationService;
+        private readonly ForumService _forumService;
 
         private string searchName;
         public string SearchName
@@ -170,6 +171,9 @@ namespace InitialProject.View.Guest1
 
             _reservationCancellationService = new ReservationCancellationService();
             _reservationCancellationService.Subscribe(this);
+
+            _forumService = new ForumService();
+            _forumService.Subscribe(this);
 
             AllAccommodations = new ObservableCollection<Accommodation>(_accommodationService.GetAll());
             PresentableAccommodations = ConvertToDTO(new List<Accommodation>(AllAccommodations));
@@ -570,6 +574,17 @@ namespace InitialProject.View.Guest1
                 AvailableDates availableDates = new AvailableDates(SelectedAvailableAccommodation, _accommodationService, _accommodationReservationService, numberOfDays, numberOfGuests, LoggedInUser);
                 availableDates.ShowDialog();
             }
+        }
+
+        private void CreateForum_Click(object sender, RoutedEventArgs e)
+        {
+            CreateForum createForum = new CreateForum(_forumService, _locationService, LoggedInUser);
+            createForum.ShowDialog();
+        }
+
+        private void CloseForum_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
