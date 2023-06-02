@@ -32,18 +32,23 @@ namespace InitialProject.ViewModel.Guide
         private readonly ImageRepository _imageRepository;
         private readonly CheckpointService _checkpointService;
         private readonly TourRequestService _tourRequestService;
-
+        private readonly ComplexTourService _complexTourService;
         public User LoggedInUser { get; set; }
         public TourRequest Request { get; set; }
-        public CreateTourViewModel(User user, TourService tourService, LocationService locationService, ImageRepository imageRepository, CheckpointService checkpointService, TourRequestService tourRequestService, TourRequest request)
+        public ComplexTour ComplexTour {get; set; }
+
+        public DateOnly? DateSlot { get; set; }
+        public CreateTourViewModel(User user, TourService tourService, LocationService locationService, ImageRepository imageRepository, CheckpointService checkpointService, TourRequestService tourRequestService, TourRequest request, ComplexTour complexTour, ComplexTourService complexTourService, DateOnly? dateSlot)
         {
             _tourService = tourService;
             _locationService = locationService;
             _imageRepository = imageRepository;
             _checkpointService = checkpointService;
             _tourRequestService = tourRequestService;
+            _complexTourService = complexTourService;
 
             LoggedInUser = user;
+            DateSlot = dateSlot;
 
             InitializeCollections();
             InitializeComboboxes();
@@ -52,6 +57,8 @@ namespace InitialProject.ViewModel.Guide
             Request = request;
             if (Request != null)
                 HandleRequest();
+
+            ComplexTour = complexTour;
 
             ImageListBorderColor = (SolidColorBrush)(new BrushConverter().ConvertFrom("#007ACC"));
             SetImage(ImageIndex);
@@ -86,7 +93,16 @@ namespace InitialProject.ViewModel.Guide
             MaximumGuests = Request.MaxGuests.ToString();
             TourCountry = _locationService.GetById(Request.LocationId).Country;
             TourCity = _locationService.GetById(Request.LocationId).City;
+            if (DateSlot == null)
+            {
+                SelectedDateInDatePicker = Request.StartTime;
+            }
+            else 
+            {
+                SelectedDateInDatePicker = new DateTime(DateSlot.Value.Year, DateSlot.Value.Month, DateSlot.Value.Day,0,0,0);
+            }
         }
+
         #endregion
 
         #region BasicInfo
@@ -409,11 +425,23 @@ namespace InitialProject.ViewModel.Guide
 
             DateTime dateTime = new DateTime(SelectedDateInDatePicker.Value.Date.Year, SelectedDateInDatePicker.Value.Date.Month, SelectedDateInDatePicker.Value.Date.Day, int.Parse(SelectedHour), int.Parse(SelectedMinute), 0);
            
-            if (Request != null && (dateTime < Request.StartTime || dateTime > Request.EndTime))
+            if (Request != null && DateSlot == null && (dateTime < Request.StartTime || dateTime > Request.EndTime))
             {
                 DateValidation = "The Request Interval Is (" + Request.StartTime.Date.ToString() + " - " + Request.EndTime.Date.ToString() + ")";
                 DateBorderColor = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFA500"));
                 return;
+            }
+            if(DateSlot != null)
+            {
+                DateTime start = new DateTime(DateSlot.Value.Year, DateSlot.Value.Month, DateSlot.Value.Day, 0, 0, 0);
+                DateTime end = new DateTime(DateSlot.Value.Year, DateSlot.Value.Month, DateSlot.Value.Day, 23, 59, 59);
+
+                if (dateTime < start || dateTime > end){
+                    DateValidation = "The Request Interval Is (" + start.ToString() + " - " + end.ToString() + ")";
+                    DateBorderColor = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFA500"));
+                    return;
+                }
+ 
             }
             if (dateTime < DateTime.Now)
             {
@@ -1252,6 +1280,8 @@ namespace InitialProject.ViewModel.Guide
                 if (Request != null)
                     UpdateRequest();
 
+                if (ComplexTour != null && DateSlot != null)
+                    UpdateComplexTour(savedTour);
             }
         }
         private void UpdateCheckpoints(Tour tour, ObservableCollection<int> checkpointIds) 
@@ -1268,6 +1298,13 @@ namespace InitialProject.ViewModel.Guide
             Request.GuideId = LoggedInUser.Id;
             Request.Status = Resources.Enums.RequestStatus.accepted;
             _tourRequestService.Update(Request);
+        }
+        private void UpdateComplexTour(Tour tour)
+        {
+            ComplexTour.AcceptedTourIdsByGuideIds.Add(LoggedInUser.Id, tour.Id);
+            ComplexTour.AvailableTourRequestIds.Remove(Request.Id);
+
+            _complexTourService.Update(ComplexTour);
         }
         #endregion
 

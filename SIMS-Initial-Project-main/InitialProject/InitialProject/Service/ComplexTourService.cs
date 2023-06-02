@@ -23,31 +23,49 @@ namespace InitialProject.Service
             _complexTourRepository = Injector.CreateInstance<IComplexTourRepository>();
             _tourService = new TourService();
         }   
-        public List<Dictionary<int, int>> GetDictionaries() 
-        {
-            List<Dictionary<int, int>> dictionaries = new List<Dictionary<int, int>>();
+ 
 
-            foreach (ComplexTour complexTour in GetAll()) 
+        public List<DateOnly> GetAvailableTimeSlots(User user, ComplexTour complexTour, TourRequest tourRequest)
+        {
+            List<DateOnly> usedDatesByToursInComplexTour = new List<DateOnly>();
+
+            List<DateOnly> usedDatesByToursByUser = new List<DateOnly>();
+
+            List<DateOnly> tourRequestSlots = new List<DateOnly>();
+
+            foreach (int id in complexTour.AcceptedTourIdsByGuideIds.Values)
             {
-                dictionaries.Add(complexTour.AcceptedTourIdsByGuideIds);
+                Tour tour = _tourService.GetById(id);
+                DateOnly date = new DateOnly(tour.StartTime.Year, tour.StartTime.Month, tour.StartTime.Day);
+                usedDatesByToursInComplexTour.Add(date);
             }
-            return dictionaries;
-        }  
 
-        public List<Tour> GetToursByGuide(User user) 
-        {
-            List<Tour> tours = new List<Tour>();
-
-            foreach (Dictionary<int, int> dictionary in GetDictionaries()) 
+            for (DateTime iterator = tourRequest.StartTime; iterator <= tourRequest.EndTime; iterator = iterator.AddDays(1))
             {
-                if (dictionary.ContainsKey(user.Id)) 
+                tourRequestSlots.Add(new DateOnly(iterator.Year, iterator.Month, iterator.Day));
+            }
+
+            usedDatesByToursByUser = _tourService.GetFilledTimeSlots(user);
+
+            tourRequestSlots.RemoveAll(date => usedDatesByToursInComplexTour.Contains(date));
+
+            tourRequestSlots.RemoveAll(date => usedDatesByToursByUser.Contains(date));
+
+            return tourRequestSlots;
+        }
+        public List<ComplexTour> GetAvailableComplexTours(User user) 
+        {
+            List<ComplexTour> tours = new List<ComplexTour>();
+
+            foreach(ComplexTour complexTour in GetAll()) 
+            {
+                if (!complexTour.AcceptedTourIdsByGuideIds.ContainsKey(user.Id)) 
                 {
-                    tours.Add(_tourService.GetById(dictionary.GetValueOrDefault(user.Id)));
+                    tours.Add(complexTour);
                 }
             }
             return tours;
         }
-
         public int GetNumberOfAvailableTours(ComplexTour complexTour) 
         {
             return complexTour.AvailableTourRequestIds.Count;

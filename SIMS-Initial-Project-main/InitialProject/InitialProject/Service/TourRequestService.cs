@@ -171,7 +171,7 @@ namespace InitialProject.Service
 
             foreach (TourRequest request in GetAll())
             {
-                if (request.Status == Resources.Enums.RequestStatus.pending)
+                if (request.Status == Resources.Enums.RequestStatus.pending && !request.IsInComplexTour)
                 {
                     bool canBeAdded = true;
                     foreach (Tour tour in _tourService.GetGuideTours(user))

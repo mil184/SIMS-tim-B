@@ -47,13 +47,22 @@ namespace InitialProject.Model
                 AvailableTourRequestIds.Add(int.Parse(id));
             }
 
-            foreach (string element in values[2].Split(','))
+            string acceptedTourIdsString = values[2];
+            if (!string.IsNullOrEmpty(acceptedTourIdsString))
             {
-                int guideId = int.Parse(element.Split(":")[0]);
-                int tourId = int.Parse(element.Split(":")[1]);
+                foreach (string element in acceptedTourIdsString.Split(','))
+                {
+                    string[] parts = element.Split(":");
+                    if (parts.Length == 2)
+                    {
+                        int guideId = int.Parse(parts[0]);
+                        int tourId = int.Parse(parts[1]);
 
-                AcceptedTourIdsByGuideIds.Add(guideId, tourId);
+                        AcceptedTourIdsByGuideIds.Add(guideId, tourId);
+                    }
+                }
             }
         }
+
     }
 }

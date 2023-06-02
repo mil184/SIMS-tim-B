@@ -283,6 +283,24 @@ namespace InitialProject.Service
             }
             return mostVisitedTour;
         }
+
+        public List<DateOnly> GetFilledTimeSlots(User user) 
+        {
+            List<DateOnly> dates = new List<DateOnly>();
+
+            foreach(Tour tour in GetUpcomingTours(user)) 
+            {
+                DateOnly date = new DateOnly(tour.StartTime.Year, tour.StartTime.Month, tour.StartTime.Day);
+
+                    if(!dates.Contains(date)) 
+                    {
+                        dates.Add(date);
+                    }
+            }
+
+            return dates;
+        }
+
         public Tour GetById(int id)
         {
             return _tourRepository.GetById(id);

@@ -227,8 +227,9 @@ namespace InitialProject.ViewModel.Guest2
                 int.Parse(MaxGuests),
                 StartDateTime,
                 EndDateTime,
-                LoggedInUser.Id
-                );
+                LoggedInUser.Id,
+                false
+                ) ;
 
             _tourRequestService.Save(tourRequest);
         }
