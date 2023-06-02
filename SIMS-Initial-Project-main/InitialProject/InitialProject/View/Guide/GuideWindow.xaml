@@ -9,40 +9,6 @@
         Icon ="/Resources/Images/favicon.ico"
         Background="#F2F2F2"
         WindowStartupLocation="CenterScreen">
-    <Window.Resources>
-        <Style x:Key="AppFont" TargetType="TextBlock">
-            <Setter Property="FontFamily" Value="Fonts/Pacifico-Regular.ttf" />
-        </Style>
-        <DataTemplate x:Key="MessageTemplate">
-            <Grid Margin="5">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <TextBlock Grid.Column="0" Grid.Row="0" Text="{Binding Text}" />
-                <Grid Grid.Column="1" Grid.Row="0">
-                    <Grid.Style>
-                        <Style TargetType="Grid">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding Accepted}" Value="True">
-                                    <Setter Property="Visibility" Value="Collapsed" />
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding Accepted}" Value="False">
-                                    <Setter Property="Visibility" Value="Collapsed" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Grid.Style>
-                    <Button Content="Accept" Click="AcceptButton_Click" />
-                    <Button Content="Decline" Click="DeclineButton_Click" Grid.Column="1" />
-                </Grid>
-            </Grid>
-        </DataTemplate>
-    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -80,7 +46,7 @@
                             <TextBlock Grid.Row="1" FontSize="18" Text="{Binding CurrentUser.Username, FallbackValue=BidningNotWorking}" HorizontalAlignment="Center" Foreground="#FFA500"/>
                             <TextBlock Grid.Row="2" FontSize="14" Text="Guide" HorizontalAlignment="Center" Margin="0 5 0 0" Foreground="#FFA500" FontWeight="Bold"/>
                         </Grid>
-                        <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="20 0">
+                        <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="20 0" HorizontalAlignment="Right">
                             <Button Content="  Resign&#x0a;(ALT + Q)" Width="100" Height="60" Margin="0 0 0 10" Background="#007ACC" Foreground="White" FontSize="16" BorderThickness="0" Padding="5 0">
                                 <Button.Template>
                                     <ControlTemplate TargetType="Button">
@@ -135,23 +101,21 @@
             </Border>
             <!-- User info and buttons -->
             <Border Grid.Column="2" Background="#E9F1F7" BorderThickness="3" BorderBrush="#007ACC" CornerRadius="5" Margin="5">
+                
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="10">
-                    <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
-                        <Image Source="/Resources/Images/info.png" Width="24" Height="24" Margin="0 0 10 0"/>
-                        <TextBlock FontSize="12" FontStyle="Italic" Text="Navigate through data with" VerticalAlignment="Center" Foreground="#007ACC"/>
-                        <TextBlock FontSize="12" FontStyle="Italic" VerticalAlignment="Center" Foreground="#FFA500">
-                        <Run Text="  &#x25B2;"/>
-                        <LineBreak/>
-                        <Run Text="  &#x25BC;"/>
-                        </TextBlock>
-                    </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
                         <Image Source="/Resources/Images/info.png" Width="24" Height="24" Margin="0 0 10 0"/>
                         <TextBlock FontSize="12" FontStyle="Italic" Text="Navigate through tabs with" VerticalAlignment="Center" Foreground="#007ACC"/>
                         <TextBlock FontSize="12" FontStyle="Italic" VerticalAlignment="Center" Foreground="#FFA500">
+                        <Run Text=" CTRL +"/>
                         <Run Text=" &#x25C0;"/>
                         <Run Text=" &#x25B6;"/>
                         </TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
+                        <Image Source="/Resources/Images/info.png" Width="24" Height="24" Margin="0 0 10 0"/>
+                        <TextBlock FontSize="12" FontStyle="Italic" Text="Navigate through data with" VerticalAlignment="Center" Foreground="#007ACC"/>
+                        <TextBlock FontSize="12" FontStyle="Italic" VerticalAlignment="Center" Foreground="#FFA500" Text=" TAB"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
                         <Image Source="/Resources/Images/info.png" Width="24" Height="24" Margin="0 0 10 0"/>
@@ -176,12 +140,60 @@
                 <Grid Name ="messageGrid">
                     <Grid.RowDefinitions>
                         <RowDefinition Height ="Auto"/>
-                        <RowDefinition Height ="Auto"/>
+                        <RowDefinition Height ="*"/>
                     </Grid.RowDefinitions>
-                    <Image Source="/Resources/Images/mail.png" Width="24" Height="24" Margin="5" HorizontalAlignment="Left"/>
-                    <StackPanel Grid.Row="2" Name="MessagesStackPanel">
-
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Image Source="/Resources/Images/mail.png" Width="24" Height="24" Margin="5" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Messages" VerticalAlignment="Center" FontSize="18" Foreground="#007ACC" FontWeight="Bold"/>
                     </StackPanel>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="2" VerticalAlignment="Stretch">
+                        <ListBox  ItemsSource="{Binding Messages}" Background="#E9F1F7" BorderThickness="3" BorderBrush="Transparent">
+                            <ListBox.Resources>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="Padding" Value="5" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="ListBoxItem">
+                                                <Border Background="#E9F1F7" BorderThickness="3" BorderBrush="#007ACC" CornerRadius="5" Margin="5">
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*" />
+                                                            <ColumnDefinition Width="Auto" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <TextBlock Text="{Binding Text}" VerticalAlignment="Center" Margin="5" />
+                                                        <Button Grid.Column="1" Content="OK" Margin="5"  Width="50" FontSize="12" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Left" Click="OkButton_Click">
+                                                            <Button.Template>
+                                                                <ControlTemplate TargetType="Button">
+                                                                    <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="10">
+                                                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                                                    </Border>
+                                                                    <ControlTemplate.Triggers>
+                                                                        <EventTrigger RoutedEvent="Button.Click">
+                                                                            <BeginStoryboard>
+                                                                                <Storyboard>
+                                                                                    <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
+                                                                                </Storyboard>
+                                                                            </BeginStoryboard>
+                                                                        </EventTrigger>
+                                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                                            <Setter TargetName="border" Property="Background" Value="#005F8B" />
+                                                                        </Trigger>
+                                                                        <Trigger Property="IsPressed" Value="True">
+                                                                            <Setter TargetName="border" Property="Background" Value="#00415E" />
+                                                                        </Trigger>
+                                                                    </ControlTemplate.Triggers>
+                                                                </ControlTemplate>
+                                                            </Button.Template>
+                                                        </Button>
+                                                    </Grid>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ListBox.Resources>
+                        </ListBox>
+                    </ScrollViewer>
                 </Grid>
             </Border>
 
@@ -275,7 +287,7 @@
                             <ColumnDefinition Width="605*"/>
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Content="Create Tour&#x0a;(CTRL + A)" Margin="5,0,0,0" Height="50" Width="130" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Left" Click="CreateButton_Click" Grid.ColumnSpan="2">
+                        <Button Grid.Column="0" Content="Create Tour&#x0a;(CTRL + A)" Margin="5,0,0,0" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Left" Click="CreateButton_Click" Grid.ColumnSpan="2">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -299,7 +311,7 @@
                                 </ControlTemplate>
                             </Button.Template>
                         </Button>
-                        <Button Grid.Column="3" Content="Start Tour&#x0a; (ENTER)" Height="50" Width="130" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Center" Click="StartTourButton_Click">
+                        <Button Grid.Column="3" Content="Start Tour&#x0a; (ENTER)" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Center" Click="StartTourButton_Click">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -324,7 +336,7 @@
                             </Button.Template>
                         </Button>
                     </Grid>
-                    <GroupBox Header="Today's Tours" FontSize="28" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2">
+                    <GroupBox Header="Today's Tours"  FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2">
                         <StackPanel Margin="0 20 0 0">
                             <ScrollViewer Height="300" VerticalScrollBarVisibility="Auto">
                                 <DataGrid Margin ="10" ItemsSource="{Binding CurrentTours}" SelectedItem="{Binding Path=SelectedCurrentTourDTO}" AutoGenerateColumns="False" Name="CurrentToursDataGrid" IsReadOnly="true" MouseDoubleClick="CurrentToursDataGrid_MouseDoubleClick" HorizontalAlignment="Stretch">
@@ -363,7 +375,7 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <Button Grid.Column="0" Content="Create Tour&#x0a;(CTRL + A)" Margin="0 0 10 0" Height="50" Width="130" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Left" Click="CreateButton_Click">
+                            <Button Grid.Column="0" Content="Create Tour&#x0a;(CTRL + A)" Margin="0 0 10 0" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Left" Click="CreateButton_Click">
                                 <Button.Template>
                                     <ControlTemplate TargetType="Button">
                                         <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -387,7 +399,7 @@
                                     </ControlTemplate>
                                 </Button.Template>
                             </Button>
-                            <Button Grid.Column="1" Content="Generate Report&#x0a;    (CTRL + R)" Margin="0 0 5 0" Height="50" Width="160" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Right" Click="GenerateReportButton_Click">
+                            <Button Grid.Column="1" Content="Generate Report&#x0a;    (CTRL + R)" Margin="0 0 5 0" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Right" Click="GenerateReportButton_Click">
                                 <Button.Template>
                                     <ControlTemplate TargetType="Button">
                                         <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -412,7 +424,7 @@
                                 </Button.Template>
                             </Button>
                         </Grid>
-                        <Button Grid.Column="1" Content="Abort Selected Tour&#x0a;         (ENTER)" Margin="0 0 5 0" Height="50" Width="160" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Right" Click="AbortButton_Click">
+                        <Button Grid.Column="1" Content="Abort Selected Tour&#x0a;         (ENTER)" Margin="0 0 5 0" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Right" Click="AbortButton_Click">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -438,7 +450,7 @@
                         </Button>
 
                     </Grid>
-                    <GroupBox Header="Upcoming Tours" FontSize="28" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2">
+                    <GroupBox Header="Upcoming Tours"  FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2">
                         <StackPanel Margin="0 20 0 0">
                             <ScrollViewer Height="300" VerticalScrollBarVisibility="Auto">
                                 <DataGrid ItemsSource="{Binding UpcomingTours}" SelectedItem="{Binding Path=SelectedUpcomingTourDTO}" AutoGenerateColumns="False" Name="UpcomingToursDataGrid" IsReadOnly="true"  HorizontalAlignment="Stretch" MouseDoubleClick="UpcomingToursDataGrid_MouseDoubleClick" Margin="10">
@@ -471,7 +483,7 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <GroupBox Header="Most Visited" FontSize="28" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Stretch">
+                        <GroupBox Header="Most Visited"  FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
@@ -490,7 +502,7 @@
                                 </Grid>
                             </Grid>
                         </GroupBox>
-                        <Button Grid.Column="2" Content="  Show Statistics&#x0a; For Selected Tour&#x0a;        (ENTER)" Margin="0 0 5 0" Height="80" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" Click="StatisticsButton_Click">
+                        <Button Grid.Column="2" Content="  Select Finished Tour&#x0a;         (ENTER)" Margin="0 0 5 0" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" Click="StatisticsButton_Click">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -515,7 +527,7 @@
                             </Button.Template>
                         </Button>
                     </Grid>
-                    <GroupBox Header="Finished Tours" FontSize="28" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2">
+                    <GroupBox Header="Finished Tours"  FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2">
                         <DataGrid Height ="240" ItemsSource="{Binding FinishedTours}" SelectedItem="{Binding Path=SelectedFinishedTourDTO}" AutoGenerateColumns="False" Name="FinishedToursDataGrid" IsReadOnly="true" MouseDoubleClick="FinishedToursDataGrid_MouseDoubleClick" Margin="10 10 10 10">
                             <DataGrid.CellStyle>
                                 <Style TargetType="DataGridCell">
@@ -539,13 +551,13 @@
                 <StackPanel Margin="10">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="14*" />
-                            <ColumnDefinition Width="249*"/>
-                            <ColumnDefinition Width="605*"/>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
-                        <Button Grid.Column="3" Content="  View Ratings For&#x0a;     Selected Tour  &#x0a;         (ENTER)" Height="80" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Right" Margin="10" Click="RatingsButton_Click">
+                        <Button Grid.Column="3" Content="Select Rated Tour&#x0a;       (ENTER)" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Right" Margin="10" Click="RatingsButton_Click">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -570,7 +582,7 @@
                             </Button.Template>
                         </Button>
                     </Grid>
-                    <GroupBox Header="Rated Tours" FontSize="28" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2">
+                    <GroupBox Header="Rated Tours"  FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2">
                         <DataGrid Height ="240" ItemsSource="{Binding RatedTours}" SelectedItem="{Binding Path=SelectedRatedTourDTO}" AutoGenerateColumns="False" Name="RatedToursDataGrid" IsReadOnly="true" MouseDoubleClick="RatedToursDataGrid_MouseDoubleClick" Margin="10 10 10 10">
                             <DataGrid.CellStyle>
                                 <Style TargetType="DataGridCell">
@@ -599,7 +611,7 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <GroupBox Header="Filters" FontSize="20" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2"
+                        <GroupBox Header="Filters"  FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2"
                     HorizontalAlignment="Stretch" Margin="10">
                             <Grid>
                                 <Grid.RowDefinitions>
@@ -614,27 +626,27 @@
                                 </Grid.ColumnDefinitions>
                                 <StackPanel Orientation="Vertical" Margin="5" Grid.Row="0" Grid.Column="0">
                                     <TextBlock Text="City:" Margin="0 0 0 5" FontSize="14"/>
-                                    <ComboBox Width="200" Height="20" FontSize="11" SelectionChanged="CbCity_SelectionChanged" ItemsSource="{Binding Path=RequestCities, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding Path=RequestCityInput, UpdateSourceTrigger=PropertyChanged}" IsEditable="True" />
+                                    <ComboBox Width="200" Height="20" FontSize="11" SelectionChanged="ComboBox_SelectionChanged" ItemsSource="{Binding Path=RequestCities, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding Path=RequestCityInput, UpdateSourceTrigger=PropertyChanged}" IsEditable="True" />
                                 </StackPanel>
                                 <StackPanel Orientation="Vertical" Margin="5" Grid.Row="0" Grid.Column="1">
                                     <TextBlock Text="Country:" Margin="0 0 0 5" FontSize="14"/>
-                                    <ComboBox Width="200" Height="20" FontSize="11" SelectionChanged="CbCountry_SelectionChanged" ItemsSource="{Binding Path=RequestCountries, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding Path=RequestCountryInput, UpdateSourceTrigger=PropertyChanged}" IsEditable="True"/>
+                                    <ComboBox Width="200" Height="20" FontSize="11" SelectionChanged="ComboBox_SelectionChanged" ItemsSource="{Binding Path=RequestCountries, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding Path=RequestCountryInput, UpdateSourceTrigger=PropertyChanged}" IsEditable="True"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Vertical" Margin="5" Grid.Row="0" Grid.Column="2">
                                     <TextBlock Text="Guests:" Margin="0 0 0 5" FontSize="14"/>
-                                    <TextBox Width="150" Height="20" FontSize="11"  TextChanged="txtGuests_TextChanged" Text="{Binding Path=RequestMaxGuestsInput, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <TextBox Width="150" Height="20" FontSize="11"  TextChanged="Text_Changed" Text="{Binding Path=RequestMaxGuestsInput, UpdateSourceTrigger=PropertyChanged}"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Vertical" Margin="5" Grid.Row="1" Grid.Column="0">
                                     <TextBlock Text="Start Date:" Margin="0 0 0 5" FontSize="14"/>
-                                    <DatePicker Width="200" Height="20" FontSize="11" SelectedDateChanged="dpStartDate_DateChanged" SelectedDate= "{Binding Path=RequestStartDateInput, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <DatePicker Width="200" Height="20" FontSize="11" SelectedDateChanged="Date_SelectionChanged" SelectedDate= "{Binding Path=RequestStartDateInput, UpdateSourceTrigger=PropertyChanged}"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Vertical" Margin="5" Grid.Row="1" Grid.Column="1">
                                     <TextBlock Text="End Date:" Margin="0 0 0 5" FontSize="14"/>
-                                    <DatePicker Width="200" Height="20" FontSize="11" SelectedDateChanged="dpEndDate_DateChanged" SelectedDate= "{Binding Path =RequestEndDateInput, UpdateSourceTrigger=PropertyChanged}" />
+                                    <DatePicker Width="200" Height="20" FontSize="11" SelectedDateChanged="Date_SelectionChanged" SelectedDate= "{Binding Path =RequestEndDateInput, UpdateSourceTrigger=PropertyChanged}" />
                                 </StackPanel>
                                 <StackPanel Orientation="Vertical" Margin="5" Grid.Row="1" Grid.Column="2">
                                     <TextBlock Text="Language:" Margin="0 0 0 5" FontSize="14"/>
-                                    <TextBox Width="150" FontSize="11" Height="20" TextChanged="txtLanguage_TextChanged" Text="{Binding Path=RequestLanguageInput, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <TextBox Width="150" FontSize="11" Height="20" TextChanged="Text_Changed" Text="{Binding Path=RequestLanguageInput, UpdateSourceTrigger=PropertyChanged}"/>
                                 </StackPanel>
 
                             </Grid>
@@ -642,7 +654,7 @@
 
 
 
-                        <Button Grid.Column="2" Content="  Show Statistics&#x0a; For Selected Tour&#x0a;        (ENTER)" Margin="0 0 5 0" Height="80" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" Click="StatisticsButton_Click">
+                        <Button Grid.Column="2" Content="Select Request&#x0a;     (ENTER)" Margin="0 0 5 0" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" Click="StatisticsButton_Click">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -667,7 +679,7 @@
                             </Button.Template>
                         </Button>
                     </Grid>
-                    <GroupBox Header="Pending Requests" FontSize="28" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2">
+                    <GroupBox Header="Pending Requests"  FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2">
                         <DataGrid Height ="210" ItemsSource="{Binding PendingRequests}" SelectedItem="{Binding Path=SelectedPendingRequestDTO}" AutoGenerateColumns="False" Name="PendingRequestsDataGrid" IsReadOnly="true" MouseDoubleClick="PendingRequests_MouseDoubleClick" Margin="10 10 10 10">
                             <DataGrid.CellStyle>
                                 <Style TargetType="DataGridCell">
@@ -691,11 +703,11 @@
                 </TabItem.Header>
                 <Grid Margin="10">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="2.5*"/>
+                        <ColumnDefinition Width="287*"/>
+                        <ColumnDefinition Width="538*"/>
+                        <ColumnDefinition Width="179*"/>
                     </Grid.ColumnDefinitions>
-                    <GroupBox Header="Filters" FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2"
-                 VerticalAlignment="Stretch" Margin="10">
+                    <GroupBox Header="Filters" FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2" Margin="10,10,10,10">
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="10">
                                 <StackPanel Margin="10">
@@ -721,7 +733,7 @@
                             </StackPanel>
                         </StackPanel>
                     </GroupBox>
-                    <Grid Grid.Column="1" Margin="10">
+                    <Grid Grid.Column="1" Margin="10,10,10,10" Grid.ColumnSpan="2">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1*"/>
                             <RowDefinition Height="1*"/>
@@ -810,7 +822,58 @@
                     <TextBlock Text="Complex Tours" FontSize="17"/>
                 </TabItem.Header>
                 <StackPanel Margin="10">
-
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="14*" />
+                            <ColumnDefinition Width="251*"/>
+                            <ColumnDefinition Width="109*"/>
+                            <ColumnDefinition Width="501*"/>
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="4" Content="Select Complex Tour&#x0a;         (ENTER)" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Center" Click="StartTourButton_Click">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <EventTrigger RoutedEvent="Button.Click">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="#005F8B" />
+                                        </Trigger>
+                                        <Trigger Property="IsPressed" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="#00415E" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </Grid>
+                    <GroupBox Header="Complex Tour Requests" FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2">
+                        <StackPanel Margin="0 20 0 0">
+                            <ScrollViewer Height="300" VerticalScrollBarVisibility="Auto">
+                                <DataGrid Margin ="10" ItemsSource="{Binding ComplexTourRequests}" SelectedItem="{Binding Path=SelectedComplexTourDTO}" AutoGenerateColumns="False" Name="ComplexTourRequestsDataGrid" IsReadOnly="true" MouseDoubleClick="ComplexTourRequestsDataGrid_MouseDoubleClick" HorizontalAlignment="Stretch">
+                                    <DataGrid.CellStyle>
+                                        <Style TargetType="DataGridCell">
+                                            <Setter Property="FontSize" Value="18"/>
+                                            <Setter Property="Padding" Value="10"/>
+                                        </Style>
+                                    </DataGrid.CellStyle>
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Locations" Binding="{Binding Locations}" Width="*" FontSize="18"/>
+                                        <DataGridTextColumn Header="Languages" Binding="{Binding Languages}" Width="*" FontSize="18"/>
+                                        <DataGridTextColumn Header="Available Tours" Binding="{Binding Path=NumberOfAvailableTours}" Width="0.6*" FontSize="18"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </ScrollViewer>
+                        </StackPanel>
+                    </GroupBox>
                 </StackPanel>
             </TabItem>
         </TabControl>

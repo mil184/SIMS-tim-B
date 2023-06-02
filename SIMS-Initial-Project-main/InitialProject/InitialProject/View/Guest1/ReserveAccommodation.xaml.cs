@@ -324,23 +324,6 @@ namespace InitialProject.View.Guest1
             return true;
         }
 
-        /*private List<DatesDTO> FindDateRanges(ObservableCollection<DateTime> dates)
-        {
-            var dateRanges = new List<DatesDTO>();
-
-            for (int i = 0; i < dates.Count - NumberOfDays + 1; i++)
-            {
-                DateTime startDate = dates[i];
-                DateTime endDate = dates[i + NumberOfDays - 1];
-
-                if (IsValidDateRange(dates, i))
-                {
-                    dateRanges.Add(new DatesDTO { StartDate = startDate, EndDate = endDate });
-                }
-            }
-
-            return dateRanges;
-        }*/
         private List<DatesDTO> FindDateRanges(ObservableCollection<DateTime> dates)
         {
             var dateRanges = new List<DatesDTO>();
@@ -397,7 +380,7 @@ namespace InitialProject.View.Guest1
             }
         }
 
-        private void UpdateUserBonusPoints(int userId)
+        public void UpdateUserBonusPoints(int userId)
         {
             var user = _userService.GetById(userId);
             user.NumberOfReservations += 1;

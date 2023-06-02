@@ -240,7 +240,9 @@ namespace InitialProject.View.Guest2
             app.ChangeLanguage(SRB);
             LanguageButtonClickCount = 0;
             NotifyOnAcceptedRequest();
+            _tourRequestService.UpdateInvalidRequests();
 
+            NotifyOnAcceptedRequest();
             NotifyAcceptedLanguages();
             NotifyAcceptedLocations();
 
@@ -343,7 +345,7 @@ namespace InitialProject.View.Guest2
 
                 if (tourRequest.Status == InitialProject.Resources.Enums.RequestStatus.accepted && !tourRequest.MessageShown)
                 {
-                    MessageBox.Show("Your tour request in " + location + " has been accepted.");
+                    MessageBox.Show("Your tour request in " + location + " has been accepted. Start time is " + tourRequest.ChosenDate);
                     tourRequest.MessageShown = true;
                     _tourRequestService.Update(tourRequest);
                 }
@@ -362,9 +364,9 @@ namespace InitialProject.View.Guest2
                     return;
                 }
 
-                MessageBox.Show("Please confirm your arrival at " + CheckedTours[0].Name, "ArrivalConfirmation", MessageBoxButton.YesNo, MessageBoxImage.Information);
+                MessageBoxResult result = MessageBox.Show("Please confirm your arrival at " + CheckedTours[0].Name, "ArrivalConfirmation", MessageBoxButton.YesNo, MessageBoxImage.Information);
 
-                if (MessageBoxResult.Yes == MessageBoxResult.Yes)
+                if (result == MessageBoxResult.Yes)
                 {
                     tourReservation.GuestArrived = true;
                     tourReservation.MessageBoxShown = true;

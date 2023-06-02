@@ -89,6 +89,8 @@ namespace InitialProject
                     {
                         GuideWindow guideWindow = new GuideWindow(user);
                         guideWindow.Show();
+                        //CreateTourWindow window = new CreateTourWindow();
+                        //window.Show();
                         Close();
                      
                     }

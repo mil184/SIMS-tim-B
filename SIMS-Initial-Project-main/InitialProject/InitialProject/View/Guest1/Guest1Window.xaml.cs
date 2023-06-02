@@ -1,30 +1,15 @@
-﻿ using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using InitialProject.Model;
-using InitialProject.Repository;
 using InitialProject.Resources.Observer;
-using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using InitialProject.Model.DTO;
 using InitialProject.Resources.Enums;
 using InitialProject.Service;
-using System.Diagnostics.Metrics;
-using InitialProject.View.Guest2;
-using InitialProject.ViewModel.Guest1;
-using System.Windows.Automation.Peers;
 using InitialProject.Repository.Interfaces;
 using InitialProject.Resources.Injector;
 
@@ -51,6 +36,8 @@ namespace InitialProject.View.Guest1
         public ObservableCollection<RescheduleRequest> AllReschedules { get; set; }
 
         public ObservableCollection<Guest1RatingsDTO> GuestRatings { get; set; }
+        public ObservableCollection<AvailableAccommodationsDTO> AvailableAccommodations { get; set; }
+        public AvailableAccommodationsDTO SelectedAvailableAccommodation { get; set; }
 
         private readonly AccommodationService _accommodationService;
         private readonly AccommodationReservationService _accommodationReservationService;
@@ -196,6 +183,8 @@ namespace InitialProject.View.Guest1
 
             GuestRatings = new ObservableCollection<Guest1RatingsDTO>();
             FormGuestRatings();
+
+            AvailableAccommodations = new ObservableCollection<AvailableAccommodationsDTO>();
         }
 
         private void ReserveButton_Click(object sender, RoutedEventArgs e)
@@ -498,6 +487,89 @@ namespace InitialProject.View.Guest1
             }
         }
 
+        public AvailableAccommodationsDTO ConvertDTO(Accommodation accommodation)
+        {
+            return new AvailableAccommodationsDTO(accommodation.Id, accommodation.Name,
+                    _locationService.GetById(accommodation.LocationId).Country,
+                     _locationService.GetById(accommodation.LocationId).City);
+        }
+        public ObservableCollection<AvailableAccommodationsDTO> ConvertDTO(ObservableCollection<Accommodation> accommodations)
+        {
+            ObservableCollection<AvailableAccommodationsDTO> dto = new ObservableCollection<AvailableAccommodationsDTO>();
+            foreach (Accommodation accommodation in accommodations)
+            {
+                dto.Add(ConvertDTO(accommodation));
+            }
+            return dto;
+        }
 
+        private void SearchAccommodation_Click(object sender, RoutedEventArgs e)
+        {
+             int numberOfGuests = int.Parse(maxGuestsTextBox.Text);
+             int numberOfDays = int.Parse(numDaysTextBox.Text);
+
+            if (startDatePicker.SelectedDate != null && endDatePicker.SelectedDate != null)
+            {
+                DateTime startDate = startDatePicker.SelectedDate.Value;
+                DateTime endDate = endDatePicker.SelectedDate.Value;
+
+                List<Accommodation> availableAccommodations = _accommodationService.GetAvailableAccommodations(startDate, endDate, numberOfGuests, numberOfDays);
+                AvailableAccommodations.Clear();
+                ObservableCollection<AvailableAccommodationsDTO> accommodationDTOs = ConvertDTO(new ObservableCollection<Accommodation>(availableAccommodations));
+                foreach (AvailableAccommodationsDTO accommodationDTO in accommodationDTOs)
+                {
+                    AvailableAccommodations.Add(accommodationDTO);
+                }
+            }
+            else
+            {
+                List<Accommodation> availableAccommodations = _accommodationService.GetAvailable(numberOfGuests, numberOfDays);
+                AvailableAccommodations.Clear();
+                ObservableCollection<AvailableAccommodationsDTO> accommodationDTOs = ConvertDTO(new ObservableCollection<Accommodation>(availableAccommodations));
+                foreach (AvailableAccommodationsDTO accommodationDTO in accommodationDTOs)
+                {
+                    AvailableAccommodations.Add(accommodationDTO);
+                }
+            }
+        }
+
+        private void ReserveAccommodation_Click(object sender, RoutedEventArgs e)
+        {
+            if(SelectedAvailableAccommodation != null)
+            {
+                var messageBoxResult = MessageBox.Show($"Are you sure you want to reserve accommodation {SelectedAvailableAccommodation.Name} in {SelectedAvailableAccommodation.Country}", "Reserve Accomodation Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                if (messageBoxResult == MessageBoxResult.Yes)
+                {
+                    var accommodation = _accommodationService.GetById(SelectedAvailableAccommodation.Id);
+                    var reservation = new AccommodationReservation(LoggedInUser.Id, accommodation.Id, startDatePicker.SelectedDate ?? DateTime.MinValue, endDatePicker.SelectedDate ?? DateTime.MaxValue, int.Parse(numDaysTextBox.Text), int.Parse(maxGuestsTextBox.Text), accommodation.OwnerId, false, accommodation.CancellationPeriod);
+                    _accommodationReservationService.Save(reservation);
+
+                    MessageBox.Show("Reservation created successfully.");
+                    ResetFields();
+                }
+                return;
+            }
+        }
+
+        private void ResetFields()
+        {
+            maxGuestsTextBox.Text = string.Empty;
+            numDaysTextBox.Text = string.Empty;
+            startDatePicker.SelectedDate = null;
+            endDatePicker.SelectedDate = null;
+        }
+
+        private void ShowDates_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedAvailableAccommodation != null)
+            {
+                int numberOfDays = int.Parse(numDaysTextBox.Text);
+                int numberOfGuests = int.Parse(maxGuestsTextBox.Text);
+
+                AvailableDates availableDates = new AvailableDates(SelectedAvailableAccommodation, _accommodationService, _accommodationReservationService, numberOfDays, numberOfGuests, LoggedInUser);
+                availableDates.ShowDialog();
+            }
+        }
     }
 }

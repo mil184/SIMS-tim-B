@@ -53,6 +53,19 @@ namespace InitialProject.Service
         public List<Tour> GetGuideTours(User user)
         {
             List<Tour> tours = new List<Tour>();
+
+            foreach (Tour tour in GetAll())
+            {
+                if (tour.GuideId == user.Id)
+                {
+                    tours.Add(tour);
+                }
+            }
+            return tours;
+        }
+        public List<Tour> GetAllUnabortedGuideTours(User user)
+        {
+            List<Tour> tours = new List<Tour>();
   
             foreach (Tour tour in GetAll())
             {
@@ -80,12 +93,12 @@ namespace InitialProject.Service
             return toursRemoved;
         }
 
-        public List<Tour> GetTodaysTours()
+        public List<Tour> GetTodaysTours(User user)
         {
             var currentDateTime = DateTime.Now;
             var currentTours = new List<Tour>();
 
-            foreach (var tour in _tourRepository.GetAll())
+            foreach (var tour in GetAllUnabortedGuideTours(user))
             {
                 if (tour.StartTime.Date == currentDateTime.Date && tour.StartTime >= currentDateTime && !tour.IsFinished)
                 {
@@ -95,11 +108,11 @@ namespace InitialProject.Service
 
             return currentTours;
         }
-        public List<Tour> GetFinishedTours()
+        public List<Tour> GetFinishedTours(User user)
         {
             var finishedTours = new List<Tour>();
 
-            foreach (var tour in _tourRepository.GetAll())
+            foreach (var tour in GetAllUnabortedGuideTours(user))
             {
                 if (tour.IsFinished)
                 {
@@ -109,11 +122,11 @@ namespace InitialProject.Service
 
             return finishedTours;
         }
-        public List<Tour> GetRatedTours()
+        public List<Tour> GetRatedTours(User user)
         {
             var ratedTours = new List<Tour>();
 
-            foreach (var tour in GetFinishedTours())
+            foreach (var tour in GetAllUnabortedGuideTours(user))
             {
                 if (tour.IsRated)
                 {
@@ -123,15 +136,15 @@ namespace InitialProject.Service
 
             return ratedTours;
         }
-        public List<Tour> GetUpcomingTours()
+        public List<Tour> GetUpcomingTours(User user)
         {
             var upcomingTours = new List<Tour>();
             var currentDate = DateTime.Now.Date;
 
-            foreach (var tour in _tourRepository.GetAll())
+            foreach (var tour in GetAllUnabortedGuideTours(user))
             {
                 var tourStartDate = tour.StartTime.Date;
-                if (tourStartDate > currentDate && !tour.IsAborted)
+                if (tourStartDate > currentDate )
                 {
                     upcomingTours.Add(tour);
                 }
@@ -223,14 +236,14 @@ namespace InitialProject.Service
 
             return tours;
         }
-        public List<Tour> GetToursByYear(int year) 
+        public List<Tour> GetToursByYear(User user, int year) 
         {
             List<Tour> toursThisYear = new List<Tour>();
 
             DateTime LeftBoundary = new DateTime(year,1,1);
             DateTime RightBoundary = new DateTime(year, 12, 31);
 
-            foreach (Tour tour in GetFinishedTours()) 
+            foreach (Tour tour in GetFinishedTours(user)) 
             {
                 if(tour.StartTime >= LeftBoundary && tour.StartTime <= RightBoundary) 
                 {
@@ -238,6 +251,19 @@ namespace InitialProject.Service
                 }
             }
             return toursThisYear;
+        }
+        public List<Tour> GetToursByTimeInterval(User user, DateTime leftBoundary, DateTime rightBoundary)
+        {
+            List<Tour> tours = new List<Tour>();
+
+            foreach (Tour tour in GetUpcomingTours(user))
+            {
+                if (tour.StartTime >= leftBoundary.Date && tour.StartTime <= rightBoundary.Date)
+                {
+                    tours.Add(tour);
+                }
+            }
+            return tours;
         }
         public Tour GetMostVisitedTour(List<Tour> toursThisYear) 
         {
@@ -287,7 +313,7 @@ namespace InitialProject.Service
             return _tourRepository.Save(tour);
         }
 
-        internal List<Tour> GetAll()
+        public List<Tour> GetAll()
         {
             return _tourRepository.GetAll();
         }
