@@ -110,7 +110,7 @@ namespace InitialProject.View.Guide
             FinishedTours = new ObservableCollection<GuideTourDTO>(GuideDTOConverter.ConvertToDTO(_tourService.GetFinishedTours(CurrentUser), _locationService));
             RatedTours = new ObservableCollection<GuideTourDTO>(GuideDTOConverter.ConvertToDTO(_tourService.GetRatedTours(CurrentUser), _locationService));
             PendingRequests = new ObservableCollection<GuideRequestDTO>(GuideDTOConverter.ConvertToDTO(_tourRequestService.GetPendingRequests(CurrentUser), _locationService));
-            ComplexTourRequests = new ObservableCollection<GuideComplexTourDTO>(GuideDTOConverter.ConvertToDTO(_complexTourService.GetAll(), _tourRequestService, _locationService, _complexTourService));
+            ComplexTourRequests = new ObservableCollection<GuideComplexTourDTO>(GuideDTOConverter.ConvertToDTO(_complexTourService.GetAvailableComplexTours(CurrentUser), _tourRequestService, _locationService, _complexTourService));
 
             RequestCountries = new ObservableCollection<string>();
             RequestCities = new ObservableCollection<string>();
@@ -241,7 +241,7 @@ namespace InitialProject.View.Guide
         }
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
-            CreateTourViewModel createTourViewModel = new CreateTourViewModel(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService, null);
+            CreateTourViewModel createTourViewModel = new CreateTourViewModel(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService, null, null, _complexTourService, null);
             CreateTourWindow createTour = new CreateTourWindow(createTourViewModel);
             createTour.ShowDialog();
         }
@@ -470,62 +470,7 @@ namespace InitialProject.View.Guide
         {
             MostVisited = GuideDTOConverter.ConvertToDTO(_tourService.GetMostVisitedTour(_tourService.GetFinishedTours(CurrentUser)), _locationService);
         }
-        #region Update
-        public void Update()
-        {
-            UpdateUpcomingTours();
-            UpdateCurrentTours();
-            UpdateFinishedTours();
-            UpdateActiveTour();
-            UpdatePendingRequests();
-        }
-        private void UpdateUpcomingTours()
-        {
-            UpcomingTours.Clear();
-            foreach (Tour tour in _tourService.GetUpcomingTours(CurrentUser))
-            {
-                UpcomingTours.Add(GuideDTOConverter.ConvertToDTO(tour, _locationService));
-            }
-        }
-        private void UpdateCurrentTours()
-        {
-            CurrentTours.Clear();
-            foreach (Tour tour in _tourService.GetTodaysTours(CurrentUser))
-            {
-                CurrentTours.Add(GuideDTOConverter.ConvertToDTO(tour, _locationService));
-            }
-        }
-        private void UpdateFinishedTours()
-        {
-            FinishedTours.Clear();
-            foreach (Tour tour in _tourService.GetFinishedTours(CurrentUser))
-            {
-                FinishedTours.Add(GuideDTOConverter.ConvertToDTO(tour, _locationService));
-            }
-        }
-        private void UpdatePendingRequests()
-        {
-            PendingRequests.Clear();
-            foreach (TourRequest request in _tourRequestService.GetPendingRequests(CurrentUser))
-            {
-                PendingRequests.Add(GuideDTOConverter.ConvertToDTO(request, _locationService));
-            }
-        }
-        private void UpdateActiveTour()
-        {
-            ActiveTour = null;
-            foreach (GuideTourDTO tourdto in CurrentTours)
-            {
-                Tour tour = GuideDTOConverter.ConvertToTour(tourdto, _tourService);
 
-                if (tour.IsActive)
-                {
-                    ActiveTour = GuideDTOConverter.ConvertToDTO(tour, _locationService);
-                    break;
-                }
-            }
-        }
-        #endregion
         private void FinishedToursDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             SelectFinishedTour();
@@ -718,7 +663,7 @@ namespace InitialProject.View.Guide
             if (SelectedPendingRequestDTO != null)
             {
                 TourRequest request = GuideDTOConverter.ConvertToRequest(SelectedPendingRequestDTO, _tourRequestService);
-                CreateTourViewModel createTourViewModel = new CreateTourViewModel(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService, request);
+                CreateTourViewModel createTourViewModel = new CreateTourViewModel(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService, request, null, _complexTourService, null);
                 CreateTourWindow createTour = new CreateTourWindow(createTourViewModel);
                 createTour.ShowDialog();
             }
@@ -728,10 +673,15 @@ namespace InitialProject.View.Guide
         #region CompexTours
         public ObservableCollection<GuideComplexTourDTO> ComplexTourRequests { get; set; }
         public GuideComplexTourDTO SelectedComplexTourDTO { get; set; }
-        
+
         private void ComplexTourRequestsDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-
+            if (SelectedComplexTourDTO != null)
+            {
+                ShowComplexTourViewModel showComplexTourViewModel = new ShowComplexTourViewModel(GuideDTOConverter.ConvertToComplexTour(SelectedComplexTourDTO,_complexTourService), _tourRequestService, _locationService, _complexTourService, CurrentUser, _checkpointService, _imageRepository, _tourService);
+                ShowComplexTour showComplexTour = new ShowComplexTour(showComplexTourViewModel);
+                showComplexTour.ShowDialog();
+            }
         }
         #endregion
 
@@ -1134,7 +1084,7 @@ namespace InitialProject.View.Guide
         {
             if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.A)
             {
-                CreateTourViewModel createTourViewModel = new CreateTourViewModel(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService, null);
+                CreateTourViewModel createTourViewModel = new CreateTourViewModel(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService, null, null, _complexTourService, null);
                 CreateTourWindow createTour = new CreateTourWindow(createTourViewModel);
                 createTour.ShowDialog();
                 e.Handled = true;
@@ -1379,6 +1329,72 @@ namespace InitialProject.View.Guide
         private void OkButton_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+        #endregion
+
+        #region Update
+        public void Update()
+        {
+            UpdateUpcomingTours();
+            UpdateCurrentTours();
+            UpdateFinishedTours();
+            UpdateActiveTour();
+            UpdatePendingRequests();
+            UpdateComplexTours();
+        }
+        private void UpdateUpcomingTours()
+        {
+            UpcomingTours.Clear();
+            foreach (Tour tour in _tourService.GetUpcomingTours(CurrentUser))
+            {
+                UpcomingTours.Add(GuideDTOConverter.ConvertToDTO(tour, _locationService));
+            }
+        }
+        private void UpdateCurrentTours()
+        {
+            CurrentTours.Clear();
+            foreach (Tour tour in _tourService.GetTodaysTours(CurrentUser))
+            {
+                CurrentTours.Add(GuideDTOConverter.ConvertToDTO(tour, _locationService));
+            }
+        }
+        private void UpdateFinishedTours()
+        {
+            FinishedTours.Clear();
+            foreach (Tour tour in _tourService.GetFinishedTours(CurrentUser))
+            {
+                FinishedTours.Add(GuideDTOConverter.ConvertToDTO(tour, _locationService));
+            }
+        }
+        private void UpdatePendingRequests()
+        {
+            PendingRequests.Clear();
+            foreach (TourRequest request in _tourRequestService.GetPendingRequests(CurrentUser))
+            {
+                PendingRequests.Add(GuideDTOConverter.ConvertToDTO(request, _locationService));
+            }
+        }
+        private void UpdateComplexTours()
+        {
+            ComplexTourRequests.Clear();
+            foreach (ComplexTour complexTour in _complexTourService.GetAvailableComplexTours(CurrentUser))
+            {
+                ComplexTourRequests.Add(GuideDTOConverter.ConvertToDTO(complexTour, _tourRequestService, _locationService, _complexTourService));
+            }
+        }
+        private void UpdateActiveTour()
+        {
+            ActiveTour = null;
+            foreach (GuideTourDTO tourdto in CurrentTours)
+            {
+                Tour tour = GuideDTOConverter.ConvertToTour(tourdto, _tourService);
+
+                if (tour.IsActive)
+                {
+                    ActiveTour = GuideDTOConverter.ConvertToDTO(tour, _locationService);
+                    break;
+                }
+            }
         }
         #endregion
 

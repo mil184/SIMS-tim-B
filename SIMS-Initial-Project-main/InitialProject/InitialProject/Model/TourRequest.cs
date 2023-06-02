@@ -23,11 +23,13 @@ namespace InitialProject.Model
         public bool SameDetailsMessageShownLocation { get; set; }
 
         public DateTime ChosenDate { get; set; }
+
+        public bool IsInComplexTour { get; set; }
         public TourRequest()
         {
         }
 
-        public TourRequest(int locationId, string description, string language, int maxGuests, DateTime startTime, DateTime endTime, int guestId)
+        public TourRequest(int locationId, string description, string language, int maxGuests, DateTime startTime, DateTime endTime, int guestId, bool isInComplexTour)
         {
             LocationId = locationId;
             Description = description;
@@ -43,6 +45,7 @@ namespace InitialProject.Model
             SameDetailsMessageShownLanguage = false;
             SameDetailsMessageShownLocation = false;
             ChosenDate = new DateTime(1, 1, 1, 1, 1, 1);
+            IsInComplexTour = isInComplexTour;  
         }
 
         public string[] ToCSV()
@@ -63,7 +66,8 @@ namespace InitialProject.Model
                 MessageShown.ToString(),
                 SameDetailsMessageShownLanguage.ToString(),
                 SameDetailsMessageShownLocation.ToString(),
-                ChosenDate.ToString()
+                ChosenDate.ToString(),
+                IsInComplexTour.ToString()
             };
 
             return csvValues;
@@ -86,6 +90,7 @@ namespace InitialProject.Model
             SameDetailsMessageShownLanguage = bool.Parse(values[12]);
             SameDetailsMessageShownLocation = bool.Parse(values[13]);
             ChosenDate = DateTime.Parse(values[14]);
+            IsInComplexTour = bool.Parse(values[15]);
         }
     }
 }

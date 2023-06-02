@@ -7,7 +7,7 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:focus="clr-namespace:InitialProject.Resources.FocusBehaviour"
         mc:Ignorable="d"
-        Title="CreateTourWindow" Height="830" Width="1024"
+        Title="CreateTourWindow" Height="820" Width="1024"
         Background="#F2F2F2"
         WindowStartupLocation="CenterScreen">
     <Grid>
