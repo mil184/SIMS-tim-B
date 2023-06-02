@@ -18,7 +18,6 @@ namespace InitialProject.View.Guest2
     {
         public User LoggedInUser { get; set; }
 
-        #region Tours
         public Guest2TourDTO SelectedGuest2TourDTO { get; set; }
         public ObservableCollection<Guest2TourDTO> TourDTOs { get; set; }
         public ObservableCollection<Tour> Tours { get; set; }
@@ -28,15 +27,11 @@ namespace InitialProject.View.Guest2
 
         public Voucher SelectedVoucher { get; set; }
         public ObservableCollection<Voucher> Vouchers { get; set; }
-        #endregion
-
-        #region Vouchers
 
         public List<Tour> CheckedTours { get; set; }
         public Tour CurrentlyActiveTour { get; set; }
         public Checkpoint CurrentlyActiveCheckpoint { get; set; }
-
-        #endregion
+        public ObservableCollection<Checkpoint> ActiveTourCheckpoints { get; set; }
 
         public int LanguageButtonClickCount { get; set; }
         private App app;
@@ -61,6 +56,7 @@ namespace InitialProject.View.Guest2
         private readonly ImageRepository _imageRepository;
         private readonly CheckpointService _checkpointService;
         private readonly UserRepository _userRepository;
+        private readonly UserService _userService;
         private readonly TourReservationService _tourReservationService;
         private readonly TourRatingService _tourRatingService;
         private readonly VoucherService _voucherService;
@@ -188,6 +184,9 @@ namespace InitialProject.View.Guest2
             _userRepository = new UserRepository();
             _userRepository.Subscribe(this);
 
+            _userService = new UserService();
+            _userService.Subscribe(this);
+
             _tourReservationService = new TourReservationService();
             _tourReservationService.Subscribe(this);
 
@@ -221,6 +220,11 @@ namespace InitialProject.View.Guest2
             {
                 CurrentlyActiveTour = CheckedTours[0];
                 CurrentlyActiveCheckpoint = _checkpointService.GetById(CurrentlyActiveTour.CurrentCheckpointId);
+                
+                foreach (int id in CurrentlyActiveTour.CheckpointIds)
+                {
+                    ActiveTourCheckpoints.Add(_checkpointService.GetById(id));
+                }
             }
 
             List<Tour> UserTours = new List<Tour>(_tourService.GetUserTours(LoggedInUser));
@@ -239,6 +243,8 @@ namespace InitialProject.View.Guest2
 
             NotifyAcceptedLanguages();
             NotifyAcceptedLocations();
+
+            AlterVoucherSectionVisibility();
         }
 
         private void NotifyAcceptedLanguages()
@@ -374,25 +380,19 @@ namespace InitialProject.View.Guest2
 
             if (!IsSelectionValid())
             {
-                MessageBox.Show("Please select a tour.", "Tour selection warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                ShowTourSelectionWarningMessage(app.Lang);
                 return;
             }
 
             if (!IsPersonCountInputValid())
             {
-                MessageBox.Show("Please enter the number of guests.", "Guest count warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                ShowGuestCountWarningMessage(app.Lang);
                 return;
             }
 
             if (!IsAverageAgeInputValid())
             {
-                MessageBox.Show("Please enter the average age of guests.", "Average age warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            if (!IsVoucherValid())
-            {
-                MessageBox.Show("Please state whether you want to use a voucher.", "Voucher warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                ShowAverageAgeWarningMessage(app.Lang);
                 return;
             }
 
@@ -404,7 +404,7 @@ namespace InitialProject.View.Guest2
 
             if (personCount > spacesLeft && selectedTour.CurrentGuestCount != selectedTour.MaxGuests)
             {
-                ShowSpacesLeftMessage(spacesLeft);
+                ShowSpacesLeftMessage(spacesLeft, app.Lang);
                 return;
             }
 
@@ -421,6 +421,49 @@ namespace InitialProject.View.Guest2
             AverageAgeTB.Text = "";
         }
 
+        #region InvalidInputWarnings
+
+        private void ShowTourSelectionWarningMessage(string lang)
+        {
+            if (lang == ENG)
+            {
+                MessageBox.Show("Please select a tour.", "Tour selection warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+
+            else if (lang == SRB)
+            {
+                MessageBox.Show("Molim Vas odaberite turu.", "Upozorenje o odabiru ture", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
+        private void ShowGuestCountWarningMessage(string lang)
+        {
+            if (lang == ENG)
+            {
+                MessageBox.Show("Please enter the number of guests.", "Guest count warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+
+            else if (lang == SRB)
+            {
+                MessageBox.Show("Molim Vas unesite broj gostiju.", "Upozorenje o unosu broja gostiju", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
+        private void ShowAverageAgeWarningMessage(string lang)
+        {
+            if (lang == ENG)
+            {
+                MessageBox.Show("Please enter the average age of guests.", "Average age warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+
+            else if (lang == SRB)
+            {
+                MessageBox.Show("Molim Vas unesite prosečne godine gostiju.", "Upozorenje o unosu prosečnih godina gostiju", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
+        #endregion
+
         private bool IsSelectionValid()
         {
             return SelectedGuest2TourDTO != null;
@@ -436,24 +479,39 @@ namespace InitialProject.View.Guest2
             return AverageAge != null;
         }
 
-        private bool IsVoucherValid()
-        {
-            return SelectedVoucher != null ^ NoVoucherBtn.IsChecked == true;
-        }
+        //private bool IsVoucherValid()
+        //{
+        //    return SelectedVoucher != null ^ NoVoucherBtn.IsChecked == true;
+        //}
 
-        private void ShowSpacesLeftMessage(int spacesLeft)
+        private void ShowSpacesLeftMessage(int spacesLeft, string lang)
         {
-            if (spacesLeft == 1)
-                MessageBox.Show("You've tried adding too many guests. There is only 1 space left.");
-            else
-                MessageBox.Show("You've tried adding too many guests. There are only " + spacesLeft.ToString() + " spaces left.");
+            if (lang == ENG)
+            {
+                if (spacesLeft == 1)
+                    MessageBox.Show("You've tried adding too many guests. There is only 1 space left.");
+                else
+                   MessageBox.Show("You've tried adding too many guests. There are only " + spacesLeft.ToString() + " spaces left.");
+            }
+
+            if (lang == SRB)
+            {
+                if (spacesLeft == 1)
+                    MessageBox.Show("Pokušali ste da dodate previše gostiju. Ostalo je još jedno slobodno mesto.");
+                else
+                    MessageBox.Show("Pokušali ste da dodate previše gostiju. Ostalo je još " + spacesLeft.ToString() + " slobodnih mesta.");
+            }
+
         }
 
         private void HandleZeroSpacesForReservation(Tour selectedTour)
         {
-            var zeroSpacesForReservation = new ZeroSpacesForReservation(SelectedGuest2TourDTO, LoggedInUser, _tourService, _locationService, _userRepository, _voucherService);
-            zeroSpacesForReservation.ShowDialog();
-            Close();
+            //var zeroSpacesForReservation = new ZeroSpacesForReservation(SelectedGuest2TourDTO, LoggedInUser, _tourService, _locationService, _userRepository, _voucherService);
+            //zeroSpacesForReservation.ShowDialog();
+
+            ZeroSpacesForReservationViewModel zeroSpacesForReservationViewModel = new ZeroSpacesForReservationViewModel(SelectedGuest2TourDTO, _tourService, _locationService, _userService);
+            ZeroSpacesForReservation zeroSpacesForReservation = new ZeroSpacesForReservation(zeroSpacesForReservationViewModel);
+            zeroSpacesForReservation.Show();
         }
 
         private void SaveOrUpdateReservation(Tour selectedTour, int personCount)
@@ -480,7 +538,20 @@ namespace InitialProject.View.Guest2
                 SaveNewReservation(tourReservation);
             }
 
-            MessageBox.Show("Reservation successful!");
+            ShowSuccessfulReservationMessage(app.Lang);
+        }
+
+        private void ShowSuccessfulReservationMessage(string lang)
+        {
+            if (lang == ENG)
+            {
+                MessageBox.Show("Reservation successful!");
+            }
+
+            else if (lang == SRB)
+            {
+                MessageBox.Show("Uspešna rezervacija!");
+            }
         }
 
         private void UpdateExistingReservation(TourReservation tourReservation)
@@ -600,11 +671,6 @@ namespace InitialProject.View.Guest2
         private void ComplexRequestingButton_Click(object sender, RoutedEventArgs e)
         {
             this.tab.SelectedIndex = 5;
-        }
-
-        private void VouchersButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.tab.SelectedIndex = 6;
         }
 
         #endregion
@@ -801,14 +867,25 @@ namespace InitialProject.View.Guest2
         {
             if (SelectedGuest2TourDTO == null)
             {
+                ShowUnselectedTourForRating(app.Lang);
+                return;
+            }
+              
+            RateTourViewModel rateTourViewModel = new RateTourViewModel(SelectedGuest2TourDTO, LoggedInUser, _tourRatingService, _tourReservationService, _tourService, _imageRepository);
+            RateTour rateTour = new RateTour(rateTourViewModel);
+            rateTour.Show();
+        }
+
+        private void ShowUnselectedTourForRating(string lang)
+        {
+            if (lang == ENG)
+            {
                 MessageBox.Show("Please select a tour in order to rate it!", "Tour selection warning", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
-                
-            else
-            { 
-                RateTourViewModel rateTourViewModel = new RateTourViewModel(SelectedGuest2TourDTO, LoggedInUser, _tourRatingService, _tourReservationService, _tourService, _imageRepository);
-                RateTour rateTour = new RateTour(rateTourViewModel);
-                rateTour.Show();
+
+            else if (lang == SRB)
+            {
+                MessageBox.Show("Molim Vas odaberite turu koju želite da ocenite.", "Upozorenje o odabiru ture", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -851,6 +928,65 @@ namespace InitialProject.View.Guest2
             LocationStatisticsViewModel locationStatisticsViewModel = new LocationStatisticsViewModel(_tourRequestService, _locationService);
             LocationStatistics locationStatistics = new LocationStatistics(locationStatisticsViewModel);
             locationStatistics.Show();
+        }
+
+        #region Information popups
+
+        private void FiltrationImage_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            FiltrationPopup.IsOpen = true;
+        }
+
+        private void FiltrationImage_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            FiltrationPopup.IsOpen = false;
+        }
+
+        private void ToursImage_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            ToursPopup.IsOpen = true;
+        }
+
+        private void ToursImage_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            ToursPopup.IsOpen = false;
+        }
+
+        private void VouchersImage_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            VouchersPopup.IsOpen = true;
+        }
+
+        private void VouchersImage_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            VouchersPopup.IsOpen = false;
+        }
+
+        #endregion
+
+        private void AlterVoucherSectionVisibility()
+        {
+            if (Vouchers.Count == 0)
+            {
+                VouchersDataGrid.Visibility = Visibility.Collapsed;
+                NoVoucherLabel.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void ShowCurrentlyActiveTourButton_Click(object sender, RoutedEventArgs e)
+        {
+            ShowTour showTour = new ShowTour(ConvertToDTO(CurrentlyActiveTour));
+            showTour.Show();
+        }
+
+        private void TrackingImage_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+
+        }
+
+        private void TrackingImage_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+
         }
     }
 }

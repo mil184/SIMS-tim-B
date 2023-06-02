@@ -318,7 +318,7 @@ namespace InitialProject.ViewModel.Guest2
         }
         #endregion
 
-        public RateTourViewModel(Guest2TourDTO selectedTour, Model.User user, TourRatingService tourRatingService, TourReservationService tourReservationService, TourService tourService, ImageRepository imageRepository)
+        public RateTourViewModel(Guest2TourDTO selectedTour, User user, TourRatingService tourRatingService, TourReservationService tourReservationService, TourService tourService, ImageRepository imageRepository)
         {
             SelectedTour = selectedTour;
             LoggedInUser = user;

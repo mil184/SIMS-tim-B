@@ -99,7 +99,7 @@ namespace InitialProject.View.Guest2
 
             if (selectedTour.CurrentGuestCount == selectedTour.MaxGuests)
             {
-                HandleZeroSpacesForReservation(selectedTour);
+                //HandleZeroSpacesForReservation(selectedTour);
                 return;
             }
 
@@ -129,9 +129,9 @@ namespace InitialProject.View.Guest2
 
         private void HandleZeroSpacesForReservation(Tour selectedTour)
         {
-            var zeroSpacesForReservation = new ZeroSpacesForReservation(SelectedTour, LoggedInUser, _tourService, _locationService, _userRepository, _voucherService);
-            zeroSpacesForReservation.ShowDialog();
-            Close();
+            //var zeroSpacesForReservation = new ZeroSpacesForReservation(SelectedTour, LoggedInUser, _tourService, _locationService, _userRepository, _voucherService);
+            //zeroSpacesForReservation.ShowDialog();
+            //Close();
         }
 
         private void SaveOrUpdateReservation(Tour selectedTour, int personCount)

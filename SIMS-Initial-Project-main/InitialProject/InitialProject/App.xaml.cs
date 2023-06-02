@@ -14,9 +14,11 @@ namespace InitialProject
     /// </summary>
     public partial class App : Application
     {
+        public string Lang { get; set; }
         public void ChangeLanguage(string lang)
         {
             TranslationSource.Instance.CurrentCulture = new System.Globalization.CultureInfo(lang);
+            Lang = lang;
         }
     }
 }

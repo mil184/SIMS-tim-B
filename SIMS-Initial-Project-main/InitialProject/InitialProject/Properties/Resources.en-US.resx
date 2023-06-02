@@ -136,13 +136,16 @@
     <value>Currently Active checkpoint:</value>
   </data>
   <data name="CurrentlyActiveTour" xml:space="preserve">
-    <value>Currently Active tour:</value>
+    <value>Currently Active Tour:</value>
   </data>
   <data name="DGCity" xml:space="preserve">
     <value>City</value>
   </data>
   <data name="DGCountry" xml:space="preserve">
     <value>Country</value>
+  </data>
+  <data name="DGCPName" xml:space="preserve">
+    <value>Checkpoint Name</value>
   </data>
   <data name="DGDuration" xml:space="preserve">
     <value>Duration (hours)</value>
@@ -158,6 +161,9 @@
   </data>
   <data name="DGName" xml:space="preserve">
     <value>Name</value>
+  </data>
+  <data name="DGOrder" xml:space="preserve">
+    <value>Order</value>
   </data>
   <data name="DGSeeMore" xml:space="preserve">
     <value>See More</value>
@@ -216,8 +222,14 @@
   <data name="Next" xml:space="preserve">
     <value>Next</value>
   </data>
+  <data name="NoSpacesAvailable" xml:space="preserve">
+    <value>There are no spaces left for chosen tour. Here are all available tours in the same city:</value>
+  </data>
   <data name="NoVoucher" xml:space="preserve">
     <value>I don't want to use a voucher.</value>
+  </data>
+  <data name="NoVouchers" xml:space="preserve">
+    <value>You don't have any vouchers.</value>
   </data>
   <data name="PersonCount" xml:space="preserve">
     <value>Person Count:</value>
@@ -237,14 +249,29 @@
   <data name="ReserveTour" xml:space="preserve">
     <value>Reserve tour</value>
   </data>
+  <data name="ShowMoreBtn" xml:space="preserve">
+    <value>Show More</value>
+  </data>
   <data name="StartDate" xml:space="preserve">
     <value>Start Date</value>
+  </data>
+  <data name="StartDateTime" xml:space="preserve">
+    <value>Start date:</value>
   </data>
   <data name="Submit" xml:space="preserve">
     <value>Submit</value>
   </data>
   <data name="Theme" xml:space="preserve">
     <value>Theme</value>
+  </data>
+  <data name="TooManyGuestsMSG1" xml:space="preserve">
+    <value>You've tried adding in too many guests. There is only one space available.</value>
+  </data>
+  <data name="TooManyGuestsMSGMany1" xml:space="preserve">
+    <value>You've tried adding in too many guests. There are only </value>
+  </data>
+  <data name="TooManyGuestsMSGMany2" xml:space="preserve">
+    <value> spaces available.</value>
   </data>
   <data name="TourCity" xml:space="preserve">
     <value>Tour City:</value>
@@ -268,6 +295,12 @@
     <value>Tour Reservation</value>
   </data>
   <data name="TourTrackingTab" xml:space="preserve">
+    <value>Tour Tracking</value>
+  </data>
+  <data name="TrackingInfo" xml:space="preserve">
+    <value>Currently active checkpoint is highlighted.</value>
+  </data>
+  <data name="TrackTour" xml:space="preserve">
     <value>Tour Tracking</value>
   </data>
   <data name="VeryBad" xml:space="preserve">
@@ -294,6 +327,13 @@
   <data name="Voucher6" xml:space="preserve">
     <value>What are vouchers?</value>
   </data>
+  <data name="VoucherInfo" xml:space="preserve">
+    <value>- Vouchers can be used to reserve a tour.
+- Vouchers can be obtained in several ways:
+  - By attending any 5 tours in one year. These vouchers expire in 6 months and can be used for any tour.
+  - When a tour guide quits or cancels a tour you reserved.
+- Used or expired vouchers will no longer be visible.</value>
+  </data>
   <data name="VouchersTab" xml:space="preserve">
     <value>Vouchers</value>
   </data>
@@ -301,6 +341,6 @@
     <value>Welcome to DMJM Tours! What would you like to do?</value>
   </data>
   <data name="YourVouchers" xml:space="preserve">
-    <value>Your Vouchers</value>
+    <value>Vouchers</value>
   </data>
 </root>

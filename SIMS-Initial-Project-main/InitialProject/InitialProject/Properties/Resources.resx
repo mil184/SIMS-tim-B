@@ -144,6 +144,9 @@
   <data name="DGCountry" xml:space="preserve">
     <value>Država</value>
   </data>
+  <data name="DGCPName" xml:space="preserve">
+    <value>Naziv tačke</value>
+  </data>
   <data name="DGDuration" xml:space="preserve">
     <value>Trajanje (sati)</value>
   </data>
@@ -158,6 +161,9 @@
   </data>
   <data name="DGName" xml:space="preserve">
     <value>Naziv</value>
+  </data>
+  <data name="DGOrder" xml:space="preserve">
+    <value>Redosled</value>
   </data>
   <data name="DGSeeMore" xml:space="preserve">
     <value>Videti još</value>
@@ -216,8 +222,14 @@
   <data name="Next" xml:space="preserve">
     <value>Sledeća</value>
   </data>
+  <data name="NoSpacesAvailable" xml:space="preserve">
+    <value>Nije ostalo nijedno slobodno mesto na odabranoj turi. Prikazane su dostupne ture u istom gradu:</value>
+  </data>
   <data name="NoVoucher" xml:space="preserve">
     <value>Ne želim da koristim vaučer.</value>
+  </data>
+  <data name="NoVouchers" xml:space="preserve">
+    <value>Nemate nijedan vaučer.</value>
   </data>
   <data name="PersonCount" xml:space="preserve">
     <value>Broj gostiju:</value>
@@ -237,14 +249,29 @@
   <data name="ReserveTour" xml:space="preserve">
     <value>Rezerviši turu</value>
   </data>
+  <data name="ShowMoreBtn" xml:space="preserve">
+    <value>Prikaži više</value>
+  </data>
   <data name="StartDate" xml:space="preserve">
     <value>Početni datum</value>
+  </data>
+  <data name="StartDateTime" xml:space="preserve">
+    <value>Početno vreme:</value>
   </data>
   <data name="Submit" xml:space="preserve">
     <value>Poslati</value>
   </data>
   <data name="Theme" xml:space="preserve">
     <value>Tema</value>
+  </data>
+  <data name="TooManyGuestsMSG1" xml:space="preserve">
+    <value>Pokušao si da dodaš previše gostiju. Slobodno je još samo jedno mesto.</value>
+  </data>
+  <data name="TooManyGuestsMSGMany1" xml:space="preserve">
+    <value>Pokušao si da dodaš previše gostiju. Slobodno je još </value>
+  </data>
+  <data name="TooManyGuestsMSGMany2" xml:space="preserve">
+    <value> mesta.</value>
   </data>
   <data name="TourCity" xml:space="preserve">
     <value>Grad ture:</value>
@@ -268,6 +295,12 @@
     <value>Rezervisanje ture</value>
   </data>
   <data name="TourTrackingTab" xml:space="preserve">
+    <value>Praćenje ture</value>
+  </data>
+  <data name="TrackingInfo" xml:space="preserve">
+    <value>Obeležena je tačka koja je trenutno aktivna.</value>
+  </data>
+  <data name="TrackTour" xml:space="preserve">
     <value>Praćenje ture</value>
   </data>
   <data name="VeryBad" xml:space="preserve">
@@ -294,6 +327,13 @@
   <data name="Voucher6" xml:space="preserve">
     <value>Šta su vaučeri?</value>
   </data>
+  <data name="VoucherInfo" xml:space="preserve">
+    <value>- Vaučeri mogu da se iskoriste pri rezervaciji ture.
+- Vaučeri se mogu osvojiti na nekoliko načina:
+  - Prisustvovanjem na barem 5 tura u jednoj godini.
+  - Kada vodič da otkaz ili otkaže turu koju ste rezervisali.
+- Iskorišćeni ili nevažeći vaučeri se neće prikazivati</value>
+  </data>
   <data name="VouchersTab" xml:space="preserve">
     <value>Vaučeri</value>
   </data>
@@ -301,6 +341,6 @@
     <value>Dobrodošli na DMJM Tours! Šta biste želeli da radite?</value>
   </data>
   <data name="YourVouchers" xml:space="preserve">
-    <value>Tvoji vaučeri</value>
+    <value>Vaučeri</value>
   </data>
 </root>

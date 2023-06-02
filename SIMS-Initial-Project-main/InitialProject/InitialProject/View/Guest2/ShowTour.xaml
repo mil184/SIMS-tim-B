@@ -14,8 +14,8 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="120"/>
-            <RowDefinition Height="85*"/>
-            <RowDefinition Height="15*"/>
+            <RowDefinition />
+            <RowDefinition Height="80"/>
         </Grid.RowDefinitions>
 
         <!-- User information section -->
@@ -78,7 +78,7 @@
 
                     <RowDefinition />
                     <RowDefinition />
-                    <RowDefinition />
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="25*"/>
@@ -87,82 +87,82 @@
                     <ColumnDefinition Width="25*"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Text="{ns:Loc TourName}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
+                <TextBlock Text="{ns:Loc TourName}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold" Margin="5" />
                 <TextBox Name="txtTourName" Margin="5" IsReadOnly="True"    
                     Text="{Binding Path=tourDTO.Name}"
-                    Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Width="300" Height="60">
+                    Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Width="230" Height="38">
                 </TextBox>
 
-                <TextBlock Text="{ns:Loc TourDesc}" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" />
+                <TextBlock Text="{ns:Loc TourDesc}" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" FontWeight="Bold" Margin="5"/>
                 <TextBox Name="txtTourDescription" Margin="5" Height="100" IsReadOnly="True"
                          Text="{Binding Path=tourDTO.Description}" 
-                         Grid.Row="0" Grid.Column="3" HorizontalAlignment="Left" Width="300" TextWrapping="Wrap" />
+                         Grid.Row="0" Grid.Column="3" HorizontalAlignment="Left" Width="230" TextWrapping="Wrap" />
 
 
-                <TextBlock Text="{ns:Loc TourCountry}" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" />
+                <TextBlock Text="{ns:Loc TourCountry}" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" FontWeight="Bold" Margin="5" />
                 <TextBox Name="txtTourCountry" Margin="5" IsReadOnly="True"
                          Text="{Binding Path=tourDTO.Country}" 
-                         Grid.Row="1" Grid.Column="3" HorizontalAlignment="Left" Width="300"/>
+                         Grid.Row="1" Grid.Column="3" HorizontalAlignment="Left" Width="230" Height="38"/>
 
-                <TextBlock Text="{ns:Loc TourCity}" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" />
+                <TextBlock Text="{ns:Loc TourCity}" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" FontWeight="Bold" Margin="5" />
                 <TextBox Name="txtTourCity" Margin="5" IsReadOnly="True"
                          Text="{Binding Path=tourDTO.City}" 
-                         Grid.Row="2" Grid.Column="3" HorizontalAlignment="Left" Width="300"/>
+                         Grid.Row="2" Grid.Column="3" HorizontalAlignment="Left" Width="230" Height="38"/>
 
-                <TextBlock Text="{ns:Loc Language}" Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" />
+                <TextBlock Text="{ns:Loc Language}" Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" FontWeight="Bold" Margin="5" />
                 <TextBox Name="txtLanguage" Margin="5" IsReadOnly="True"
                          Text="{Binding Path=tourDTO.Language}" 
                          Grid.Row="3" Grid.Column="3"
-                         HorizontalAlignment="Left" Width="300"/>
+                         HorizontalAlignment="Left" Width="230" Height="38"/>
 
-                <TextBlock Text="{ns:Loc MaxGuests}" Grid.Row="4" Grid.Column="2" VerticalAlignment="Center" />
+                <TextBlock Text="{ns:Loc MaxGuests}" Grid.Row="4" Grid.Column="2" VerticalAlignment="Center" FontWeight="Bold" Margin="5" />
                 <TextBox Name="txtMaxGuests" Margin="5" IsReadOnly="True"
                          Text="{Binding Path=tourDTO.MaxGuests}" 
                          Grid.Row="4" Grid.Column="3"
-                         HorizontalAlignment="Left" Width="300"/>
+                         HorizontalAlignment="Left" Width="230" Height="38"/>
 
-                <TextBlock Text="{ns:Loc CurrentGuests}" Grid.Row="5" Grid.Column="2" VerticalAlignment="Center" />
+                <TextBlock Text="{ns:Loc CurrentGuests}" Grid.Row="5" Grid.Column="2" VerticalAlignment="Center" FontWeight="Bold" Margin="5" />
                 <TextBox Name="txtCurrentGuests" Margin="5" IsReadOnly="True"
                          Text="{Binding Path=tourDTO.CurrentGuestCount}" 
                          Grid.Row="5" Grid.Column="3"
-                         HorizontalAlignment="Left" Width="300"/>
+                         HorizontalAlignment="Left" Width="230" Height="38"/>
 
-                <TextBlock Text="{ns:Loc StartDateTime}" Grid.Row="6" Grid.Column="2" VerticalAlignment="Center" />
+                <TextBlock Text="{ns:Loc StartDateTime}" Grid.Row="6" Grid.Column="2" VerticalAlignment="Center" FontWeight="Bold" Margin="5" />
                 <TextBox Name="txtStartDateTime" Margin="5" IsReadOnly="True"
                          Text="{Binding Path=tourDTO.StartTime, StringFormat={}{0:dd.M.yyyy. HH:mm}}" 
                          Grid.Row="6" Grid.Column="3"
-                         HorizontalAlignment="Left" Width="300" />
+                         HorizontalAlignment="Left" Width="230" Height="38" />
 
-                <TextBlock Text="{ns:Loc Duration}" Grid.Row="7" Grid.Column="2" VerticalAlignment="Center" />
+                <TextBlock Text="{ns:Loc Duration}" Grid.Row="7" Grid.Column="2" VerticalAlignment="Center" FontWeight="Bold" Margin="5" />
                 <TextBox Name="txtDuration" Margin="5" IsReadOnly="True"
                          Text="{Binding Path=tourDTO.Duration}" 
                          Grid.Row="7" Grid.Column="3"
-                         HorizontalAlignment="Left" Width="300"/>
+                         HorizontalAlignment="Left" Width="230" Height="38" />
 
-                <TextBlock Text="{ns:Loc Guide}" Grid.Row="8" Grid.Column="2" VerticalAlignment="Center" />
+                <TextBlock Text="{ns:Loc Guide}" Grid.Row="8" Grid.Column="2" VerticalAlignment="Center" FontWeight="Bold" Margin="5" />
                 <TextBox Name="txtGuide" Margin="5" IsReadOnly="True"
                          Text="{Binding Path=tourDTO.Guide}" 
                          Grid.Row="8" Grid.Column="3"
-                         HorizontalAlignment="Left" Width="300"/>
+                         HorizontalAlignment="Left" Width="230" Height="38" />
 
-                <TextBlock Text="{ns:Loc Images}" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" />
+                <TextBlock Text="{ns:Loc Images}" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold" Margin="5" />
                 <Image Name="picHolder" Grid.ColumnSpan="2" Grid.Row="2" Grid.RowSpan="6" Stretch="Uniform" Margin="10"/>
 
-                <Button Grid.Column="0" Grid.Row="8" HorizontalAlignment="Center" Width="150" Height="35" Content="{ns:Loc Previous}" Click="PreviousButton_Click"/>
-                <Button Grid.Column="1" Grid.Row="8" HorizontalAlignment="Center" Width="150" Height="35" Content="{ns:Loc Next}" Click="NextButton_Click"/>
+                <Button Grid.Column="0" Grid.Row="8" HorizontalAlignment="Center" Width="160" Height="40" Content="{ns:Loc Previous}" Click="PreviousButton_Click"/>
+                <Button Grid.Column="1" Grid.Row="8" HorizontalAlignment="Center" Width="160" Height="40" Content="{ns:Loc Next}" Click="NextButton_Click"/>
                 
             </Grid>
         </GroupBox>
         
         <Button Grid.Row="3" Grid.Column="1"
                 HorizontalAlignment="Center"
-                FontSize="25" 
-                Height="50" Width="200"
+                FontSize="20" 
+                Height="40" Width="160"
                 Click ="ExitButton_Click">
             <Button.Content>
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="/Resources/Images/back.png" Width="25" Margin="5"/>
-                    <TextBlock Text="{ns:Loc Exit}"/>
+                    <Image Source="/Resources/Images/cross.png" Width="25" Margin="5" HorizontalAlignment="Center"/>
+                    <TextBlock Text="{ns:Loc Exit}" HorizontalAlignment="Center" Margin="4"/>
                 </StackPanel>
             </Button.Content>
         </Button>
