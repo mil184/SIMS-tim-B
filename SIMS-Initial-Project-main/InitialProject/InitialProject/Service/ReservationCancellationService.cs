@@ -13,14 +13,14 @@ namespace InitialProject.Service
         private readonly IReservationCancellationRepository _reservationCancellationRepository;
         private readonly AccommodationService _accommodationService;
         private readonly AccommodationReservationService _reservationService;
-        private readonly UserRepository _userRepository;
+        private readonly UserService _userService;
 
         public ReservationCancellationService()
         {
             _reservationCancellationRepository = Injector.CreateInstance<IReservationCancellationRepository>();
             _accommodationService = new AccommodationService();
             _reservationService = new AccommodationReservationService();
-            _userRepository = new UserRepository();
+            _userService = new UserService();
         }
 
         public List<ReservationCancellation> GetCancellationsByYear(int accommodationId, int year)

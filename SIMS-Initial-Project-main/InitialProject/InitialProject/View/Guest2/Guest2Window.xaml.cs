@@ -53,7 +53,7 @@ namespace InitialProject.View.Guest2
         private readonly LocationService _locationService;
         private readonly ImageRepository _imageRepository;
         private readonly CheckpointService _checkpointService;
-        private readonly UserRepository _userRepository;
+        private readonly UserService _userService;
         private readonly TourReservationService _tourReservationService;
         private readonly TourRatingService _tourRatingService;
         private readonly VoucherService _voucherService;
@@ -137,8 +137,8 @@ namespace InitialProject.View.Guest2
             _checkpointService = new CheckpointService();
             _checkpointService.Subscribe(this);
 
-            _userRepository = new UserRepository();
-            _userRepository.Subscribe(this);
+            _userService = new UserService();
+            _userService.Subscribe(this);
 
             _tourReservationService = new TourReservationService();
             _tourReservationService.Subscribe(this);
@@ -424,7 +424,7 @@ namespace InitialProject.View.Guest2
                     tour.CurrentGuestCount,
                     tour.StartTime,
                     tour.Duration,
-                    _userRepository.GetById(tour.GuideId).Username));
+                    _userService.GetById(tour.GuideId).Username));
             }
 
             return dto;
@@ -443,7 +443,7 @@ namespace InitialProject.View.Guest2
                 tour.CurrentGuestCount,
                 tour.StartTime,
                 tour.Duration,
-                _userRepository.GetById(tour.GuideId).Username);
+                _userService.GetById(tour.GuideId).Username);
 
         }
 
@@ -451,7 +451,7 @@ namespace InitialProject.View.Guest2
         {
             if (SelectedGuest2TourDTO != null)
             {
-                ReserveTour reserveTourForm = new ReserveTour(SelectedGuest2TourDTO, LoggedInUser, _tourService, _tourReservationService, _voucherService, _locationService, _userRepository);
+                ReserveTour reserveTourForm = new ReserveTour(SelectedGuest2TourDTO, LoggedInUser, _tourService, _tourReservationService, _voucherService, _locationService, _userService);
                 reserveTourForm.ShowDialog();
             }
         }
@@ -528,7 +528,7 @@ namespace InitialProject.View.Guest2
 
         private void RequestButton_Click(object sender, RoutedEventArgs e)
         {
-            RequestTourViewModel requestTourViewModel = new RequestTourViewModel(_userRepository, _locationService, _tourRequestService, LoggedInUser);
+            RequestTourViewModel requestTourViewModel = new RequestTourViewModel(_userService, _locationService, _tourRequestService, LoggedInUser);
             RequestTour requestTour = new RequestTour(requestTourViewModel);
             requestTour.Show();
         }

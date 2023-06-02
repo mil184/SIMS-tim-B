@@ -15,14 +15,14 @@ namespace InitialProject.Service
         private readonly IGuestReviewRepository _guestReviewRepository;
         private readonly AccommodationService _accommodationService;
         private readonly AccommodationReservationService _reservationService;
-        private readonly UserRepository _userRepository;
+        private readonly UserService _userService;
 
         public GuestReviewService()
         {
             _guestReviewRepository = Injector.CreateInstance<IGuestReviewRepository>();
             _accommodationService = new AccommodationService();
             _reservationService = new AccommodationReservationService();
-            _userRepository = new UserRepository();
+            _userService = new UserService();
         }
 
         public List<GuestReviewDTO> GetUnreviewedGuests(int ownerId)
@@ -35,7 +35,7 @@ namespace InitialProject.Service
                 {
                     if (_accommodationService.GetByUser(ownerId).Any(item => item.Id == reservation.AccommodationId))
                     {
-                        guests.Add(new GuestReviewDTO(reservation.Id, _userRepository.GetById(reservation.GuestId).Username, _accommodationService.GetById(reservation.AccommodationId).Name));
+                        guests.Add(new GuestReviewDTO(reservation.Id, _userService.GetById(reservation.GuestId).Username, _accommodationService.GetById(reservation.AccommodationId).Name));
                     }
                 }
             }

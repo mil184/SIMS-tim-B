@@ -22,7 +22,7 @@ namespace InitialProject.ViewModel.Guest2
         public ObservableCollection<String> cbCountryItemsSource { get; set; }
         public ObservableCollection<String> cbCityItemsSource { get; set; }
 
-        private readonly UserRepository _userRepository;
+        private readonly UserService _userService;
         private readonly LocationService _locationService;
         private readonly TourRequestService _tourRequestService;
 
@@ -199,9 +199,9 @@ namespace InitialProject.ViewModel.Guest2
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public RequestTourViewModel(UserRepository userRepository, LocationService locationService, TourRequestService tourRequestService, User user)
+        public RequestTourViewModel(UserService userService, LocationService locationService, TourRequestService tourRequestService, User user)
         {
-            _userRepository = userRepository;
+            _userService = userService;
             _locationService = locationService;
             _tourRequestService = tourRequestService;
             _tourRequestService.Subscribe(this);

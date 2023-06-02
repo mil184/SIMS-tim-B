@@ -39,7 +39,7 @@ namespace InitialProject.View.Guide
         private readonly LocationService _locationService;
         private readonly ImageRepository _imageRepository;
         private readonly CheckpointService _checkpointService;
-        private readonly UserRepository _userRepository;
+        private readonly UserService _userService;
         private readonly VoucherRepository _voucherRepository;
         private readonly TourRequestService _tourRequestService;
         private readonly ComplexTourService _complexTourService;
@@ -67,8 +67,8 @@ namespace InitialProject.View.Guide
             _tourReservationService = new TourReservationService();
             _tourReservationService.Subscribe(this);
 
-            _userRepository = new UserRepository();
-            _userRepository.Subscribe(this);
+            _userService = new UserService();
+            _userService.Subscribe(this);
 
             _voucherRepository = new VoucherRepository();
             _voucherRepository.Subscribe(this);
@@ -91,7 +91,6 @@ namespace InitialProject.View.Guide
             RequestStartDateInput = null;
             RequestEndDateInput = null;
 
-            CurrentUser.Username = "Gorana";
             CurrentTourSortIndex = 0;
             CurrentRequestSortIndex = 0;
 
@@ -126,8 +125,21 @@ namespace InitialProject.View.Guide
 
             Messages = new ObservableCollection<GuideMessage>();
 
-            Messages.Add( new GuideMessage("You have become a superguide for the language: ENGLISH"));
-            Messages.Add(new GuideMessage("You have become a superguide for the language: GERMAN"));
+            List<string> gotLanguages = _userService.UpdateSuperGuidesLanguagesGot(CurrentUser);
+
+            if (gotLanguages.Count > 0) 
+            {
+                foreach (string language in gotLanguages)
+                    Messages.Add(new GuideMessage(language, true));
+            }
+            List<string> lostLanguages = _userService.UpdateSuperGuidesLanguagesLost(CurrentUser);
+
+            if (lostLanguages.Count > 0)
+            {
+                foreach (string language in lostLanguages)
+                    Messages.Add(new GuideMessage(language, false));
+            }
+
         }
 
         private void InitializeComboBoxes()
@@ -280,7 +292,7 @@ namespace InitialProject.View.Guide
             if (selectedTour.IsActive)
             {
                 ActiveTour = GuideDTOConverter.ConvertToDTO(selectedTour, _locationService);
-                ShowCheckpoints showCheckpoints = new ShowCheckpoints(selectedTour, _checkpointService, _tourService, _tourReservationService, _userRepository);
+                ShowCheckpoints showCheckpoints = new ShowCheckpoints(selectedTour, _checkpointService, _tourService, _tourReservationService, _userService);
                 showCheckpoints.ShowDialog();
             }
             else if (TourActive)
@@ -322,7 +334,7 @@ namespace InitialProject.View.Guide
         }
         private void ShowCheckpointsForTour(Tour tour)
         {
-            ShowCheckpoints showCheckpoints = new ShowCheckpoints(tour, _checkpointService, _tourService, _tourReservationService, _userRepository);
+            ShowCheckpoints showCheckpoints = new ShowCheckpoints(tour, _checkpointService, _tourService, _tourReservationService, _userService);
             showCheckpoints.ShowDialog();
         }
         private bool ConfirmStartTour(Tour selectedTour)
@@ -501,7 +513,7 @@ namespace InitialProject.View.Guide
         }
         private void SelectRatedTour()
         {
-            RatingsViewModel ratingsViewModel = new RatingsViewModel(_userRepository, _tourRatingService, _tourReservationService, _checkpointService, GuideDTOConverter.ConvertToTour(SelectedRatedTourDTO, _tourService));
+            RatingsViewModel ratingsViewModel = new RatingsViewModel(_userService, _tourRatingService, _tourReservationService, _checkpointService, GuideDTOConverter.ConvertToTour(SelectedRatedTourDTO, _tourService));
             Ratings ratings = new Ratings(ratingsViewModel);
             ratings.Show();
         }
@@ -1326,9 +1338,23 @@ namespace InitialProject.View.Guide
 
         #region MessagesGrid
         public ObservableCollection<GuideMessage> Messages { get; set; }
+        public GuideMessage SelectedMessage { get; set; }
         private void OkButton_Click(object sender, RoutedEventArgs e)
         {
-
+            if(SelectedMessage != null) 
+            {
+                List<string> currentUserLanguages = new List<string>();
+                   
+                foreach(string language in CurrentUser.SuperGuideLanguages) 
+                {
+                    if(SelectedMessage.Language != language)
+                    currentUserLanguages.Add(language);
+                }
+                
+                CurrentUser.SuperGuideLanguages = currentUserLanguages;
+                _userService.Update(CurrentUser);
+            }
+            
         }
         #endregion
 
@@ -1341,6 +1367,25 @@ namespace InitialProject.View.Guide
             UpdateActiveTour();
             UpdatePendingRequests();
             UpdateComplexTours();
+            UpdateMessages();
+        }
+        private void UpdateMessages() 
+        {
+            Messages.Clear();
+            List<string> gotLanguages = _userService.UpdateSuperGuidesLanguagesGot(CurrentUser);
+
+            if (gotLanguages.Count > 0)
+            {
+                foreach (string language in gotLanguages)
+                    Messages.Add(new GuideMessage(language, true));
+            }
+            List<string> lostLanguages = _userService.UpdateSuperGuidesLanguagesLost(CurrentUser);
+
+            if (lostLanguages.Count > 0)
+            {
+                foreach (string language in lostLanguages)
+                    Messages.Add(new GuideMessage(language, false));
+            }
         }
         private void UpdateUpcomingTours()
         {

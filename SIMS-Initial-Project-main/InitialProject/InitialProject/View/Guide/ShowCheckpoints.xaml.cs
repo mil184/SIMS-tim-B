@@ -30,7 +30,7 @@ namespace InitialProject.View.Guide
         private readonly CheckpointService _checkpointService;
         private readonly TourService _tourService;
         private readonly TourReservationService _tourReservationService;
-        private readonly UserRepository _userRepository;
+        private readonly UserService _userService;
 
         public Tour ActiveTour {get; set;}
         public ObservableCollection<UserDTO> UnmarkedGuests { get; set; }
@@ -58,7 +58,7 @@ namespace InitialProject.View.Guide
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public ShowCheckpoints(Tour tour, CheckpointService checkpointService, TourService tourService, TourReservationService tourReservationService, UserRepository userRepository)
+        public ShowCheckpoints(Tour tour, CheckpointService checkpointService, TourService tourService, TourReservationService tourReservationService, UserService userService)
         {
             InitializeComponent();
             DataContext = this;
@@ -67,7 +67,7 @@ namespace InitialProject.View.Guide
             _checkpointService = checkpointService;
             _tourService = tourService;
             _tourReservationService = tourReservationService;
-            _userRepository = userRepository;
+            _userService = userService;
 
             ActiveTour = tour;
 
@@ -89,7 +89,7 @@ namespace InitialProject.View.Guide
 
             foreach (int guestId in _tourReservationService.GetUncheckedUserIdsByTour(ActiveTour)) 
             {
-                UnmarkedGuests.Add(GuideDTOConverter.ConvertToDTO(_userRepository.GetById(guestId), _tourReservationService, ActiveTour, _checkpointService));
+                UnmarkedGuests.Add(GuideDTOConverter.ConvertToDTO(_userService.GetById(guestId), _tourReservationService, ActiveTour, _checkpointService));
             }
 
             CurrentCheckpoint = _checkpointService.GetById(ActiveTour.CurrentCheckpointId);

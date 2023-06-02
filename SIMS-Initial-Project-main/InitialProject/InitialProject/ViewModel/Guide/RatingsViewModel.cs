@@ -16,7 +16,7 @@ namespace InitialProject.ViewModel.Guide
 {
     public class RatingsViewModel : INotifyPropertyChanged, IObserver
     {
-        private readonly UserRepository _userRepository;
+        private readonly UserService _userService;
         private readonly CheckpointService _checkpointService;
         private readonly TourRatingService _tourRatingService;
         private readonly TourReservationService _tourReservationService;
@@ -43,9 +43,9 @@ namespace InitialProject.ViewModel.Guide
                 OnPropertyChanged();
             }
         }
-        public RatingsViewModel(UserRepository userRepository, TourRatingService tourRatingService, TourReservationService tourReservationService, CheckpointService checkpointService, Tour finishedTour)
+        public RatingsViewModel(UserService userService, TourRatingService tourRatingService, TourReservationService tourReservationService, CheckpointService checkpointService, Tour finishedTour)
         {
-            _userRepository = userRepository;
+            _userService = userService;
             _tourRatingService = tourRatingService;
             _tourReservationService = tourReservationService;
             _checkpointService = checkpointService;
@@ -90,7 +90,7 @@ namespace InitialProject.ViewModel.Guide
 
         private string GetUserName(int userId)
         {
-            var user = _userRepository.GetById(userId);
+            var user = _userService.GetById(userId);
             return user.Username;
         }
 

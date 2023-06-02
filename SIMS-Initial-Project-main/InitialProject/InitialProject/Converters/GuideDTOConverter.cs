@@ -94,10 +94,10 @@ namespace InitialProject.Converters
 
             return new UserDTO(user.Id, user.Username, currentCheckpoint);
         }
-        static public User ConvertToUser(UserDTO dto, UserRepository userRepository)
+        static public User ConvertToUser(UserDTO dto, UserService userService)
         {
             if (dto != null)
-                return userRepository.GetById(dto.UserId);
+                return userService.GetById(dto.UserId);
             return null;
         }
         static public List<GuideComplexTourDTO> ConvertToDTO(List<ComplexTour> complexTours, TourRequestService tourRequestService, LocationService locationService, ComplexTourService complexTourService)

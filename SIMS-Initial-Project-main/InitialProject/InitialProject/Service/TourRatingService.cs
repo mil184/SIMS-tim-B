@@ -34,6 +34,22 @@ namespace InitialProject.Service
             return urls;
         }
 
+        public double GetAverageLanguageRating(Tour tour) 
+        {
+            double counter = 0;
+            double sum = 0;
+
+            foreach(TourRating tourRating in GetTourRatings(tour)) 
+            {
+                if(tourRating.isValid && tourRating.TourId == tourRating.Id)
+                {
+                    sum += tourRating.GuideLanguage;
+                    counter++;
+                }
+            }
+            return sum / counter;
+        }
+
         public TourRating Save(TourRating tourRating)
         {
             return _tourRatingRepository.Save(tourRating);
@@ -44,6 +60,10 @@ namespace InitialProject.Service
             return _tourRatingRepository.GetById(id);
         }
 
+        public List<TourRating> GetAll()
+        {
+            return _tourRatingRepository.GetAll();
+        }
         public TourRating Update(TourRating tourRating)
         {
             return _tourRatingRepository.Update(tourRating);

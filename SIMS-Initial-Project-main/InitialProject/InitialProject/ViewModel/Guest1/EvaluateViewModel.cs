@@ -23,7 +23,7 @@ namespace InitialProject.ViewModel.Guest1
         private readonly AccommodationRatingService _accommodationRatingsService;
         private readonly AccommodationReservationService _accommodationReservationService;
         private readonly IImageRepository _imageRepository;
-        private readonly IUserRepository _userRepository;
+        private readonly IUserRepository _userService;
         private readonly RenovationRecommendationService _renovationRecommendationService;
 
         public AccommodationReservation Reservation { get; set; }
@@ -276,7 +276,7 @@ namespace InitialProject.ViewModel.Guest1
             _accommodationRatingsService = accommodationRatingsService;
             _accommodationReservationService = accommodationReservationService;
             _imageRepository = imageRepository;
-            _userRepository = Injector.CreateInstance<IUserRepository>();
+            _userService = Injector.CreateInstance<IUserRepository>();
             _renovationRecommendationService = new RenovationRecommendationService();
 
             Reservation = _accommodationReservationService.GetById(SelectedUnratedAccommodation.ReservationId);
@@ -375,7 +375,7 @@ namespace InitialProject.ViewModel.Guest1
 
         private void SetSuperOwnerPrivileges(int id, int numberOfRatings, double averageRating)
         {
-            User owner = _userRepository.GetById(id);
+            User owner = _userService.GetById(id);
             if (numberOfRatings >= 50 && averageRating > 4.5)
             {
                 owner.Type = InitialProject.Resources.Enums.UserType.superowner;
@@ -384,7 +384,7 @@ namespace InitialProject.ViewModel.Guest1
             {
                 owner.Type = InitialProject.Resources.Enums.UserType.owner;
             }
-            _userRepository.Update(owner);
+            _userService.Update(owner);
         }
 
         private void Execute_CancelEvaluateCommand(object obj)

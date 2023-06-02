@@ -47,7 +47,7 @@ namespace InitialProject.View.Guest2
         private readonly TourReservationService _tourReservationService;
         private readonly TourService _tourService;
         private readonly LocationService _locationService;
-        private readonly UserRepository _userRepository;
+        private readonly UserService _userService;
         private readonly VoucherService _voucherService;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -57,7 +57,7 @@ namespace InitialProject.View.Guest2
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public ReserveTour(Guest2TourDTO selectedTour, User user, TourService tourService, TourReservationService tourReservationService, VoucherService voucherService, LocationService locationService, UserRepository userRepository)
+        public ReserveTour(Guest2TourDTO selectedTour, User user, TourService tourService, TourReservationService tourReservationService, VoucherService voucherService, LocationService locationService, UserService userService)
         {
             InitializeComponent();
             DataContext = this;
@@ -69,7 +69,7 @@ namespace InitialProject.View.Guest2
             _tourService = tourService;
             _voucherService = voucherService;
             _locationService = locationService;
-            _userRepository = userRepository;
+            _userService = userService;
 
             List<Voucher> UserVouchers = _voucherService.GetUserVouchers(LoggedInUser);
             Vouchers = new ObservableCollection<Voucher>(_voucherService.GetActiveVouchers(UserVouchers));
@@ -128,7 +128,7 @@ namespace InitialProject.View.Guest2
 
         private void HandleZeroSpacesForReservation(Tour selectedTour)
         {
-            var zeroSpacesForReservation = new ZeroSpacesForReservation(SelectedTour, LoggedInUser, _tourService, _locationService, _userRepository, _voucherService);
+            var zeroSpacesForReservation = new ZeroSpacesForReservation(SelectedTour, LoggedInUser, _tourService, _locationService, _userService, _voucherService);
             zeroSpacesForReservation.ShowDialog();
             Close();
         }

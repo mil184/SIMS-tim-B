@@ -24,11 +24,11 @@ namespace InitialProject.View.Guest2
 
         private readonly TourService _tourService;
         private readonly LocationService _locationService;
-        private readonly UserRepository _userRepository;
+        private readonly UserService _userService;
         private readonly VoucherService _voucherService;
         private readonly TourReservationService _tourReservationService;
 
-        public ZeroSpacesForReservation(Guest2TourDTO selectedTour, User user, TourService tourService, LocationService locationService, UserRepository userRepository, VoucherService voucherService)
+        public ZeroSpacesForReservation(Guest2TourDTO selectedTour, User user, TourService tourService, LocationService locationService, UserService userService, VoucherService voucherService)
         {
             InitializeComponent();
             DataContext = this;
@@ -38,7 +38,7 @@ namespace InitialProject.View.Guest2
 
             _tourService = tourService;
             _locationService = locationService;
-            _userRepository = userRepository;
+            _userService = userService;
             _voucherService = voucherService;
 
             ToursByCity = _tourService.GetByCityName(selectedTour.City);
@@ -66,7 +66,7 @@ namespace InitialProject.View.Guest2
         {
             if (NewSelectedTour != null)
             {
-                ReserveTour reserveTourForm = new ReserveTour(NewSelectedTour, LoggedInUser, _tourService, _tourReservationService, _voucherService, _locationService, _userRepository);
+                ReserveTour reserveTourForm = new ReserveTour(NewSelectedTour, LoggedInUser, _tourService, _tourReservationService, _voucherService, _locationService, _userService);
                 reserveTourForm.ShowDialog();
             }
             Close();
@@ -89,7 +89,7 @@ namespace InitialProject.View.Guest2
                     tour.CurrentGuestCount,
                     tour.StartTime,
                     tour.Duration,
-                    _userRepository.GetById(tour.GuideId).Username));
+                    _userService.GetById(tour.GuideId).Username));
             }
 
             return dtoList;
@@ -107,7 +107,7 @@ namespace InitialProject.View.Guest2
                 tour.CurrentGuestCount,
                 tour.StartTime,
                 tour.Duration,
-                _userRepository.GetById(tour.GuideId).Username);
+                _userService.GetById(tour.GuideId).Username);
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)

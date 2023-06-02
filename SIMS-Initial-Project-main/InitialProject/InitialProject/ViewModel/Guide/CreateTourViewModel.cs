@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics.Metrics;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -520,6 +521,7 @@ namespace InitialProject.ViewModel.Guide
         public void RemoveSelectedCheckpoint()
         {
             TourCheckpoints.Remove(SelectedCheckpoint);
+            OrderCounter--;
 
             int counter = 0;
 

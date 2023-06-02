@@ -5,6 +5,7 @@ using InitialProject.Resources.Injector;
 using InitialProject.Resources.Observer;
 using System;
 using System.Collections.Generic;
+using System.Windows.Input;
 
 namespace InitialProject.Service
 {
@@ -12,12 +13,14 @@ namespace InitialProject.Service
     {
         private readonly ITourRepository _tourRepository;
         private readonly LocationService _locationService;
+        private readonly TourRatingService _tourRatingService;
         private readonly TourReservationRepository _tourReservationRepository;
 
         public TourService()
         {
             _tourRepository = Injector.CreateInstance<ITourRepository>();
             _locationService = new LocationService();
+            _tourRatingService = new TourRatingService();
             _tourReservationRepository = new TourReservationRepository();
         }
 
@@ -136,6 +139,51 @@ namespace InitialProject.Service
 
             return ratedTours;
         }
+        public List<Tour> GetLastYearsTours(User user)
+        {
+            var ratedTours = new List<Tour>();
+
+            DateTime end = DateTime.Now;
+            DateTime start = DateTime.Now.AddYears(-1);
+
+            foreach (var tour in GetRatedTours(user))
+            {
+
+                if (tour.StartTime >= start && tour.StartTime <= end)
+                {
+                    ratedTours.Add(tour);
+                }
+            }
+
+            return ratedTours;
+        }
+        public List<Tour> GetLastYearsToursByLanguage(User user, string language)
+        {
+            var ratedTours = new List<Tour>();
+
+            foreach (var tour in GetRatedTours(user))
+            {
+                if(tour.Language == language)
+                {
+                    ratedTours.Add(tour);
+                }
+            }
+
+            return ratedTours;
+        }
+
+        public double GetAverageLanguageRating(List<Tour> tours) 
+        {
+            double count = 0;
+            double sum = 0;
+
+            foreach(Tour tour in tours) 
+            {
+                sum += _tourRatingService.GetAverageLanguageRating(tour);
+                count++;
+            }
+            return sum/count;
+        }
         public List<Tour> GetUpcomingTours(User user)
         {
             var upcomingTours = new List<Tour>();
@@ -207,6 +255,21 @@ namespace InitialProject.Service
             }
 
             return tours;
+        }
+
+        public List<string> GetAllLanguages() 
+        {
+            List<string> languages = new List<string>();
+
+            foreach (Tour tour in GetAll())
+            {
+                if (!languages.Contains(tour.Language))
+                {
+                    languages.Add(tour.Language);
+                }
+            }
+
+            return languages;
         }
         public List<Tour> GetByDuration(double duration)
         {

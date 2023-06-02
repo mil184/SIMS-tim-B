@@ -12,17 +12,19 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace InitialProject.Service
+namespace InitialProject.Service 
 {
     public class UserService
     {
         private readonly IUserRepository _userRepository;
         private readonly AccommodationReservationService _accommodationReservationService;
+        private readonly TourService _tourService;
 
         public UserService()
         {
             _userRepository = Injector.CreateInstance<IUserRepository>();
             _accommodationReservationService = new AccommodationReservationService();
+            _tourService = new TourService();
         }
 
         public User GetByUsername(string username)
@@ -55,6 +57,61 @@ namespace InitialProject.Service
             }
         }
 
+        public bool ShouldMessageBeShown(User user, List<string> languages)
+        {
+            return languages.SequenceEqual(user.SuperGuideLanguages);
+        }
+        public List<string> UpdateSuperGuidesLanguagesGot(User user)
+        {
+            List<string> updatedLanguages = new List<string>();
+
+                List<string> currentLanguages = user.SuperGuideLanguages;
+                List<string> newLanguages = QualifiesForSuperGuide(user);
+
+                // Find the languages in newLanguages that are not in currentLanguages
+                List<string> addedLanguages = newLanguages.Except(currentLanguages).ToList();
+
+                // Add the addedLanguages to the updatedLanguages list
+                updatedLanguages.AddRange(addedLanguages);
+
+
+            return updatedLanguages;
+        }
+
+        public List<string> UpdateSuperGuidesLanguagesLost(User user)
+        {
+            List<string> lostLanguages = new List<string>();
+
+
+                List<string> currentLanguages = user.SuperGuideLanguages;
+                List<string> newLanguages = QualifiesForSuperGuide(user);
+
+                // Find the languages in currentLanguages that are not in newLanguages
+                List<string> lost = currentLanguages.Except(newLanguages).ToList();
+
+                // Add the lost languages to the lostLanguages list
+                lostLanguages.AddRange(lost);
+    
+
+            return lostLanguages;
+        }
+
+        public List<string> QualifiesForSuperGuide(User user)
+        {
+            List<string> superLanguages = new List<string>();
+
+            foreach(string language in _tourService.GetAllLanguages()) 
+            {
+                List<Tour> tours = _tourService.GetLastYearsToursByLanguage(user, language);
+
+                if(tours.Count >= 20 && _tourService.GetAverageLanguageRating(tours) > 4.0) 
+                {
+                    superLanguages.Add(language);
+                }
+
+            }
+            return superLanguages;
+        }
         public User GetById(int id)
         {
             return _userRepository.GetById(id);

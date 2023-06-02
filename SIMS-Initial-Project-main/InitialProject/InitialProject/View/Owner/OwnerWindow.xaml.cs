@@ -28,7 +28,7 @@ namespace InitialProject.View.Owner
         private readonly ImageRepository _imageRepository;
         private readonly AccommodationReservationRepository _reservationRepository;
         private readonly GuestReviewRepository _guestReviewRepository;
-        private readonly UserRepository _userRepository;
+        private readonly UserService _userService;
         private readonly AccommodationRatingsRepository _ratingRepository;
         private readonly RescheduleRequestRepository _rescheduleRequestRepository;
 
@@ -48,8 +48,8 @@ namespace InitialProject.View.Owner
             _reservationRepository.Subscribe(this);
             _guestReviewRepository = new GuestReviewRepository();
             _guestReviewRepository.Subscribe(this);
-            _userRepository = new UserRepository();
-            _userRepository.Subscribe(this);
+            _userService = new UserService();
+            _userService.Subscribe(this);
             _ratingRepository = new AccommodationRatingsRepository();
             _ratingRepository.Subscribe(this);
             _rescheduleRequestRepository = new RescheduleRequestRepository();
@@ -84,7 +84,7 @@ namespace InitialProject.View.Owner
             {
                 if (rating.OwnerId == LoggedInUser.Id && _guestReviewRepository.GetAll().Any(t => t.ReservationId == rating.ReservationId))
                 {
-                    RatingsDTO dto = new RatingsDTO(_userRepository.GetById(_reservationRepository.GetById(rating.ReservationId).GuestId).Username, _repository.GetById(rating.AccommodationId).Name, rating.Cleanliness, rating.Correctness, rating.Comment);
+                    RatingsDTO dto = new RatingsDTO(_userService.GetById(_reservationRepository.GetById(rating.ReservationId).GuestId).Username, _repository.GetById(rating.AccommodationId).Name, rating.Cleanliness, rating.Correctness, rating.Comment);
                     RatingsDTO.Add(dto);
                 }
             }
@@ -115,7 +115,7 @@ namespace InitialProject.View.Owner
                 {
                     if (Accommodations.Any(item => item.Id == reservation.AccommodationId))
                     {
-                        UnreviewedGuests.Add(new GuestReviewDTO(reservation.Id, _userRepository.GetById(reservation.GuestId).Username, _repository.GetById(reservation.AccommodationId).Name));
+                        UnreviewedGuests.Add(new GuestReviewDTO(reservation.Id, _userService.GetById(reservation.GuestId).Username, _repository.GetById(reservation.AccommodationId).Name));
                         UnreviewedReservations.Add(reservation);
                     }
                 }
