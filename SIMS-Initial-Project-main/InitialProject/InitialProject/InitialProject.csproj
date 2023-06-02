@@ -206,7 +206,6 @@
 
   <ItemGroup>
     <Folder Include="ViewModel\Guest2\" />
-    <Folder Include="ViewModel\Guest1\" />
     <Folder Include="ViewModel\Owner\" />
   </ItemGroup>
 

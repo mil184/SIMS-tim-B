@@ -56,6 +56,7 @@ namespace InitialProject.View.Guest1
         private readonly GuestReviewService _guestReviewService;
         private readonly ReservationCancellationService _reservationCancellationService;
         private readonly ForumService _forumService;
+        private readonly CommentService _commentService;
 
         private string searchName;
         public string SearchName
@@ -181,6 +182,9 @@ namespace InitialProject.View.Guest1
 
             _forumService = new ForumService();
             _forumService.Subscribe(this);
+
+            _commentService = new CommentService();
+            _commentService.Subscribe(this);
 
             AllAccommodations = new ObservableCollection<Accommodation>(_accommodationService.GetAll());
             PresentableAccommodations = ConvertToDTO(new List<Accommodation>(AllAccommodations));
@@ -647,7 +651,11 @@ namespace InitialProject.View.Guest1
 
         private void AddComment_Click(object sender, RoutedEventArgs e)
         {
-
+            if(SelectedForum != null)
+            {
+                ForumComment comment = new ForumComment(SelectedForum, _commentService, LoggedInUser);
+                comment.ShowDialog();
+            }
         }
 
         private void ShowComments_Click(object sender, RoutedEventArgs e)

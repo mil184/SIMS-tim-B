@@ -28,7 +28,8 @@ namespace InitialProject.Resources.Injector
             { typeof(IRenovationRecommendationRepository), new RenovationRecommendationCSVRepository() },
             { typeof(IUserRepository), new UserCSVRepository() },
             { typeof(IImageRepository), new ImageCSVRepository() },
-            { typeof(IForumRepository), new ForumCSVRepository() }
+            { typeof(IForumRepository), new ForumCSVRepository() },
+            { typeof(ICommentRepository), new CommentCSVRepository() }
 
         };
 
