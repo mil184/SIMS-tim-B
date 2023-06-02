@@ -470,33 +470,66 @@
                     </Grid.RowDefinitions>
 
                     <TextBlock Text="Forums about locations" FontSize="18" FontWeight="SemiBold" Margin="10"/>
-                    <ListBox  Grid.Row="1" Margin="10">
+                    <ListBox Name="allForums" Grid.Row="1" Margin="10" ItemsSource="{Binding Path=AllForums, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding Path=SelectedForum, UpdateSourceTrigger=PropertyChanged}">
+                       <!--   <Label Content="jjdkd"/> -->
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="Opacity" Value="0.5"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsOpened}" Value="True">
+                                        <Setter Property="Opacity" Value="1"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsOpened}" Value="False">
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <ScrollViewer VerticalScrollBarVisibility="Auto">
-                                    <Border BorderBrush="#82a2c4" BorderThickness="3" CornerRadius="8" Margin="10" Width="950" Height="170">
+                                    <Border BorderBrush="#82a2c4" BorderThickness="3" CornerRadius="8" Margin="10" Width="950" Height="200">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="2*" />
-                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="2.5*"/>
+                                                <ColumnDefinition Width="*"/>
                                             </Grid.ColumnDefinitions>
                                             <StackPanel Orientation="Vertical" Grid.Column="0" Margin="10">
-                                                <StackPanel Orientation="Horizontal" Margin="5,10,5,5">
+                                                <StackPanel Orientation="Horizontal" Margin="5">
                                                     <TextBlock Text="Country: " FontWeight="SemiBold" FontSize="16" Margin="5"/>
-                                                    <TextBlock Text="{Binding Country}" FontSize="16" Margin="5" />
+                                                    <TextBlock Text="{Binding Country}" FontSize="16"/>
                                                 </StackPanel>
-                                                <StackPanel Orientation="Horizontal" Margin="5,10,5,5">
+                                                <StackPanel Orientation="Horizontal" Margin="5">
                                                     <TextBlock Text="City: " FontWeight="SemiBold" FontSize="16" Margin="5"/>
-                                                    <TextBlock Text="{Binding City}" FontSize="16" Margin="5" />
+                                                    <TextBlock Text="{Binding City}" FontSize="16"/>
                                                 </StackPanel>
-                                                <StackPanel Orientation="Horizontal" Margin="5,10,5,5">
+                                                <StackPanel Orientation="Horizontal" Margin="5">
                                                     <TextBlock Text="Comment: " FontWeight="SemiBold" FontSize="16" Margin="5"/>
-                                                    <TextBlock Text="{Binding Comment}" FontSize="16" Margin="5" />
+                                                    <TextBlock Text="{Binding Comment}" FontSize="16"/>
                                                 </StackPanel>
-                                                <StackPanel Orientation="Horizontal" Margin="5,10,5,5">
+                                                <StackPanel Orientation="Horizontal" Margin="5">
                                                     <TextBlock Text="Created by: " FontWeight="SemiBold" FontSize="16" Margin="5"/>
-                                                    <TextBlock Text="{Binding UserName}" FontSize="16" Margin="5" />
+                                                    <TextBlock Text="{Binding Username}" FontSize="16"/>
                                                 </StackPanel>
+                                            </StackPanel>
+                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="10,0,0,0" Width="250" Height="140">
+                                                <Button x:Name="addComment" Content="Add comment" Click="AddComment_Click" Width="150" Height="40" Margin="0,10,0,30" FontSize="16" Background="#97b9de">
+                                                    <Button.Template>
+                                                        <ControlTemplate TargetType="Button">
+                                                            <Border CornerRadius="20" Background="{TemplateBinding Background}" BorderThickness="2" BorderBrush="#6d87a3">
+                                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                            </Border>
+                                                        </ControlTemplate>
+                                                    </Button.Template>
+                                                </Button>
+                                                <Button x:Name="showComments" Content="Show comments" Click="ShowComments_Click" Width="150" Height="40" FontSize="16" Background="#97b9de">
+                                                    <Button.Template>
+                                                        <ControlTemplate TargetType="Button">
+                                                            <Border CornerRadius="20" Background="{TemplateBinding Background}" BorderThickness="2" BorderBrush="#6d87a3">
+                                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                            </Border>
+                                                        </ControlTemplate>
+                                                    </Button.Template>
+                                                </Button>
                                             </StackPanel>
                                         </Grid>
                                     </Border>

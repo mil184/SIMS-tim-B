@@ -12,6 +12,8 @@ using InitialProject.Resources.Enums;
 using InitialProject.Service;
 using InitialProject.Repository.Interfaces;
 using InitialProject.Resources.Injector;
+using System.Windows.Controls;
+using Xceed.Wpf.Toolkit.Primitives;
 
 namespace InitialProject.View.Guest1
 {
@@ -38,6 +40,11 @@ namespace InitialProject.View.Guest1
         public ObservableCollection<Guest1RatingsDTO> GuestRatings { get; set; }
         public ObservableCollection<AvailableAccommodationsDTO> AvailableAccommodations { get; set; }
         public AvailableAccommodationsDTO SelectedAvailableAccommodation { get; set; }
+
+        public ObservableCollection<ForumDTO> AllForums { get; set; }
+        public ForumDTO SelectedForum { get; set; }
+        private Button addComment;
+        private Button showComments;
 
         private readonly AccommodationService _accommodationService;
         private readonly AccommodationReservationService _accommodationReservationService;
@@ -189,6 +196,11 @@ namespace InitialProject.View.Guest1
             FormGuestRatings();
 
             AvailableAccommodations = new ObservableCollection<AvailableAccommodationsDTO>();
+
+            AllForums = new ObservableCollection<ForumDTO>();
+            FormForums();
+            addComment = new Button();
+            showComments = new Button();
         }
 
         private void ReserveButton_Click(object sender, RoutedEventArgs e)
@@ -306,6 +318,7 @@ namespace InitialProject.View.Guest1
         {
             FormUnratedReservation();
             FormGuestRatings();
+            FormForums();
         }
 
         private void ImagesButton_Click(object sender, RoutedEventArgs e)
@@ -582,7 +595,62 @@ namespace InitialProject.View.Guest1
             createForum.ShowDialog();
         }
 
+        public ForumDTO ConvertDTO(Forum forum)
+        {
+            return new ForumDTO(forum.Id, _locationService.GetById(forum.LocationId).Country,
+                     _locationService.GetById(forum.LocationId).City, forum.Comment, _userService.GetById(forum.GuestId).Username, forum.IsOpened);
+        }
+        public ObservableCollection<ForumDTO> ConvertDTO(ObservableCollection<Forum> forums)
+        {
+            ObservableCollection<ForumDTO> dto = new ObservableCollection<ForumDTO>();
+            foreach (Forum forum in forums)
+            {
+                dto.Add(ConvertDTO(forum));
+            }
+            return dto;
+        }
+        public void FormForums()
+        {
+            AllForums.Clear();
+            foreach(Forum forum in _forumService.GetAll())
+            {
+                ForumDTO dto = new ForumDTO(forum.Id, _locationService.GetById(forum.LocationId).Country, _locationService.GetById(forum.LocationId).City, forum.Comment, _userService.GetById(forum.GuestId).Username, forum.IsOpened) ;
+                AllForums.Add(dto);
+            }
+        }
+
         private void CloseForum_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedForum != null)
+            {
+                int forumId = SelectedForum.Id;
+                Forum forumToClose = _forumService.GetForumById(forumId);
+                if (forumToClose != null)
+                {
+                    var messageBoxResult = MessageBox.Show($"Are you sure you want to close forum?", "Close Forum Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    if (messageBoxResult == MessageBoxResult.Yes)
+                    {
+                        forumToClose.IsOpened = false;
+                        _forumService.Update(forumToClose);
+                        RefreshListBox();
+                        MessageBox.Show("Forum closed successfully.");
+                    }
+                }
+            }
+        }
+
+        private void RefreshListBox()
+        {
+            allForums.ItemsSource = _forumService.GetAll();
+            SelectedForum = null;
+        }
+
+        private void AddComment_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ShowComments_Click(object sender, RoutedEventArgs e)
         {
 
         }

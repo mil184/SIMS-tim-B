@@ -1,4 +1,5 @@
 ﻿using InitialProject.Model;
+using InitialProject.Repository;
 using InitialProject.Repository.Interfaces;
 using InitialProject.Resources.Injector;
 using InitialProject.Resources.Observer;
@@ -24,9 +25,26 @@ namespace InitialProject.Service
             return _forumRepository.Save(forum);
         }
 
+        public void Update(Forum forum)
+        {
+            _forumRepository.Update(forum);
+        }
+
         public List<Forum> GetAll()
         {
             return _forumRepository.GetAll();
+        }
+
+        public Forum GetForumById(int forumId)
+        {
+            foreach (Forum forum in _forumRepository.GetAll())
+            {
+                if (forum.Id == forumId)
+                {
+                    return forum;
+                }
+            }
+            return null;
         }
 
         public void Subscribe(IObserver observer)

@@ -46,6 +46,18 @@ namespace InitialProject.Repository.Implementations
             return forum;
         }
 
+        public Forum Update(Forum forum)
+        {
+            _forums = _serializer.FromCSV(FilePath);
+            Forum current = _forums.Find(c => c.Id == forum.Id);
+            int index = _forums.IndexOf(current);
+            _forums.Remove(current);
+            _forums.Insert(index, forum);
+            _serializer.ToCSV(FilePath, _forums);
+            NotifyObservers();
+            return forum;
+        }
+
         public List<Forum> GetAll()
         {
             return _forums;

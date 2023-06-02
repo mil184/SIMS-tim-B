@@ -13,15 +13,17 @@ namespace InitialProject.Model.DTO
         public string City { get; set; }
         public string Comment { get; set; }
         public string Username { get; set; }
+        public bool IsOpened { get; set; }
 
         public ForumDTO() {}
-        public ForumDTO(int id, string country, string city, string comment, string username)
+        public ForumDTO(int id, string country, string city, string comment, string username, bool isOpened)
         {
             Id = id;
             Country = country;
             City = city;
             Comment = comment;
             Username = username;
+            IsOpened = isOpened;
         }
     }
 }
