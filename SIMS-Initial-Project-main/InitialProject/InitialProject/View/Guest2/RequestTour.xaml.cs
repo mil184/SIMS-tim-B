@@ -24,42 +24,39 @@ namespace InitialProject.View.Guest2
             _viewModel = viewModel;
             DataContext = _viewModel;
 
-            InitializeComboBoxes();
-        }
-
-        private void InitializeComboBoxes()
-        {
-            for (int i = 0; i < 24; i++)
+            if (_viewModel.CloseAction == null)
             {
-                string hour = i.ToString("D2");
-                StartHour_cb.Items.Add(hour);
-            }
-            for (int i = 0; i < 60; i++)
-            {
-                string minute = i.ToString("D2");
-                StartMinute_cb.Items.Add(minute);
-            }
-            for (int i = 0; i < 24; i++)
-            {
-                string hour = i.ToString("D2");
-                EndHour_cb.Items.Add(hour);
-            }
-            for (int i = 0; i < 60; i++)
-            {
-                string minute = i.ToString("D2");
-                EndMinute_cb.Items.Add(minute);
+                _viewModel.CloseAction = new Action(this.Close);
             }
         }
 
-        public void RequestTourButton_Click(object sender, RoutedEventArgs e)
-        {
-            _viewModel.RequestTourButton_Click(sender, e);
-            Close();
-        }
+        //private void InitializeComboBoxes()
+        //{
+        //    for (int i = 0; i < 24; i++)
+        //    {
+        //        string hour = i.ToString("D2");
+        //        StartHour_cb.Items.Add(hour);
+        //    }
+        //    for (int i = 0; i < 60; i++)
+        //    {
+        //        string minute = i.ToString("D2");
+        //        StartMinute_cb.Items.Add(minute);
+        //    }
+        //    for (int i = 0; i < 24; i++)
+        //    {
+        //        string hour = i.ToString("D2");
+        //        EndHour_cb.Items.Add(hour);
+        //    }
+        //    for (int i = 0; i < 60; i++)
+        //    {
+        //        string minute = i.ToString("D2");
+        //        EndMinute_cb.Items.Add(minute);
+        //    }
+        //}
 
-        private void cbCountrySelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            _viewModel.InitializeCityDropdown();
-        }
+        //private void cbCountrySelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    _viewModel.InitializeCityDropdown();
+        //}
     }
 }

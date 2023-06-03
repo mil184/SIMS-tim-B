@@ -95,7 +95,7 @@
                     Command="{Binding ExitCommand}" >
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="/Resources/Images/back.png" Width="25" Margin="5"/>
+                        <Image Source="/Resources/Images/cross.png" Width="25" Margin="5"/>
                         <TextBlock Text="{ns:Loc Exit}"/>
                     </StackPanel>
                 </Button.Content>

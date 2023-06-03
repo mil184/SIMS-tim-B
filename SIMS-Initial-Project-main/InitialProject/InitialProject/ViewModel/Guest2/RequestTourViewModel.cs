@@ -14,19 +14,26 @@ using InitialProject.Service;
 using System.Windows.Input;
 using InitialProject.View.Guest2;
 using System.Windows;
+using MenuNavigation.Commands;
 
 namespace InitialProject.ViewModel.Guest2
 {
     public class RequestTourViewModel : INotifyPropertyChanged, IObserver
     {
+        public Action CloseAction { get; set; }
+        public User LoggedInUser { get; set; }
+
         public ObservableCollection<String> cbCountryItemsSource { get; set; }
         public ObservableCollection<String> cbCityItemsSource { get; set; }
+
+        public ObservableCollection<string> StartHours { get; set; }
+        public ObservableCollection<string> StartMinutes { get; set; }
+        public ObservableCollection<string> EndHours { get; set; }
+        public ObservableCollection<string> EndMinutes { get; set; }
 
         private readonly UserRepository _userRepository;
         private readonly LocationService _locationService;
         private readonly TourRequestService _tourRequestService;
-
-        public User LoggedInUser { get; set; }
 
         #region Properties
 
@@ -190,7 +197,15 @@ namespace InitialProject.ViewModel.Guest2
         public DateTime StartDateTime => StartDate.Date + new TimeSpan(StartHour, StartMinute, 0);
         public DateTime EndDateTime => EndDate.Date + new TimeSpan(EndHour, EndMinute, 0);
 
-       
+        public RelayCommand SubmitRequestCommand { get; set; }
+        public RelayCommand ExitCommand { get; set; }
+        public RelayCommand ChangeLanguageCommand { get; set; }
+        public RelayCommand CountrySelectionChangedCommand { get; set; }
+
+        public int LanguageButtonClickCount { get; set; }
+        private App app;
+        private const string SRB = "sr-Latn-RS";
+        private const string ENG = "en-US";
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -199,7 +214,7 @@ namespace InitialProject.ViewModel.Guest2
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public RequestTourViewModel(UserRepository userRepository, LocationService locationService, TourRequestService tourRequestService, User user)
+        public RequestTourViewModel(UserRepository userRepository, LocationService locationService, TourRequestService tourRequestService, User user, string lang)
         {
             _userRepository = userRepository;
             _locationService = locationService;
@@ -214,7 +229,86 @@ namespace InitialProject.ViewModel.Guest2
             EndDate = DateTime.Now;
 
             InitializeCountryDropdown();
-        }   
+            InitializeTimeComboBoxes();
+
+            SubmitRequestCommand = new RelayCommand(Execute_SubmitRequestCommand);
+            ExitCommand = new RelayCommand(Execute_ExitCommand);
+            ChangeLanguageCommand = new RelayCommand(Execute_ChangeLanguageCommand);
+            CountrySelectionChangedCommand = new RelayCommand(Execute_CountrySelectionChangedCommand);
+
+            app = (App)Application.Current;
+            app.ChangeLanguage(lang);
+            InitializeLanguageButton(lang);
+        }
+
+        private void Execute_CountrySelectionChangedCommand(object obj)
+        {
+            InitializeCityDropdown();
+        }
+
+        private void InitializeTimeComboBoxes()
+        {
+            StartHours = new ObservableCollection<string>();
+            StartMinutes = new ObservableCollection<string>();
+            EndHours = new ObservableCollection<string>();
+            EndMinutes = new ObservableCollection<string>();
+            
+            for (int i = 0; i < 24; i++)
+            {
+                string hour = i.ToString("D2");
+                StartHours.Add(hour);
+            }
+            for (int i = 0; i < 60; i++)
+            {
+                string minute = i.ToString("D2");
+                StartMinutes.Add(minute);
+            }
+            for (int i = 0; i < 24; i++)
+            {
+                string hour = i.ToString("D2");
+                EndHours.Add(hour);
+            }
+            for (int i = 0; i < 60; i++)
+            {
+                string minute = i.ToString("D2");
+                EndMinutes.Add(minute);
+            }
+        }
+
+        private void InitializeLanguageButton(string lang)
+        {
+            if (lang == SRB)
+            {
+                LanguageButtonClickCount = 0;
+                return;
+            }
+
+            LanguageButtonClickCount = 1;
+        }
+
+        private void Execute_SubmitRequestCommand(object obj)
+        {
+            CreateTourRequest();
+            CloseAction();
+        }
+
+        private void Execute_ChangeLanguageCommand(object obj)
+        {
+            LanguageButtonClickCount++;
+
+            if (LanguageButtonClickCount % 2 == 1)
+            {
+                app.ChangeLanguage(ENG);
+                return;
+            }
+
+            app.ChangeLanguage(SRB);
+        }
+
+        private void Execute_ExitCommand(object obj)
+        {
+            CloseAction();
+        }
 
         private void CreateTourRequest()
         {
@@ -231,11 +325,6 @@ namespace InitialProject.ViewModel.Guest2
                 );
 
             _tourRequestService.Save(tourRequest);
-        }
-
-        public void RequestTourButton_Click(object sender, RoutedEventArgs e)
-        {
-            CreateTourRequest();
         }
 
         public void Update()

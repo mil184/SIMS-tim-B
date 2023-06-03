@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ns="clr-namespace:InitialProject.Localization"
-        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:local="clr-namespace:InitialProject.View.Guest2"
         mc:Ignorable="d"
         Title="DMJM-Tours" Icon ="/Resources/Images/favicon.ico"
@@ -94,7 +94,13 @@
             
 
             <!--<StackPanel Margin ="0, 20, 240, 20" Grid.Column="1" HorizontalAlignment="Right">-->
-                <ComboBox Grid.Row="0" Grid.Column="1" Height="40" Margin="10" ItemsSource="{Binding cbCountryItemsSource}" SelectedItem="{Binding Country}" IsEnabled="True" SelectionChanged="cbCountrySelectionChanged"/>
+                <ComboBox Grid.Row="0" Grid.Column="1" Height="40" Margin="10" ItemsSource="{Binding cbCountryItemsSource}" SelectedItem="{Binding Country}" IsEnabled="True">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged" >
+                            <i:InvokeCommandAction Command="{Binding CountrySelectionChangedCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </ComboBox>
                 <ComboBox Grid.Row="1" Grid.Column="1" Height="40" Margin="10" ItemsSource="{Binding cbCityItemsSource}" SelectedItem="{Binding City}" IsEnabled="True"/>
 
                 <TextBox Grid.Row="2" Grid.Column="1" Height="40" Margin="10" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
@@ -102,15 +108,15 @@
                 <TextBox Grid.Row="4" Grid.Column="1" Height="40" Margin="10" Text="{Binding MaxGuests, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                 <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" Height="40" Margin="10">
                     <DatePicker Width="160" SelectedDate="{Binding StartDate, UpdateSourceTrigger=PropertyChanged}" Margin="5, 0, 5, 0"/>
-                    <ComboBox Name ="StartHour_cb" SelectedItem="{Binding StartHour, UpdateSourceTrigger=PropertyChanged}" Width="70" Margin="5, 0, 5, 0"/>
-                    <ComboBox Name ="StartMinute_cb" SelectedItem="{Binding StartMinute, UpdateSourceTrigger=PropertyChanged}" Width="70" Margin="5, 0, 5, 0"/>
+                    <ComboBox Name ="StartHour_cb" SelectedItem="{Binding StartHour, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding StartHours}" Width="70" Margin="5, 0, 5, 0"/>
+                    <ComboBox Name ="StartMinute_cb" SelectedItem="{Binding StartMinute, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding StartMinutes}" Width="70" Margin="5, 0, 5, 0"/>
                 </StackPanel>
                 <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal" Height="40" Margin="10">
 
 
                     <DatePicker SelectedDate="{Binding EndDate, UpdateSourceTrigger=PropertyChanged}" Width="160" Margin="5, 0, 5, 0"/>
-                    <ComboBox Name ="EndHour_cb" SelectedItem="{Binding EndHour, UpdateSourceTrigger=PropertyChanged}" Width="70" Margin="5, 0, 5, 0"/>
-                    <ComboBox Name ="EndMinute_cb" SelectedItem="{Binding EndMinute, UpdateSourceTrigger=PropertyChanged}" Width="70" Margin="5, 0, 5, 0"/>
+                    <ComboBox Name ="EndHour_cb" SelectedItem="{Binding EndHour, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding EndHours}" Width="70" Margin="5, 0, 5, 0"/>
+                    <ComboBox Name ="EndMinute_cb" SelectedItem="{Binding EndMinute, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding EndMinutes}" Width="70" Margin="5, 0, 5, 0"/>
                     
                 </StackPanel>
            
