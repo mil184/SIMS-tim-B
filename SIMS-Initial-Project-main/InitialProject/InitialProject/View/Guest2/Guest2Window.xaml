@@ -625,9 +625,105 @@
             <!-- Requests tab -->
             <TabItem Header="{ns:Loc TourRequestingTab}" FontSize="20">
 
-                <StackPanel>
+                <Grid>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="60*"/>
+                        <RowDefinition Height="40*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30*"/>
+                            <ColumnDefinition Width="70*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.Column="0"
+                                Width="160" Height="40" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                Content="Request a tour"
+                                Click="RequestButton_Click"/>
+
+                        <GroupBox Grid.Column="1" Margin="0, 20, 20, 20">
+                            <GroupBox.Header>
+                                <Label Content="My Tour Requests"
+                                       FontSize="25" FontWeight="Bold"/>
+                            </GroupBox.Header>
+
+                            <DataGrid ItemsSource="{Binding TourRequestDTOs}"
+                                      AutoGenerateColumns="False" IsReadOnly="True">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Country" Binding="{Binding Country}" Width="*"/>
+                                    <DataGridTextColumn Header="City" Binding="{Binding City}" Width="*"/>
+                                    <DataGridTextColumn Header="Language" Binding="{Binding Language}" Width="*"/>
+                                    <DataGridTextColumn Header="Start Date" Binding="{Binding StartTime, StringFormat={}{0:MM/dd/yyyy}}" Width="*"/>
+                                    <DataGridTextColumn Header="End Date" Binding="{Binding EndTime, StringFormat={}{0:MM/dd/yyyy}}" Width="*"/>
+                                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </GroupBox>
+
+                    </Grid>
+
+                    <Grid Grid.Row="1" Margin="20, 0, 20, 20" Background="#DDDDDD">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Margin="10" Grid.Column="0">
+                            <TextBlock 
+                                       FontSize="20" FontWeight="Bold" Margin="10" TextWrapping="WrapWithOverflow" 
+                                       Text="Tour request status statistics for chosen year:"/>
+                            <ComboBox Margin="10" Width="160" Height="40" 
+                                      ItemsSource="{Binding TourRequestYears}" SelectedItem="{Binding SelectedStatisticYear}" SelectionChanged="YearStatisticSelectionChanged"/>
+                            <TextBlock Height ="60" Text="{Binding StatusStatistic, UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>
+
+                        <Border Grid.Column="1" BorderBrush="Gray" BorderThickness="1,0,0,0" Margin="0, 10, 0, 10"/>
+
+                        <StackPanel Margin="10" Grid.Column="1">
+                            <TextBlock 
+                                       FontSize="20" FontWeight="Bold" Margin="10" TextWrapping="WrapWithOverflow" 
+                                       Text="Average guest count for chosen year:"/>
+                            <ComboBox Margin="10" Width="160" Height="40" 
+                                      ItemsSource="{Binding TourRequestYears}" SelectedItem="{Binding SelectedStatisticGuestYear}" SelectionChanged="GuestYearStatisticSelectionChanged"/>
+                            <TextBlock Height ="60" Text="{Binding GuestStatistic, UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>
+
+                        <Border Grid.Column="2" BorderBrush="Gray" BorderThickness="1,0,0,0" Margin="0, 10, 0, 10"/>
+
+                        <StackPanel Margin="10" Grid.Column="2" >
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                            </Grid>
+
+                            <TextBlock Grid.Column="0" Margin="10"
+                                       FontSize="20" FontWeight="Bold" TextWrapping="WrapWithOverflow"
+                                       Text="Number of requests for each language:"/>
+                            <Button Grid.Column="1" Margin="10"
+                                    Width="160" Height="40" FontSize="20"
+                                    Content="Language Chart" Click="LanguageStatisicButton_Click"/>
+
+                            <TextBlock Grid.Column="2" Margin="10"
+                                       FontSize="20" FontWeight="Bold" TextWrapping="WrapWithOverflow"
+                                       Text="Number of requests for each location:"/>
+                            <Button Grid.Column="3" Margin="10, 10, 10, 20"
+                                    Width="160" Height="40" FontSize="20"
+                                    Content="Location Chart" Click="LocationStatisicButton_Click"/>
+                        </StackPanel>
+
+                    </Grid>
                     
-                <StackPanel Orientation="Horizontal"  Margin="10">
+                <!--<StackPanel Orientation="Horizontal"  Margin="10">
                     <StackPanel Orientation="Horizontal" Margin="10">
                         <Button Content="Request a tour" Width="100" Height="40" VerticalAlignment="Center" Click="RequestButton_Click"/>
                     </StackPanel>
@@ -648,9 +744,9 @@
                             </DataGrid>
                        
                     </GroupBox>
-                </StackPanel>
+                </StackPanel>-->
 
-                    <StackPanel Orientation="Horizontal">
+                    <!--<StackPanel Orientation="Horizontal" Grid.Row="1">
                         <StackPanel Margin="10, 0, 10, 10">
 
                             <TextBlock Margin="5">Show tour request status statistics for chosen year:</TextBlock>
@@ -671,10 +767,12 @@
                             <TextBlock  Width="200" Height="40" TextWrapping="WrapWithOverflow">Chart that displays number of requests for each location:</TextBlock>
                             <Button Content="Location Chart" Width="100" Click="LocationStatisicButton_Click"/>
                         </StackPanel>
-                    </StackPanel>
+                    </StackPanel>-->
 
 
-                </StackPanel>
+                
+
+                </Grid>
             </TabItem>
 
             
