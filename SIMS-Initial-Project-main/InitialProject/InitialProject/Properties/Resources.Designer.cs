@@ -385,6 +385,15 @@ namespace InitialProject.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nema nijedna trenutno aktivna tura..
+        /// </summary>
+        public static string NoTourActive {
+            get {
+                return ResourceManager.GetString("NoTourActive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ne želim da koristim vaučer..
         /// </summary>
         public static string NoVoucher {

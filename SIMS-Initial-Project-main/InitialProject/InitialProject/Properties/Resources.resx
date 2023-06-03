@@ -225,6 +225,9 @@
   <data name="NoSpacesAvailable" xml:space="preserve">
     <value>Nije ostalo nijedno slobodno mesto na odabranoj turi. Prikazane su dostupne ture u istom gradu:</value>
   </data>
+  <data name="NoTourActive" xml:space="preserve">
+    <value>Nema nijedna trenutno aktivna tura.</value>
+  </data>
   <data name="NoVoucher" xml:space="preserve">
     <value>Ne želim da koristim vaučer.</value>
   </data>

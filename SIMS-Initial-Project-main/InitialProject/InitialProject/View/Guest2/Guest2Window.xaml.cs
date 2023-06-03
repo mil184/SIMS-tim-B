@@ -31,6 +31,7 @@ namespace InitialProject.View.Guest2
         public List<Tour> CheckedTours { get; set; }
         public Tour CurrentlyActiveTour { get; set; }
         public Checkpoint CurrentlyActiveCheckpoint { get; set; }
+        public Checkpoint CurrentlyActiveCheckpoint1 { get; set; }
         public ObservableCollection<Checkpoint> ActiveTourCheckpoints { get; set; }
 
         public int LanguageButtonClickCount { get; set; }
@@ -220,7 +221,8 @@ namespace InitialProject.View.Guest2
             {
                 CurrentlyActiveTour = CheckedTours[0];
                 CurrentlyActiveCheckpoint = _checkpointService.GetById(CurrentlyActiveTour.CurrentCheckpointId);
-                
+
+                ActiveTourCheckpoints = new ObservableCollection<Checkpoint>();
                 foreach (int id in CurrentlyActiveTour.CheckpointIds)
                 {
                     ActiveTourCheckpoints.Add(_checkpointService.GetById(id));
@@ -247,6 +249,7 @@ namespace InitialProject.View.Guest2
             NotifyAcceptedLocations();
 
             AlterVoucherSectionVisibility();
+            AlterTourTrackingVisibility();
         }
 
         private void NotifyAcceptedLanguages()
@@ -975,6 +978,16 @@ namespace InitialProject.View.Guest2
             }
         }
 
+        private void AlterTourTrackingVisibility()
+        {
+            if (_tourService.GetActiveTours().Count == 0 || _tourService.GetAll().Count == 0)
+            {
+                NoTourActive.Visibility = Visibility.Visible;
+                CurrentlyActiveTourColumn.Visibility = Visibility.Collapsed;
+                TourTrackingColumn.Visibility = Visibility.Collapsed;
+            }
+        }
+
         private void ShowCurrentlyActiveTourButton_Click(object sender, RoutedEventArgs e)
         {
             ShowTour showTour = new ShowTour(ConvertToDTO(CurrentlyActiveTour));
@@ -990,5 +1003,6 @@ namespace InitialProject.View.Guest2
         {
 
         }
+
     }
 }
