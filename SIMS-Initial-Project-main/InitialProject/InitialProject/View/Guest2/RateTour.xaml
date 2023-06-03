@@ -6,7 +6,9 @@
         xmlns:ns="clr-namespace:InitialProject.Localization"
         xmlns:local="clr-namespace:InitialProject.View.Guest2"
         mc:Ignorable="d"
-        Title="RateTour" Height="768" Width="600">
+        Title="DMJM-Tours" Icon ="/Resources/Images/favicon.ico"
+        Height="768" Width="600">
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="100"/>
@@ -133,12 +135,12 @@
         </StackPanel>
 
         <StackPanel Grid.Row="6" Margin="10" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="{ns:Loc Submit}" Command="{Binding SubmitRatingCommand}" FontSize="20" Height="40" Width="150" Margin="5, 5, 10, 5" />
-            <Button Command="{Binding ExitCommand}"  FontSize="20" Height="40" Width="150" Margin="5, 5, 10, 5">
+            <Button Content="{ns:Loc Submit}" Command="{Binding SubmitRatingCommand}" FontSize="20" Height="40" Width="160" Margin="5, 5, 10, 5" />
+            <Button Command="{Binding ExitCommand}"  FontSize="20" Height="40" Width="160" Margin="5, 5, 10, 5">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="/Resources/Images/back.png" Width="25" Margin="5"/>
-                        <TextBlock Text="{ns:Loc Exit}"/>
+                        <Image Source="/Resources/Images/cross.png" Width="25" Margin="5" VerticalAlignment="Center"/>
+                        <TextBlock Text="{ns:Loc Exit}" VerticalAlignment="Center"/>
                     </StackPanel>
                 </Button.Content>
             </Button>

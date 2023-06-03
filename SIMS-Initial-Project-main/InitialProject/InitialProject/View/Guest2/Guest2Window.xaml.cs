@@ -923,14 +923,14 @@ namespace InitialProject.View.Guest2
 
         private void LanguageStatisicButton_Click(object sender, RoutedEventArgs e)
         {
-            LanguageStatisticsViewModel languageStatisticsViewModel = new LanguageStatisticsViewModel(_tourRequestService);
+            LanguageStatisticsViewModel languageStatisticsViewModel = new LanguageStatisticsViewModel(_tourRequestService, app.Lang);
             LanguageStatistics languageStatistics = new LanguageStatistics(languageStatisticsViewModel);
             languageStatistics.Show();
         }
 
         private void LocationStatisicButton_Click(object sender, RoutedEventArgs e)
         {
-            LocationStatisticsViewModel locationStatisticsViewModel = new LocationStatisticsViewModel(_tourRequestService, _locationService);
+            LocationStatisticsViewModel locationStatisticsViewModel = new LocationStatisticsViewModel(_tourRequestService, app.Lang);
             LocationStatistics locationStatistics = new LocationStatistics(locationStatisticsViewModel);
             locationStatistics.Show();
         }

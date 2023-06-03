@@ -329,19 +329,14 @@ namespace InitialProject.ViewModel.Guest2
             _imageRepository = imageRepository;
 
             
-            SubmitRatingCommand = new RelayCommand(Execute_SubmitRatingCommand, CanExecute_SubmitRatingCommand);
-            ExitCommand = new RelayCommand(Execute_ExitCommand, CanExecute_ExitCommand);
-            AddImageCommand = new RelayCommand(Execute_AddImageCommand, CanExecute_AddImageCommand);
-            ChangeLanguageCommand = new RelayCommand(Execute_ChangeLanguageCommand, CanExecute_ChangeLanguageCommand);
+            SubmitRatingCommand = new RelayCommand(Execute_SubmitRatingCommand);
+            ExitCommand = new RelayCommand(Execute_ExitCommand);
+            AddImageCommand = new RelayCommand(Execute_AddImageCommand);
+            ChangeLanguageCommand = new RelayCommand(Execute_ChangeLanguageCommand);
 
             app = (App)Application.Current;
             app.ChangeLanguage(SRB);
             LanguageButtonClickCount = 0;
-        }
-
-        private bool CanExecute_ChangeLanguageCommand(object obj)
-        {
-            return true;
         }
 
         private void Execute_ChangeLanguageCommand(object obj)
@@ -355,12 +350,6 @@ namespace InitialProject.ViewModel.Guest2
             }
 
             app.ChangeLanguage(SRB);
-        }
-
-        private bool CanExecute_AddImageCommand(object obj)
-        {
-            //return ImageUrl != string.Empty;
-            return true;
         }
 
         private void Execute_AddImageCommand(object obj)
@@ -382,20 +371,9 @@ namespace InitialProject.ViewModel.Guest2
             }
         }
 
-        private bool CanExecute_ExitCommand(object obj)
-        {
-            return true;
-        }
-
         private void Execute_ExitCommand(object obj)
         {
             CloseAction();
-        }
-
-        private bool CanExecute_SubmitRatingCommand(object obj)
-        {
-            //return GuideKnowledge != 0 && Interestingness != 0 && GuideLanguage != 0 && Comment != null && ImageUrls.Count != 0;
-            return true;
         }
 
         private void Execute_SubmitRatingCommand(object obj)
