@@ -318,7 +318,7 @@ namespace InitialProject.ViewModel.Guest2
         }
         #endregion
 
-        public RateTourViewModel(Guest2TourDTO selectedTour, User user, TourRatingService tourRatingService, TourReservationService tourReservationService, TourService tourService, ImageRepository imageRepository)
+        public RateTourViewModel(Guest2TourDTO selectedTour, User user, TourRatingService tourRatingService, TourReservationService tourReservationService, TourService tourService, ImageRepository imageRepository, string lang)
         {
             SelectedTour = selectedTour;
             LoggedInUser = user;
@@ -335,8 +335,19 @@ namespace InitialProject.ViewModel.Guest2
             ChangeLanguageCommand = new RelayCommand(Execute_ChangeLanguageCommand);
 
             app = (App)Application.Current;
-            app.ChangeLanguage(SRB);
-            LanguageButtonClickCount = 0;
+            app.ChangeLanguage(lang);
+            InitializeLanguageButton(lang);
+        }
+
+        public void InitializeLanguageButton(string lang)
+        {
+            if (lang == SRB)
+            {
+                LanguageButtonClickCount = 0;
+                return;
+            }
+
+            LanguageButtonClickCount = 1;
         }
 
         private void Execute_ChangeLanguageCommand(object obj)

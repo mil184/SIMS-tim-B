@@ -46,7 +46,7 @@ namespace InitialProject.ViewModel.Guest2
         private const string ENG = "en-US";
 
 
-        public ZeroSpacesForReservationViewModel(Guest2TourDTO selectedTour, TourService tourService, LocationService locationService, UserService userService)
+        public ZeroSpacesForReservationViewModel(Guest2TourDTO selectedTour, TourService tourService, LocationService locationService, UserService userService, string lang)
         {
             PreviousSelectedTour = selectedTour;
 
@@ -66,8 +66,19 @@ namespace InitialProject.ViewModel.Guest2
             ShowMoreCommand = new RelayCommand(Execute_ShowMoreCommand);
 
             app = (App)Application.Current;
-            app.ChangeLanguage(SRB);
-            LanguageButtonClickCount = 0;
+            app.ChangeLanguage(lang);
+            InitializeLanguageButton(lang);
+        }
+
+        public void InitializeLanguageButton(string lang)
+        {
+            if (lang == SRB)
+            {
+                LanguageButtonClickCount = 0;
+                return;
+            }
+
+            LanguageButtonClickCount = 1;
         }
 
         public void Execute_ShowMoreCommand(object obj)

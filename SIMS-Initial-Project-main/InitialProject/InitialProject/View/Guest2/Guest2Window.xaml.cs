@@ -514,7 +514,7 @@ namespace InitialProject.View.Guest2
             //var zeroSpacesForReservation = new ZeroSpacesForReservation(SelectedGuest2TourDTO, LoggedInUser, _tourService, _locationService, _userRepository, _voucherService);
             //zeroSpacesForReservation.ShowDialog();
 
-            ZeroSpacesForReservationViewModel zeroSpacesForReservationViewModel = new ZeroSpacesForReservationViewModel(SelectedGuest2TourDTO, _tourService, _locationService, _userService);
+            ZeroSpacesForReservationViewModel zeroSpacesForReservationViewModel = new ZeroSpacesForReservationViewModel(SelectedGuest2TourDTO, _tourService, _locationService, _userService, app.Lang);
             ZeroSpacesForReservation zeroSpacesForReservation = new ZeroSpacesForReservation(zeroSpacesForReservationViewModel);
             zeroSpacesForReservation.Show();
         }
@@ -744,10 +744,9 @@ namespace InitialProject.View.Guest2
             int AcceptedPercentage = AcceptedToursCount * 100 / tourRequestsForYear.Count();
             int DeniedPercentage = DeniedToursCount * 100 / tourRequestsForYear.Count();
 
-            MessageBox.Show(AcceptedToursCount + " of your tours were accepted. " + DeniedToursCount + " of your tours were denied. Total tours for year:" + tourRequestsForYear.Count() + ". " + AcceptedPercentage + "% of your tours were accepted. " + DeniedPercentage + "% of your tours were denied.");
-
-            StatusStatistic = AcceptedToursCount + "of your tours were accepted." + DeniedToursCount + "of your tours were denied.";
-
+            StatusStatisticTB.Text = 
+                AcceptedToursCount + " of your tours were accepted. \n" + 
+                DeniedToursCount + " of your tours were denied.";
         }
 
         private void GuestYearStatisticSelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -760,13 +759,12 @@ namespace InitialProject.View.Guest2
 
             if (totalTourRequests==0)
             {
-                MessageBox.Show("No accepted tour in this year.");
+                GuestStatisticTB.Text = "No accepted tour in this year.";
+                return;
             }
-            else
-            {
-                double averageGuests = (double)totalGuests / (double)totalTourRequests;
-                MessageBox.Show("Average guests:" + averageGuests);
-            }
+            
+            double averageGuests = (double)totalGuests / (double)totalTourRequests;
+            GuestStatisticTB.Text = "Average guests:" + averageGuests;
             
         }
 
@@ -876,7 +874,7 @@ namespace InitialProject.View.Guest2
                 return;
             }
               
-            RateTourViewModel rateTourViewModel = new RateTourViewModel(SelectedGuest2TourDTO, LoggedInUser, _tourRatingService, _tourReservationService, _tourService, _imageRepository);
+            RateTourViewModel rateTourViewModel = new RateTourViewModel(SelectedGuest2TourDTO, LoggedInUser, _tourRatingService, _tourReservationService, _tourService, _imageRepository, app.Lang);
             RateTour rateTour = new RateTour(rateTourViewModel);
             rateTour.Show();
         }
