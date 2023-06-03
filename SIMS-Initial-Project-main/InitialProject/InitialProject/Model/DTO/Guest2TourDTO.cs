@@ -14,6 +14,7 @@ namespace InitialProject.Model.DTO
         public string Language { get; set; }
         public int MaxGuests { get; set; }
         public int CurrentGuestCount { get; set; }
+        public int Guests { get; set; }
         public DateTime StartTime { get; set; }
         public double Duration { get; set; }
         public string Guide { get; set; }
@@ -32,6 +33,7 @@ namespace InitialProject.Model.DTO
             Language = language;
             MaxGuests = maxGuests;
             CurrentGuestCount = currentGuestCount;
+            Guests = MaxGuests - CurrentGuestCount;
             StartTime = startTime;
             Duration = duration;
             Guide = guide;

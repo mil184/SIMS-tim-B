@@ -1,4 +1,5 @@
-﻿using System;
+﻿using InitialProject.Localization;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -13,5 +14,11 @@ namespace InitialProject
     /// </summary>
     public partial class App : Application
     {
+        public string Lang { get; set; }
+        public void ChangeLanguage(string lang)
+        {
+            TranslationSource.Instance.CurrentCulture = new System.Globalization.CultureInfo(lang);
+            Lang = lang;
+        }
     }
 }

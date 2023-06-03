@@ -3,12 +3,92 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ns="clr-namespace:InitialProject.Localization"
         xmlns:local="clr-namespace:InitialProject.View.Guest2"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
-        Title="LocationStatistics" Height="768" Width="600">
+        Title="DMJM-Tours" Icon ="/Resources/Images/favicon.ico" Height="768" Width="600">
     <Grid>
-        <lvc:CartesianChart Series="{Binding LocationSeriesCollection}" Margin="20">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition/>
+            <RowDefinition Height="70"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Background="White">
+
+
+
+            <Border BorderBrush="#DDDDDD" BorderThickness="2" Margin="3">
+                <Grid Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="7*"/>
+                        <ColumnDefinition Width="3*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Resources/Images/favicon.ico" Margin="10" HorizontalAlignment="Left"/>
+                        <TextBlock FontSize="60" FontFamily="Bernard MT" FontWeight="Bold" VerticalAlignment="Center">
+                            DMJM Tours
+                        </TextBlock>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Margin="10">
+                        <Button FontSize="18" Margin="0,0,0,5" Height="35" HorizontalAlignment="Stretch">
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/Resources/Images/theme.png" Margin="0"/>
+                                    <TextBlock Text="{ns:Loc Theme}"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+
+                        <Button FontSize="18" Height="35" HorizontalAlignment="Stretch" Command="{Binding ChangeLanguageCommand}">
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/Resources/Images/language.png" Width="Auto" Margin="5"/>
+                                    <TextBlock Text="{ns:Loc LanguageBtn}"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <GroupBox Grid.Row="1" Margin="20, 0, 20, 20">
+            <GroupBox.Header>
+                <Label 
+                    FontSize="25" FontWeight="Bold"
+                    Content="Location Chart"/>
+            </GroupBox.Header>
+
+            <lvc:CartesianChart Series="{Binding LocationSeriesCollection}">
+                <lvc:CartesianChart.AxisX>
+                    <lvc:Axis Labels="{Binding Cities}">
+                        <lvc:Axis.Separator>
+                            <lvc:Separator Stroke="#FFC5C5C5" StrokeThickness="1" StrokeDashArray="1, 4" />
+                        </lvc:Axis.Separator>
+                    </lvc:Axis>
+                </lvc:CartesianChart.AxisX>
+            </lvc:CartesianChart>
+        </GroupBox>
+
+        <Grid Grid.Row="2">
+            <Button Command="{Binding ExitCommand}"  FontSize="20" Height="40" Width="160" Margin="5, 5, 10, 5">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Resources/Images/cross.png" Width="25" Margin="5" VerticalAlignment="Center"/>
+                        <TextBlock Text="{ns:Loc Exit}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+        </Grid>
+        
+
+        <!--<lvc:CartesianChart Series="{Binding LocationSeriesCollection}" Margin="20" Grid.Row="1">
             <lvc:CartesianChart.AxisX>
                 <lvc:Axis Labels="{Binding Cities}">
                     <lvc:Axis.Separator>
@@ -16,6 +96,6 @@
                     </lvc:Axis.Separator>
                 </lvc:Axis>
             </lvc:CartesianChart.AxisX>
-        </lvc:CartesianChart>
+        </lvc:CartesianChart>-->
     </Grid>
 </Window>

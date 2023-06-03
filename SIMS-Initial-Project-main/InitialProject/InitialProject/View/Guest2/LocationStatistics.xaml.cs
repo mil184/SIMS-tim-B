@@ -26,6 +26,11 @@ namespace InitialProject.View.Guest2
             InitializeComponent();
             _viewModel = viewModel;
             DataContext = _viewModel;
+
+            if (_viewModel.CloseAction == null)
+            {
+                _viewModel.CloseAction = new Action(this.Close);
+            }
         }
     }
 }

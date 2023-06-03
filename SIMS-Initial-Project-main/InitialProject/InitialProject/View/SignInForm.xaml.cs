@@ -99,7 +99,6 @@ namespace InitialProject
                         Guest2Window guest2Window = new Guest2Window(user);
                         guest2Window.Show();
                         Close();
-                       
                     }
                 } 
                 else
