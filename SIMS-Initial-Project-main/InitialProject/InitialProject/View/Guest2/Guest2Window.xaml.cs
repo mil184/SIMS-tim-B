@@ -914,7 +914,7 @@ namespace InitialProject.View.Guest2
         private void RequestButton_Click(object sender, RoutedEventArgs e)
         {
 
-            RequestTourViewModel requestTourViewModel = new RequestTourViewModel(_userRepository, _locationService, _tourRequestService, LoggedInUser, app.Lang);
+            RequestTourViewModel requestTourViewModel = new RequestTourViewModel(_userService, _locationService, _tourRequestService, LoggedInUser, app.Lang);
             RequestTour requestTour = new RequestTour(requestTourViewModel);
             requestTour.Show();
         }

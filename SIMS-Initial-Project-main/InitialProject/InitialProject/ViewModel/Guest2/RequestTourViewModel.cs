@@ -214,7 +214,7 @@ namespace InitialProject.ViewModel.Guest2
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public RequestTourViewModel(UserRepository userRepository, LocationService locationService, TourRequestService tourRequestService, User user, string lang)
+        public RequestTourViewModel(UserService userService, LocationService locationService, TourRequestService tourRequestService, User user, string lang)
         {
             _userService = userService;
             _locationService = locationService;
