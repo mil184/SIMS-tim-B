@@ -1,5 +1,4 @@
 ﻿using InitialProject.Model;
-using InitialProject.Repository;
 using InitialProject.Repository.Interfaces;
 using InitialProject.Resources.Injector;
 using InitialProject.Resources.Observer;
@@ -11,16 +10,10 @@ namespace InitialProject.Service
     public class ReservationCancellationService
     {
         private readonly IReservationCancellationRepository _reservationCancellationRepository;
-        private readonly AccommodationService _accommodationService;
-        private readonly AccommodationReservationService _reservationService;
-        private readonly UserRepository _userRepository;
 
         public ReservationCancellationService()
         {
             _reservationCancellationRepository = Injector.CreateInstance<IReservationCancellationRepository>();
-            _accommodationService = new AccommodationService();
-            _reservationService = new AccommodationReservationService();
-            _userRepository = new UserRepository();
         }
 
         public List<ReservationCancellation> GetCancellationsByYear(int accommodationId, int year)

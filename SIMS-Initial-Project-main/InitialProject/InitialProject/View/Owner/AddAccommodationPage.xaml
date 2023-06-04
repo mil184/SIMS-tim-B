@@ -64,7 +64,7 @@
                  Validation.ErrorTemplate="{StaticResource ValidationTemplate}"
                  Style="{StaticResource MyWaterMarkStyle}" Tag="Accommodation Name" Text="{Binding Path=AccommodationName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
 
-        <ComboBox Width="400" Text="Test" Name="cbCountry" Margin="5" Grid.Row="1" FontFamily="Comic Sans MS" FontSize="20">
+        <ComboBox Width="400" Text="Test" Name="cbCountry" Margin="5" Grid.Row="1" FontFamily="Comic Sans MS" FontSize="20" SelectedItem="{Binding Country}" >
             <ComboBoxItem IsSelected="True"/>
             <ComboBox.ItemContainerStyle>
                 <Style TargetType="ComboBoxItem">
@@ -80,7 +80,7 @@
         </ComboBox>
         <TextBlock Width="150" FontStyle="Italic" HorizontalAlignment="Left" Margin="20,0,0,0" FontSize="20" Height="40" Visibility="Visible" Name="txtSelectCountry" Foreground="Gray" Text="Select Country" Grid.Row="1" FontFamily="Comic Sans MS" />
 
-        <ComboBox Width="400" Name="cbCity" Margin="5" IsEnabled="False" Grid.Row="2" FontFamily="Comic Sans MS" FontSize="20">
+        <ComboBox Width="400" Name="cbCity" Margin="5" IsEnabled="False" Grid.Row="2" FontFamily="Comic Sans MS" FontSize="20" SelectedItem="{Binding City}">
             <ComboBoxItem IsSelected="True"/>
             <ComboBox.ItemContainerStyle>
                 <Style TargetType="ComboBoxItem">
@@ -96,7 +96,7 @@
         </ComboBox>
         <TextBlock Width="120" FontStyle="Italic" HorizontalAlignment="Left" Margin="20,0,0,0" FontSize="20" Height="40" Visibility="Visible" Name="txtSelectCity" Foreground="Gray" Text="Select City" Grid.Row="2" FontFamily="Comic Sans MS" />
 
-        <ComboBox Width="400" Name="AccommodationType_cb" Grid.Row="3" Margin="5" FontFamily="Comic Sans MS" FontSize="20">
+        <ComboBox Width="400" Grid.Row="3" Margin="5" FontFamily="Comic Sans MS" FontSize="20" ItemsSource="{Binding Types}" SelectedItem="{Binding Type}">
             <ComboBox.ItemContainerStyle>
                 <Style TargetType="ComboBoxItem">
                     <Setter Property="FontFamily" Value="Comic Sans MS" />
@@ -109,19 +109,31 @@
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </ComboBox>
-        <TextBlock Width="280" FontStyle="Italic" HorizontalAlignment="Left" Margin="20,0,0,0" FontSize="20" Height="40" Visibility="Visible" Name="txtSelectType" Foreground="Gray" Text="Select Accommodation Type" Grid.Row="3" FontFamily="Comic Sans MS" />
+        <TextBlock Width="280" FontStyle="Italic" HorizontalAlignment="Left" Margin="20,0,0,0" FontSize="20" Height="40" Visibility="{Binding ItemVisibility}" Name="txtSelectType" Foreground="Gray" Text="Select Accommodation Type" Grid.Row="3" FontFamily="Comic Sans MS" />
 
         <TextBox Width="400" Height="40" FontSize="20" TextAlignment="Justify" FontFamily="Comic Sans MS" Style="{StaticResource MyWaterMarkStyle}" Tag="Max Number of Guests"
                  Validation.ErrorTemplate="{StaticResource ValidationTemplate}"
-                 Name="txtMaxGuests" Margin="5" Text="{Binding Path=MaxGuests, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Grid.Row="4" />
+                 Name="txtMaxGuests" Margin="5" Text="{Binding Path=MaxGuests, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Grid.Row="4">
+            <ToolTipService.ToolTip>
+                <TextBlock Text="Max Guests, Min Days and Cancellation Period need to be numbers!"></TextBlock>
+            </ToolTipService.ToolTip>
+        </TextBox>
 
         <TextBox Width="400" Height="40" FontSize="20" TextAlignment="Justify" FontFamily="Comic Sans MS"  Style="{StaticResource MyWaterMarkStyle}" Tag="Min Reservation Days"
                  Validation.ErrorTemplate="{StaticResource ValidationTemplate}"
-                 Name="txtMinReservationDays" Margin="5" Text="{Binding Path=MinReservationDays, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Grid.Row="5" Grid.Column="1" />
+                 Name="txtMinReservationDays" Margin="5" Text="{Binding Path=MinReservationDays, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Grid.Row="5" Grid.Column="1">
+            <ToolTipService.ToolTip>
+                <TextBlock Text="Max Guests, Min Days and Cancellation Period need to be numbers!"></TextBlock>
+            </ToolTipService.ToolTip>
+        </TextBox>
 
         <TextBox Width="400" Height="40" FontSize="20" TextAlignment="Justify" FontFamily="Comic Sans MS"  Style="{StaticResource MyWaterMarkStyle}" Tag="Cancellation Period"
                  Validation.ErrorTemplate="{StaticResource ValidationTemplate}"
-                 Name="txtCancellationPeriod" Margin="5" Text="{Binding Path=CancellationPeriod, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Grid.Row="6" Grid.Column="1" />
+                 Name="txtCancellationPeriod" Margin="5" Text="{Binding Path=CancellationPeriod, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Grid.Row="6" Grid.Column="1">
+            <ToolTipService.ToolTip>
+                <TextBlock Text="Max Guests, Min Days and Cancellation Period need to be numbers!"></TextBlock>
+            </ToolTipService.ToolTip>
+        </TextBox>
 
         <TextBox x:Name="UrlTextBox" Width="340" Margin="15,0,0,0" Height="40" Grid.Row="7" HorizontalAlignment="Left"
                  FontSize="20" TextAlignment="Justify" FontFamily="Comic Sans MS" Style="{StaticResource MyWaterMarkStyle}" Tag="Image URLs"/>
@@ -137,6 +149,28 @@
             <ListBox x:Name="UrlListBox" Width="400" HorizontalAlignment="Center" BorderThickness="0" Height="100" ItemsSource="{Binding ImageUrls}" />
         </GroupBox>
 
-        <Button Grid.Row="10" Height="40" Width="200" FontSize="15" FontFamily="Comic Sans MS" Foreground="White" Background="#FF684CA4" Command="{Binding AddAccommodationCommand}">Register Accommodation</Button>
+        <Button Grid.Row="10" Height="40" Width="200" FontSize="15" FontFamily="Comic Sans MS" Foreground="White" Background="#FF684CA4" Command="{Binding AddAccommodationCommand}">Register Accommodation
+            <Button.Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="FontSize" Value="14" />
+                    <Style.Triggers>
+                        <EventTrigger RoutedEvent="Button.MouseEnter">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation To="16" Duration="0:0:0.2" Storyboard.TargetProperty="FontSize" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="Button.MouseLeave">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation To="14" Duration="0:0:0.2" Storyboard.TargetProperty="FontSize" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
     </Grid>
 </Page>

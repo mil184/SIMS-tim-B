@@ -5,11 +5,13 @@ using InitialProject.View.Owner;
 using MenuNavigation.Commands;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
+using System.Windows.Navigation;
 
 namespace InitialProject.ViewModel.Owner
 {
     public class AccommodationsPageViewModel : IObserver
     {
+        public NavigationService navigationService { get; private set; }
         public OwnerMainWindow MainWindow { get; set; }
         public User LoggedInUser { get; set; }
         public ObservableCollection<Accommodation> Accommodations { get; set; }
@@ -24,22 +26,19 @@ namespace InitialProject.ViewModel.Owner
         private void Execute_NavigateToAddAccommodationPageCommand(object obj)
         {
             Page addAccommodation = new AddAccommodationPage(MainWindow, _accommodationService);
-            MainWindow.Main.NavigationService.Navigate(addAccommodation);
-            MainWindow.Title.Content = "Register an Accommodation";
+            navigationService.Navigate(addAccommodation);
         }
 
         private void Execute_NavigateToStatisticsPageCommand(object obj)
         {
             Page statistics = new StatisticsPage(SelectedAccommodation);
-            MainWindow.Main.NavigationService.Navigate(statistics);
-            MainWindow.Title.Content = "Stats";
+            navigationService.Navigate(statistics);
         }
 
         private void Execute_NavigateToRenovateAccommodationPageCommand(object obj)
         {
-            Page renovateAccommodation = new RenovateAccommodationPage(MainWindow, LoggedInUser, SelectedAccommodation);
-            MainWindow.Main.NavigationService.Navigate(renovateAccommodation);
-            MainWindow.Title.Content = "Renovate the Accommodation";
+            Page renovateAccommodation = new RenovateAccommodationPage(navigationService, LoggedInUser, SelectedAccommodation);
+            navigationService.Navigate(renovateAccommodation);
         }
 
         private bool CanExecute_Command(object obj)
@@ -47,9 +46,10 @@ namespace InitialProject.ViewModel.Owner
             return true;
         }
 
-        public AccommodationsPageViewModel(OwnerMainWindow window, User user)
+        public AccommodationsPageViewModel(NavigationService navService, OwnerMainWindow window, User user)
         {
             MainWindow = window;
+            navigationService = navService;
             LoggedInUser = user;
 
             _accommodationService = new AccommodationService();

@@ -25,6 +25,8 @@ namespace InitialProject.ViewModel.Owner
 
         private readonly ImageRepository _imageRepository;
 
+        private bool IsClicked { get; set; }
+
 
         private string _accommodationName;
         public string AccommodationName
@@ -138,6 +140,25 @@ namespace InitialProject.ViewModel.Owner
             }
         }
 
+        private Visibility _itemVisibility;
+        public Visibility ItemVisibility
+        {
+            get => _itemVisibility;
+            set
+            {
+                if (_itemVisibility != value)
+                {
+                    _itemVisibility = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public ObservableCollection<string> Countries { get; set; }
+        public ObservableCollection<string> Cities { get; set; }
+        public ObservableCollection<string> Types { get; set; }
+
+
         private ObservableCollection<int> _imageIds = new ObservableCollection<int>();
 
         public RelayCommand AddAccommodationCommand { get; set; }
@@ -148,6 +169,7 @@ namespace InitialProject.ViewModel.Owner
 
         private void Execute_AddAccommodationCommand(object obj)
         {
+            IsClicked = true;
             if (IsValid)
             {
                 Location AccommodationLocation = _locationService.GetLocation(Country, City);
@@ -163,35 +185,34 @@ namespace InitialProject.ViewModel.Owner
 
         private void Execute_CountrySelectionChangeCommand(object obj)
         {
-            if (CurrentPage.cbCountry.SelectedItem != null && _locationService != null)
+            if (Country != null && _locationService != null)
             {
                 CurrentPage.txtSelectCountry.Visibility = Visibility.Hidden;
                 if (CurrentPage.cbCity.Items != null)
                 {
                     CurrentPage.cbCity.Items.Clear();
+                    Cities.Clear();
                 }
 
                 CurrentPage.cbCity.IsEnabled = true;
-                foreach (String city in _locationService.GetCitiesByCountry(CurrentPage.cbCountry.SelectedItem.ToString()))
+                foreach (string city in _locationService.GetCitiesByCountry(Country))
                 {
                     CurrentPage.cbCity.Items.Add(city);
+                    Cities.Add(city);
                 }
             }
         }
 
         private void Execute_CitySelectionChangeCommand(object obj)
         {
-            if (CurrentPage.cbCountry.SelectedItem != null && CurrentPage.cbCity.SelectedItem != null)
+            if (Country != null && City != null)
             {
                 if (CurrentPage.txtSelectCity != null) CurrentPage.txtSelectCity.Visibility = Visibility.Hidden;
-                Country = CurrentPage.cbCountry.SelectedItem.ToString();
-                City = CurrentPage.cbCity.SelectedItem.ToString();
             }
         }
 
         private void Execute_TypeSelectionChangeCommand(object obj)
         {
-            Type = CurrentPage.AccommodationType_cb.SelectedItem.ToString();
             if (CurrentPage.txtSelectType != null) CurrentPage.txtSelectType.Visibility = Visibility.Hidden;
         }
 
@@ -219,6 +240,7 @@ namespace InitialProject.ViewModel.Owner
             CurrentPage = page;
             LoggedInUser = MainWindow.LoggedInUser;
             _service = service;
+            IsClicked = false;
 
             _locationService = new LocationService();
             _imageRepository = new ImageRepository();
@@ -233,23 +255,31 @@ namespace InitialProject.ViewModel.Owner
             TypeSelectionChangeCommand = new RelayCommand(Execute_TypeSelectionChangeCommand, CanExecute_Command);
             AddImageCommand = new RelayCommand(Execute_AddImageCommand, CanExecute_Command);
 
+            Countries = new ObservableCollection<string>();
+            Cities = new ObservableCollection<string>();
             InitializeCountries();
-
+            Types = new ObservableCollection<string>();
             InitializeAccommodationType_cb();
         }
 
+
+
         private void InitializeAccommodationType_cb()
         {
-            CurrentPage.AccommodationType_cb.Items.Add("Apartment");
-            CurrentPage.AccommodationType_cb.Items.Add("House");
-            CurrentPage.AccommodationType_cb.Items.Add("Hut");
+            Types.Clear();
+            Types.Add("Hut");
+            Types.Add("House");
+            Types.Add("Apartment");
         }
 
         private void InitializeCountries()
         {
+            Countries.Clear();
             foreach (var country in _locationService.GetCountries())
             {
                 CurrentPage.cbCountry.Items.Add(country);
+                
+                Countries.Add(country);
             }
         }
 
@@ -265,36 +295,46 @@ namespace InitialProject.ViewModel.Owner
         {
             get
             {
-                int TryParseNumber;
-                if (columnName == "AccommodationName")
                 {
-                    if (string.IsNullOrEmpty(AccommodationName))
-                        return "This field is required";
-                }
-                else if (columnName == "MaxGuests")
-                {
-                    if (string.IsNullOrEmpty(MaxGuests))
-                        return "This field is required";
+                    int TryParseNumber;
+                    if (columnName == "AccommodationName")
+                    {
+                        if (IsClicked)
+                        if (string.IsNullOrEmpty(AccommodationName))
+                            return "This field is required";
+                    }
+                    else if (columnName == "MaxGuests")
+                    {
+                        if (IsClicked)
+                            if (string.IsNullOrEmpty(MaxGuests))
+                            return "This field is required";
 
-                    if (!int.TryParse(MaxGuests, out TryParseNumber))
-                        return "This field should be a number";
-                }
-                else if (columnName == "MinReservationDays")
-                {
-                    if (string.IsNullOrEmpty(MinReservationDays))
-                        return "This field is required";
+                        if (IsClicked)
+                            if (!int.TryParse(MaxGuests, out TryParseNumber))
+                            return "This field should be a number";
+                    }
+                    else if (columnName == "MinReservationDays")
+                    {
+                        if (IsClicked)
+                            if (string.IsNullOrEmpty(MinReservationDays))
+                            return "This field is required";
 
-                    if (!int.TryParse(MinReservationDays, out TryParseNumber))
-                        return "This field should be a number";
-                }
-                else if (columnName == "CancellationPeriod")
-                {
-                    if (string.IsNullOrEmpty(CancellationPeriod))
-                        return "This field is required";
+                        if (IsClicked)
+                            if (!int.TryParse(MinReservationDays, out TryParseNumber))
+                            return "This field should be a number";
+                    }
+                    else if (columnName == "CancellationPeriod")
+                    {
+                        if (IsClicked)
+                            if (string.IsNullOrEmpty(CancellationPeriod))
+                            return "This field is required";
 
-                    if (!int.TryParse(CancellationPeriod, out TryParseNumber))
-                        return "This field should be a number";
+                        if (IsClicked)
+                            if (!int.TryParse(CancellationPeriod, out TryParseNumber))
+                            return "This field should be a number";
+                    }
                 }
+                
 
                 return null;
             }

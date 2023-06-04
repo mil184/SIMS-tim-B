@@ -1,22 +1,23 @@
 ﻿using InitialProject.Model;
 using InitialProject.ViewModel.Owner;
 using System.Windows.Controls;
+using System.Windows.Navigation;
 
 namespace InitialProject.View.Owner
 {
     public partial class RenovateAccommodationPage : Page
     {
-        public OwnerMainWindow MainWindow { get; set; }
+        public NavigationService navigationService { get; set; }
         public User LoggedInUser { get; set; }
         public Accommodation SelectedAccommodation { get; set; }
         public RenovateAccommodationPageViewModel _viewModel { get; set; }
-        public RenovateAccommodationPage(OwnerMainWindow window, User user, Accommodation selectedAccommodation)
+        public RenovateAccommodationPage(NavigationService navService, User user, Accommodation selectedAccommodation)
         {
             InitializeComponent();
-            MainWindow = window;
+            navigationService = navService;
             LoggedInUser = user;
             SelectedAccommodation = selectedAccommodation;
-            _viewModel = new RenovateAccommodationPageViewModel(MainWindow, LoggedInUser, SelectedAccommodation);
+            _viewModel = new RenovateAccommodationPageViewModel(navigationService, LoggedInUser, SelectedAccommodation);
             DataContext = _viewModel;
         }
     }

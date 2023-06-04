@@ -5,20 +5,18 @@ using System.Windows.Navigation;
 
 namespace InitialProject.View.Owner
 {
-    public partial class AccommodationsPage : Page
+    public partial class RescheduleRequestsPage : Page
     {
-        public AccommodationsPageViewModel _viewModel { get; set; }
-        public OwnerMainWindow MainWindow { get; set; }
+        public RescheduleRequestsPageViewModel _viewModel { get; set; }
         public User LoggedInUser { get; set; }
         public NavigationService navigationService { get; set; }
 
-        public AccommodationsPage(NavigationService navService, OwnerMainWindow window, User user)
+        public RescheduleRequestsPage(NavigationService navService, User user)
         {
             InitializeComponent();
-            LoggedInUser = user;
             navigationService = navService;
-            MainWindow = window;
-            _viewModel = new AccommodationsPageViewModel(navigationService, window, user);
+            LoggedInUser = user;
+            _viewModel = new RescheduleRequestsPageViewModel(navigationService, LoggedInUser);
             DataContext = _viewModel;
         }
     }

@@ -27,8 +27,9 @@
                     </Style>
                 </DataGrid.CellStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding StartDate}" Width="*" FontSize="20" ></DataGridTextColumn>
-                    <DataGridTextColumn Binding="{Binding EndDate}" Width="*" FontSize="20" ></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding AccommodationId}" Width="Auto" FontSize="20" ></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding StartDate, StringFormat='dd-MM-yyyy'}" Width="*" FontSize="20" ></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding EndDate, StringFormat='dd-MM-yyyy'}" Width="*" FontSize="20" ></DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </GroupBox>
@@ -40,6 +41,9 @@
             <DataGrid ItemsSource="{Binding Path=UpcomingRenovations, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" IsReadOnly="True"
                       SelectedItem="{Binding Path=SelectedRenovation, UpdateSourceTrigger=PropertyChanged}"
                       GridLinesVisibility="None" HeadersVisibility="None" RowHeight="50" FontFamily="Comic Sans MS">
+                <ToolTipService.ToolTip>
+                    <TextBlock Text="You can cancel a renovation only if it is in 5 days or more!"></TextBlock>
+                </ToolTipService.ToolTip>
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick" >
                         <i:InvokeCommandAction Command="{Binding CancelRenovationCommand}"/>
@@ -51,12 +55,17 @@
                     </Style>
                 </DataGrid.CellStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding StartDate}" Width="*" FontSize="20" ></DataGridTextColumn>
-                    <DataGridTextColumn Binding="{Binding EndDate}" Width="*" FontSize="20" ></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding AccommodationId}" Width="Auto" FontSize="20" ></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding StartDate, StringFormat='dd-MM-yyyy'}" Width="*" FontSize="20" ></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding EndDate, StringFormat='dd-MM-yyyy'}" Width="*" FontSize="20" ></DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </GroupBox>
         
-        <Image Grid.Row="2" Source="/Resources/Images/OwnerIcons/renovations.jpg"></Image>
+        <Image Grid.Row="2" Source="/Resources/Images/OwnerIcons/renovations.jpg">
+            <ToolTipService.ToolTip>
+                <TextBlock Text="You can cancel a renovation only if it is in 5 days or more!"></TextBlock>
+            </ToolTipService.ToolTip>
+        </Image>
     </Grid>
 </Page>
