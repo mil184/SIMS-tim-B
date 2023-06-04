@@ -1,5 +1,6 @@
 ﻿using InitialProject.ViewModel.Guest2;
 using InitialProject.ViewModel.Guide;
+using System;
 using System.Windows;
 using System.Windows.Input;
 
@@ -13,7 +14,12 @@ namespace InitialProject.View.Guest2
         {
             InitializeComponent();
             _viewModel = viewModel;
-            DataContext = _viewModel;   
+            DataContext = _viewModel;
+
+            if (_viewModel.CloseAction == null)
+            {
+                _viewModel.CloseAction = new Action(this.Close);
+            }
         }
     }
 }

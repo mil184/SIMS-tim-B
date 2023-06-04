@@ -18,18 +18,25 @@
     <None Remove="Fonts\Pacifico-Regular.ttf" />
     <None Remove="Resources\Images\accommodation.png" />
     <None Remove="Resources\Images\add.png" />
+    <None Remove="Resources\Images\ana.jpg" />
+    <None Remove="Resources\Images\back.png" />
+    <None Remove="Resources\Images\cross.png" />
     <None Remove="Resources\Images\delete.png" />
     <None Remove="Resources\Images\edit.png" />
     <None Remove="Resources\Images\favicon.ico" />
+    <None Remove="Resources\Images\gift.png" />
     <None Remove="Resources\Images\gorana.jpg" />
     <None Remove="Resources\Images\green-check.png" />
+    <None Remove="Resources\Images\group.png" />
     <None Remove="Resources\Images\guest.png" />
     <None Remove="Resources\Images\guest2.png" />
+    <None Remove="Resources\Images\guest2logo.png" />
     <None Remove="Resources\Images\home.png" />
     <None Remove="Resources\Images\image.png" />
     <None Remove="Resources\Images\image_unavailable.png" />
     <None Remove="Resources\Images\info.png" />
     <None Remove="Resources\Images\inspection.png" />
+    <None Remove="Resources\Images\language.png" />
     <None Remove="Resources\Images\leftArrow.png" />
     <None Remove="Resources\Images\logo.png" />
     <None Remove="Resources\Images\menu.png" />
@@ -72,6 +79,8 @@
     <None Remove="Resources\Images\red-x.png" />
     <None Remove="Resources\Images\rightArrow.png" />
     <None Remove="Resources\Images\search.jpg" />
+    <None Remove="Resources\Images\see.png" />
+    <None Remove="Resources\Images\theme.png" />
     <None Remove="Resources\Images\tour-guide.png" />
     <None Remove="Resources\Images\trash-can.png" />
     <None Remove="Resources\Images\traveler.png" />
@@ -85,10 +94,37 @@
     <Content Include="Resources\Images\add.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\Images\ana.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\back.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\cross.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Images\delete.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\Images\gift.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\group.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\guest2logo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Images\home.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\language.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\see.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\theme.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Resource Include="Fonts\Pacifico-Regular.ttf">
@@ -199,6 +235,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Resources\NewFolder\" />
     <Page Update="View\Guest2\TourImages.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
@@ -208,6 +245,42 @@
     <Folder Include="ViewModel\Guest2\" />
     <Folder Include="ViewModel\Guest1\" />
     <Folder Include="ViewModel\Owner\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.en-US.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.en-US.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 
 </Project>

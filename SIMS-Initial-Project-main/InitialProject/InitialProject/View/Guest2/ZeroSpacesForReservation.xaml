@@ -4,46 +4,103 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InitialProject.View.Guest2"
+        xmlns:ns="clr-namespace:InitialProject.Localization"
         mc:Ignorable="d"
-        Title="DMJM-Tours" Height="450" Width="800"
+        Title="DMJM-Tours" Height="768" Width="1024"
         Icon ="/Resources/Images/favicon.ico">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="120"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition />
+            <RowDefinition Height="120"/>
         </Grid.RowDefinitions>
 
-        <TextBlock FontSize="20" Margin="10" HorizontalAlignment="Center" TextWrapping="Wrap">
-        <Run Text="There are no spaces available for chosen tour. Would you like to reserve another one in the same city?"/>
-        </TextBlock>
+        <Grid Grid.Row="0" Background="White" Grid.ColumnSpan="2">
 
-        <Border Grid.Row="1" Margin="10" BorderBrush="Gray" BorderThickness="1">
-            <ScrollViewer Height="200" VerticalScrollBarVisibility="Auto">
-                <DataGrid ItemsSource="{Binding Tours}" 
-                      SelectedItem="{Binding Path=NewSelectedTour}"
+            <Border BorderBrush="#DDDDDD" BorderThickness="2" Margin="3">
+                <Grid Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="7*"/>
+                        <ColumnDefinition Width="3*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Resources/Images/favicon.ico" Margin="10" HorizontalAlignment="Left"/>
+                        <TextBlock FontSize="78" FontFamily="Bernard MT" FontWeight="Bold" VerticalAlignment="Center">
+                            DMJM Tours
+                        </TextBlock>
+                    </StackPanel>
+
+
+
+                    <StackPanel Grid.Column="1" Margin="10">
+                        <Button FontSize="20" Margin="0,0,0,20" Height="35" HorizontalAlignment="Stretch">
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/Resources/Images/theme.png" Margin="0"/>
+                                    <TextBlock Text="{ns:Loc Theme}"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                        <Button FontSize="20" Margin="0,0,0,20" Height="35" HorizontalAlignment="Stretch" Command="{Binding ChangeLanguageCommand}">
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/Resources/Images/language.png" Width="Auto" Margin="5"/>
+                                    <TextBlock Text="{ns:Loc LanguageBtn}"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <TextBlock Grid.Row="1" 
+                   FontSize="20" Margin="30" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"
+                   Text="{ns:Loc NoSpacesAvailable}" />
+
+
+        <Grid Grid.Row="2" Margin="30, 0, 30, 0" Grid.ColumnSpan="2" >
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <DataGrid FontSize="20"
+                    ItemsSource="{Binding Tours}" SelectedItem="{Binding SelectedTour}"
                       AutoGenerateColumns="False"
                       IsReadOnly="True">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
-                        <DataGridTextColumn Header="Country" Binding="{Binding Country}" Width="*"/>
-                        <DataGridTextColumn Header="City" Binding="{Binding City}" Width="*"/>
-                        <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
-                        <DataGridTextColumn Header="Language" Binding="{Binding Language}" Width="*"/>
-                        <DataGridTextColumn Header="Max Guests" Binding="{Binding MaxGuests}" Width="*"/>
-                        <DataGridTextColumn Header="Current Guest Count" Binding="{Binding CurrentGuestCount}" Width="*"/>
-                        <DataGridTextColumn Header="Start Time" Binding="{Binding StartTime, StringFormat={}{0:dd.M.yyyy. HH:mm}}" Width="*"/>
-                        <DataGridTextColumn Header="Duration" Binding="{Binding Duration}" Width="*"/>
-                        <DataGridTextColumn Header="Guide" Binding="{Binding Guide}" Width="*"/>
+                        <DataGridTextColumn Header="{ns:Loc DGName}"  Binding="{Binding Name}" Width="*" />
+                        <DataGridTextColumn Header="{ns:Loc DGCountry}" Binding="{Binding Country}" Width="*"/>
+                        <DataGridTextColumn Header="{ns:Loc DGCity}" Binding="{Binding City}" Width="*"/>
+                        <DataGridTextColumn Header="{ns:Loc DGLanguage}" Binding="{Binding Language}" Width="*"/>
+                        <DataGridTextColumn Header="{ns:Loc DGGuests}" Binding="{Binding Guests}" Width="*"/>
+                        <DataGridTextColumn Header="{ns:Loc DGDuration}" Binding="{Binding Duration}" Width="*"/>
+                        <DataGridTemplateColumn Header="{ns:Loc DGSeeMore}" Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Command="{Binding ShowMoreCommand}">
+                                        <Image Width="10" Source="/Resources/Images/see.png" />
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
             </ScrollViewer>
-        </Border>
+        </Grid>
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="10">
-            <Button Content="Reserve Tour" Margin="0 0 10 0" Click="ReserveButton_Click" Width="100"/>
-            <Button Content="Cancel" Click="CancelButton_Click" Width="100"/>
-        </StackPanel>
+        
+            <Button Grid.Row="3"
+                    FontSize="20" Height="40" Width="160" HorizontalAlignment="Center"
+                    Command="{Binding ExitCommand}" >
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Resources/Images/cross.png" Width="25" Margin="5"/>
+                        <TextBlock Text="{ns:Loc Exit}"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+        
     </Grid>
 
 </Window>
