@@ -17,11 +17,62 @@ namespace InitialProject.Service
 
         private readonly IAccommodationReservationRepository _accommodationReservationRepository;
         private readonly AccommodationRenovationService _accommodationRenovationService;
+        private readonly AccommodationRepository _accommodationRepository;
 
         public AccommodationReservationService()
         {
             _accommodationReservationRepository = Injector.CreateInstance<IAccommodationReservationRepository>();
             _accommodationRenovationService = new AccommodationRenovationService();
+            _accommodationRepository = new AccommodationRepository();
+        }
+
+        public (int, int) GetBusiestLocation(int ownerId)
+        {
+            List<Accommodation> accommodations = new List<Accommodation>();
+            foreach (AccommodationReservation reservation in _accommodationReservationRepository.GetAll())
+            {
+                if (reservation.OwnerId == ownerId)
+                {
+                    accommodations.Add(_accommodationRepository.GetById(reservation.AccommodationId));
+                }
+            }
+
+            Dictionary<int, int> locationCounts = new Dictionary<int, int>();
+            foreach (Accommodation accommodation in accommodations)
+            {
+                int locationId = accommodation.LocationId;
+                if (locationCounts.ContainsKey(locationId))
+                {
+                    locationCounts[locationId]++;
+                }
+                else
+                {
+                    locationCounts[locationId] = 1;
+                }
+            }
+
+            int maxLocation = 0;
+            int locationWithMostVisits = 0;
+
+            int minLocation = int.MaxValue;
+            int locationWithLeastVisits = 0;
+
+            foreach (var kvp in locationCounts)
+            {
+                if (kvp.Value > maxLocation)
+                {
+                    maxLocation = kvp.Value;
+                    locationWithMostVisits = kvp.Key;
+                }
+
+                if (kvp.Value < minLocation)
+                {
+                    minLocation = kvp.Value;
+                    locationWithLeastVisits = kvp.Key;
+                }
+            }
+
+            return (locationWithMostVisits, locationWithLeastVisits);
         }
 
         public int GetBusiestYear(int accommodationId)

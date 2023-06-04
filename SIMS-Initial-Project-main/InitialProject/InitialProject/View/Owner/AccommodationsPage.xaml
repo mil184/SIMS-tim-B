@@ -8,11 +8,30 @@
       d:DesignHeight="700" d:DesignWidth="430"
       Title="AccommodationsPage">
 
-    <DockPanel>
-        <Button DockPanel.Dock="Bottom" Height="50" Width="50" Command="{Binding AddAccommodationCommand}" Background="Transparent">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Hyperlink Foreground="White" Command="{Binding NavigateToMinStatisticsPageCommand}">
+                <TextBlock Text="{Binding LeastPopular}" FontSize="14" FontFamily="Comic Sans MS"></TextBlock>
+            </Hyperlink>
+        </TextBlock>
+        <Button Grid.Row="1" Grid.Column="1" Height="50" Width="50" Command="{Binding AddAccommodationCommand}" Background="Transparent">
             <Image Source="/Resources/Images/OwnerIcons/image.png"></Image>
         </Button>
-        <DataGrid ItemsSource="{Binding Path=Accommodations, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Bottom"
+        <TextBlock Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Hyperlink Foreground="White" Command="{Binding NavigateToMaxStatisticsPageCommand}">
+                <TextBlock Text="{Binding MostPopular}" FontSize="14" FontFamily="Comic Sans MS"></TextBlock>
+            </Hyperlink>
+        </TextBlock>
+        <DataGrid ItemsSource="{Binding Path=Accommodations, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.ColumnSpan="3"
                   SelectedItem="{Binding Path=SelectedAccommodation, UpdateSourceTrigger=PropertyChanged}"
                   AlternatingRowBackground="#381C74" RowBackground="#FF684CA4"
                   Foreground="White" Background="#FF684CA4" HorizontalAlignment="Stretch"
@@ -56,5 +75,5 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-    </DockPanel>
+    </Grid>
 </Page>
