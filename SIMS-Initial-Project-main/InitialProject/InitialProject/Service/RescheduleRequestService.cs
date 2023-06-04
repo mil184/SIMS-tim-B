@@ -65,6 +65,11 @@ namespace InitialProject.Service
             return reschedulesThisYear;
         }
 
+        public RescheduleRequest GetById(int id)
+        {
+            return _rescheduleRequestRepository.GetById(id);
+        }
+
         public RescheduleRequest Save(RescheduleRequest rescheduleRequest)
         {
             return _rescheduleRequestRepository.Save(rescheduleRequest);

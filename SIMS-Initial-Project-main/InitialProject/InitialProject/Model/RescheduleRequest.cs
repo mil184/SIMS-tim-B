@@ -1,6 +1,8 @@
 ﻿using InitialProject.Resources.Enums;
 using InitialProject.Serializer;
 using System;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
 
 namespace InitialProject.Model
 {

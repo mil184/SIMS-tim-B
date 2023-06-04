@@ -69,8 +69,30 @@
                 <TextBox TextAlignment="Justify" FontFamily="Comic Sans MS" Style="{StaticResource MyWaterMarkStyle}" Tag="Days Required"
                  Validation.ErrorTemplate="{StaticResource ValidationTemplate}" FontSize="15"
                  Name="txtDaysRequired" Margin="15" Text="{Binding Path=Duration, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Grid.Row="2"/>
-                <Button Height="35" Width="150" Grid.Row="3" FontFamily="Comic Sans MS" FontSize="15" Background="#FF684CA4" Foreground="White"
-                        Command="{Binding FindTimeSlotsCommand}">Find Time Slots</Button>
+                <Button Height="35" Width="150" Grid.Row="3" FontFamily="Comic Sans MS" FontSize="13" Background="#FF684CA4" Foreground="White"
+                        Command="{Binding FindTimeSlotsCommand}">Find Time Slots
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}">
+                            <Setter Property="FontSize" Value="13" />
+                            <Style.Triggers>
+                                <EventTrigger RoutedEvent="Button.MouseEnter">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation To="15" Duration="0:0:0.2" Storyboard.TargetProperty="FontSize" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                                <EventTrigger RoutedEvent="Button.MouseLeave">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation To="13" Duration="0:0:0.2" Storyboard.TargetProperty="FontSize" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
             </Grid>
         </Grid>
         <GroupBox Grid.Row="1" Margin="10">
@@ -108,12 +130,34 @@
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Margin="10" Text="{Binding SelectedTimeSpan}"></TextBlock>
+                    <TextBlock Grid.Row="0" Margin="10,40,10,10" Width="150" Text="{Binding SelectedTimeSpan}" TextWrapping="Wrap" FontFamily="Comic Sans MS" FontSize="15" VerticalAlignment="Center"></TextBlock>
                     <TextBox TextAlignment="Justify" FontFamily="Comic Sans MS" Style="{StaticResource MyWaterMarkStyle}" Tag="Description"
-                             Validation.ErrorTemplate="{StaticResource ValidationTemplate}" FontSize="10"
+                             Validation.ErrorTemplate="{StaticResource ValidationTemplate}" FontSize="15" TextWrapping="Wrap"
                              Margin="15" Text="{Binding Path=Description, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Grid.Row="1"/>
                     <Button Height="35" Width="150" Grid.Row="21" FontFamily="Comic Sans MS" FontSize="15" Foreground="White"
-                            Command="{Binding RenovateCommand}" Background="#FF684CA4">Renovate!</Button>
+                            Command="{Binding RenovateCommand}" Background="#FF684CA4">Renovate!
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}">
+                                <Setter Property="FontSize" Value="13" />
+                                <Style.Triggers>
+                                    <EventTrigger RoutedEvent="Button.MouseEnter">
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation To="15" Duration="0:0:0.2" Storyboard.TargetProperty="FontSize" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                    <EventTrigger RoutedEvent="Button.MouseLeave">
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation To="13" Duration="0:0:0.2" Storyboard.TargetProperty="FontSize" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
                 </Grid>
             </Grid>
             <GroupBox.Header>

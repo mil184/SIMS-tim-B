@@ -40,6 +40,18 @@ namespace InitialProject.Service
             }
         }
 
+        public Accommodation GetAccommodationByLocation(int locationId)
+        {
+            foreach (Accommodation accommodation in _accommodationRepository.GetAll())
+            {
+                if (accommodation.LocationId == locationId)
+                {
+                    return accommodation;
+                }
+            }
+            return null;
+        }
+
         public List<Accommodation> GetByUser(int ownerId)
         {
             var accommodations = new List<Accommodation>();

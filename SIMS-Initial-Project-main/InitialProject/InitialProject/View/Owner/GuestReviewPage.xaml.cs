@@ -13,7 +13,7 @@ namespace InitialProject.View.Owner
         {
             InitializeComponent();
             LoggedInUser = user;
-            _viewModel = new GuestReviewPageViewModel(this, user);
+            _viewModel = new GuestReviewPageViewModel(user);
             DataContext = _viewModel;
         }
     }

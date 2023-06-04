@@ -47,6 +47,8 @@
     <None Remove="Resources\Images\OwnerIcons\addAccommodation.png" />
     <None Remove="Resources\Images\OwnerIcons\apartment.png" />
     <None Remove="Resources\Images\OwnerIcons\arrow.png" />
+    <None Remove="Resources\Images\OwnerIcons\cancel.png" />
+    <None Remove="Resources\Images\OwnerIcons\check.png" />
     <None Remove="Resources\Images\OwnerIcons\dislike.png" />
     <None Remove="Resources\Images\OwnerIcons\dots.png" />
     <None Remove="Resources\Images\OwnerIcons\forum.png" />
@@ -57,6 +59,11 @@
     <None Remove="Resources\Images\OwnerIcons\image.png" />
     <None Remove="Resources\Images\OwnerIcons\like.png" />
     <None Remove="Resources\Images\OwnerIcons\menu.png" />
+    <None Remove="Resources\Images\OwnerIcons\mood1.png" />
+    <None Remove="Resources\Images\OwnerIcons\mood2.png" />
+    <None Remove="Resources\Images\OwnerIcons\mood3.png" />
+    <None Remove="Resources\Images\OwnerIcons\mood4.png" />
+    <None Remove="Resources\Images\OwnerIcons\mood5.png" />
     <None Remove="Resources\Images\OwnerIcons\music.png" />
     <None Remove="Resources\Images\OwnerIcons\musicDark.png" />
     <None Remove="Resources\Images\OwnerIcons\peopleTalking.jpg" />
@@ -74,6 +81,7 @@
     <None Remove="Resources\Images\OwnerIcons\sad.png" />
     <None Remove="Resources\Images\OwnerIcons\stats.png" />
     <None Remove="Resources\Images\OwnerIcons\talking2.png" />
+    <None Remove="Resources\Images\OwnerIcons\time.jpg" />
     <None Remove="Resources\Images\OwnerIcons\worker.png" />
     <None Remove="Resources\Images\pdf.jpg" />
     <None Remove="Resources\Images\red-x.png" />
@@ -164,6 +172,7 @@
     <Resource Include="Resources\Images\OwnerIcons\addAccommodation.png" />
     <Resource Include="Resources\Images\OwnerIcons\apartment.png" />
     <Resource Include="Resources\Images\OwnerIcons\arrow.png" />
+    <Resource Include="Resources\Images\OwnerIcons\cancel.png" />
     <Resource Include="Resources\Images\OwnerIcons\dislike.png" />
     <Resource Include="Resources\Images\OwnerIcons\dots.png" />
     <Resource Include="Resources\Images\OwnerIcons\forum.png" />
@@ -174,6 +183,11 @@
     <Resource Include="Resources\Images\OwnerIcons\image.png" />
     <Resource Include="Resources\Images\OwnerIcons\like.png" />
     <Resource Include="Resources\Images\OwnerIcons\menu.png" />
+    <Resource Include="Resources\Images\OwnerIcons\mood1.png" />
+    <Resource Include="Resources\Images\OwnerIcons\mood2.png" />
+    <Resource Include="Resources\Images\OwnerIcons\mood3.png" />
+    <Resource Include="Resources\Images\OwnerIcons\mood4.png" />
+    <Resource Include="Resources\Images\OwnerIcons\mood5.png" />
     <Resource Include="Resources\Images\OwnerIcons\musicDark.png" />
     <Resource Include="Resources\Images\OwnerIcons\peopleTalking.jpg" />
     <Resource Include="Resources\Images\OwnerIcons\rating.png" />
@@ -190,6 +204,7 @@
     <Resource Include="Resources\Images\OwnerIcons\sad.png" />
     <Resource Include="Resources\Images\OwnerIcons\stats.png" />
     <Resource Include="Resources\Images\OwnerIcons\talking2.png" />
+    <Resource Include="Resources\Images\OwnerIcons\time.jpg" />
     <Resource Include="Resources\Images\OwnerIcons\worker.png" />
     <Resource Include="Resources\Images\pdf.jpg" />
     <Resource Include="Resources\Images\red-x.png">
@@ -209,6 +224,10 @@
     <Content Include="Resources\Images\view.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Images\OwnerIcons\check.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -244,7 +263,6 @@
   <ItemGroup>
     <Folder Include="ViewModel\Guest2\" />
     <Folder Include="ViewModel\Guest1\" />
-    <Folder Include="ViewModel\Owner\" />
   </ItemGroup>
 
   <ItemGroup>

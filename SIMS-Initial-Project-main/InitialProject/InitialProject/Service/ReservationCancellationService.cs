@@ -1,5 +1,4 @@
 ﻿using InitialProject.Model;
-using InitialProject.Repository;
 using InitialProject.Repository.Interfaces;
 using InitialProject.Resources.Injector;
 using InitialProject.Resources.Observer;

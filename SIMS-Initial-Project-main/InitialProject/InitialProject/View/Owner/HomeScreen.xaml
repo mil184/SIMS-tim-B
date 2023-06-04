@@ -8,6 +8,37 @@
       d:DesignHeight="700" d:DesignWidth="430"
       Title="HomeScreen" x:Name="homescreen">
 
+    <Page.Resources>
+        <Style TargetType="Image">
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <RotateTransform Angle="0" CenterX="12" CenterY="12" />
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <EventTrigger RoutedEvent="MouseEnter">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetProperty="(Image.RenderTransform).(RotateTransform.Angle)"
+                                         From="0" To="360" Duration="0:0:5" RepeatBehavior="Forever" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="MouseLeave">
+                    <BeginStoryboard Name="stopStoryboard">
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetProperty="(Image.RenderTransform).(RotateTransform.Angle)"
+                                         To="0" Duration="0:0:0.5" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="MouseLeave">
+                    <StopStoryboard BeginStoryboardName="stopStoryboard" />
+                </EventTrigger>
+            </Style.Triggers>
+        </Style>
+    </Page.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -22,7 +53,8 @@
 
         <Button Grid.Row="0" Grid.Column="0" Width="190" Height="140" Background="#FF684CA4" Foreground="White" Command="{Binding NavigateToAccommodationsPageCommand}">
             <StackPanel Orientation="Horizontal">
-                <Image Source="/Resources/Images/OwnerIcons/accommodation.png" Height="24" Width="24" Margin="7"/>
+                <Image Source="/Resources/Images/OwnerIcons/accommodation.png" Height="24" Width="24" Margin="7">
+                </Image>
                 <TextBlock Margin="7" VerticalAlignment="Center" FontSize="14">Accommodations</TextBlock>
             </StackPanel>
             <Button.Effect>
@@ -31,7 +63,8 @@
         </Button>
         <Button Grid.Row="0" Grid.Column="1" Width="190" Height="140" Background="#381C74" Command="{Binding NavigateToRenovationsPageCommand}">
             <StackPanel Orientation="Horizontal">
-                <Image Source="/Resources/Images/OwnerIcons/renovation.png" Height="24" Width="24" Margin="7"/>
+                <Image Source="/Resources/Images/OwnerIcons/renovation.png" Height="24" Width="24" Margin="7">
+                </Image>
                 <TextBlock Margin="7" VerticalAlignment="Center" FontSize="14" Foreground="White">Renovations</TextBlock>
             </StackPanel>
             <Button.Effect>
@@ -56,7 +89,7 @@
                 <DropShadowEffect Color="Black" />
             </Button.Effect>
         </Button>
-        <Button Grid.Row="2" Grid.Column="0" Width="190" Height="140" Background="#FF684CA4" Foreground="White">
+        <Button Grid.Row="2" Grid.Column="0" Width="190" Height="140" Background="#FF684CA4" Foreground="White"  Command="{Binding NavigateToRescheduleRequestsPageCommand}">
             <StackPanel Orientation="Horizontal">
                 <Image Source="/Resources/Images/OwnerIcons/rescheduling.png" Height="24" Width="24" Margin="7"/>
                 <TextBlock Margin="7" VerticalAlignment="Center" FontSize="14">Reschedule Requests</TextBlock>
@@ -74,7 +107,7 @@
                 <DropShadowEffect Color="Black" />
             </Button.Effect>
         </Button>
-        <Button Grid.Row="3" Grid.Column="0" Width="190" Height="140" Background="#381C74" Foreground="White">
+        <Button Grid.Row="3" Grid.Column="0" Width="190" Height="140" Background="#381C74" Foreground="White" Command="{Binding GenerateReportCommand}">
             <StackPanel Orientation="Horizontal">
                 <Image Source="/Resources/Images/OwnerIcons/report.png" Height="24" Width="24" Margin="7"/>
                 <TextBlock Margin="7" VerticalAlignment="Center" FontSize="14">Generate a Report</TextBlock>

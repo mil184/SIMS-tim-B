@@ -5,11 +5,8 @@ using LiveCharts;
 using LiveCharts.Wpf;
 using MenuNavigation.Commands;
 using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows;
-using System.Windows.Controls;
 
 namespace InitialProject.ViewModel.Owner
 {

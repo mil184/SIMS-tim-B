@@ -4,8 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InitialProject.View.Owner"
+        xmlns:Media="clr-namespace:System.Windows.Media;assembly=PresentationCore"
+        xmlns:Animations="clr-namespace:System.Windows.Media.Animation;assembly=PresentationCore"
         mc:Ignorable="d"
-        Title="OwnerMainWindow" Height="750" Width="430" WindowStartupLocation="CenterScreen">
+        Title="Owner" Height="750" Width="430" WindowStartupLocation="CenterScreen" Icon="/Resources/Images/favicon.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
@@ -16,7 +18,25 @@
             <Menu Name="menu" Margin="5">
                 <MenuItem Height="34" Width="34" Background="#FF684CA4" BorderBrush="#FF684CA4">
                     <MenuItem.Icon>
-                        <Image Source= "/Resources/Images/OwnerIcons/menu.png" Height= "24" Width= "24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Image Source= "/Resources/Images/OwnerIcons/menu.png" Height= "24" Width= "24" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Image.RenderTransform>
+                                <RotateTransform Angle="0" CenterX="12" CenterY="12" />
+                            </Image.RenderTransform>
+                            <Image.Style>
+                                <Style TargetType="Image">
+                                    <Style.Triggers>
+                                        <EventTrigger RoutedEvent="MouseDown">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetProperty="(Image.RenderTransform).(RotateTransform.Angle)"
+                                                                     From="0" To="360" Duration="0:0:0.75" />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
                     </MenuItem.Icon>
                     <MenuItem Header="Accommodations" Height="45" Command="{Binding NavigateToAccommodationsPageCommand}">
                         <MenuItem.HeaderTemplate>
@@ -58,7 +78,7 @@
                             <Image Source= "/Resources/Images/OwnerIcons/ratingDark.png" Height= "24" Width= "24" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="Reschedule Requests" Height="45">
+                    <MenuItem Header="Reschedule Requests" Height="45" Command="{Binding NavigateToRescheduleRequestsPageCommand}">
                         <MenuItem.HeaderTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{TemplateBinding Content}" VerticalAlignment="Center"/>
@@ -78,7 +98,7 @@
                             <Image Source= "/Resources/Images/OwnerIcons/forumDark.png" Height= "24" Width= "24" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="Generate a Report" Height="45">
+                    <MenuItem Header="Generate a Report" Height="45" Command="{Binding GenerateReportCommand}">
                         <MenuItem.HeaderTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{TemplateBinding Content}" VerticalAlignment="Center"/>
@@ -100,13 +120,53 @@
                     </MenuItem>
                 </MenuItem>
             </Menu>
-            <Label Foreground="White" VerticalAlignment="Center" Margin="5" Name="Title">DMJM Tours</Label>
+            <TextBlock Foreground="White" VerticalAlignment="Center" Margin="5" Name="Title">DMJM Tours</TextBlock>
             <Button Command="{Binding NavigateToHomePageCommand}">
-                <Image Source="/Resources/Images/favicon.ico" Height= "24" Width= "24" Margin="5"></Image>
+                <Image Source="/Resources/Images/favicon.ico" Height= "24" Width= "24" Margin="5">
+                    <Image.RenderTransform>
+                        <RotateTransform Angle="0" CenterX="12" CenterY="12" />
+                    </Image.RenderTransform>
+                    <Image.Style>
+                        <Style TargetType="Image">
+                            <Style.Triggers>
+                                <EventTrigger RoutedEvent="MouseEnter">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="(Image.RenderTransform).(RotateTransform.Angle)"
+                                             From="0" To="360" Duration="0:0:5" RepeatBehavior="Forever" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                                <EventTrigger RoutedEvent="MouseLeave">
+                                    <BeginStoryboard Name="stopStoryboard">
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="(Image.RenderTransform).(RotateTransform.Angle)"
+                                                             To="0" Duration="0:0:0.5" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                                <EventTrigger RoutedEvent="MouseLeave">
+                                    <StopStoryboard BeginStoryboardName="stopStoryboard" />
+                                </EventTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Image.Style>
+                </Image>
             </Button>
         </ToolBar>
-        <Button Width="30" HorizontalAlignment="Right" Background="#FF684CA4" Name="BackButton" Visibility="Hidden" Command="{Binding NavigateBackCommand}">
-            <Image Source="/Resources/Images/OwnerIcons/arrow.png" Height="34"></Image>
+        <Button Width="30" HorizontalAlignment="Left" Margin="355,0,0,0" Background="#FF684CA4" Name="BackButton" Visibility="Visible" Command="{Binding NavigateBackCommand}">
+            <Image Source="/Resources/Images/OwnerIcons/arrow.png" Height="34">
+                <Image.Triggers>
+                    <EventTrigger RoutedEvent="MouseDown">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0" Duration="0:0:0.3" />
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.3" BeginTime="0:0:0.3" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Image.Triggers>
+            </Image>
         </Button>
         <Button Width="30" HorizontalAlignment="Right" Background="#FF684CA4" Name="DotsButton" Visibility="Visible">
             <Image Source="/Resources/Images/OwnerIcons/dots.png" Height="34"></Image>
