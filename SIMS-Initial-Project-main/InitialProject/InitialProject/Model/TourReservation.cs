@@ -16,7 +16,6 @@ namespace InitialProject.Model
         public int PersonCount { get; set; }
         public int CheckpointArrivalId { get; set; }
         public bool GuestChecked { get; set; }
-
         public bool MessageBoxShown { get; set; }
         public bool GuestArrived { get; set; }
         public bool IsRated { get; set; }

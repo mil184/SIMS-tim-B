@@ -40,6 +40,7 @@ namespace InitialProject.Repository.Implementations
             _users.Remove(current);
             _users.Insert(index, user);       // keep ascending order of ids in file 
             _serializer.ToCSV(FilePath, _users);
+            NotifyObservers();
             return user;
         }
 

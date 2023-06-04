@@ -23,111 +23,123 @@ using System.Windows.Media.Animation;
 
 namespace InitialProject.View.Guide
 {
-    public partial class ShowCheckpoints : Window, INotifyPropertyChanged, IObserver
+    public partial class ShowCheckpoints : Window
     {
-        private readonly Tour SelectedTour;
-
-        private readonly CheckpointService _checkpointService;
-        private readonly TourService _tourService;
-        private readonly TourReservationService _tourReservationService;
-        private readonly UserService _userService;
-
-        public Tour ActiveTour {get; set;}
-        public ObservableCollection<UserDTO> UnmarkedGuests { get; set; }
-        public UserDTO SelectedUserDTO { get; set; }
-
-        public ObservableCollection<Checkpoint> Checkpoints { get; set; }
-
-        private Checkpoint currentCheckpoint;
-        public Checkpoint CurrentCheckpoint
+        private readonly ShowCheckpointsViewModel _viewModel;
+        public ShowCheckpoints(ShowCheckpointsViewModel viewModel)
         {
-            get { return currentCheckpoint; }
-            set
+            InitializeComponent();
+            _viewModel = viewModel;
+            DataContext = _viewModel;
+            InitializeShortcuts();
+        }
+
+        private void ListBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (sender is ListBox listBox && listBox.SelectedItem == null && listBox.Items.Count > 0)
             {
-                if (currentCheckpoint != value)
+                if (_viewModel.SelectedCheckpoint != null)
                 {
-                    currentCheckpoint = value;
-                    OnPropertyChanged();
+                    listBox.SelectedIndex = _viewModel.SelectedCheckpoint.Order - 1;
+                }
+                else 
+                {
+                    listBox.SelectedIndex = 0;
                 }
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        public ShowCheckpoints(Tour tour, CheckpointService checkpointService, TourService tourService, TourReservationService tourReservationService, UserService userService)
-        {
-            InitializeComponent();
-            DataContext = this;
-
-            SelectedTour = tour;
-            _checkpointService = checkpointService;
-            _tourService = tourService;
-            _tourReservationService = tourReservationService;
-            _userService = userService;
-
-            ActiveTour = tour;
-
-            InitializeCollections();
-            SetPropertyValues();
-
-        }
-        private void InitializeCollections()
-        {
-            Checkpoints = new ObservableCollection<Checkpoint>();
-            UnmarkedGuests = new ObservableCollection<UserDTO>();
-        }
-        private void SetPropertyValues()
-        {
-            foreach(int checkpointId in ActiveTour.CheckpointIds)
-            {
-                Checkpoints.Add(_checkpointService.GetById(checkpointId));
-            }
-
-            foreach (int guestId in _tourReservationService.GetUncheckedUserIdsByTour(ActiveTour)) 
-            {
-                UnmarkedGuests.Add(GuideDTOConverter.ConvertToDTO(_userService.GetById(guestId), _tourReservationService, ActiveTour, _checkpointService));
-            }
-
-            CurrentCheckpoint = _checkpointService.GetById(ActiveTour.CurrentCheckpointId);
-
-        }
-
         public void Update()
         {
-            throw new NotImplementedException();
-        }
 
-        private void presentButton_Click(object sender, RoutedEventArgs e)
+        }
+        private void UpdateCheckpointButton_Click(object sender, RoutedEventArgs e)
         {
+            _viewModel.UpdateCheckpoint();
 
+            if (_viewModel.ActiveTour.IsFinished)
+                Close();
         }
-
-        private void nextCheckpointButton_Click(object sender, RoutedEventArgs e)
+        private void EndTourButton_Click(object sender, RoutedEventArgs e)
         {
-            CurrentCheckpoint.IsActive = false;
-            _checkpointService.Update(CurrentCheckpoint);
-
-            int currentIndex = Checkpoints.IndexOf(CurrentCheckpoint);
-            CurrentCheckpoint = Checkpoints[++currentIndex];
-            CurrentCheckpoint.IsActive = true;
-            _checkpointService.Update(CurrentCheckpoint);
-
-            ActiveTour.CurrentCheckpointId = CurrentCheckpoint.Id;
-            _tourService.Update(ActiveTour);
+            _viewModel.EndTour();
+            Close();
         }
-
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
+            Close();
+        }
+        private void CheckUser_Click(object sender, RoutedEventArgs e)
+        {
+            _viewModel.CheckUser();
 
         }
-
-        private void endTourButton_Click(object sender, RoutedEventArgs e)
+        private void InitializeShortcuts()
+        {
+            PreviewKeyDown += Enter_PreviewKeyDown;
+            PreviewKeyDown += OnKeyDown;
+            PreviewKeyDown += Escape_PreviewKeyDown;
+            PreviewKeyDown += EndTour_PreviewKeyDown;
+            PreviewKeyDown += UpdateCheckpoint_PreviewKeyDown;
+            PreviewKeyDown += Demo_PreviewKeyDown;
+        }
+        private void Enter_PreviewKeyDown(object sender, KeyEventArgs e)
         {
 
+            if (e.Key == Key.Enter && _viewModel.SelectedGuestDTO != null && !_viewModel.IsDemo)
+            {
+                _viewModel.CheckUser();
+                e.Handled = true;
+            }
+        }
+        private void Demo_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+
+            if (!_viewModel.IsDemo && Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.D)
+            {
+                _viewModel.StartDemoAsync();
+                e.Handled = true;
+            }
+        }
+        private void OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.LeftCtrl)
+            {
+                return;
+            }
+
+            if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.D)
+            {
+                return;
+            }
+            if (_viewModel.IsDemo)
+            {
+                _viewModel.StopDemo = true;
+                e.Handled = true;
+
+            }
+        }
+        private void Escape_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (!_viewModel.IsDemo && e.Key == Key.Escape)
+            {
+                this.Close();
+            }
+        }
+        private void EndTour_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (!_viewModel.IsDemo && Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.E)
+            {
+                _viewModel.EndTour();
+                this.Close();
+            }
+        }
+        private void UpdateCheckpoint_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (!_viewModel.IsDemo && Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.S)
+            {
+                _viewModel.UpdateCheckpoint();
+            }
         }
     }
 }

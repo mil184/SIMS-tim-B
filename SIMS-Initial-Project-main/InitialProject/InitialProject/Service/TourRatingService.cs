@@ -2,6 +2,7 @@
 using InitialProject.Repository;
 using InitialProject.Resources.Observer;
 using System.Collections.Generic;
+using System.Windows;
 
 namespace InitialProject.Service
 {

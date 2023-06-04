@@ -56,44 +56,13 @@ namespace InitialProject.Service
                 _userRepository.Update(guest);
             }
         }
-
-        public bool ShouldMessageBeShown(User user, List<string> languages)
+        public List<string> GetAddedLanguages(List<string> current, List<string> newer)
         {
-            return languages.SequenceEqual(user.SuperGuideLanguages);
+            return newer.Except(current).ToList();
         }
-        public List<string> UpdateSuperGuidesLanguagesGot(User user)
+        public List<string> GetLostLanguages(List<string> current, List<string> newer)
         {
-            List<string> updatedLanguages = new List<string>();
-
-                List<string> currentLanguages = user.SuperGuideLanguages;
-                List<string> newLanguages = QualifiesForSuperGuide(user);
-
-                // Find the languages in newLanguages that are not in currentLanguages
-                List<string> addedLanguages = newLanguages.Except(currentLanguages).ToList();
-
-                // Add the addedLanguages to the updatedLanguages list
-                updatedLanguages.AddRange(addedLanguages);
-
-
-            return updatedLanguages;
-        }
-
-        public List<string> UpdateSuperGuidesLanguagesLost(User user)
-        {
-            List<string> lostLanguages = new List<string>();
-
-
-                List<string> currentLanguages = user.SuperGuideLanguages;
-                List<string> newLanguages = QualifiesForSuperGuide(user);
-
-                // Find the languages in currentLanguages that are not in newLanguages
-                List<string> lost = currentLanguages.Except(newLanguages).ToList();
-
-                // Add the lost languages to the lostLanguages list
-                lostLanguages.AddRange(lost);
-    
-
-            return lostLanguages;
+            return current.Except(newer).ToList();
         }
 
         public List<string> QualifiesForSuperGuide(User user)
@@ -104,12 +73,13 @@ namespace InitialProject.Service
             {
                 List<Tour> tours = _tourService.GetLastYearsToursByLanguage(user, language);
 
-                if(tours.Count >= 20 && _tourService.GetAverageLanguageRating(tours) > 4.0) 
+                if (tours.Count >= 20 && _tourService.GetAverageLanguageRating(tours) > 4.0) 
                 {
                     superLanguages.Add(language);
                 }
 
             }
+
             return superLanguages;
         }
         public User GetById(int id)

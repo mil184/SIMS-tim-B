@@ -3,6 +3,7 @@ using InitialProject.Model.DTO;
 using InitialProject.Repository;
 using InitialProject.Service;
 using InitialProject.View.Guest2;
+using MenuNavigation.Commands;
 using Org.BouncyCastle.Asn1.Ocsp;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,15 @@ namespace InitialProject.ViewModel.Guide
 {
     public class CreateTourViewModel : INotifyPropertyChanged
     {
+        #region Commands
+        public ICommand CancelCommand { get; }
+
+        //private void InitializeCommands() 
+        //{
+        //    CancelCommand = new RelayCommand(CancelCommandExecute);
+        //}
+        #endregion
+
         #region MAIN
         private readonly TourService _tourService;
         private readonly LocationService _locationService;
@@ -453,9 +463,9 @@ namespace InitialProject.ViewModel.Guide
 
             TourDates.Add(dateTime);
 
-            SelectedDateInDatePicker = null;
-            SelectedHour = null;
-            SelectedMinute = null;
+            //SelectedDateInDatePicker = null;
+            //SelectedHour = null;
+            //SelectedMinute = null;
 
         }
         public void RemoveSelectedDate() 

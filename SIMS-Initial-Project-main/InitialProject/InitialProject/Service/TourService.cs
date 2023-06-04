@@ -5,6 +5,7 @@ using InitialProject.Resources.Injector;
 using InitialProject.Resources.Observer;
 using System;
 using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Input;
 
 namespace InitialProject.Service
@@ -182,6 +183,7 @@ namespace InitialProject.Service
                 sum += _tourRatingService.GetAverageLanguageRating(tour);
                 count++;
             }
+
             return sum/count;
         }
         public List<Tour> GetUpcomingTours(User user)

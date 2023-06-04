@@ -29,6 +29,10 @@ namespace InitialProject.Service
         {
             return _checkpointRepository.Update(checkpoint);
         }
+        public List<Checkpoint> GetByTour(Tour tour)    
+        {
+            return GetAll().Where(c => c.TourId == tour.Id).ToList();
+        }
         public void NotifyObservers()
         {
             _checkpointRepository.NotifyObservers();

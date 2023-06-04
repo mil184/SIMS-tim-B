@@ -125,20 +125,7 @@ namespace InitialProject.View.Guide
 
             Messages = new ObservableCollection<GuideMessage>();
 
-            List<string> gotLanguages = _userService.UpdateSuperGuidesLanguagesGot(CurrentUser);
-
-            if (gotLanguages.Count > 0) 
-            {
-                foreach (string language in gotLanguages)
-                    Messages.Add(new GuideMessage(language, true));
-            }
-            List<string> lostLanguages = _userService.UpdateSuperGuidesLanguagesLost(CurrentUser);
-
-            if (lostLanguages.Count > 0)
-            {
-                foreach (string language in lostLanguages)
-                    Messages.Add(new GuideMessage(language, false));
-            }
+            
 
         }
 
@@ -292,7 +279,8 @@ namespace InitialProject.View.Guide
             if (selectedTour.IsActive)
             {
                 ActiveTour = GuideDTOConverter.ConvertToDTO(selectedTour, _locationService);
-                ShowCheckpoints showCheckpoints = new ShowCheckpoints(selectedTour, _checkpointService, _tourService, _tourReservationService, _userService);
+                ShowCheckpointsViewModel showCheckpointsViewModel = new ShowCheckpointsViewModel(selectedTour, _checkpointService, _tourService, _tourReservationService, _userService);
+                ShowCheckpoints showCheckpoints = new ShowCheckpoints(showCheckpointsViewModel);
                 showCheckpoints.ShowDialog();
             }
             else if (TourActive)
@@ -334,7 +322,8 @@ namespace InitialProject.View.Guide
         }
         private void ShowCheckpointsForTour(Tour tour)
         {
-            ShowCheckpoints showCheckpoints = new ShowCheckpoints(tour, _checkpointService, _tourService, _tourReservationService, _userService);
+            ShowCheckpointsViewModel showCheckpointsViewModel = new ShowCheckpointsViewModel(tour, _checkpointService, _tourService, _tourReservationService, _userService);
+            ShowCheckpoints showCheckpoints = new ShowCheckpoints(showCheckpointsViewModel);
             showCheckpoints.ShowDialog();
         }
         private bool ConfirmStartTour(Tour selectedTour)
@@ -1343,18 +1332,9 @@ namespace InitialProject.View.Guide
         {
             if(SelectedMessage != null) 
             {
-                List<string> currentUserLanguages = new List<string>();
-                   
-                foreach(string language in CurrentUser.SuperGuideLanguages) 
-                {
-                    if(SelectedMessage.Language != language)
-                    currentUserLanguages.Add(language);
-                }
-                
-                CurrentUser.SuperGuideLanguages = currentUserLanguages;
+                CurrentUser.SuperGuideLanguages.Remove(SelectedMessage.Language);
                 _userService.Update(CurrentUser);
-            }
-            
+            }        
         }
         #endregion
 
@@ -1372,20 +1352,7 @@ namespace InitialProject.View.Guide
         private void UpdateMessages() 
         {
             Messages.Clear();
-            List<string> gotLanguages = _userService.UpdateSuperGuidesLanguagesGot(CurrentUser);
 
-            if (gotLanguages.Count > 0)
-            {
-                foreach (string language in gotLanguages)
-                    Messages.Add(new GuideMessage(language, true));
-            }
-            List<string> lostLanguages = _userService.UpdateSuperGuidesLanguagesLost(CurrentUser);
-
-            if (lostLanguages.Count > 0)
-            {
-                foreach (string language in lostLanguages)
-                    Messages.Add(new GuideMessage(language, false));
-            }
         }
         private void UpdateUpcomingTours()
         {
@@ -1442,6 +1409,7 @@ namespace InitialProject.View.Guide
             }
         }
         #endregion
+
 
     }
 }
