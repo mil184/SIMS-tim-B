@@ -1,3 +1,26 @@
-1|129|ssss|German|11|9.7.2023. 00:00:00|23.7.2023. 23:59:59|pending|5|3|31.5.2023. 22:16:59|False|False|False|1.1.0001. 01:01:01|True
-2|213|omg desc|English|132|2.6.2023. 00:00:00|29.6.2023. 23:59:59|invalid|5|3|31.5.2023. 22:16:59|False|False|False|1.1.0001. 01:01:01|True
-3|213|omg another|French|132|20.6.2023. 00:00:00|14.8.2023. 23:59:59|pending|5|3|31.5.2023. 22:16:59|False|False|False|1.1.0001. 01:01:01|True
+1|129|ssss|German|11|09-Jul-23 12:00:00 AM|23-Jul-23 11:59:59 PM|pending|5|3|31-May-23 10:16:59 PM|False|False|False|01-Jan-01 1:01:01 AM|True
+2|213|omg desc|English|132|02-Jun-23 12:00:00 AM|29-Jun-23 11:59:59 PM|invalid|5|3|31-May-23 10:16:59 PM|False|False|False|01-Jan-01 1:01:01 AM|True
+3|213|omg another|French|132|20-Jun-23 12:00:00 AM|14-Aug-23 11:59:59 PM|pending|5|3|31-May-23 10:16:59 PM|False|False|False|01-Jan-01 1:01:01 AM|True
+4|142|hhh|Serbian|34|04-Jun-23 1:01:00 AM|07-Jun-23 11:14:00 AM|invalid|5|-1|04-Jun-23 11:31:54 AM|False|False|False|01-Jan-01 1:01:01 AM|False
+5|142|ggg|Serbian|32|04-Jun-23 1:01:00 AM|05-Jun-23 11:14:00 AM|invalid|5|-1|04-Jun-23 12:29:49 PM|False|False|False|01-Jan-01 1:01:01 AM|False
+6|348|ddd|dd|32|04-Jun-23 3:03:00 AM|07-Jun-23 11:13:00 AM|invalid|5|-1|04-Jun-23 12:31:03 PM|False|False|False|01-Jan-01 1:01:01 AM|False
+7|14|tamara gdje si|Brchanski|11|05-Jun-23 12:12:00 PM|18-Jun-23 1:11:00 PM|invalid|5|-1|04-Jun-23 12:41:02 PM|False|False|False|01-Jan-01 1:01:01 AM|True
+8|142|dsa|dsa|43|06-Jun-23 12:12:00 PM|22-Jun-23 10:13:00 AM|invalid|5|-1|04-Jun-23 12:45:33 PM|False|False|False|01-Jan-01 1:01:01 AM|True
+9|269|dddd|ddd|11|22-Jun-23 11:11:00 AM|30-Jun-23 11:12:00 AM|pending|5|-1|04-Jun-23 12:49:14 PM|False|False|False|01-Jan-01 1:01:01 AM|True
+10|346|dd|dd|11|29-Jun-23 1:13:00 PM|30-Jun-23 12:11:00 PM|pending|5|-1|04-Jun-23 12:54:37 PM|False|False|False|01-Jan-01 1:01:01 AM|True
+11|9|dd|dd|11|04-Jun-23 1:13:00 PM|12-Jul-23 11:10:00 AM|invalid|5|-1|04-Jun-23 12:57:12 PM|False|False|False|01-Jan-01 1:01:01 AM|True
+12|142|dd|dd|11|04-Jun-23 1:13:00 PM|23-Jun-23 1:11:00 PM|invalid|5|-1|04-Jun-23 12:59:23 PM|False|False|False|01-Jan-01 1:01:01 AM|True
+13|348|hhh|hh|23|04-Jun-23 11:11:00 AM|04-Jun-23 1:10:00 PM|invalid|5|-1|04-Jun-23 1:02:04 PM|False|False|False|01-Jan-01 1:01:01 AM|True
+14|126|dsa|dsa|32|04-Jun-23 11:11:00 AM|04-Jun-23 10:10:00 AM|invalid|5|-1|04-Jun-23 1:03:07 PM|False|False|False|01-Jan-01 1:01:01 AM|True
+15|289|321|321|321|04-Jun-23 11:11:00 AM|04-Jun-23 10:10:00 AM|invalid|5|-1|04-Jun-23 1:03:16 PM|False|False|False|01-Jan-01 1:01:01 AM|True
+16|142|dsa|dsa|23|04-Jun-23 1:01:00 AM|04-Jun-23 11:16:00 AM|invalid|5|-1|04-Jun-23 1:06:56 PM|False|False|False|01-Jan-01 1:01:01 AM|True
+17|128|gtgt|gttg|432|04-Jun-23 4:04:00 AM|04-Jun-23 9:26:00 PM|invalid|5|-1|04-Jun-23 1:07:12 PM|False|False|False|01-Jan-01 1:01:01 AM|True
+18|142|dsa|sda|231|04-Jun-23 12:00:00 AM|04-Jun-23 1:12:00 PM|invalid|5|-1|04-Jun-23 1:41:42 PM|False|False|False|01-Jan-01 1:01:01 AM|True
+19|206|ewq|ewq|321|04-Jun-23 3:03:00 AM|04-Jun-23 7:12:00 PM|invalid|5|-1|04-Jun-23 1:41:54 PM|False|False|False|01-Jan-01 1:01:01 AM|True
+20|142|ggg|ggg|33|04-Jun-23 12:12:00 PM|04-Jun-23 11:10:00 AM|invalid|5|-1|04-Jun-23 1:46:09 PM|False|False|False|01-Jan-01 1:01:01 AM|True
+21|142|ttt|tttt|31|04-Jun-23 12:12:00 PM|04-Jun-23 11:10:00 AM|invalid|5|-1|04-Jun-23 1:46:29 PM|False|False|False|01-Jan-01 1:01:01 AM|True
+22|267|kkk|kkk|5|04-Jun-23 2:02:00 AM|04-Jun-23 1:12:00 PM|invalid|5|-1|04-Jun-23 1:52:06 PM|False|False|False|01-Jan-01 1:01:01 AM|True
+23|287|jjj|jjj|9|04-Jun-23 5:05:00 AM|04-Jun-23 10:23:00 PM|invalid|5|-1|04-Jun-23 1:52:25 PM|False|False|False|01-Jan-01 1:01:01 AM|True
+24|132|ttt|ttt|321|04-Jun-23 2:02:00 AM|04-Jun-23 11:09:00 AM|invalid|5|-1|04-Jun-23 8:15:04 PM|False|False|False|01-Jan-01 1:01:01 AM|True
+25|201|ddd|dddd|32|04-Jun-23 11:11:00 AM|04-Jun-23 9:09:00 AM|pending|5|-1|04-Jun-23 8:17:17 PM|False|False|False|01-Jan-01 1:01:01 AM|True
+26|174|ds|dsa|321|04-Jun-23 11:11:00 AM|04-Jun-23 9:09:00 AM|pending|5|-1|04-Jun-23 8:17:39 PM|False|False|False|01-Jan-01 1:01:01 AM|True

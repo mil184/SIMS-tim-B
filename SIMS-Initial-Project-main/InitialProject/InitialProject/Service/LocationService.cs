@@ -98,7 +98,7 @@ namespace InitialProject.Service
             }
             return country;
         }
-        public Location GetLocation(String country, string city)
+        public Location GetLocation(string country, string city)
         {
             foreach (Location location in GetAll())
             {

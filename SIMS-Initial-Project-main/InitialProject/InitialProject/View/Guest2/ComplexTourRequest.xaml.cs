@@ -1,4 +1,5 @@
-﻿using System;
+﻿using InitialProject.ViewModel.Guest2;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,14 +15,20 @@ using System.Windows.Shapes;
 
 namespace InitialProject.View.Guest2
 {
-    /// <summary>
-    /// Interaction logic for ComplexTourRequest.xaml
-    /// </summary>
     public partial class ComplexTourRequest : Window
     {
-        public ComplexTourRequest()
+        private readonly ComplexTourRequestViewModel _viewModel;
+
+        public ComplexTourRequest(ComplexTourRequestViewModel viewModel)
         {
             InitializeComponent();
+            _viewModel = viewModel;
+            DataContext = _viewModel;
+
+            if (_viewModel.CloseAction == null)
+            {
+                _viewModel.CloseAction = new Action(this.Close);
+            }
         }
     }
 }

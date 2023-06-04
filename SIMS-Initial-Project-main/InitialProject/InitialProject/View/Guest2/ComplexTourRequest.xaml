@@ -146,23 +146,17 @@
                 </GroupBox.Header>
 
                 <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="150"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
+                    
 
-                    <Button Grid.Row="0"
-                        Height="60" Width="250" FontSize="20" HorizontalAlignment="Center" Margin="10"
-                        Content="Add another regular tour"/>
-
-                    <GroupBox Grid.Row="1" Margin="50, 0, 50, 50">
+                    <GroupBox Margin="50">
                         <GroupBox.Header>
                             <Label Content="Submitted regular tours:"
                                    FontSize="20" FontWeight="Bold" />
                         </GroupBox.Header>
 
                         <ScrollViewer Margin="10" VerticalScrollBarVisibility="Auto">
-                            <DataGrid FontSize="20" AutoGenerateColumns="false">
+                            <DataGrid FontSize="20" AutoGenerateColumns="false" IsReadOnly="True"
+                                      ItemsSource="{Binding TourRequestLocations}">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="{ns:Loc DGCity}"  Binding="{Binding City}" Width="*" />
                                     <DataGridTextColumn Header="{ns:Loc DGCountry}"  Binding="{Binding Country}" Width="*" />
@@ -180,7 +174,7 @@
 
 
         <StackPanel Grid.Row="3" Margin="10" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="{ns:Loc Submit}" Command="{Binding SubmitRequestCommand}" FontSize="20" Height="40" Width="160" Margin="5, 5, 10, 5" />
+            <Button Content="{ns:Loc Submit}" Command="{Binding SubmitComplexTourRequestCommand}" FontSize="20" Height="40" Width="160" Margin="5, 5, 10, 5" />
             <Button Command="{Binding ExitCommand}"  FontSize="20" Height="40" Width="160" Margin="5, 5, 10, 5">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">

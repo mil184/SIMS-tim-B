@@ -62,6 +62,7 @@ namespace InitialProject.View.Guest2
         private readonly TourRatingService _tourRatingService;
         private readonly VoucherService _voucherService;
         private readonly TourRequestService _tourRequestService;
+        private readonly ComplexTourService _complexTourService;
 
         #region Properties
 
@@ -199,6 +200,9 @@ namespace InitialProject.View.Guest2
 
             _tourRequestService = new TourRequestService();
             _tourRequestService.Subscribe(this);
+
+            _complexTourService = new ComplexTourService();
+            _complexTourService.Subscribe(this);
 
             Tours = new ObservableCollection<Tour>(_tourService.GetReservableTours());
             TourDTOs = ConvertToDTO(new List<Tour>(Tours));
@@ -1002,5 +1006,11 @@ namespace InitialProject.View.Guest2
 
         }
 
+        private void ComplexWindow(object sender, RoutedEventArgs e)
+        {
+            ComplexTourRequestViewModel complexTourRequestViewModel = new ComplexTourRequestViewModel(_userRepository, _locationService, _tourRequestService, _complexTourService, LoggedInUser, app.Lang);
+            ComplexTourRequest complexTourRequest = new ComplexTourRequest(complexTourRequestViewModel);
+            complexTourRequest.Show();
+        }
     }
 }
