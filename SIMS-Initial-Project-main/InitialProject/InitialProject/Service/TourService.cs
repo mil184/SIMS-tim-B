@@ -5,6 +5,7 @@ using InitialProject.Resources.Injector;
 using InitialProject.Resources.Observer;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
@@ -81,6 +82,39 @@ namespace InitialProject.Service
                 }
             }
             return tours;
+        }
+        public List<Tour> FilterTours(string input, List<Tour> tours)
+        {
+            List<Tour> byName = new List<Tour>();
+
+            foreach (var tour in tours)
+            {
+                if (tour.Name.ToLower().Contains(input.ToLower()))
+                {
+                    byName.Add(tour);
+                }
+            }
+            List<Tour> byCountry = new List<Tour>();
+
+            foreach (var tour in tours)
+            {
+                if (_locationService.GetById(tour.LocationId).Country.ToLower().Contains(input.ToLower()))
+                {
+                    byCountry.Add(tour);
+                }
+            }
+            List<Tour> byCity = new List<Tour>();
+
+            foreach (var tour in tours)
+            {
+                if (_locationService.GetById(tour.LocationId).City.ToLower().Contains(input.ToLower()))
+                {
+                    byCity.Add(tour);
+                }
+            }
+            List<Tour> combinedList = byName.Union(byCountry).Union(byCity).Distinct().ToList();
+
+            return combinedList;
         }
         public List<Tour> GetAllUnabortedGuideTours(User user)
         {

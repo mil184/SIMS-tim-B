@@ -340,6 +340,37 @@ namespace InitialProject.View.Guide
         {
             MessageBox.Show("An active tour is already in progress. Please finish the current tour before starting a new one.", "Active Tour Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
+        private string _currentToursSearchInput;
+        public string CurrentToursSearchInput
+        {
+            get => _currentToursSearchInput;
+            set
+            {
+                if (value != _currentToursSearchInput)
+                {
+                    _currentToursSearchInput = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private void CurrentToursSearchText_Changed(object sender, TextChangedEventArgs e)
+        {
+            CurrentTours.Clear();
+            if (!string.IsNullOrEmpty(CurrentToursSearchInput)) 
+            {
+                foreach(Tour tour in _tourService.FilterTours(CurrentToursSearchInput, _tourService.GetTodaysTours(CurrentUser))) 
+                {
+                    CurrentTours.Add(GuideDTOConverter.ConvertToDTO(tour, _locationService));
+                }
+            }
+            else 
+            {
+                foreach (Tour tour in _tourService.GetTodaysTours(CurrentUser))
+                {
+                    CurrentTours.Add(GuideDTOConverter.ConvertToDTO(tour, _locationService));
+                }
+            }
+        }
         #endregion
 
         #region UpcomingToursTab
@@ -1408,8 +1439,8 @@ namespace InitialProject.View.Guide
                 }
             }
         }
+
         #endregion
-
-
+    
     }
 }

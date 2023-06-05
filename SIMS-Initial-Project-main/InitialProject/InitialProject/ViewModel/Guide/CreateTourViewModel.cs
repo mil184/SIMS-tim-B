@@ -1297,6 +1297,8 @@ namespace InitialProject.ViewModel.Guide
 
                 if (ComplexTour != null && DateSlot != null)
                     UpdateComplexTour(savedTour);
+
+                CancelCommand.Execute(null);
             }
         }
         private void UpdateCheckpoints(Tour tour, ObservableCollection<int> checkpointIds) 
