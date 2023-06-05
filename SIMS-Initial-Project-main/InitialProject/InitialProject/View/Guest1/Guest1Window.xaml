@@ -10,6 +10,15 @@
         Loaded="GuestWindow_OnLoaded"
         WindowStartupLocation="CenterScreen"
         Background="#c0dcfa">
+    <Window.Resources>
+        <Style x:Key="UsefulForumStyle" TargetType="TextBlock">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsVeryUseful}" Value="True">
+                    <Setter Property="Text" Value="&#x2714;" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
            <RowDefinition Height="Auto"/>
@@ -471,7 +480,6 @@
 
                     <TextBlock Text="Forums about locations" FontSize="18" FontWeight="SemiBold" Margin="10"/>
                     <ListBox Name="allForums" Grid.Row="1" Margin="10" ItemsSource="{Binding Path=AllForums, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding Path=SelectedForum, UpdateSourceTrigger=PropertyChanged}">
-                       <!--   <Label Content="jjdkd"/> -->
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
                                 <Setter Property="Opacity" Value="0.5"/>
@@ -492,23 +500,24 @@
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="2.5*"/>
                                                 <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="0.3*"/>
                                             </Grid.ColumnDefinitions>
                                             <StackPanel Orientation="Vertical" Grid.Column="0" Margin="10">
                                                 <StackPanel Orientation="Horizontal" Margin="5">
                                                     <TextBlock Text="Country: " FontWeight="SemiBold" FontSize="16" Margin="5"/>
-                                                    <TextBlock Text="{Binding Country}" FontSize="16"/>
+                                                    <TextBlock Text="{Binding Country}" FontSize="16" Margin="5"/>
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal" Margin="5">
                                                     <TextBlock Text="City: " FontWeight="SemiBold" FontSize="16" Margin="5"/>
-                                                    <TextBlock Text="{Binding City}" FontSize="16"/>
+                                                    <TextBlock Text="{Binding City}" FontSize="16" Margin="5"/>
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal" Margin="5">
                                                     <TextBlock Text="Comment: " FontWeight="SemiBold" FontSize="16" Margin="5"/>
-                                                    <TextBlock Text="{Binding Comment}" FontSize="16"/>
+                                                    <TextBlock Text="{Binding Comment}" FontSize="16" Margin="5"/>
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal" Margin="5">
                                                     <TextBlock Text="Created by: " FontWeight="SemiBold" FontSize="16" Margin="5"/>
-                                                    <TextBlock Text="{Binding Username}" FontSize="16"/>
+                                                    <TextBlock Text="{Binding Username}" FontSize="16" Margin="5"/>
                                                 </StackPanel>
                                             </StackPanel>
                                             <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="10,0,0,0" Width="250" Height="140">
@@ -531,6 +540,7 @@
                                                     </Button.Template>
                                                 </Button>
                                             </StackPanel>
+                                            <TextBlock Grid.Column="2" HorizontalAlignment="Center" FontSize="40" Foreground="Green" Margin="10" Style="{StaticResource UsefulForumStyle}"/>
                                         </Grid>
                                     </Border>
                                 </ScrollViewer>

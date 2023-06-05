@@ -14,9 +14,10 @@ namespace InitialProject.Model.DTO
         public string Comment { get; set; }
         public string Username { get; set; }
         public bool IsOpened { get; set; }
+        public bool IsVeryUseful { get; set; }
 
         public ForumDTO() {}
-        public ForumDTO(int id, string country, string city, string comment, string username, bool isOpened)
+        public ForumDTO(int id, string country, string city, string comment, string username, bool isOpened, bool isVeryUseful)
         {
             Id = id;
             Country = country;
@@ -24,6 +25,7 @@ namespace InitialProject.Model.DTO
             Comment = comment;
             Username = username;
             IsOpened = isOpened;
+            IsVeryUseful = isVeryUseful;
         }
     }
 }

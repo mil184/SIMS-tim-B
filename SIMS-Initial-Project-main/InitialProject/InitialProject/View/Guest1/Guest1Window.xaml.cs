@@ -602,7 +602,7 @@ namespace InitialProject.View.Guest1
         public ForumDTO ConvertDTO(Forum forum)
         {
             return new ForumDTO(forum.Id, _locationService.GetById(forum.LocationId).Country,
-                     _locationService.GetById(forum.LocationId).City, forum.Comment, _userService.GetById(forum.UserId).Username, forum.IsOpened);
+                     _locationService.GetById(forum.LocationId).City, forum.Comment, _userService.GetById(forum.UserId).Username, forum.IsOpened, forum.IsVeryUseful);
         }
         public ObservableCollection<ForumDTO> ConvertDTO(ObservableCollection<Forum> forums)
         {
@@ -618,7 +618,7 @@ namespace InitialProject.View.Guest1
             AllForums.Clear();
             foreach(Forum forum in _forumService.GetAll())
             {
-                ForumDTO dto = new ForumDTO(forum.Id, _locationService.GetById(forum.LocationId).Country, _locationService.GetById(forum.LocationId).City, forum.Comment, _userService.GetById(forum.UserId).Username, forum.IsOpened) ;
+                ForumDTO dto = new ForumDTO(forum.Id, _locationService.GetById(forum.LocationId).Country, _locationService.GetById(forum.LocationId).City, forum.Comment, _userService.GetById(forum.UserId).Username, forum.IsOpened, forum.IsVeryUseful) ;
                 AllForums.Add(dto);
             }
         }
@@ -636,17 +636,10 @@ namespace InitialProject.View.Guest1
                     {
                         forumToClose.IsOpened = false;
                         _forumService.Update(forumToClose);
-                        RefreshListBox();
                         MessageBox.Show("Forum closed successfully.");
                     }
                 }
             }
-        }
-
-        private void RefreshListBox()
-        {
-            allForums.ItemsSource = _forumService.GetAll();
-            SelectedForum = null;
         }
 
         private void AddComment_Click(object sender, RoutedEventArgs e)

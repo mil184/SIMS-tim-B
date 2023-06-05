@@ -16,6 +16,9 @@ namespace InitialProject.ViewModel.Guest1
     public class ForumCommentViewModel
     {
         private readonly CommentService _commentService;
+        private readonly ForumService _forumService;
+        private readonly AccommodationService _accommodationService;
+        private readonly AccommodationReservationService _accommodationReservationService;
         public User LoggedInUser { get; set; }
 
         public RelayCommand AddCommentCommand { get; set; }
@@ -63,6 +66,9 @@ namespace InitialProject.ViewModel.Guest1
         {
             SelectedForum = selectedForum;
             _commentService = commentService;
+            _forumService = new ForumService();
+            _accommodationService = new AccommodationService();
+            _accommodationReservationService = new AccommodationReservationService();
             LoggedInUser = user;
 
             AddCommentCommand = new RelayCommand(Execute_AddCommentCommand, CanExecute_Command);
@@ -80,10 +86,48 @@ namespace InitialProject.ViewModel.Guest1
             if (messageBoxResult == MessageBoxResult.Yes)
             {
                 ForumComment comment = new ForumComment(Comment, LoggedInUser.Id, SelectedForum.Id);
+                IncreaseComment();
                 _commentService.Save(comment);
                 MessageBox.Show("Comment added successfully.");
+                CheckUsefulForum();
                 var window = Application.Current.Windows.OfType<View.Guest1.ForumComment>().FirstOrDefault();
                 window.Close();
+            }
+        }
+
+        private void IncreaseComment()
+        {
+            int forumId = SelectedForum.Id;
+            Forum forum = _forumService.GetForumById(forumId);
+
+            if (LoggedInUser.Type == Resources.Enums.UserType.guest1 || LoggedInUser.Type == Resources.Enums.UserType.superguest)
+            {
+                forum.GuestCommentsCount++;
+            }
+            else if (LoggedInUser.Type == Resources.Enums.UserType.owner || LoggedInUser.Type == Resources.Enums.UserType.superowner)
+            {
+                forum.OwnerCommentsCount++;
+            }
+            _forumService.Update(forum);
+        }
+
+        private void CheckUsefulForum()
+        {
+            int forumId = SelectedForum.Id;
+            Forum forum = _forumService.GetForumById(forumId);
+
+            int guestCommentsCount = forum.GuestCommentsCount;
+            int ownerCommentsCount = forum.OwnerCommentsCount;
+
+            int userId = forum.UserId;
+
+            bool hasGuestVisitedLocation = _accommodationReservationService.HasGuestVisitedLocation(userId);
+           // bool hasOwnerAccommodationOnLocation = _accommodationService.HasOwnerAccommodationOnLocation(userId);
+
+            if (guestCommentsCount >= 20 && ownerCommentsCount >= 10 && hasGuestVisitedLocation)
+            {
+                forum.IsVeryUseful = true;
+                _forumService.Update(forum);
             }
         }
 

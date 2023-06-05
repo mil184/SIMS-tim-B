@@ -225,6 +225,21 @@ namespace InitialProject.Service
             return reservations;
         }
 
+        public bool HasGuestVisitedLocation(int guestId)
+        {
+            List<AccommodationReservation> reservations = GetReservationsByGuestId(guestId);
+
+            foreach (AccommodationReservation reservation in reservations)
+            {
+                if (reservation.HasGuestPresence)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public AccommodationReservation GetById(int id)
         {
             return _accommodationReservationRepository.GetById(id);
