@@ -843,12 +843,8 @@
                             </DataGrid>
                         </ScrollViewer>
                     </GroupBox>
-                    
-                </Grid>
 
-                
-                
-                
+                </Grid>
 
             </TabItem>
 

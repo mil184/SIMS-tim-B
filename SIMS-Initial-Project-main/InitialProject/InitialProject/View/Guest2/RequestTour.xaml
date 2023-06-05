@@ -37,7 +37,7 @@
 
 
 
-                    <StackPanel Grid.Column="1" Margin="10">
+                    <!--<StackPanel Grid.Column="1" Margin="10">
                         <Button FontSize="18" Margin="0,0,0,5" Height="35" HorizontalAlignment="Stretch">
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal">
@@ -55,7 +55,7 @@
                                 </StackPanel>
                             </Button.Content>
                         </Button>
-                    </StackPanel>
+                    </StackPanel>-->
                 </Grid>
             </Border>
         </Grid>
