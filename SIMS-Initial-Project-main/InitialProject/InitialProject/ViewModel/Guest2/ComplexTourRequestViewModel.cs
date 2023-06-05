@@ -41,7 +41,6 @@ namespace InitialProject.ViewModel.Guest2
         public RelayCommand SubmitRequestCommand { get; set; }
         public RelayCommand SubmitComplexTourRequestCommand { get; set; }
         public RelayCommand ExitCommand { get; set; }
-        public RelayCommand ChangeLanguageCommand { get; set; }
         public RelayCommand CountrySelectionChangedCommand { get; set; }
 
         #region Properties
@@ -235,7 +234,7 @@ namespace InitialProject.ViewModel.Guest2
             StartDate = DateTime.Now;
             EndDate = DateTime.Now;
 
-            ComplexTour = new ComplexTour();
+            ComplexTour = new ComplexTour(LoggedInUser.Id);
             TourRequestLocations = new ObservableCollection<Location>();
 
             InitializeCountryDropdown();
@@ -244,12 +243,12 @@ namespace InitialProject.ViewModel.Guest2
             SubmitRequestCommand = new RelayCommand(Execute_SubmitRequestCommand);
             SubmitComplexTourRequestCommand = new RelayCommand(Execute_SubmitComplexTourRequestCommand);
             ExitCommand = new RelayCommand(Execute_ExitCommand);
-            //ChangeLanguageCommand = new RelayCommand(Execute_ChangeLanguageCommand);
             CountrySelectionChangedCommand = new RelayCommand(Execute_CountrySelectionChangedCommand);  
         }
 
         private void Execute_SubmitComplexTourRequestCommand(object obj)
         {
+
             _complexTourService.Save(ComplexTour);
             MessageBox.Show("Successfully submitted a complex tour!");
             CloseAction();
@@ -278,6 +277,7 @@ namespace InitialProject.ViewModel.Guest2
 
             TourRequest savedRequest = _tourRequestService.Save(tourRequest);
 
+            ComplexTour.TourRequestIds.Add(savedRequest.Id);
             ComplexTour.AvailableTourRequestIds.Add(savedRequest.Id);
 
             TourRequestLocations.Add(tourLocation);

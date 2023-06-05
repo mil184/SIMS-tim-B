@@ -215,6 +215,7 @@ namespace InitialProject.View.Guest2
             TourRequests = new ObservableCollection<TourRequest>(_tourRequestService.GetGuestRequests(LoggedInUser));
             TourRequestsForYear = new ObservableCollection<TourRequest>();
             TourRequestDTOs = new ObservableCollection<Guest2TourRequestDTO>(TourRequestDTOConverter.ConvertToDTOList(_tourRequestService.GetGuestRequests(LoggedInUser)));
+            
             ComplexTourDTOs = new ObservableCollection<ComplexTourRequestDTO>(ComplexTourRequestDTOConverter.ConvertToDTOList(_complexTourService.GetAll(), _locationService, _tourRequestService));
 
             CheckedTours = new List<Tour>();
@@ -347,7 +348,6 @@ namespace InitialProject.View.Guest2
             TourRequestYears.Clear();
             FormTourRequestYears();
 
-            
             ComplexTourDTOs.Clear();
             FormComplexTourRequestDTOs();
         }

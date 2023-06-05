@@ -25,7 +25,7 @@ namespace InitialProject.Converters
             string statuses = "";
             string chosenDates = "";
 
-            foreach (int requestId in complexTour.AvailableTourRequestIds)
+            foreach (int requestId in complexTour.TourRequestIds)
             {
                 TourRequest tourRequest = tourRequestService.GetById(requestId);
                 Location location = locationService.GetById(tourRequest.LocationId);
