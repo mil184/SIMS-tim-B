@@ -295,6 +295,24 @@ namespace InitialProject.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Završene Ture.
+        /// </summary>
+        public static string FinishedTours {
+            get {
+                return ResourceManager.GetString("FinishedTours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Odaberite završenu turu kako biste ocenili..
+        /// </summary>
+        public static string FinishedToursInfo {
+            get {
+                return ResourceManager.GetString("FinishedToursInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Vodič:.
         /// </summary>
         public static string Guide {

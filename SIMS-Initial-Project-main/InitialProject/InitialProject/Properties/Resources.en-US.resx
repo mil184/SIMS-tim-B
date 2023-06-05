@@ -195,6 +195,12 @@
   <data name="FiltrationInfo" xml:space="preserve">
     <value>Filtration is used to show only specific, relevant tours when you input wanted information. This way, the list of tours gets smaller, but these tours do not disappear.</value>
   </data>
+  <data name="FinishedTours" xml:space="preserve">
+    <value>Finished Tours</value>
+  </data>
+  <data name="FinishedToursInfo" xml:space="preserve">
+    <value>Choose a finished tour in order to rate it.</value>
+  </data>
   <data name="Guide" xml:space="preserve">
     <value>Guide:</value>
   </data>

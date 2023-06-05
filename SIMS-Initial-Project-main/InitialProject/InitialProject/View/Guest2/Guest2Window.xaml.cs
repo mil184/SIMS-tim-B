@@ -956,6 +956,16 @@ namespace InitialProject.View.Guest2
 
         #region Information popups
 
+        private void FinishedToursImage_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            FinishedToursPopup.IsOpen = true;
+        }
+
+        private void FinishedToursImage_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            FinishedToursPopup.IsOpen = false;
+        }
+
         private void ComplexTours_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
             ComplexToursPopup.IsOpen = true;
@@ -1039,5 +1049,7 @@ namespace InitialProject.View.Guest2
             ComplexTourRequest complexTourRequest = new ComplexTourRequest(complexTourRequestViewModel);
             complexTourRequest.Show();
         }
+
+        
     }
 }

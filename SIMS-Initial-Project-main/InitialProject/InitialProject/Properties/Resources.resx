@@ -195,6 +195,12 @@
   <data name="FiltrationInfo" xml:space="preserve">
     <value>Filtracija se koristi da se prikažu samo specifične, relevantne ture kada se unesu željene informacije.</value>
   </data>
+  <data name="FinishedTours" xml:space="preserve">
+    <value>Završene Ture</value>
+  </data>
+  <data name="FinishedToursInfo" xml:space="preserve">
+    <value>Odaberite završenu turu kako biste ocenili.</value>
+  </data>
   <data name="Guide" xml:space="preserve">
     <value>Vodič:</value>
   </data>
