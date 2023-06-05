@@ -14,15 +14,26 @@ namespace InitialProject.Model
     public class ComplexTour : ISerializable
     {
         public int Id { get; set; }
+        public List<int> TourRequestIds { get; set; }
         public List<int> AvailableTourRequestIds { get; set; }
         public Dictionary<int,int> AcceptedTourIdsByGuideIds { get; set; }
         public ComplexTourStatus Status { get; set; }
+        public int GuestId { get; set; }
 
-        public ComplexTour() 
+        public ComplexTour()
         {
+            TourRequestIds = new List<int>();
+            AvailableTourRequestIds = new List<int>();
+            AcceptedTourIdsByGuideIds = new Dictionary<int, int>();
+        }
+
+        public ComplexTour(int guestId) 
+        {
+            TourRequestIds = new List<int>();
             AvailableTourRequestIds = new List<int>();
             AcceptedTourIdsByGuideIds = new Dictionary<int, int>();
             Status = ComplexTourStatus.pending;
+            GuestId = guestId;
         }
 
         public string[] ToCSV()
@@ -31,14 +42,17 @@ namespace InitialProject.Model
 
                 Id.ToString(),
 
+                string.Join(",", TourRequestIds),
+
                 string.Join(",", AvailableTourRequestIds),
 
                 string.Join(",", AcceptedTourIdsByGuideIds
                         .Select(entry => $"{entry.Key}:{entry.Value}")
                         .ToArray()),
-                Status.ToString()
 
-        };
+                Status.ToString(),
+                GuestId.ToString()
+            };
 
             return csvValues;
         }
@@ -49,10 +63,14 @@ namespace InitialProject.Model
 
             foreach (string id in values[1].Split(','))
             {
+                TourRequestIds.Add(int.Parse(id));
+            }
+            foreach (string id in values[2].Split(','))
+            {
                 AvailableTourRequestIds.Add(int.Parse(id));
             }
 
-            string acceptedTourIdsString = values[2];
+            string acceptedTourIdsString = values[3];
             if (!string.IsNullOrEmpty(acceptedTourIdsString))
             {
                 foreach (string element in acceptedTourIdsString.Split(','))
@@ -68,7 +86,9 @@ namespace InitialProject.Model
                 }
             }
 
-            Status = Enum.Parse<ComplexTourStatus>(values[3]);
+            Status = Enum.Parse<ComplexTourStatus>(values[4]);
+
+            GuestId = int.Parse(values[5]);
         }
 
     }

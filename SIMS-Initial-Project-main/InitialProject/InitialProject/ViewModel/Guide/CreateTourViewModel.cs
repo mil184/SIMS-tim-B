@@ -1312,13 +1312,13 @@ namespace InitialProject.ViewModel.Guide
         {
             Request.GuideId = LoggedInUser.Id;
             Request.Status = Resources.Enums.RequestStatus.accepted;
+            Request.ChosenDate = TourDates[0];
             _tourRequestService.Update(Request);
         }
         private void UpdateComplexTour(Tour tour)
         {
             ComplexTour.AcceptedTourIdsByGuideIds.Add(LoggedInUser.Id, tour.Id);
             ComplexTour.AvailableTourRequestIds.Remove(Request.Id);
-
             _complexTourService.Update(ComplexTour);
         }
         #endregion
