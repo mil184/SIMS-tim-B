@@ -180,6 +180,9 @@
   <data name="EndDatesDG" xml:space="preserve">
     <value>Završni datumi</value>
   </data>
+  <data name="EndDateTime" xml:space="preserve">
+    <value>Vreme završavanja:</value>
+  </data>
   <data name="Exit" xml:space="preserve">
     <value>Izlaz</value>
   </data>
@@ -266,6 +269,9 @@
   </data>
   <data name="RateTourBtn" xml:space="preserve">
     <value>Oceni turu</value>
+  </data>
+  <data name="requestATour" xml:space="preserve">
+    <value>Zahtevaj turu:</value>
   </data>
   <data name="requestComplexTour" xml:space="preserve">
     <value>Zahtevaj složenu turu</value>

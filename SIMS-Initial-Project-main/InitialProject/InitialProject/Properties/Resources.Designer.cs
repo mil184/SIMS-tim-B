@@ -250,6 +250,15 @@ namespace InitialProject.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Vreme završavanja:.
+        /// </summary>
+        public static string EndDateTime {
+            get {
+                return ResourceManager.GetString("EndDateTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Izlaz.
         /// </summary>
         public static string Exit {
@@ -507,6 +516,15 @@ namespace InitialProject.Properties {
         public static string RateTourBtn {
             get {
                 return ResourceManager.GetString("RateTourBtn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zahtevaj turu:.
+        /// </summary>
+        public static string requestATour {
+            get {
+                return ResourceManager.GetString("requestATour", resourceCulture);
             }
         }
         
