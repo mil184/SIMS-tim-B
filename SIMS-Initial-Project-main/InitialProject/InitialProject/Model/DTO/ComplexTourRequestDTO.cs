@@ -14,10 +14,11 @@ namespace InitialProject.Model.DTO
         public string StartDates { get; set; }
         public string EndDates { get; set; }
         public string Statuses { get; set; }
+        public string ChosenDates { get; set; }
 
         public ComplexTourRequestDTO() { }
 
-        public ComplexTourRequestDTO(int id, string locations, string languages, string startDates, string endDates, string statuses)
+        public ComplexTourRequestDTO(int id, string locations, string languages, string startDates, string endDates, string statuses, string chosenDates)
         {
             Id = id;
             Locations = locations;
@@ -25,6 +26,7 @@ namespace InitialProject.Model.DTO
             StartDates = startDates;
             EndDates = endDates;
             Statuses = statuses;
+            ChosenDates = chosenDates;
         }
     }
 }

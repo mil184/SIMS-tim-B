@@ -830,6 +830,7 @@
                                     <DataGridTextColumn Header="{ns:Loc StartDatesDG}" Binding="{Binding StartDates}" Width="*" />
                                     <DataGridTextColumn Header="{ns:Loc EndDatesDG}" Binding="{Binding EndDates}" Width="*" />
                                     <DataGridTextColumn Header="{ns:Loc StatusesDG}" Binding="{Binding Statuses}" Width="*" />
+                                    <DataGridTextColumn Header="{ns:Loc ChosenDatesDG}" Binding="{Binding ChosenDates}" Width="*" />
                                 </DataGrid.Columns>
                             </DataGrid>
                         </ScrollViewer>

@@ -23,6 +23,7 @@ namespace InitialProject.Converters
             string startDates = "";
             string endDates = "";
             string statuses = "";
+            string chosenDates = "";
 
             foreach (int requestId in complexTour.AvailableTourRequestIds)
             {
@@ -30,27 +31,42 @@ namespace InitialProject.Converters
                 Location location = locationService.GetById(tourRequest.LocationId);
 
                 locations += location.City + ", " + location.Country + "\n";
-                if (!string.IsNullOrEmpty(locations))
-                    locations = locations.TrimEnd('\n');
+                
 
                 languages += tourRequest.Language + "\n";
-                if (!string.IsNullOrEmpty(languages))
-                    languages = languages.TrimEnd('\n');
+                
 
                 startDates += tourRequest.StartTime.ToString() + "\n";
-                if (!string.IsNullOrEmpty(startDates))
-                    startDates = startDates.TrimEnd('\n');
-
+                
                 endDates += tourRequest.EndTime.ToString() + "\n";
-                if (!string.IsNullOrEmpty(endDates))
-                    endDates = endDates.TrimEnd('\n');
+               
 
                 statuses += tourRequest.Status + "\n";
-                if (!string.IsNullOrEmpty(statuses))
-                    statuses = statuses.TrimEnd('\n');
+                
+                if (tourRequest.Status == Resources.Enums.RequestStatus.accepted)
+                {
+                    chosenDates += tourRequest.ChosenDate.ToString() + "\n";
+                }
+                else
+                {
+                    chosenDates += "/ \n";
+                }
             }
 
-            return new ComplexTourRequestDTO(complexTour.Id, locations, languages, startDates, endDates, statuses);
+            if (!string.IsNullOrEmpty(locations))
+                locations = locations.TrimEnd('\n');
+            if (!string.IsNullOrEmpty(languages))
+                languages = languages.TrimEnd('\n');
+            if (!string.IsNullOrEmpty(startDates))
+                startDates = startDates.TrimEnd('\n');
+            if (!string.IsNullOrEmpty(endDates))
+                endDates = endDates.TrimEnd('\n');
+            if (!string.IsNullOrEmpty(statuses))
+                statuses = statuses.TrimEnd('\n');
+            if (!string.IsNullOrEmpty(chosenDates))
+                statuses = statuses.TrimEnd('\n');
+
+            return new ComplexTourRequestDTO(complexTour.Id, locations, languages, startDates, endDates, statuses, chosenDates);
         }
         
         static public List<ComplexTourRequestDTO> ConvertToDTOList(List<ComplexTour> complexTours, LocationService locationService, TourRequestService tourRequestService)
