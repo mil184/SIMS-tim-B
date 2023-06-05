@@ -79,7 +79,7 @@ namespace InitialProject.ViewModel.Guest1
             var messageBoxResult = MessageBox.Show($"Would you like to add comment?", "Adding Comment Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (messageBoxResult == MessageBoxResult.Yes)
             {
-                ForumComment comment = new ForumComment(Comment, LoggedInUser.Id);
+                ForumComment comment = new ForumComment(Comment, LoggedInUser.Id, SelectedForum.Id);
                 _commentService.Save(comment);
                 MessageBox.Show("Comment added successfully.");
                 var window = Application.Current.Windows.OfType<View.Guest1.ForumComment>().FirstOrDefault();

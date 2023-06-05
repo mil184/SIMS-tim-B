@@ -563,7 +563,7 @@ namespace InitialProject.View.Guest1
                 if (messageBoxResult == MessageBoxResult.Yes)
                 {
                     var accommodation = _accommodationService.GetById(SelectedAvailableAccommodation.Id);
-                    var reservation = new AccommodationReservation(LoggedInUser.Id, accommodation.Id, startDatePicker.SelectedDate ?? DateTime.MinValue, endDatePicker.SelectedDate ?? DateTime.MaxValue, int.Parse(numDaysTextBox.Text), int.Parse(maxGuestsTextBox.Text), accommodation.OwnerId, false, accommodation.CancellationPeriod);
+                    var reservation = new AccommodationReservation(LoggedInUser.Id, accommodation.Id, startDatePicker.SelectedDate ?? DateTime.MinValue, endDatePicker.SelectedDate ?? DateTime.MaxValue, int.Parse(numDaysTextBox.Text), int.Parse(maxGuestsTextBox.Text), accommodation.OwnerId, false, accommodation.CancellationPeriod, false);
                     _accommodationReservationService.Save(reservation);
 
                     MessageBox.Show("Reservation created successfully.");
@@ -602,7 +602,7 @@ namespace InitialProject.View.Guest1
         public ForumDTO ConvertDTO(Forum forum)
         {
             return new ForumDTO(forum.Id, _locationService.GetById(forum.LocationId).Country,
-                     _locationService.GetById(forum.LocationId).City, forum.Comment, _userService.GetById(forum.GuestId).Username, forum.IsOpened);
+                     _locationService.GetById(forum.LocationId).City, forum.Comment, _userService.GetById(forum.UserId).Username, forum.IsOpened);
         }
         public ObservableCollection<ForumDTO> ConvertDTO(ObservableCollection<Forum> forums)
         {
@@ -618,7 +618,7 @@ namespace InitialProject.View.Guest1
             AllForums.Clear();
             foreach(Forum forum in _forumService.GetAll())
             {
-                ForumDTO dto = new ForumDTO(forum.Id, _locationService.GetById(forum.LocationId).Country, _locationService.GetById(forum.LocationId).City, forum.Comment, _userService.GetById(forum.GuestId).Username, forum.IsOpened) ;
+                ForumDTO dto = new ForumDTO(forum.Id, _locationService.GetById(forum.LocationId).Country, _locationService.GetById(forum.LocationId).City, forum.Comment, _userService.GetById(forum.UserId).Username, forum.IsOpened) ;
                 AllForums.Add(dto);
             }
         }
@@ -660,7 +660,11 @@ namespace InitialProject.View.Guest1
 
         private void ShowComments_Click(object sender, RoutedEventArgs e)
         {
-
+            if (SelectedForum != null)
+            {
+                ShowComments showComment = new ShowComments(SelectedForum, _commentService, LoggedInUser);
+                showComment.ShowDialog();
+            }
         }
     }
 }

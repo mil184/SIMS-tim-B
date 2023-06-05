@@ -366,7 +366,7 @@ namespace InitialProject.View.Guest1
 
                 if (messageBoxResult == MessageBoxResult.Yes)
                 {
-                    var reservation = new AccommodationReservation(LoggedInUser.Id, SelectedAccommodation.Id, selectedItem.StartDate, selectedItem.EndDate, NumberOfDays, MaxGuests, SelectedAccommodation.OwnerId, false, SelectedAccommodation.CancellationPeriod);
+                    var reservation = new AccommodationReservation(LoggedInUser.Id, SelectedAccommodation.Id, selectedItem.StartDate, selectedItem.EndDate, NumberOfDays, MaxGuests, SelectedAccommodation.OwnerId, false, SelectedAccommodation.CancellationPeriod, false);
                     _accommodationReservationService.Save(reservation);
 
                     MessageBox.Show("Reservation created successfully.");

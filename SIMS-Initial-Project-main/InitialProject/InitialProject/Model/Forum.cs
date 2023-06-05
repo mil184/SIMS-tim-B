@@ -16,22 +16,22 @@ namespace InitialProject.Model
         public int Id { get; set; }
         public int LocationId { get; set; }
         public string Comment { get; set; }
-        public int GuestId { get; set; }
+        public int UserId { get; set; }
         public bool IsOpened { get; set; }
 
         public Forum() { }
 
-        public Forum(int locationId, string comment, int guestId)
+        public Forum(int locationId, string comment, int userId)
         {
             LocationId = locationId;
             Comment = comment;
-            GuestId = guestId;
+            UserId = userId;
             IsOpened = true;
         }
 
         public string[] ToCSV()
         {
-            string[] csvValues = { Id.ToString(), LocationId.ToString(), Comment, GuestId.ToString(), IsOpened.ToString() };
+            string[] csvValues = { Id.ToString(), LocationId.ToString(), Comment, UserId.ToString(), IsOpened.ToString() };
             return csvValues;
         }
 
@@ -40,7 +40,7 @@ namespace InitialProject.Model
             Id = Convert.ToInt32(values[0]);
             LocationId = Convert.ToInt32(values[1]);
             Comment = values[2];
-            GuestId = Convert.ToInt32(values[3]);
+            UserId = Convert.ToInt32(values[3]);
             IsOpened = Convert.ToBoolean(values[4]);
         }
     }

@@ -168,7 +168,7 @@ namespace InitialProject.ViewModel.Guest1
                 if (messageBoxResult == MessageBoxResult.Yes)
                 {
                     var accommodation = _accommodationService.GetById(SelectedAvailableAccommodation.Id);
-                    var reservation = new AccommodationReservation(LoggedInUser.Id, SelectedAvailableAccommodation.Id, SelectedDate.StartDate, SelectedDate.EndDate, NumberOfDays, NumberOfGuests, accommodation.OwnerId, false, accommodation.CancellationPeriod);
+                    var reservation = new AccommodationReservation(LoggedInUser.Id, SelectedAvailableAccommodation.Id, SelectedDate.StartDate, SelectedDate.EndDate, NumberOfDays, NumberOfGuests, accommodation.OwnerId, false, accommodation.CancellationPeriod, false);
                     _accommodationReservationService.Save(reservation);
 
                     MessageBox.Show("Reservation created successfully.");
