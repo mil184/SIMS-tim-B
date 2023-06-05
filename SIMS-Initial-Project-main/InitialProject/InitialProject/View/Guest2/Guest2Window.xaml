@@ -293,7 +293,6 @@
                                         <TextBlock Text="{ns:Loc ReserveInfo}" Background="#96CDFA" Padding="5" TextWrapping="Wrap" Width="300"/>
                                     </Popup>
                                 </StackPanel>
-
                             </GroupBox.Header>
                             <ScrollViewer VerticalScrollBarVisibility="Auto">
                                 <DataGrid ItemsSource="{Binding TourDTOs}"  
@@ -800,21 +799,47 @@
             <!-- Complex Tour Requesting tab -->
             <TabItem Header="{ns:Loc ComplexTourRequestingTab}" FontSize="20">
 
-                <!--Source="/Resources/Images/inspection.png"-->
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="250"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
 
-                <!--<Grid>-->
-                <!--<Image Source="/Resources/Images/inspection.png" Margin="5" Height="30" MouseEnter="Image_MouseEnter" MouseLeave="Image_MouseLeave"/>
-                    <Popup x:Name="infoPopup" PlacementTarget="{Binding ElementName=image}" IsOpen="False">
-                        <TextBlock Text="Your tooltip text goes here" Background="White" Padding="5"/>
-                    </Popup>-->
+                    <Button Grid.Row="0"
+                        Height="40" Width="260" FontSize="20"
+                        Content="{ns:Loc requestComplexTour}" 
+                        Click="ComplexWindow"/>
 
-                <!--<Image x:Name="image" Source="/Resources/Images/inspection.png" Width="16" Height="16" Margin="5" MouseEnter="Image_MouseEnter" MouseLeave="Image_MouseLeave" />
-                    <Popup  Placement="Right" PlacementTarget="{Binding ElementName=image}" IsOpen="False">
-                        <TextBlock Text="Your tooltip text goes here" Background="White" Padding="5"/>
-                    </Popup>
-                </Grid>-->
+                    <GroupBox Grid.Row="1" Margin ="30" >
+                        <GroupBox.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <Label FontSize="25" FontWeight="Bold" Content="{ns:Loc ComplexTours}"/>
+                                <Image x:Name="ComplexToursImage" Source="/Resources/Images/info.png" 
+                                        Height="30" Margin ="5, 0, 0, 0 " HorizontalAlignment="Left" VerticalAlignment="Center"
+                                        MouseEnter="ComplexTours_MouseEnter" MouseLeave="ComplexTours_MouseLeave" />
+                                <Popup x:Name="ComplexToursPopup" Placement="Right" PlacementTarget="{Binding ElementName=ComplexToursImage}" IsOpen="False">
+                                    <TextBlock Text="{ns:Loc ComplexTourInfo}" Background="#96CDFA" Padding="5" TextWrapping="Wrap" Width="300"/>
+                                </Popup>
+                            </StackPanel>
+                        </GroupBox.Header>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <DataGrid ItemsSource="{Binding ComplexTourDTOs}" AutoGenerateColumns="False" Name="ComplexTourRequestsDataGrid" IsReadOnly="true" HorizontalAlignment="Center" FontSize="20">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="{ns:Loc LocationsDG}" Binding="{Binding Locations}" Width="*" />
+                                    <DataGridTextColumn Header="{ns:Loc LanguagesDG}" Binding="{Binding Languages}" Width="*" />
+                                    <DataGridTextColumn Header="{ns:Loc StartDatesDG}" Binding="{Binding StartDates}" Width="*" />
+                                    <DataGridTextColumn Header="{ns:Loc EndDatesDG}" Binding="{Binding EndDates}" Width="*" />
+                                    <DataGridTextColumn Header="{ns:Loc StatusesDG}" Binding="{Binding Statuses}" Width="*" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ScrollViewer>
+                    </GroupBox>
+                    
+                </Grid>
 
-                <Button Height="40" Width="160" Click="ComplexWindow"/>
+                
+                
+                
 
             </TabItem>
 

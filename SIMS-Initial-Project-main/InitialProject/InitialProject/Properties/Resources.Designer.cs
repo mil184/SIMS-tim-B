@@ -88,11 +88,29 @@ namespace InitialProject.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Složene ture se sastoje od više od jedne obične ture..
+        /// </summary>
+        public static string ComplexTourInfo {
+            get {
+                return ResourceManager.GetString("ComplexTourInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Zahtevanje kompleksnih tura.
         /// </summary>
         public static string ComplexTourRequestingTab {
             get {
                 return ResourceManager.GetString("ComplexTourRequestingTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Složene ture.
+        /// </summary>
+        public static string ComplexTours {
+            get {
+                return ResourceManager.GetString("ComplexTours", resourceCulture);
             }
         }
         
@@ -223,6 +241,15 @@ namespace InitialProject.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Završni datumi.
+        /// </summary>
+        public static string EndDatesDG {
+            get {
+                return ResourceManager.GetString("EndDatesDG", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Izlaz.
         /// </summary>
         public static string Exit {
@@ -349,6 +376,24 @@ namespace InitialProject.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Jezici.
+        /// </summary>
+        public static string LanguagesDG {
+            get {
+                return ResourceManager.GetString("LanguagesDG", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lokacije.
+        /// </summary>
+        public static string LocationsDG {
+            get {
+                return ResourceManager.GetString("LocationsDG", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Odjavi se.
         /// </summary>
         public static string LogOut {
@@ -448,6 +493,15 @@ namespace InitialProject.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Zahtevaj složenu turu.
+        /// </summary>
+        public static string requestComplexTour {
+            get {
+                return ResourceManager.GetString("requestComplexTour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Odaberi turu kako bi rezervisao!.
         /// </summary>
         public static string ReserveInfo {
@@ -484,11 +538,29 @@ namespace InitialProject.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Početni datumi.
+        /// </summary>
+        public static string StartDatesDG {
+            get {
+                return ResourceManager.GetString("StartDatesDG", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Početno vreme:.
         /// </summary>
         public static string StartDateTime {
             get {
                 return ResourceManager.GetString("StartDateTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Statusi.
+        /// </summary>
+        public static string StatusesDG {
+            get {
+                return ResourceManager.GetString("StatusesDG", resourceCulture);
             }
         }
         

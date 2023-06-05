@@ -126,8 +126,14 @@
   <data name="CommentQuestion" xml:space="preserve">
     <value>4. Dodati komentar:*</value>
   </data>
+  <data name="ComplexTourInfo" xml:space="preserve">
+    <value>Složene ture se sastoje od više od jedne obične ture.</value>
+  </data>
   <data name="ComplexTourRequestingTab" xml:space="preserve">
     <value>Zahtevanje kompleksnih tura</value>
+  </data>
+  <data name="ComplexTours" xml:space="preserve">
+    <value>Složene ture</value>
   </data>
   <data name="CurrentGuests" xml:space="preserve">
     <value>Trenutni broj gostiju:</value>
@@ -171,6 +177,9 @@
   <data name="Duration" xml:space="preserve">
     <value>Trajanje (sati):</value>
   </data>
+  <data name="EndDatesDG" xml:space="preserve">
+    <value>Završni datumi</value>
+  </data>
   <data name="Exit" xml:space="preserve">
     <value>Izlaz</value>
   </data>
@@ -213,6 +222,12 @@
   <data name="LanguageQuestion" xml:space="preserve">
     <value>3. Kako biste ocenili vodičevo poznavanje jezika?*</value>
   </data>
+  <data name="LanguagesDG" xml:space="preserve">
+    <value>Jezici</value>
+  </data>
+  <data name="LocationsDG" xml:space="preserve">
+    <value>Lokacije</value>
+  </data>
   <data name="LogOut" xml:space="preserve">
     <value>Odjavi se</value>
   </data>
@@ -246,6 +261,9 @@
   <data name="RateTourBtn" xml:space="preserve">
     <value>Oceni turu</value>
   </data>
+  <data name="requestComplexTour" xml:space="preserve">
+    <value>Zahtevaj složenu turu</value>
+  </data>
   <data name="ReserveInfo" xml:space="preserve">
     <value>Odaberi turu kako bi rezervisao!</value>
   </data>
@@ -258,8 +276,14 @@
   <data name="StartDate" xml:space="preserve">
     <value>Početni datum</value>
   </data>
+  <data name="StartDatesDG" xml:space="preserve">
+    <value>Početni datumi</value>
+  </data>
   <data name="StartDateTime" xml:space="preserve">
     <value>Početno vreme:</value>
+  </data>
+  <data name="StatusesDG" xml:space="preserve">
+    <value>Statusi</value>
   </data>
   <data name="Submit" xml:space="preserve">
     <value>Poslati</value>

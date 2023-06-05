@@ -126,8 +126,14 @@
   <data name="CommentQuestion" xml:space="preserve">
     <value>4. Add a comment:*</value>
   </data>
+  <data name="ComplexTourInfo" xml:space="preserve">
+    <value>Complex tours consist of more than one regular tour.</value>
+  </data>
   <data name="ComplexTourRequestingTab" xml:space="preserve">
     <value>Complex Tour Requesting</value>
+  </data>
+  <data name="ComplexTours" xml:space="preserve">
+    <value>Complex Tours</value>
   </data>
   <data name="CurrentGuests" xml:space="preserve">
     <value>Current Guests:</value>
@@ -171,6 +177,9 @@
   <data name="Duration" xml:space="preserve">
     <value>Duration (hours):</value>
   </data>
+  <data name="EndDatesDG" xml:space="preserve">
+    <value>End Dates</value>
+  </data>
   <data name="Exit" xml:space="preserve">
     <value>Exit</value>
   </data>
@@ -213,6 +222,12 @@
   <data name="LanguageQuestion" xml:space="preserve">
     <value>3. How would you rate your tour guide's language?*</value>
   </data>
+  <data name="LanguagesDG" xml:space="preserve">
+    <value>Languages</value>
+  </data>
+  <data name="LocationsDG" xml:space="preserve">
+    <value>Locations</value>
+  </data>
   <data name="LogOut" xml:space="preserve">
     <value>Log Out</value>
   </data>
@@ -246,6 +261,9 @@
   <data name="RateTourBtn" xml:space="preserve">
     <value>Rate This Tour</value>
   </data>
+  <data name="requestComplexTour" xml:space="preserve">
+    <value>Request a Complex Tour</value>
+  </data>
   <data name="ReserveInfo" xml:space="preserve">
     <value>Select a tour in order to reserve it!</value>
   </data>
@@ -258,8 +276,14 @@
   <data name="StartDate" xml:space="preserve">
     <value>Start Date</value>
   </data>
+  <data name="StartDatesDG" xml:space="preserve">
+    <value>Start Dates</value>
+  </data>
   <data name="StartDateTime" xml:space="preserve">
     <value>Start date:</value>
+  </data>
+  <data name="StatusesDG" xml:space="preserve">
+    <value>Statuses</value>
   </data>
   <data name="Submit" xml:space="preserve">
     <value>Submit</value>
