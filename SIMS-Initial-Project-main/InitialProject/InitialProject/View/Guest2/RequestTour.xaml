@@ -90,7 +90,7 @@
                 <Label Grid.Row="2" Grid.Column="0" FontSize="20" FontWeight="Bold" Height="40" Margin="5,17,5,18" Content="{ns:Loc TourDesc}" Grid.ColumnSpan="2"/>
                 <Label Grid.Row="3" Grid.Column="0" FontSize="20" FontWeight="Bold" Height="40" Margin="5,17,5,17" Content="{ns:Loc Language}" Grid.ColumnSpan="2"/>
                 <Label Grid.Row="4" Grid.Column="0" FontSize="20" FontWeight="Bold" Height="40" Margin="5,17,5,18" Content="{ns:Loc MaxGuests}" Grid.ColumnSpan="2"/>
-                <Label Grid.Row="5" Grid.Column="0" FontSize="20" FontWeight="Bold" Height="40" Margin="5,17,5,17" Content="{ns:Loc StartDateTime} " Grid.ColumnSpan="2"/>
+                <Label Grid.Row="5" Grid.Column="0" FontSize="20" FontWeight="Bold" Height="40" Margin="5,17,5,17" Content="{ns:Loc StartDateTime}" Grid.ColumnSpan="2"/>
                 <Label Grid.Row="6" Grid.Column="0" FontSize="20" FontWeight="Bold" Height="40" Margin="5,18,5,17" Content="{ns:Loc EndDateTime}" Grid.ColumnSpan="2"/>
 
 

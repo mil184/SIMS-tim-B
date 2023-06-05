@@ -204,6 +204,9 @@
   <data name="FinishedToursInfo" xml:space="preserve">
     <value>Choose a finished tour in order to rate it.</value>
   </data>
+  <data name="guestStatistic" xml:space="preserve">
+    <value>Average guest count for chosen year:</value>
+  </data>
   <data name="Guide" xml:space="preserve">
     <value>Guide:</value>
   </data>
@@ -228,20 +231,35 @@
   <data name="LanguageBtn" xml:space="preserve">
     <value>Show in Serbian</value>
   </data>
+  <data name="languageChart" xml:space="preserve">
+    <value>Language Chart</value>
+  </data>
   <data name="LanguageQuestion" xml:space="preserve">
     <value>3. How would you rate your tour guide's language?*</value>
   </data>
   <data name="LanguagesDG" xml:space="preserve">
     <value>Languages</value>
   </data>
+  <data name="languageStatistic" xml:space="preserve">
+    <value>Number of requests for each language:</value>
+  </data>
+  <data name="locationChart" xml:space="preserve">
+    <value>Location Chart</value>
+  </data>
   <data name="LocationsDG" xml:space="preserve">
     <value>Locations</value>
+  </data>
+  <data name="locationStatistic" xml:space="preserve">
+    <value>Number of requests for each location:</value>
   </data>
   <data name="LogOut" xml:space="preserve">
     <value>Log Out</value>
   </data>
   <data name="MaxGuests" xml:space="preserve">
     <value>Maximum guests:</value>
+  </data>
+  <data name="myTourRequests" xml:space="preserve">
+    <value>Your Tour Requests</value>
   </data>
   <data name="Next" xml:space="preserve">
     <value>Next</value>
@@ -272,6 +290,9 @@
   </data>
   <data name="requestATour" xml:space="preserve">
     <value>Request A Tour:</value>
+  </data>
+  <data name="requestATourBtn" xml:space="preserve">
+    <value>Request a Tour</value>
   </data>
   <data name="requestComplexTour" xml:space="preserve">
     <value>Request a Complex Tour</value>
@@ -378,6 +399,9 @@
   </data>
   <data name="Welcome" xml:space="preserve">
     <value>Welcome to DMJM Tours! What would you like to do?</value>
+  </data>
+  <data name="yearStatistic" xml:space="preserve">
+    <value>Tour request status statistics for chosen year:</value>
   </data>
   <data name="YourVouchers" xml:space="preserve">
     <value>Vouchers</value>

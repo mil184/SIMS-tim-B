@@ -61,7 +61,7 @@
             <GroupBox.Header>
                 <Label 
                     FontSize="25" FontWeight="Bold"
-                    Content="Location Chart"/>
+                    Content="{ns:Loc LocationChart}"/>
             </GroupBox.Header>
 
             <lvc:CartesianChart Series="{Binding LocationSeriesCollection}">
