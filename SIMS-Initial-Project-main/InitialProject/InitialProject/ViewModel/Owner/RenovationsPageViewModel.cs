@@ -1,12 +1,8 @@
 ﻿using InitialProject.Model;
-using InitialProject.Resources.Enums;
 using InitialProject.Service;
-using InitialProject.View.Owner;
 using MenuNavigation.Commands;
 using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics.Metrics;
-using System.Windows;
 
 namespace InitialProject.ViewModel.Owner
 {

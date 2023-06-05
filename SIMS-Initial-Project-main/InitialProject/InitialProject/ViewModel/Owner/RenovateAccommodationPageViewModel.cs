@@ -7,12 +7,13 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
+using System.Windows.Navigation;
 
 namespace InitialProject.ViewModel.Owner
 {
     public class RenovateAccommodationPageViewModel : INotifyPropertyChanged, IDataErrorInfo
     {
-        public OwnerMainWindow MainWindow { get; set; }
+        public NavigationService navigationService { get; set; }
         public User LoggedInUser { get; set; }
         public Accommodation SelectedAccommodation { get; set; }
         public ObservableCollection<DateTime> Dates { get; set; }
@@ -116,7 +117,10 @@ namespace InitialProject.ViewModel.Owner
 
         private void Execute_SelectionChangedCommand(object obj)
         {
-            SelectedTimeSpan = SelectedDate.AddDays(int.Parse(Duration) - 1).ToString();
+            SelectedTimeSpan = "The renovations will end on: ";
+            DateTime date = SelectedDate.AddDays(int.Parse(Duration) - 1);
+            DateOnly dateOnly = new DateOnly(date.Year, date.Month, date.Day);
+            SelectedTimeSpan += dateOnly.ToString();
         }
 
         private void Execute_RenovateCommand(object obj)
@@ -124,8 +128,7 @@ namespace InitialProject.ViewModel.Owner
             AccommodationRenovation renovation = new AccommodationRenovation(SelectedAccommodation.Id, SelectedAccommodation.OwnerId, int.Parse(Duration), StartDate, StartDate.AddDays(int.Parse(Duration)-1), Description);
             _accommodationRenovationService.Save(renovation);
             Page renovations = new RenovationsPage(LoggedInUser);
-            MainWindow.Main.NavigationService.Navigate(renovations);
-            MainWindow.Title.Content = "Renovations";
+            navigationService.Navigate(renovations);
         }
 
         public bool CanFind_Command(object obj)
@@ -142,9 +145,9 @@ namespace InitialProject.ViewModel.Owner
             return true;
         }
 
-        public RenovateAccommodationPageViewModel(OwnerMainWindow window, User user, Accommodation selectedAccommodation)
+        public RenovateAccommodationPageViewModel(NavigationService navService, User user, Accommodation selectedAccommodation)
         {
-            MainWindow = window;
+            navigationService = navService;
             LoggedInUser = user;
             SelectedAccommodation = selectedAccommodation;
 

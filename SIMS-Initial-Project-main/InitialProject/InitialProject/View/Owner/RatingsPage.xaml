@@ -33,11 +33,15 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Comment" Binding="{Binding Comment}" Width="3*" FontSize="20" ></DataGridTextColumn>
+                    <DataGridTextColumn Header="Comment" Binding="{Binding Comment}" Width="3*" FontSize="18" ></DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </GroupBox>
-        
-        <Image Source="/Resources/Images/OwnerIcons/peopleTalking.jpg" Grid.Row="1" />
+
+        <Image Source="/Resources/Images/OwnerIcons/peopleTalking.jpg" Grid.Row="1">
+            <ToolTipService.ToolTip>
+                <TextBlock Text="You need to review the guest first to see what they said about you!"></TextBlock>
+            </ToolTipService.ToolTip>
+        </Image>
     </Grid>
 </Page>

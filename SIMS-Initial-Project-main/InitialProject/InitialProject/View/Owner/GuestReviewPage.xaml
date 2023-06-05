@@ -412,41 +412,65 @@
                     <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="50"></ColumnDefinition>
-                    <ColumnDefinition Width="150"></ColumnDefinition>
+                    <ColumnDefinition Width="200"></ColumnDefinition>
                     <ColumnDefinition Width="50"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
-                <Image Source="/Resources/Images/OwnerIcons/happiness.png" Height="30" Width="30" Grid.Row="1" Grid.Column="2" Margin="10"/>
-                <Image Source="/Resources/Images/OwnerIcons/happiness.png" Height="30" Width="30" Grid.Row="3" Grid.Column="2"/>
-                <Image Source="/Resources/Images/OwnerIcons/sad.png" Height="30" Width="30" Grid.Row="1" Grid.Column="0" Margin="10"/>
-                <Image Source="/Resources/Images/OwnerIcons/sad.png" Height="30" Width="30" Grid.Row="3" Grid.Column="0"/>
+                <Image Source="{Binding SelectedCleanlinessImage}" Height="30" Width="30" Grid.Row="1" Grid.Column="1" Margin="10"/>
+                <Image Source="{Binding SelectedBehaviourImage}" Height="30" Width="30" Grid.Row="3" Grid.Column="1"/>
 
-                <TextBlock FontFamily="Comic Sans MS" Text="Cleanliness:" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#FF684CA4" />
-                <Slider Style="{StaticResource Horizontal_Slider}" Margin="10" Maximum="4" Grid.Row="1" Grid.Column="1" TickPlacement="BottomRight" TickFrequency="1" IsSnapToTickEnabled="True" Name="CleannessSlider"
-                        Width="130" Foreground="#FF684CA4">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="ValueChanged" >
-                            <i:InvokeCommandAction Command="{Binding CleanlinessSliderChangedCommand}"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </Slider>
+                <TextBlock FontFamily="Comic Sans MS" Text="Cleanliness:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#FF684CA4" Grid.ColumnSpan="2"/>
+                <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Validation.ErrorTemplate="{StaticResource ValidationTemplate}">
+                    <RadioButton Name="cleanliness1" Content="1" IsChecked="{Binding Cleanliness1IsChecked, UpdateSourceTrigger=PropertyChanged}" FontSize="16" Margin="15,0,0,0" VerticalAlignment="Center"/>
+                    <RadioButton Name="cleanliness2" Content="2" IsChecked="{Binding Cleanliness2IsChecked, UpdateSourceTrigger=PropertyChanged}" FontSize="16" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                    <RadioButton Name="cleanliness3" Content="3" IsChecked="{Binding Cleanliness3IsChecked, UpdateSourceTrigger=PropertyChanged}" FontSize="16" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                    <RadioButton Name="cleanliness4" Content="4" IsChecked="{Binding Cleanliness4IsChecked, UpdateSourceTrigger=PropertyChanged}" FontSize="16" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                    <RadioButton Name="cleanliness5" Content="5" IsChecked="{Binding Cleanliness5IsChecked, UpdateSourceTrigger=PropertyChanged}" FontSize="16" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                </StackPanel>
 
-                <TextBlock FontFamily="Comic Sans MS" Text="Behaviour:" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#FF684CA4" />
-                <Slider Style="{StaticResource Horizontal_Slider}" Margin="10" Maximum="4" Grid.Row="3" Grid.Column="1" TickPlacement="BottomRight" TickFrequency="1" IsSnapToTickEnabled="True" Name="BehaviourSlider"
-                        Width="130" Foreground="#FF684CA4">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="ValueChanged" >
-                            <i:InvokeCommandAction Command="{Binding BehaviourSliderChangedCommand}"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </Slider>
+                <TextBlock FontFamily="Comic Sans MS" Text="Behaviour:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#FF684CA4" Grid.ColumnSpan="2"/>
+                <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0" Validation.ErrorTemplate="{StaticResource ValidationTemplate}">
+                    <RadioButton Name="behaviour1" Content="1" IsChecked="{Binding Behaviour1IsChecked, UpdateSourceTrigger=PropertyChanged}" FontSize="16" Margin="15,0,0,0" VerticalAlignment="Center"/>
+                    <RadioButton Name="behaviour2" Content="2" IsChecked="{Binding Behaviour2IsChecked, UpdateSourceTrigger=PropertyChanged}" FontSize="16" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                    <RadioButton Name="behaviour3" Content="3" IsChecked="{Binding Behaviour3IsChecked, UpdateSourceTrigger=PropertyChanged}" FontSize="16" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                    <RadioButton Name="behaviour4" Content="4" IsChecked="{Binding Behaviour4IsChecked, UpdateSourceTrigger=PropertyChanged}" FontSize="16" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                    <RadioButton Name="behaviour5" Content="5" IsChecked="{Binding Behaviour5IsChecked, UpdateSourceTrigger=PropertyChanged}" FontSize="16" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                </StackPanel>
             </Grid>
         </StackPanel>
         <TextBox TextWrapping="Wrap" Width="390" Height="130" Margin="10,30,10,10" Text="{Binding Path=Comment, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                  Style="{StaticResource MyWaterMarkStyle}" Tag="Additional Comment"
                  Validation.ErrorTemplate="{StaticResource ValidationTemplate}" FontFamily="Comic Sans MS" FontSize="20"/>
-        <Button Width="100" Height="40" Background="#FF684CA4" Foreground="White" FontFamily="Comic Sans MS" Command="{Binding ReviewGuestCommand}">Post Review</Button>
-        <Image Source="/Resources/Images/OwnerIcons/talking2.png"></Image>
+        <Button Width="100" Height="40" Background="#FF684CA4" Foreground="White" FontFamily="Comic Sans MS" Command="{Binding ReviewGuestCommand}">Post Review
+            <ToolTipService.ToolTip>
+                <TextBlock Text="You can only review guests who left 5 days prior!"></TextBlock>
+            </ToolTipService.ToolTip>
+            <Button.Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="FontSize" Value="12" />
+                    <Style.Triggers>
+                        <EventTrigger RoutedEvent="Button.MouseEnter">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation To="14" Duration="0:0:0.2" Storyboard.TargetProperty="FontSize" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="Button.MouseLeave">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation To="12" Duration="0:0:0.2" Storyboard.TargetProperty="FontSize" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+        <Image Source="/Resources/Images/OwnerIcons/talking2.png">
+            <ToolTipService.ToolTip>
+                <TextBlock Text="You can only review guests who left 5 days prior!"></TextBlock>
+            </ToolTipService.ToolTip>
+        </Image>
     </StackPanel>
 </Page>
