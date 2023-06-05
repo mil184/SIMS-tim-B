@@ -41,8 +41,8 @@
 
             <Label Grid.Row="0" Grid.Column="0" Content="Username:" Foreground="#333" VerticalAlignment="Center" />
             <Label Grid.Row="1" Grid.Column="0" Content="Password:" Foreground="#333" VerticalAlignment="Center" Margin="0,10,0,0" />
-            <TextBox Grid.Row="0" Grid.Column="1" Height="30" VerticalAlignment="Center" Background="#FFF" BorderBrush="#EEE" BorderThickness="1" Margin="0,0,0,10" Text="{Binding Path=Username, UpdateSourceTrigger=PropertyChanged}"/>
-            <PasswordBox Name ="txtPassword" Grid.Row="1" Grid.Column="1" Height="30" VerticalAlignment="Center" Background="#FFF" BorderBrush="#EEE" BorderThickness="1" Margin="0,10,0,0" PreviewKeyDown="PasswordBox_PreviewKeyDown" />
+            <TextBox Grid.Row="0" Grid.Column="1" Height="30" VerticalAlignment="Center" Background="#FFF" BorderBrush="#EEE" BorderThickness="1" Margin="0,0,0,10" Text="{Binding Path=Username, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center"/>
+            <PasswordBox Name ="txtPassword" Grid.Row="1" Grid.Column="1" Height="30" VerticalAlignment="Center" Background="#FFF" BorderBrush="#EEE" BorderThickness="1" Margin="0,10,0,0" PreviewKeyDown="PasswordBox_PreviewKeyDown" VerticalContentAlignment="Center"/>
         </Grid>
 
         <!-- Sign-in Button Section -->

@@ -49,7 +49,7 @@
                             <TextBlock Grid.Row="2" FontSize="14" Text="Guide" HorizontalAlignment="Center" Margin="0 5 0 0" Foreground="#FFA500" FontWeight="Bold"/>
                         </Grid>
                         <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="20 0" HorizontalAlignment="Right">
-                            <Button Content="  Resign&#x0a;(ALT + Q)" Width="100" Height="60" Margin="0 0 0 10" Background="#007ACC" Foreground="White" FontSize="16" BorderThickness="0" Padding="5 0">
+                            <Button Content="  Resign&#x0a;(ALT + Q)" Width="100" Height="60" Margin="0 0 0 10" Background="#007ACC" Foreground="White" FontSize="16" BorderThickness="0" Padding="5 0" IsTabStop="False">
                                 <Button.Template>
                                     <ControlTemplate TargetType="Button">
                                         <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -73,7 +73,7 @@
                                     </ControlTemplate>
                                 </Button.Template>
                             </Button>
-                            <Button Content=" Log Out&#x0a;(ALT + F4)" Width="100" Height="60" Background="#007ACC" Foreground="White" FontSize="16" BorderThickness="0" Padding="5 0" Click="LogOut_Click">
+                            <Button Content=" Log Out&#x0a;(ALT + F4)" Width="100" Height="60" Background="#007ACC" Foreground="White" FontSize="16" BorderThickness="0" Padding="5 0" Click="LogOut_Click" IsTabStop="False">
                                 <Button.Template>
                                     <ControlTemplate TargetType="Button">
                                         <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -283,7 +283,7 @@
                     </Grid.RowDefinitions>
 
                     <StackPanel Orientation="Horizontal" Grid.Row="0">
-                        <Button Content="Create Tour&#x0a;(CTRL + A)" Margin="10" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" Click="CreateButton_Click">
+                        <Button Content="Create Tour&#x0a;(CTRL + A)" Margin="10" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" Click="CreateButton_Click" IsTabStop="False">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -307,7 +307,7 @@
                                 </ControlTemplate>
                             </Button.Template>
                         </Button>
-                        <Button Content="Start Tour&#x0a; (ENTER)" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" Click="StartTourButton_Click" Margin="10" >
+                        <Button Content="Start Tour&#x0a; (ENTER)" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" Click="StartTourButton_Click" Margin="10" IsTabStop="False">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -338,7 +338,7 @@
                             <ColumnDefinition Width="Auto"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <Image Width="30" Height="30" Source="/Resources/Images/magnifying-glass.png" />
-                        <TextBox Grid.Column="1" BorderThickness="1" Margin="10" FontSize="16" Height="30" Width="300" TextChanged="CurrentToursSearchText_Changed" Text="{Binding CurrentToursSearchInput, UpdateSourceTrigger=PropertyChanged}">
+                        <TextBox Grid.Column="1" BorderThickness="1" Margin="10" FontSize="16" Height="30" Width="300" TextChanged="CurrentToursSearchText_Changed" Text="{Binding CurrentToursSearchInput, UpdateSourceTrigger=PropertyChanged}" behaviors:TextBoxProperties.WatermarkText="Search here..." TextAlignment="Left" VerticalContentAlignment="Center">
                         </TextBox>
                     </Grid>
 
@@ -429,7 +429,7 @@
                     </Grid.RowDefinitions>
 
                     <StackPanel Orientation="Horizontal" Grid.Row="0">
-                        <Button Content="Create Tour&#x0a;(CTRL + A)" Margin="10" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Left" Click="CreateButton_Click">
+                        <Button Content="Create Tour&#x0a;(CTRL + A)" Margin="10" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Left" Click="CreateButton_Click" IsTabStop="False">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -455,7 +455,7 @@
                         </Button>
 
 
-                        <Button Content="Generate Report&#x0a;    (CTRL + R)" Margin="10" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Right" Click="GenerateReportButton_Click">
+                        <Button Content="Generate Report&#x0a;    (CTRL + R)" Margin="10" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Right" Click="GenerateReportButton_Click" IsTabStop="False">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -480,7 +480,7 @@
                             </Button.Template>
                         </Button>
 
-                        <Button Content="Abort Selected Tour&#x0a;         (ENTER)" Margin="10" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Right" Click="AbortButton_Click">
+                        <Button Content="Abort Selected Tour&#x0a;         (ENTER)" Margin="10" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Right" Click="AbortButton_Click" IsTabStop="False">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -511,7 +511,7 @@
                             <ColumnDefinition Width="Auto"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <Image Width="30" Height="30" Source="/Resources/Images/magnifying-glass.png" />
-                        <TextBox Grid.Column="1" BorderThickness="1" Margin="10" FontSize="16" Height="30" Width="300" TextChanged="UpcomingToursSearchText_Changed" Text="{Binding UpcomingToursSearchInput, UpdateSourceTrigger=PropertyChanged}">
+                        <TextBox Grid.Column="1" BorderThickness="1" Margin="10" FontSize="16" Height="30" Width="300" TextChanged="UpcomingToursSearchText_Changed" Text="{Binding UpcomingToursSearchInput, UpdateSourceTrigger=PropertyChanged}" behaviors:TextBoxProperties.WatermarkText="Search here..." TextAlignment="Left" VerticalContentAlignment="Center">
                         </TextBox>
                     </Grid>
 
@@ -605,7 +605,7 @@
                             <RowDefinition Height="*"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <Button  Grid.Row="1"  Content="  Select Finished Tour&#x0a;         (ENTER)" Margin="10" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" Click="StatisticsButton_Click" HorizontalAlignment="Center">
+                        <Button  Grid.Row="1"  Content="  Select Finished Tour&#x0a;         (ENTER)" Margin="10" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" Click="StatisticsButton_Click" HorizontalAlignment="Center" IsTabStop="False">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -635,7 +635,7 @@
                                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
                             <Image Width="30" Height="30" Source="/Resources/Images/magnifying-glass.png" HorizontalAlignment="Right"/>
-                            <TextBox Grid.Column="1" BorderThickness="1" Margin="10" FontSize="16" Height="30" Width="300" TextChanged="FinishedToursSearchText_Changed" Text="{Binding FinishedToursSearchInput, UpdateSourceTrigger=PropertyChanged}">
+                            <TextBox Grid.Column="1" BorderThickness="1" Margin="10" FontSize="16" Height="30" Width="300" TextChanged="FinishedToursSearchText_Changed" Text="{Binding FinishedToursSearchInput, UpdateSourceTrigger=PropertyChanged}" behaviors:TextBoxProperties.WatermarkText="Search here..." TextAlignment="Left" VerticalContentAlignment="Center">
                             </TextBox>
                         </Grid>
                     </Grid>
@@ -708,7 +708,7 @@
 
 
 
-                        <Button Grid.Column="3" Content="Select Rated Tour&#x0a;       (ENTER)" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Right" Margin="10" Click="RatingsButton_Click">
+                        <Button Grid.Column="3" Content="Select Rated Tour&#x0a;       (ENTER)" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Right" Margin="10" Click="RatingsButton_Click" IsTabStop="False">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -740,7 +740,7 @@
                             <ColumnDefinition Width="Auto"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <Image Width="30" Height="30" Source="/Resources/Images/magnifying-glass.png" />
-                        <TextBox Grid.Column="1" BorderThickness="1" Margin="10" FontSize="16" Height="30" Width="300" TextChanged="RatedToursSearchText_Changed" Text="{Binding RatedToursSearchInput, UpdateSourceTrigger=PropertyChanged}">                        </TextBox>
+                        <TextBox Grid.Column="1" BorderThickness="1" Margin="10" FontSize="16" Height="30" Width="300" TextChanged="RatedToursSearchText_Changed" Text="{Binding RatedToursSearchInput, UpdateSourceTrigger=PropertyChanged}" behaviors:TextBoxProperties.WatermarkText="Search here..." TextAlignment="Left" VerticalContentAlignment="Center"></TextBox>
                     </Grid>
 
                     <GroupBox Grid.Row="1" Header="Rated Tours"  FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2" Grid.ColumnSpan="3" Margin="10 0 10 10">
@@ -870,7 +870,7 @@
                             <RowDefinition Height="*"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <Button Grid.Row="1" Content="Select Request&#x0a;     (ENTER)" Margin="0 0 5 0" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" Click="StatisticsButton_Click">
+                        <Button Grid.Row="1" Content="Select Request&#x0a;     (ENTER)" Margin="10" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" Click="StatisticsButton_Click" IsTabStop="False">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -900,7 +900,7 @@
                                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
                             <Image Width="30" Height="30" Source="/Resources/Images/magnifying-glass.png" HorizontalAlignment="Right"/>
-                            <TextBox Grid.Column="1" BorderThickness="1" Margin="10" FontSize="16" Height="30" Width="300" TextChanged="PendingRequestsSearchText_Changed" Text="{Binding PendingRequestsSearchInput, UpdateSourceTrigger=PropertyChanged}">
+                            <TextBox Grid.Column="1" BorderThickness="1" Margin="10" FontSize="16" Height="30" Width="300" TextChanged="PendingRequestsSearchText_Changed" Text="{Binding PendingRequestsSearchInput, UpdateSourceTrigger=PropertyChanged}" behaviors:TextBoxProperties.WatermarkText="Search here..." TextAlignment="Left" VerticalContentAlignment="Center">
 
                             </TextBox>
                         </Grid>
@@ -1105,7 +1105,7 @@
 
 
 
-                        <Button Grid.Column="3" Content="Select Complex Tour&#x0a;          (ENTER)" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Right" Margin="10" Click="RatingsButton_Click">
+                        <Button Grid.Column="3" Content="Select Complex Tour&#x0a;          (ENTER)" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Right" Margin="10" Click="RatingsButton_Click" IsTabStop="False">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -1137,10 +1137,10 @@
                             <ColumnDefinition Width="Auto"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <Image Width="30" Height="30" Source="/Resources/Images/magnifying-glass.png" />
-                        <TextBox Grid.Column="1" BorderThickness="1" Margin="10" FontSize="16" Height="30" Width="300" TextChanged="ComplexTourRequestsSearchText_Changed" Text="{Binding ComplexToursSearchInput, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBox Grid.Column="1" BorderThickness="1" Margin="10" FontSize="16" Height="30" Width="300" TextChanged="ComplexTourRequestsSearchText_Changed" Text="{Binding ComplexToursSearchInput, UpdateSourceTrigger=PropertyChanged}" behaviors:TextBoxProperties.WatermarkText="Search here..." TextAlignment="Left" VerticalContentAlignment="Center"/>
                     </Grid>
 
-                    <GroupBox Grid.Row="1" Header="Rated Tours"  FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2" Grid.ColumnSpan="3" Margin="10 0 10 10">
+                    <GroupBox Grid.Row="1" Header="Complex Tour Requests"  FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2" Grid.ColumnSpan="3" Margin="10 0 10 10">
                         <DataGrid ItemsSource="{Binding ComplexTourRequests}" SelectedItem="{Binding Path=SelectedComplexTourDTO}" AutoGenerateColumns="False" Margin="10" FontSize="20" Focusable="True" SelectionMode="Single" Name="ComplexToursDataGrid" IsReadOnly="True" MouseDoubleClick="ComplexTourRequestsDataGrid_MouseDoubleClick">
                             <DataGrid.Columns>
 

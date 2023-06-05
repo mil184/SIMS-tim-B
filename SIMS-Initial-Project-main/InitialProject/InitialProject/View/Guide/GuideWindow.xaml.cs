@@ -853,6 +853,7 @@ namespace InitialProject.View.Guide
         }
         private void ComplexTourRequestsSearchText_Changed(object sender, TextChangedEventArgs e)
         {
+            if (ComplexTourRequests == null) return;
             ComplexTourRequests.Clear();
             if (!string.IsNullOrEmpty(ComplexToursSearchInput))
             {
