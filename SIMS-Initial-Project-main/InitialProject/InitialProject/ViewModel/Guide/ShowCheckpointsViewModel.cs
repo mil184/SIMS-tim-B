@@ -1,9 +1,11 @@
-﻿using InitialProject.Converters;
+﻿using InitialProject.Commands;
+using InitialProject.Converters;
 using InitialProject.Model;
 using InitialProject.Model.DTO;
 using InitialProject.Resources.Observer;
 using InitialProject.Service;
 using iTextSharp.text.pdf.qrcode;
+using MenuNavigation.Commands;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,12 +16,15 @@ using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace InitialProject.ViewModel.Guide
 {
     public class ShowCheckpointsViewModel : INotifyPropertyChanged, IObserver
     {
+        #region MAIN
         private readonly CheckpointService _checkpointService;
         private readonly TourService _tourService;
         private readonly TourReservationService _tourReservationService;
@@ -42,7 +47,19 @@ namespace InitialProject.ViewModel.Guide
                 }
             }
         }
-
+        private int _selectedIndex;
+        public int SelectedIndex
+        {
+            get => _selectedIndex;
+            set
+            {
+                if (value != _selectedIndex)
+                {
+                    _selectedIndex = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
@@ -73,6 +90,7 @@ namespace InitialProject.ViewModel.Guide
             InitializeCollections();
             SetActiveCheckpoint();
             InitializeOtherValues();
+            InitializeCommands();
 
         }
         private void InitializeOtherValues()
@@ -97,6 +115,7 @@ namespace InitialProject.ViewModel.Guide
         private void SetActiveCheckpoint()
         {
             SelectedCheckpoint = _checkpointService.GetById(ActiveTour.CurrentCheckpointId);
+            
         }
 
         public void UpdateCheckpoint() 
@@ -118,19 +137,21 @@ namespace InitialProject.ViewModel.Guide
             if (currentIndex == Checkpoints.Count - 1)
             {
                 EndTour();
-                return;
+                CancelCommand.Execute(null);
             }
 
         }
 
         public void EndTour() 
         {
-            //ActiveTour.CurrentCheckpointId = -1;
+            ActiveTour.CurrentCheckpointId = -1;
             ActiveTour.IsActive = false;
             ActiveTour.IsFinished = true;
             _tourService.Update(ActiveTour);
+            MessageBox.Show($"The {ActiveTour.Name} tour has sucessfuly finished.", "Finished Tour Info", MessageBoxButton.OK, MessageBoxImage.Information);
+            CancelCommand.Execute(null);
 
-            
+
         }
 
         public void CheckUser() 
@@ -144,6 +165,7 @@ namespace InitialProject.ViewModel.Guide
                 Update();
             }
         }
+        #endregion
 
         #region Demo
         private bool _isEnabled;
@@ -252,7 +274,19 @@ namespace InitialProject.ViewModel.Guide
                 Checkpoints.Add(c);
             }
 
-            SelectedCheckpoint = _checkpointService.GetById(ActiveTour.CurrentCheckpointId);
+            SetActiveCheckpoint();
+
+            if ( ListBox != null & ListBox.SelectedItem == null && ListBox.Items.Count > 0)
+            {
+                if (SelectedCheckpoint != null)
+                {
+                    ListBox.SelectedIndex = SelectedCheckpoint.Order - 1;
+                }
+                else
+                {
+                    ListBox.SelectedIndex = 0;
+                }
+            }
         }
         private async Task AddGuestsAndCheckpoints()
         {
@@ -375,6 +409,72 @@ namespace InitialProject.ViewModel.Guide
                 _buttonBackgroundColorCheck = value;
                 OnPropertyChanged(nameof(ButtonBackgroundColorCheck));
             }
+        }
+        #endregion
+
+        #region Commands
+        public RelayCommand CancelCommand { get; set; }
+        public RelayCommand EndTourCommand { get; set; }
+        public RelayCommand UpdateCheckpointCommand { get; private set; }
+        public RelayCommand DemoCommand { get; private set; }
+        public ICommand StopDemoCommand { get; private set; }
+        public RelayCommand EnterCommand { get; private set; }
+        public ICommand ListBoxLoadedCommand { get; set; }
+        public ListBox ListBox { get; set; }
+        public void InitializeCommands()
+        {
+            UpdateCheckpointCommand = new RelayCommand(UpdateCheckpoint, CanExecute);
+            DemoCommand = new RelayCommand(StartDemo, CanExecute);
+            EnterCommand = new RelayCommand(Enter, CanExecute);
+            EndTourCommand= new RelayCommand(EndTour, CanExecute);
+            StopDemoCommand = new DelegateCommand(StopDemoM, CannotExecute);
+            ListBoxLoadedCommand = new RelayCommand(ExecuteListBoxLoadedCommand);
+        }
+        private void ExecuteListBoxLoadedCommand(object parameter)
+        {
+            if (parameter is ListBox listBox)
+            {
+                if (listBox.SelectedItem == null && listBox.Items.Count > 0)
+                {
+                    ListBox = listBox;
+                    if (SelectedCheckpoint != null)
+                    {
+                        listBox.SelectedIndex = SelectedCheckpoint.Order - 1;
+                    }
+                    else
+                    {
+                        listBox.SelectedIndex = 0;
+                    }
+                }
+            }
+        }
+        private void StopDemoM(object parameter)
+        {
+            StopDemo = true;
+        }
+        private bool CanExecute(object parameter)
+        {
+            return !IsDemo;
+        }
+        private bool CannotExecute(object parameter)
+        {
+            return IsDemo;
+        }
+        private void StartDemo(object parameter)
+        {
+            StartDemoAsync();
+        }
+        private void UpdateCheckpoint(object parameter)
+        {
+            UpdateCheckpoint();
+        }
+        private void EndTour(object parameter)
+        {
+            EndTour();
+        }
+        private void Enter(object parameter)
+        {
+         CheckUser();
         }
         #endregion
     }

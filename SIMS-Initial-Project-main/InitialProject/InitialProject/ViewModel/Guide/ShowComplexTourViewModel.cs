@@ -4,6 +4,7 @@ using InitialProject.Model.DTO;
 using InitialProject.Repository;
 using InitialProject.Service;
 using InitialProject.View.Guide;
+using MenuNavigation.Commands;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -71,5 +72,6 @@ namespace InitialProject.ViewModel.Guide
             CreateTourWindow createTour = new CreateTourWindow(createTourViewModel);
             createTour.ShowDialog();
         }
+
     }
 }

@@ -1,4 +1,6 @@
 ﻿using InitialProject.ViewModel.Guide;
+using MenuNavigation.Commands;
+using Org.BouncyCastle.Asn1.BC;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -31,8 +33,14 @@ namespace InitialProject.View.Guide
             InitializeComponent();
 
             _viewModel = viewModel;
-            viewModel.Window = this;
             DataContext = _viewModel;
+
+            _viewModel.CancelCommand = new RelayCommand(obj =>
+            {
+                if (!_viewModel.IsDemo)
+                    this.Close();
+            });
+
         }
 
     }

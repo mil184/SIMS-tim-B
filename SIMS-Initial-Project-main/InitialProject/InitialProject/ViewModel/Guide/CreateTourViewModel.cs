@@ -30,8 +30,6 @@ namespace InitialProject.ViewModel.Guide
 {
     public class CreateTourViewModel : INotifyPropertyChanged
     {
-        public Window Window { get; set; }
-
         #region MAIN
         private readonly TourService _tourService;
         private readonly LocationService _locationService;
@@ -1752,7 +1750,7 @@ namespace InitialProject.ViewModel.Guide
         #endregion
 
         #region Commands
-        public RelayCommand CancelCommand { get; private set; }
+        public RelayCommand CancelCommand { get; set; }
         public RelayCommand CreateTourCommand { get; private set; }
         public RelayCommand NextImageCommand { get; private set; }
         public RelayCommand PreviousImageCommand { get; private set; }
@@ -1802,7 +1800,6 @@ namespace InitialProject.ViewModel.Guide
             CountrySelectionChangedCommand = new RelayCommand(OnCountrySelectionChanged);
 
             EnterKeyCommand = new RelayCommand(EnterKeyHandler, CanExecute);
-            CancelCommand = new RelayCommand(Cancel, CanExecute);
             CreateTourCommand = new RelayCommand(Save, CanExecute);
             DemoCommand = new RelayCommand(StartDemo, CanExecute);
             CountryCommand = new RelayCommand(SetMostRequestedCountry, CanExecute);
@@ -1811,7 +1808,7 @@ namespace InitialProject.ViewModel.Guide
             DeleteCommand = new RelayCommand(Delete, CanExecute);
 
 
-            StopDemoCommand = new DelegateCommand(StopDemoM);
+            StopDemoCommand = new DelegateCommand(StopDemoM,CannotExecute);
 
         }
         private void OnCountrySelectionChanged(object parameter)
@@ -1821,59 +1818,48 @@ namespace InitialProject.ViewModel.Guide
 
         private void StopDemoM(object parameter)
         {   
-                if (IsDemo)
-                {
-                    StopDemo = true;
-                }
+ 
+          StopDemo = true;
+ 
         }
         private bool CanExecute(object parameter)
         {
             return !IsDemo;
         }
+        private bool CannotExecute(object parameter)
+        {
+            return IsDemo;
+        }
         private void StartDemo(object parameter)
         {
-            if (!IsDemo)
-            {
+
                 StartDemoAsync();
-            }
         }
 
         private void Save(object parameter)
         {
-            if (!IsDemo)
-            {
+
                 Save();
-            }
         }
 
         private void SetMostRequestedCountry(object parameter)
         {
-            if (!IsDemo)
-            {
-                SetMostRequestedCountry();
-            }
+
+               SetMostRequestedCountry();
         }
 
         private void SetMostRequestedCity(object parameter)
         {
-            if (!IsDemo)
-            {
-                SetMostRequestedCity();
-            }
+               SetMostRequestedCity();
         }
 
         private void SetMostRequestedLanguage(object parameter)
         {
-            if (!IsDemo)
-            {
-                SetMostRequestedLanguage();
-            }
+              SetMostRequestedLanguage();
         }
 
         private void Delete(object parameter)
         {
-            if (!IsDemo)
-            {
                 if (SelectedCheckpoint != null)
                 {
                     RemoveSelectedCheckpoint();
@@ -1886,12 +1872,10 @@ namespace InitialProject.ViewModel.Guide
                 {
                     RemoveSelectedImage();
                 }
-            }
         }
 
         private void EnterKeyHandler(object parameter)
         {
-            if (IsDemo) return;
 
             if (IsImageTextBoxFocused)
             {
@@ -1907,10 +1891,6 @@ namespace InitialProject.ViewModel.Guide
             {
                 AddCheckpoint();
             }
-        }
-        private void Cancel(object parameter)
-        {
-            Window.Close();
         }
         private void CreateTour(object parameter)
         {
@@ -1988,10 +1968,6 @@ namespace InitialProject.ViewModel.Guide
             StartDemoAsync();
         }
 
-        private bool CanStartDemo(object parameter)
-        {
-            return IsDemo;
-        }
         #endregion
     }
 }

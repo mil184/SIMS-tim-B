@@ -9,9 +9,13 @@
 
   <ItemGroup>
     <Compile Remove="NewFolder1\**" />
+    <Compile Remove="Resources\NewFolder\**" />
     <EmbeddedResource Remove="NewFolder1\**" />
+    <EmbeddedResource Remove="Resources\NewFolder\**" />
     <None Remove="NewFolder1\**" />
+    <None Remove="Resources\NewFolder\**" />
     <Page Remove="NewFolder1\**" />
+    <Page Remove="Resources\NewFolder\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -254,7 +258,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Resources\NewFolder\" />
     <Page Update="View\Guest2\TourImages.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>

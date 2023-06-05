@@ -4,11 +4,24 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InitialProject.View.Guide"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:behaviors="clr-namespace:InitialProject.Resources.Behavior"
         mc:Ignorable="d"
         Title="DMJM-Tours" Width="1024" Height="600"
         Icon ="/Resources/Images/favicon.ico"
         Background="#F2F2F2"
         WindowStartupLocation="CenterScreen">
+    <Window.InputBindings>
+        <KeyBinding Key="Escape" Command="{Binding CancelCommand}" />
+        <KeyBinding Key="D" Modifiers="Control" Command="{Binding DemoCommand}" />
+        <KeyBinding Key="S" Modifiers="Control" Command="{Binding UpdateCheckpointCommand}" />
+        <KeyBinding Key="E" Modifiers="Control" Command="{Binding EndTourCommand}" />
+    </Window.InputBindings>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="PreviewKeyDown">
+            <i:InvokeCommandAction Command="{Binding StopDemoCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
@@ -25,7 +38,10 @@
                     <RowDefinition Height="*"></RowDefinition>
                     <RowDefinition Height="Auto"></RowDefinition>
                 </Grid.RowDefinitions>
-                <DataGrid ItemsSource="{Binding UnmarkedGuests}" SelectedItem="{Binding Path=SelectedGuestDTO}" AutoGenerateColumns="False" IsReadOnly="true" Margin="10 10 10 10" FontSize="20" IsEnabled="{Binding IsEnabled}">
+                <DataGrid ItemsSource="{Binding UnmarkedGuests}" SelectedItem="{Binding Path=SelectedGuestDTO}" AutoGenerateColumns="False" IsReadOnly="true" Margin="10 10 10 10" FontSize="20" IsEnabled="{Binding IsEnabled}" Focusable="True" SelectionMode="Single">
+                    <DataGrid.InputBindings>
+                        <KeyBinding Key="Enter" Command="{Binding EnterCommand}" />
+                    </DataGrid.InputBindings>
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="User" Binding="{Binding Username}" Width="*">
                             <DataGridTextColumn.ElementStyle>
@@ -65,7 +81,7 @@
                         </DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-                <Button Grid.Row="1"  Content="Check User&#x0a;   (ENTER)" Margin="5" Height="60" Width="180" FontSize="16" Background="{Binding ButtonBackgroundColorCheck}" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" Click ="CheckUser_Click" IsEnabled="{Binding IsEnabled}">
+                <Button Grid.Row="1"  Content="Check User&#x0a;   (ENTER)" Margin="5" Height="60" Width="180" FontSize="16" Background="{Binding ButtonBackgroundColorCheck}" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" Command="{Binding EnterCommand}" IsEnabled="{Binding IsEnabled}" IsTabStop="False">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -97,7 +113,8 @@
                     <RowDefinition Height="*"></RowDefinition>
                     <RowDefinition Height="Auto"></RowDefinition>
                 </Grid.RowDefinitions>
-                <ListBox ItemsSource="{Binding Checkpoints}" SelectedItem="{Binding SelectedCheckpoint}" Margin="10 10 10 10" Loaded="ListBox_Loaded" IsEnabled="False" IsHitTestVisible="False"> 
+                <ListBox ItemsSource="{Binding Checkpoints}" SelectedItem="{Binding SelectedCheckpoint}" Margin="10 10 10 10"  IsEnabled="False" IsHitTestVisible="False"
+                         behaviors:ListBoxLoadedBehavior.LoadedCommand="{Binding ListBoxLoadedCommand}"> 
                     <ListBox.Resources>
                         <Style TargetType="ListBoxItem">
                             <Setter Property="Template">
@@ -132,7 +149,7 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
 
-                <Button Grid.Row="1"  Content="Update Checkpoint&#x0a;       (CTRL + S)" Margin="5" Height="60" Width="180" FontSize="16" Background="{Binding ButtonBackgroundColorUpdate}" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" Click="UpdateCheckpointButton_Click" IsEnabled="{Binding IsEnabled}">
+                <Button Grid.Row="1"  Content="Update Checkpoint&#x0a;       (CTRL + S)" Margin="5" Height="60" Width="180" FontSize="16" Background="{Binding ButtonBackgroundColorUpdate}" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" IsEnabled="{Binding IsEnabled}" IsTabStop="False" Command="{Binding UpdateCheckpointCommand}">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -159,7 +176,7 @@
             </Grid>
         </GroupBox>
         <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Center">
-            <Button  Content="  End Tour &#x0a; (CTRL + E)" Margin="5" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" Click="EndTourButton_Click" IsEnabled="{Binding IsEnabled}">
+            <Button  Content="  End Tour &#x0a; (CTRL + E)" Margin="5" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" IsEnabled="{Binding IsEnabled}" IsTabStop="False" Command="{Binding EndTourCommand}">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -183,7 +200,7 @@
                     </ControlTemplate>
                 </Button.Template>
             </Button>
-            <Button Content="Close&#x0a;(ESC)" Margin="5" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" Click="CloseButton_Click">
+            <Button Content="Close&#x0a;(ESC)" Margin="5" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" IsTabStop="False">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20" IsEnabled="{Binding IsEnabled}">

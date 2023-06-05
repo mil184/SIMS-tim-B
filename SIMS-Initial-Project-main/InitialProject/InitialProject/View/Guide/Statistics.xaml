@@ -9,6 +9,9 @@
         Title="Statistics" Height="820" Width="650"
         Background="#F2F2F2"
         WindowStartupLocation="CenterScreen">
+    <Window.InputBindings>
+        <KeyBinding Key="Escape" Command="{Binding CancelCommand}" />
+    </Window.InputBindings>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -84,7 +87,7 @@
 
                 </Grid>
                 </Border>
-                    <Button Grid.Column="3" Content="Cancel (ESC)" Height="70" Width="140" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Center" Click="CancelButton_Click">
+            <Button Grid.Column="3" Content="Cancel (ESC)" Height="70" Width="140" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Center" Command="{Binding CancelCommand}">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">

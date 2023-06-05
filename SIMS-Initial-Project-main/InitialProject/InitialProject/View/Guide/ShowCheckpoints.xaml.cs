@@ -7,6 +7,7 @@ using InitialProject.Resources.Observer;
 using InitialProject.Resources.UIHelper;
 using InitialProject.Service;
 using InitialProject.ViewModel.Guide;
+using MenuNavigation.Commands;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -31,115 +32,14 @@ namespace InitialProject.View.Guide
             InitializeComponent();
             _viewModel = viewModel;
             DataContext = _viewModel;
-            InitializeShortcuts();
-        }
 
-        private void ListBox_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (sender is ListBox listBox && listBox.SelectedItem == null && listBox.Items.Count > 0)
+            _viewModel.CancelCommand = new RelayCommand(obj =>
             {
-                if (_viewModel.SelectedCheckpoint != null)
-                {
-                    listBox.SelectedIndex = _viewModel.SelectedCheckpoint.Order - 1;
-                }
-                else 
-                {
-                    listBox.SelectedIndex = 0;
-                }
-            }
-        }
-
-        public void Update()
-        {
+                if (!_viewModel.IsDemo)
+                    this.Close();
+            });
 
         }
-        private void UpdateCheckpointButton_Click(object sender, RoutedEventArgs e)
-        {
-            _viewModel.UpdateCheckpoint();
-
-            if (_viewModel.ActiveTour.IsFinished)
-                Close();
-        }
-        private void EndTourButton_Click(object sender, RoutedEventArgs e)
-        {
-            _viewModel.EndTour();
-            Close();
-        }
-        private void CloseButton_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-        private void CheckUser_Click(object sender, RoutedEventArgs e)
-        {
-            _viewModel.CheckUser();
-
-        }
-        private void InitializeShortcuts()
-        {
-            PreviewKeyDown += Enter_PreviewKeyDown;
-            PreviewKeyDown += OnKeyDown;
-            PreviewKeyDown += Escape_PreviewKeyDown;
-            PreviewKeyDown += EndTour_PreviewKeyDown;
-            PreviewKeyDown += UpdateCheckpoint_PreviewKeyDown;
-            PreviewKeyDown += Demo_PreviewKeyDown;
-        }
-        private void Enter_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-
-            if (e.Key == Key.Enter && _viewModel.SelectedGuestDTO != null && !_viewModel.IsDemo)
-            {
-                _viewModel.CheckUser();
-                e.Handled = true;
-            }
-        }
-        private void Demo_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-
-            if (!_viewModel.IsDemo && Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.D)
-            {
-                _viewModel.StartDemoAsync();
-                e.Handled = true;
-            }
-        }
-        private void OnKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.LeftCtrl)
-            {
-                return;
-            }
-
-            if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.D)
-            {
-                return;
-            }
-            if (_viewModel.IsDemo)
-            {
-                _viewModel.StopDemo = true;
-                e.Handled = true;
-
-            }
-        }
-        private void Escape_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (!_viewModel.IsDemo && e.Key == Key.Escape)
-            {
-                this.Close();
-            }
-        }
-        private void EndTour_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (!_viewModel.IsDemo && Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.E)
-            {
-                _viewModel.EndTour();
-                this.Close();
-            }
-        }
-        private void UpdateCheckpoint_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (!_viewModel.IsDemo && Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.S)
-            {
-                _viewModel.UpdateCheckpoint();
-            }
-        }
+    
     }
 }

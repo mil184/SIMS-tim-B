@@ -3,6 +3,7 @@ using InitialProject.Repository;
 using InitialProject.Service;
 using LiveCharts;
 using LiveCharts.Wpf;
+using MenuNavigation.Commands;
 using System.Windows.Media;
 
 namespace InitialProject.ViewModel.Guide
@@ -79,5 +80,7 @@ namespace InitialProject.ViewModel.Guide
 
             VaucherLabels = new[] { "Used A Voucher?" };
         }
+
+        public RelayCommand CancelCommand { get; set; }
     }
 }
