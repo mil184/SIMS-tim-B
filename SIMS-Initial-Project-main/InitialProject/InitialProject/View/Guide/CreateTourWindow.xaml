@@ -5,17 +5,34 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InitialProject.View.Guide"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-        xmlns:focus="clr-namespace:InitialProject.Resources.FocusBehaviour"
+        xmlns:behaviors="clr-namespace:InitialProject.Resources.Behavior"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         mc:Ignorable="d"
-        Title="CreateTourWindow" Height="820" Width="1024"
+        Title="CreateTourWindow" Height="830" Width="1024"
         Background="#F2F2F2"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen" Focusable="True">
+    <Window.InputBindings>
+        <KeyBinding Key="Escape" Command="{Binding CancelCommand}" />
+        <KeyBinding Key="Return" Command="{Binding EnterKeyCommand}" />
+        <KeyBinding Key="D" Modifiers="Control" Command="{Binding DemoCommand}" />
+        <KeyBinding Key="S" Modifiers="Control" Command="{Binding CreateTourCommand}" />
+        <KeyBinding Key="Delete" Command="{Binding DeleteCommand}" />
+        <KeyBinding Key="D1" Modifiers="Control" Command="{Binding CountryCommand}" />
+        <KeyBinding Key="D2" Modifiers="Control" Command="{Binding  CityCommand}" />
+        <KeyBinding Key="D3" Modifiers="Control" Command="{Binding  LanguageCommand}" />
+    </Window.InputBindings>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="PreviewKeyDown">
+            <i:InvokeCommandAction Command="{Binding StopDemoCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
 
         </Grid.ColumnDefinitions>
+
         <StackPanel>
             <GroupBox Header="Basic Info" Margin="10" FontSize="20" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2" Padding="5">
                 <Grid>
@@ -105,12 +122,13 @@
                         <Border BorderBrush="{Binding Path=TourCountryBorderColor}" BorderThickness="1">
                             <ComboBox SelectedItem="{Binding Path=TourCountry, UpdateSourceTrigger=PropertyChanged}"
                           ItemsSource="{Binding Path=Countries, UpdateSourceTrigger=PropertyChanged}"
-                          SelectionChanged="Country_SelectionChanged"
                           Grid.Row="3" 
                           Grid.Column="1"
                           FontSize="13"
                           IsEnabled="{Binding Path=IsEnabledCountryComboBox}"
-                          IsDropDownOpen="{Binding Path=IsCountryComboBoxDropDown}"/>
+                          IsDropDownOpen="{Binding Path=IsCountryComboBoxDropDown}"
+                          behaviors:ComboBoxSelectionChangedBehavior.SelectionChangedCommand="{Binding CountrySelectionChangedCommand}"/>
+                            
                         </Border>
                     </StackPanel>
                     <TextBlock Text="City:" 
@@ -208,8 +226,7 @@
                           Grid.Row="0" 
                           Grid.Column="1"
                           FontSize="13"
-                          GotFocus="DatePicker_GotFocus"
-                          LostFocus="DatePicker_LostFocus"
+                          behaviors:DatePickerBehavior.GotFocusCommand="{Binding DatePickerGotFocusCommand}" behaviors:DatePickerBehavior.LostFocusCommand="{Binding DatePickerLostFocusCommand}"                
                           IsDropDownOpen="{Binding Path=IsDatePickerDropDown}"
                           IsEnabled="{Binding Path = IsEnabledDatePicker}"/>
                         </Border>
@@ -235,8 +252,7 @@
                           ItemsSource="{Binding Path=Hours, UpdateSourceTrigger=PropertyChanged}"
                           Width="100"
                           FontSize="13"
-                          GotFocus="HoursComboBox_GotFocus"
-                          LostFocus="HoursComboBox_LostFocus"
+                          behaviors:ComboBoxBehavior.GotFocusCommand="{Binding HoursComboBoxGotFocusCommand}" behaviors:ComboBoxBehavior.LostFocusCommand="{Binding HoursComboBoxLostFocusCommand}"
                           IsDropDownOpen="{Binding Path=IsHoursComboBoxDropDown}"
                           IsEnabled="{Binding Path = IsEnabledHoursComboBox}"/>
                             </Border>
@@ -246,12 +262,11 @@
                           ItemsSource="{Binding Path=Minutes, UpdateSourceTrigger=PropertyChanged}"
                           Width="100"
                           FontSize="13"                          
-                          GotFocus="MinutesComboBox_GotFocus"
-                          LostFocus="MinutesComboBox_LostFocus"
+                          behaviors:ComboBoxBehavior.GotFocusCommand="{Binding MinutesComboBoxGotFocusCommand}" behaviors:ComboBoxBehavior.LostFocusCommand="{Binding MinutesComboBoxLostFocusCommand}"                
                           IsDropDownOpen="{Binding Path=IsMinutesComboBoxDropDown}"
                           IsEnabled="{Binding Path = IsEnabledMinutesComboBox}"/>
                             </Border>
-                            <Button Content="Add (ENTER)" Height="30" Width="80" FontSize="11" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2"  Click="AddDate_Click"  IsEnabled="{Binding IsEnabledButton}" Margin="20 0 0 0">
+                            <Button Content="Add (ENTER)" Height="30" Width="80" FontSize="11" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2"  Command="{Binding AddDateCommand}"  IsEnabled="{Binding IsEnabledButton}" Margin="20 0 0 0">
                                 <Button.Template>
                                     <ControlTemplate TargetType="Button">
                                         <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -335,12 +350,12 @@
                                VerticalAlignment="Center"/>
                     <StackPanel Orientation="Horizontal"  Grid.Row="0"  Grid.Column="1" HorizontalAlignment="Stretch">
                         <TextBox Text="{Binding Path=CheckpointName, UpdateSourceTrigger=PropertyChanged}"
-                         FontSize="13"
-                         GotFocus="CheckpointTextBox_GotFocus"
-                         LostFocus="CheckpointTextBox_LostFocus"
-                         Width="200"              
+                         FontSize="11"
+                         Width="200"
+                         Height="20"
+                         behaviors:TextBoxBehavior.GotFocusCommand="{Binding CheckpointTextBoxGotFocusCommand}" behaviors:TextBoxBehavior.LostFocusCommand="{Binding CheckpointTextBoxLostFocusCommand}"
                          IsEnabled="{Binding Path = IsEnabledCheckpointNameTextBox}"/>
-                        <Button Content="Add (ENTER)" Height="30" Width="80" FontSize="11" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2"  Click="AddCheckpoint_Click"  IsEnabled="{Binding IsEnabledButton}" Margin="20 0 0 0" HorizontalAlignment="Right">
+                        <Button Content="Add (ENTER)" Height="30" Width="80" FontSize="11" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2"  Command="{Binding AddCheckpointCommand}"  IsEnabled="{Binding IsEnabledButton}" Margin="20 0 0 0" HorizontalAlignment="Right">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -426,11 +441,11 @@
                     <StackPanel Orientation="Horizontal"  Grid.Row="0"  Grid.Column="1">
                         <TextBox Text="{Binding Path=ImageUrl, UpdateSourceTrigger=PropertyChanged}"
                          FontSize="13"
-                         GotFocus="ImageTextBox_GotFocus"
-                         LostFocus="ImageTextBox_LostFocus"
-                                 Width="250"
+                        behaviors:TextBoxBehavior.GotFocusCommand="{Binding ImageTextBoxGotFocusCommand}" behaviors:TextBoxBehavior.LostFocusCommand="{Binding ImageTextBoxLostFocusCommand}"
+                        Width="250"
+                        Height="20"
                          IsEnabled="{Binding Path = IsEnabledImageUrlTextBox}"/>
-                        <Button Content="Add (ENTER)" Height="30" Width="80" FontSize="11" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2"  Click="AddImage_Click"  IsEnabled="{Binding IsEnabledButton}" Margin="20 0 0 0">
+                        <Button Content="Add (ENTER)" Height="30" Width="80" FontSize="11" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" IsEnabled="{Binding IsEnabledButton}" Margin="20 0 0 0" Command="{Binding AddImageUrlCommand}">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -457,7 +472,7 @@
                     </StackPanel>
                     <StackPanel Orientation="Vertical" Grid.Row="1" Grid.ColumnSpan="2">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
-                            <Button Content="&lt;" Height="50" Width="50" FontSize="20" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Left" Click="BackButton_Click" focus:FocusBehavior.IsFocused="{Binding IsLeftButtonFocused}" IsEnabled="{Binding IsEnabledButton}" Margin="0 0 10 0">
+                            <Button Content="&lt;" Height="50" Width="50" FontSize="20" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Left" Command="{Binding PreviousImageCommand}" IsEnabled="{Binding IsEnabledButton}" Margin="0 0 10 0">
                                 <Button.Template>
                                     <ControlTemplate TargetType="Button">
                                         <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -490,7 +505,7 @@
                                     <Image Width="250" Height="200" Stretch="Fill" Source="{Binding ImageSource}"/>
                                 </Border>
                             </StackPanel>
-                            <Button Content=">" Margin="10 0 10 0" Height="50" Width="50" FontSize="20" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Left" Click="NextButton_Click" IsEnabled="{Binding IsEnabledButton}">
+                            <Button Content=">" Margin="10 0 10 0" Height="50" Width="50" FontSize="20" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Left" Command="{Binding NextImageCommand}" IsEnabled="{Binding IsEnabledButton}">
                                 <Button.Template>
                                     <ControlTemplate TargetType="Button">
                                         <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -552,7 +567,7 @@
                     </StackPanel>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" >
-                <Button Content="    Save&#x0a;(CTRL + S)" Width="100" Height="60" Background="#007ACC" Foreground="White" FontSize="15" BorderThickness="0" Padding="5 0" Click="btnCreateTour_Click" Margin="5" IsEnabled="{Binding IsEnabledButton}">
+                    <Button Content="    Save&#x0a;(CTRL + S)" Width="100" Height="60" Background="#007ACC" Foreground="White" FontSize="15" BorderThickness="0" Padding="5 0" Command="{Binding CreateTourCommand}" Margin="5" IsEnabled="{Binding IsEnabledButton}">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -577,29 +592,29 @@
                     </Button.Template>
                 </Button>
 
-                <Button Content=" Cancel&#x0a;  (ESC)" Width="100" Height="60" Background="#007ACC" Foreground="White" FontSize="15" BorderThickness="0" Padding="5 0" Click="CancelButton_Click" Margin="5" IsEnabled="{Binding IsEnabledButton}">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <EventTrigger RoutedEvent="Button.Click">
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </EventTrigger>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="border" Property="Background" Value="#005F8B" />
-                                </Trigger>
-                                <Trigger Property="IsPressed" Value="True">
-                                    <Setter TargetName="border" Property="Background" Value="#00415E" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Button.Template>
+                    <Button Content=" Cancel&#x0a;  (ESC)" Width="100" Height="60" Background="#007ACC" Foreground="White" FontSize="15" BorderThickness="0" Padding="5 0" Command="{Binding CancelCommand}"  Margin="5" IsEnabled="{Binding IsEnabledButton}">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <EventTrigger RoutedEvent="Button.Click">
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="border" Property="Background" Value="#005F8B" />
+                                    </Trigger>
+                                    <Trigger Property="IsPressed" Value="True">
+                                        <Setter TargetName="border" Property="Background" Value="#00415E" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
                     </Button>
                 </StackPanel>
                 

@@ -1,4 +1,5 @@
-﻿using InitialProject.Model;
+﻿using InitialProject.Commands;
+using InitialProject.Model;
 using InitialProject.Model.DTO;
 using InitialProject.Repository;
 using InitialProject.Service;
@@ -9,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Diagnostics.Metrics;
 using System.Globalization;
 using System.Linq;
@@ -28,14 +30,7 @@ namespace InitialProject.ViewModel.Guide
 {
     public class CreateTourViewModel : INotifyPropertyChanged
     {
-        #region Commands
-        public ICommand CancelCommand { get; }
-
-        //private void InitializeCommands() 
-        //{
-        //    CancelCommand = new RelayCommand(CancelCommandExecute);
-        //}
-        #endregion
+        public Window Window { get; set; }
 
         #region MAIN
         private readonly TourService _tourService;
@@ -63,6 +58,7 @@ namespace InitialProject.ViewModel.Guide
 
             InitializeCollections();
             InitializeComboboxes();
+            InitializeRelayCommands();
             Enable();
 
             Request = request;
@@ -764,10 +760,26 @@ namespace InitialProject.ViewModel.Guide
 
             while (true)
             {
-                if (StopDemo) break;
-                await StartTourNameAnimation();
-                if (StopDemo) break;
-                await StartTourDescriptionAnimation();
+
+                string targetText = "Osaka Food and Culture";
+                foreach (char c in targetText)
+                {
+                    if (StopDemo) break;
+                    TourName += c;
+                    await Task.Delay(Duration);
+                }
+
+                targetText = "Explore the unique culture and delicious cuisine of Osaka, known as Japan's \"Kitchen\", with a local guide who will take you to the best hidden food spots and show you the city's historic landmarks.";
+
+                foreach (char c in targetText)
+                {
+                    if (StopDemo) break;
+                    TourDescription += c;
+                    await Task.Delay(Duration);
+                }
+
+                await Task.Delay(Duration * 10);
+
                 if (StopDemo) break;
                 await StartTourLanguageAnimation();
                 if (StopDemo) break;
@@ -855,17 +867,7 @@ namespace InitialProject.ViewModel.Guide
             IsEnabledButton = true;
 
         }
-        private async Task StartTourNameAnimation()
-        {
-            string targetText = "Osaka Food and Culture";
-            foreach (char c in targetText)
-            {
-                TourName += c;
-                await Task.Delay(Duration);
-            }
 
-            await Task.Delay(Duration*10);
-        }
         private async Task StartTourDescriptionAnimation()
         {
             string targetText = "Explore the unique culture and delicious cuisine of Osaka, known as Japan's \"Kitchen\", with a local guide who will take you to the best hidden food spots and show you the city's historic landmarks.";
@@ -1746,6 +1748,249 @@ namespace InitialProject.ViewModel.Guide
         public void SetMostRequestedLanguage()
         {
             TourLanguage = _tourRequestService.GetMostRequestedLanguage();
+        }
+        #endregion
+
+        #region Commands
+        public RelayCommand CancelCommand { get; private set; }
+        public RelayCommand CreateTourCommand { get; private set; }
+        public RelayCommand NextImageCommand { get; private set; }
+        public RelayCommand PreviousImageCommand { get; private set; }
+        public RelayCommand AddDateCommand { get; private set; }
+        public RelayCommand AddCheckpointCommand { get; private set; }
+        public RelayCommand AddImageUrlCommand { get; private set; }
+        public RelayCommand ImageTextBoxGotFocusCommand { get; private set; }
+        public RelayCommand ImageTextBoxLostFocusCommand { get; private set; }
+        public RelayCommand HoursComboBoxGotFocusCommand { get; private set; }
+        public RelayCommand HoursComboBoxLostFocusCommand { get; private set; }
+        public RelayCommand MinutesComboBoxGotFocusCommand { get; private set; }
+        public RelayCommand MinutesComboBoxLostFocusCommand { get; private set; }
+        public RelayCommand CheckpointTextBoxGotFocusCommand { get; private set; }
+        public RelayCommand CheckpointTextBoxLostFocusCommand { get; private set; }
+        public RelayCommand DatePickerGotFocusCommand { get; private set; }
+        public RelayCommand DatePickerLostFocusCommand { get; private set; }
+        public RelayCommand EnterKeyCommand { get; private set; }
+        public RelayCommand DemoCommand { get; private set; }
+        public RelayCommand OnKeyDownCommand { get; private set; }
+        public RelayCommand CreateCommand { get; private set; }
+        public RelayCommand CountryCommand { get; private set; }
+        public RelayCommand CityCommand { get; private set; }
+        public RelayCommand LanguageCommand { get; private set; }
+        public RelayCommand DeleteCommand { get; private set; }
+        public RelayCommand CountrySelectionChangedCommand { get; private set; }
+        public ICommand StopDemoCommand { get; private set; }
+        private void InitializeRelayCommands()
+        {
+            CreateTourCommand = new RelayCommand(CreateTour);
+
+            NextImageCommand = new RelayCommand(NextImage);
+            PreviousImageCommand = new RelayCommand(PreviousImage);
+            AddDateCommand = new RelayCommand(AddDate);
+            AddCheckpointCommand = new RelayCommand(AddCheckpoint);
+            AddImageUrlCommand = new RelayCommand(AddImage);
+
+            ImageTextBoxGotFocusCommand = new RelayCommand(ImageTextBoxGotFocus);
+            ImageTextBoxLostFocusCommand = new RelayCommand(ImageTextBoxLostFocus);
+            HoursComboBoxGotFocusCommand = new RelayCommand(HoursComboBoxGotFocus);
+            HoursComboBoxLostFocusCommand = new RelayCommand(HoursComboBoxLostFocus);
+            MinutesComboBoxGotFocusCommand = new RelayCommand(MinutesComboBoxGotFocus);
+            MinutesComboBoxLostFocusCommand = new RelayCommand(MinutesComboBoxLostFocus);
+            CheckpointTextBoxGotFocusCommand = new RelayCommand(CheckpointTextBoxGotFocus);
+            CheckpointTextBoxLostFocusCommand = new RelayCommand(CheckpointTextBoxLostFocus);
+            DatePickerGotFocusCommand = new RelayCommand(DatePickerGotFocus);
+            DatePickerLostFocusCommand = new RelayCommand(DatePickerLostFocus);
+            CountrySelectionChangedCommand = new RelayCommand(OnCountrySelectionChanged);
+
+            EnterKeyCommand = new RelayCommand(EnterKeyHandler, CanExecute);
+            CancelCommand = new RelayCommand(Cancel, CanExecute);
+            CreateTourCommand = new RelayCommand(Save, CanExecute);
+            DemoCommand = new RelayCommand(StartDemo, CanExecute);
+            CountryCommand = new RelayCommand(SetMostRequestedCountry, CanExecute);
+            CityCommand = new RelayCommand(SetMostRequestedCity, CanExecute);
+            LanguageCommand = new RelayCommand(SetMostRequestedLanguage, CanExecute);
+            DeleteCommand = new RelayCommand(Delete, CanExecute);
+
+
+            StopDemoCommand = new DelegateCommand(StopDemoM);
+
+        }
+        private void OnCountrySelectionChanged(object parameter)
+        {
+            UpdateCityCoboBox();
+        }
+
+        private void StopDemoM(object parameter)
+        {   
+                if (IsDemo)
+                {
+                    StopDemo = true;
+                }
+        }
+        private bool CanExecute(object parameter)
+        {
+            return !IsDemo;
+        }
+        private void StartDemo(object parameter)
+        {
+            if (!IsDemo)
+            {
+                StartDemoAsync();
+            }
+        }
+
+        private void Save(object parameter)
+        {
+            if (!IsDemo)
+            {
+                Save();
+            }
+        }
+
+        private void SetMostRequestedCountry(object parameter)
+        {
+            if (!IsDemo)
+            {
+                SetMostRequestedCountry();
+            }
+        }
+
+        private void SetMostRequestedCity(object parameter)
+        {
+            if (!IsDemo)
+            {
+                SetMostRequestedCity();
+            }
+        }
+
+        private void SetMostRequestedLanguage(object parameter)
+        {
+            if (!IsDemo)
+            {
+                SetMostRequestedLanguage();
+            }
+        }
+
+        private void Delete(object parameter)
+        {
+            if (!IsDemo)
+            {
+                if (SelectedCheckpoint != null)
+                {
+                    RemoveSelectedCheckpoint();
+                }
+                else if (SelectedDateInList != null)
+                {
+                    RemoveSelectedDate();
+                }
+                else
+                {
+                    RemoveSelectedImage();
+                }
+            }
+        }
+
+        private void EnterKeyHandler(object parameter)
+        {
+            if (IsDemo) return;
+
+            if (IsImageTextBoxFocused)
+            {
+                AddImageUrl();
+            }
+
+            if (IsDatePickerFocused || IsHoursComboBoxFocused || IsMinutesComboBoxFocused)
+            {
+                AddDateTime();
+            }
+
+            if (IsCheckpointTextBoxFocused)
+            {
+                AddCheckpoint();
+            }
+        }
+        private void Cancel(object parameter)
+        {
+            Window.Close();
+        }
+        private void CreateTour(object parameter)
+        {
+            Save();
+        }
+        private void NextImage(object parameter)
+        {
+            NextImage();
+        }
+        private void PreviousImage(object parameter)
+        {
+            PreviousImage();
+        }
+        private void AddDate(object parameter)
+        {
+            AddDateTime();
+        }
+        private void AddCheckpoint(object parameter)
+        {
+            AddCheckpoint();
+        }
+        private void AddImage(object parameter)
+        {
+            AddImageUrl();
+        }
+        private void ImageTextBoxGotFocus(object parameter)
+        {
+            IsImageTextBoxFocused = true;
+        }
+
+        private void ImageTextBoxLostFocus(object parameter)
+        {
+            IsImageTextBoxFocused = false;
+        }
+        private void HoursComboBoxGotFocus(object parameter)
+        {
+            IsHoursComboBoxFocused = true;
+        }
+
+        private void HoursComboBoxLostFocus(object parameter)
+        {
+            IsHoursComboBoxFocused = false;
+        }
+
+        private void MinutesComboBoxGotFocus(object parameter)
+        {
+            IsMinutesComboBoxFocused = true;
+        }
+
+        private void MinutesComboBoxLostFocus(object parameter)
+        {
+            IsMinutesComboBoxFocused = false;
+        }
+
+        private void CheckpointTextBoxGotFocus(object parameter)
+        {
+           IsCheckpointTextBoxFocused = true;
+        }
+
+        private void CheckpointTextBoxLostFocus(object parameter)
+        {
+            IsCheckpointTextBoxFocused = false;
+        }
+        private void DatePickerGotFocus(object parameter)
+        {
+            IsDatePickerFocused = true;
+        }
+
+        private void DatePickerLostFocus(object parameter)
+        {
+            IsDatePickerFocused = false;
+        }
+        private void StartDemoAsync(object parameter)
+        {
+            StartDemoAsync();
+        }
+
+        private bool CanStartDemo(object parameter)
+        {
+            return IsDemo;
         }
         #endregion
     }
