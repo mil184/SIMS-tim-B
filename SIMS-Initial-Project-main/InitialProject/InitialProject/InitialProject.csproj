@@ -302,6 +302,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Folder Include="ViewModel\Owner\" />
   </ItemGroup>
 
 </Project>

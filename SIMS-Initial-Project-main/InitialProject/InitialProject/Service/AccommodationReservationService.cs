@@ -263,6 +263,34 @@ namespace InitialProject.Service
             return reservations;
         }
 
+        public List<AccommodationReservation> GetReservationsByGuestId(int guestId)
+        {
+            List<AccommodationReservation> reservations = new List<AccommodationReservation>();
+            foreach (AccommodationReservation reservation in _accommodationReservationRepository.GetAll())
+            {
+                if (reservation.GuestId == guestId)
+                {
+                    reservations.Add(reservation);
+                }
+            }
+            return reservations;
+        }
+
+        public bool HasGuestVisitedLocation(int guestId)
+        {
+            List<AccommodationReservation> reservations = GetReservationsByGuestId(guestId);
+
+            foreach (AccommodationReservation reservation in reservations)
+            {
+                if (reservation.HasGuestPresence)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public AccommodationReservation GetById(int id)
         {
             return _accommodationReservationRepository.GetById(id);

@@ -174,7 +174,7 @@ namespace InitialProject.Service
                 if (request.Status == Resources.Enums.RequestStatus.pending && !request.IsInComplexTour)
                 {
                     bool canBeAdded = true;
-                    foreach (Tour tour in _tourService.GetGuideTours(user))
+                    foreach (Tour tour in _tourService.GetAllUnabortedGuideTours(user))
                     {
                         if (!(request.EndTime <= tour.StartTime || request.StartTime >= tour.StartTime.AddHours(tour.Duration)))
                         {

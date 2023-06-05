@@ -12,6 +12,8 @@ using InitialProject.Resources.Enums;
 using InitialProject.Service;
 using InitialProject.Repository.Interfaces;
 using InitialProject.Resources.Injector;
+using System.Windows.Controls;
+using Xceed.Wpf.Toolkit.Primitives;
 
 namespace InitialProject.View.Guest1
 {
@@ -39,6 +41,11 @@ namespace InitialProject.View.Guest1
         public ObservableCollection<AvailableAccommodationsDTO> AvailableAccommodations { get; set; }
         public AvailableAccommodationsDTO SelectedAvailableAccommodation { get; set; }
 
+        public ObservableCollection<ForumDTO> AllForums { get; set; }
+        public ForumDTO SelectedForum { get; set; }
+        private Button addComment;
+        private Button showComments;
+
         private readonly AccommodationService _accommodationService;
         private readonly AccommodationReservationService _accommodationReservationService;
         private readonly LocationService _locationService;
@@ -48,6 +55,8 @@ namespace InitialProject.View.Guest1
         private readonly RescheduleRequestService _rescheduleRequestService;
         private readonly GuestReviewService _guestReviewService;
         private readonly ReservationCancellationService _reservationCancellationService;
+        private readonly ForumService _forumService;
+        private readonly CommentService _commentService;
 
         private string searchName;
         public string SearchName
@@ -171,6 +180,12 @@ namespace InitialProject.View.Guest1
             _reservationCancellationService = new ReservationCancellationService();
             _reservationCancellationService.Subscribe(this);
 
+            _forumService = new ForumService();
+            _forumService.Subscribe(this);
+
+            _commentService = new CommentService();
+            _commentService.Subscribe(this);
+
             AllAccommodations = new ObservableCollection<Accommodation>(_accommodationService.GetAll());
             PresentableAccommodations = ConvertToDTO(new List<Accommodation>(AllAccommodations));
 
@@ -185,6 +200,11 @@ namespace InitialProject.View.Guest1
             FormGuestRatings();
 
             AvailableAccommodations = new ObservableCollection<AvailableAccommodationsDTO>();
+
+            AllForums = new ObservableCollection<ForumDTO>();
+            FormForums();
+            addComment = new Button();
+            showComments = new Button();
         }
 
         private void ReserveButton_Click(object sender, RoutedEventArgs e)
@@ -302,6 +322,7 @@ namespace InitialProject.View.Guest1
         {
             FormUnratedReservation();
             FormGuestRatings();
+            FormForums();
         }
 
         private void ImagesButton_Click(object sender, RoutedEventArgs e)
@@ -542,7 +563,7 @@ namespace InitialProject.View.Guest1
                 if (messageBoxResult == MessageBoxResult.Yes)
                 {
                     var accommodation = _accommodationService.GetById(SelectedAvailableAccommodation.Id);
-                    var reservation = new AccommodationReservation(LoggedInUser.Id, accommodation.Id, startDatePicker.SelectedDate ?? DateTime.MinValue, endDatePicker.SelectedDate ?? DateTime.MaxValue, int.Parse(numDaysTextBox.Text), int.Parse(maxGuestsTextBox.Text), accommodation.OwnerId, false, accommodation.CancellationPeriod);
+                    var reservation = new AccommodationReservation(LoggedInUser.Id, accommodation.Id, startDatePicker.SelectedDate ?? DateTime.MinValue, endDatePicker.SelectedDate ?? DateTime.MaxValue, int.Parse(numDaysTextBox.Text), int.Parse(maxGuestsTextBox.Text), accommodation.OwnerId, false, accommodation.CancellationPeriod, false);
                     _accommodationReservationService.Save(reservation);
 
                     MessageBox.Show("Reservation created successfully.");
@@ -569,6 +590,73 @@ namespace InitialProject.View.Guest1
 
                 AvailableDates availableDates = new AvailableDates(SelectedAvailableAccommodation, _accommodationService, _accommodationReservationService, numberOfDays, numberOfGuests, LoggedInUser);
                 availableDates.ShowDialog();
+            }
+        }
+
+        private void CreateForum_Click(object sender, RoutedEventArgs e)
+        {
+            CreateForum createForum = new CreateForum(_forumService, _locationService, LoggedInUser);
+            createForum.ShowDialog();
+        }
+
+        public ForumDTO ConvertDTO(Forum forum)
+        {
+            return new ForumDTO(forum.Id, _locationService.GetById(forum.LocationId).Country,
+                     _locationService.GetById(forum.LocationId).City, forum.Comment, _userService.GetById(forum.UserId).Username, forum.IsOpened, forum.IsVeryUseful);
+        }
+        public ObservableCollection<ForumDTO> ConvertDTO(ObservableCollection<Forum> forums)
+        {
+            ObservableCollection<ForumDTO> dto = new ObservableCollection<ForumDTO>();
+            foreach (Forum forum in forums)
+            {
+                dto.Add(ConvertDTO(forum));
+            }
+            return dto;
+        }
+        public void FormForums()
+        {
+            AllForums.Clear();
+            foreach(Forum forum in _forumService.GetAll())
+            {
+                ForumDTO dto = new ForumDTO(forum.Id, _locationService.GetById(forum.LocationId).Country, _locationService.GetById(forum.LocationId).City, forum.Comment, _userService.GetById(forum.UserId).Username, forum.IsOpened, forum.IsVeryUseful) ;
+                AllForums.Add(dto);
+            }
+        }
+
+        private void CloseForum_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedForum != null)
+            {
+                int forumId = SelectedForum.Id;
+                Forum forumToClose = _forumService.GetForumById(forumId);
+                if (forumToClose != null)
+                {
+                    var messageBoxResult = MessageBox.Show($"Are you sure you want to close forum?", "Close Forum Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    if (messageBoxResult == MessageBoxResult.Yes)
+                    {
+                        forumToClose.IsOpened = false;
+                        _forumService.Update(forumToClose);
+                        MessageBox.Show("Forum closed successfully.");
+                    }
+                }
+            }
+        }
+
+        private void AddComment_Click(object sender, RoutedEventArgs e)
+        {
+            if(SelectedForum != null)
+            {
+                ForumComment comment = new ForumComment(SelectedForum, _commentService, LoggedInUser);
+                comment.ShowDialog();
+            }
+        }
+
+        private void ShowComments_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedForum != null)
+            {
+                ShowComments showComment = new ShowComments(SelectedForum, _commentService, LoggedInUser);
+                showComment.ShowDialog();
             }
         }
     }

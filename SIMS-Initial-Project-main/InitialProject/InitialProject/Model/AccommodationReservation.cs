@@ -9,7 +9,6 @@ namespace InitialProject.Model
 {
     public class AccommodationReservation : ISerializable
     {
-
         public int Id { get; set; }
         public int GuestId { get; set; }
         public int AccommodationId { get; set; }
@@ -21,9 +20,10 @@ namespace InitialProject.Model
         public int OwnerId { get; set; }
         public bool IsRated { get; set; }
         public int CancellationPeriod { get; set; }
+        public bool HasGuestPresence { get; set; }
 
         public AccommodationReservation() { }
-        public AccommodationReservation( int guestId, int accommodationId, DateTime startDate, DateTime endDate, int numberDays, int maxGuests, int ownerId, bool isRated, int cancellationPeriod)
+        public AccommodationReservation( int guestId, int accommodationId, DateTime startDate, DateTime endDate, int numberDays, int maxGuests, int ownerId, bool isRated, int cancellationPeriod, bool hasGuestPresence)
         {
             GuestId = guestId;
             AccommodationId = accommodationId;
@@ -35,10 +35,11 @@ namespace InitialProject.Model
             OwnerId = ownerId;
             IsRated = isRated;
             CancellationPeriod = cancellationPeriod;
+            HasGuestPresence = hasGuestPresence;
         }
         public string[] ToCSV()
         {
-            string[] csvValues = { Id.ToString(), GuestId.ToString(), AccommodationId.ToString(), StartDate.ToString(), EndDate.ToString(), NumberDays.ToString(), MaxGuests.ToString(), IsAvailable.ToString(), OwnerId.ToString(), IsRated.ToString(), CancellationPeriod.ToString() };
+            string[] csvValues = { Id.ToString(), GuestId.ToString(), AccommodationId.ToString(), StartDate.ToString(), EndDate.ToString(), NumberDays.ToString(), MaxGuests.ToString(), IsAvailable.ToString(), OwnerId.ToString(), IsRated.ToString(), CancellationPeriod.ToString(), HasGuestPresence.ToString() };
             return csvValues;
         }
 
@@ -55,6 +56,7 @@ namespace InitialProject.Model
             OwnerId = Convert.ToInt32(values[8]);
             IsRated = Convert.ToBoolean(values[9]);
             CancellationPeriod = Convert.ToInt32(values[10]);
+            HasGuestPresence = Convert.ToBoolean(values[11]);
         }
     }
 }

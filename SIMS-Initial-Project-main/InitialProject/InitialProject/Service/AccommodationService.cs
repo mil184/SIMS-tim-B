@@ -200,6 +200,20 @@ namespace InitialProject.Service
             return availableAccommodations;
         }
 
+     /*   public bool HasOwnerAccommodationOnLocation(int ownerId)
+        {
+            List<Accommodation> accommodations = GetByUser(ownerId);
+
+            foreach (Accommodation accommodation in accommodations)
+            {
+                if (accommodation.HasAccommodation)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }*/
+
         public Accommodation GetById(int id)
         {
             return _accommodationRepository.GetById(id);

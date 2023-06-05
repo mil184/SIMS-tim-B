@@ -1,0 +1,51 @@
+﻿<Window x:Class="InitialProject.View.Guest1.CreateForum"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:InitialProject.View.Guest1"
+        mc:Ignorable="d"
+        Title="Create forum" Height="600" Width="600"
+        Background="#e9f1fa"
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Margin="10,20,0,0" Height="90">
+            <TextBlock Text="Country:" Margin="10,0,0,0" Width="100" Height="30" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            <ComboBox x:Name="countryComboBox" ItemsSource="{Binding Path=Countries, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding Path=ForumCountry, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="SelectedCountryChanged" Width="170" Height="30" Margin="10" FontSize="16"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="10,20,0,0" Height="90" Grid.Row="1">
+            <TextBlock Text="City:" Margin="10,0,0,0" Width="100" Height="30" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            <ComboBox x:Name="cityComboBox" ItemsSource="{Binding Path=Cities, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding Path=ForumCity, UpdateSourceTrigger=PropertyChanged}" Width="170" Height="30" Margin="10" FontSize="16"/>
+        </StackPanel>
+        <StackPanel Orientation="Vertical" Grid.Row="2">
+            <Label Margin="10,5,0,0" Content="Comment:" FontSize="16"/>
+            <TextBox x:Name="commentTextBox" Text="{Binding Path=Comment, UpdateSourceTrigger=PropertyChanged}" Width="400" Height="150" Margin="10,10,10,0" FontSize="14" HorizontalAlignment="Left"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="3">
+            <Button x:Name="save" Content="Save" Command="{Binding CreateForumCommand}" Width="120" Height="40" HorizontalAlignment="Center" Margin="150,0,40,0" Background="#97b9de">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="20" Background="{TemplateBinding Background}" BorderThickness="2" BorderBrush="#6d87a3">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <Button x:Name="cancel" Content="Cancel" Command="{Binding CancelCommand}" Width="120" Height="40" HorizontalAlignment="Center" Background="#97b9de">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="20" Background="{TemplateBinding Background}" BorderThickness="2" BorderBrush="#6d87a3">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>

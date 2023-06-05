@@ -610,18 +610,18 @@ namespace InitialProject.View.Guide
                 RequestCityInput = string.Empty;
 
             UpdateSearchParameters();
-            UpdateRequests();
+           // UpdateRequests();
         }
 
         private void Text_Changed(object sender, TextChangedEventArgs e)
         {
             UpdateSearchParameters();
-            UpdateRequests();
+           // UpdateRequests();
         }
         private void Date_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             UpdateSearchParameters();
-            UpdateRequests();
+          //  UpdateRequests();
         }
         private void UpdateSearchParameters()
         {
@@ -639,7 +639,7 @@ namespace InitialProject.View.Guide
             RequestParameters.City = RequestCityInput;
             RequestParameters.Country = RequestCountryInput;
         }
-        private void UpdateRequests()
+     /*   private void UpdateRequests()
         {
 
             PendingRequests.Clear();
@@ -653,7 +653,7 @@ namespace InitialProject.View.Guide
                 PendingRequests.Add(dto);
             }
 
-        }
+        }*/
         private void PendingRequests_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             CreateTourBasedOnRequest();
