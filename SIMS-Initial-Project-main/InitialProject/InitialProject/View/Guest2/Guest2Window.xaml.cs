@@ -1035,7 +1035,7 @@ namespace InitialProject.View.Guest2
 
         private void ComplexWindow(object sender, RoutedEventArgs e)
         {
-            ComplexTourRequestViewModel complexTourRequestViewModel = new ComplexTourRequestViewModel(_userRepository, _locationService, _tourRequestService, _complexTourService, LoggedInUser, app.Lang);
+            ComplexTourRequestViewModel complexTourRequestViewModel = new ComplexTourRequestViewModel(_locationService, _tourRequestService, _complexTourService, LoggedInUser, app.Lang);
             ComplexTourRequest complexTourRequest = new ComplexTourRequest(complexTourRequestViewModel);
             complexTourRequest.Show();
         }

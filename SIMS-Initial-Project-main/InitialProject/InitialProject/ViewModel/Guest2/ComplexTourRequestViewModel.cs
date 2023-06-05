@@ -217,7 +217,7 @@ namespace InitialProject.ViewModel.Guest2
             //
         }
 
-        public ComplexTourRequestViewModel(UserRepository userRepository, LocationService locationService, TourRequestService tourRequestService, ComplexTourService complexTourService, User user, string lang)
+        public ComplexTourRequestViewModel(LocationService locationService, TourRequestService tourRequestService, ComplexTourService complexTourService, User user, string lang)
         {
             _locationService = locationService;
             _locationService.Subscribe(this);
