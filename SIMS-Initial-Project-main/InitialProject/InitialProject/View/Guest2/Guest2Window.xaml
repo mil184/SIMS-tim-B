@@ -7,7 +7,8 @@
         xmlns:local="clr-namespace:InitialProject.View.Guest2"
         mc:Ignorable="d"
         Title="DMJM-Tours" Height="768" Width="1024"
-        Icon ="/Resources/Images/favicon.ico">
+        Icon ="/Resources/Images/favicon.ico"
+        WindowState="Maximized">
 
     <Window.Resources>
         <ControlTemplate x:Key="ValidationErrorTemplate">

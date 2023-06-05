@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Image = System.Windows.Controls.Image;
 
@@ -53,18 +54,26 @@ namespace InitialProject.View.Guest2
             }
 
             imageIndex = 0;
-
             Image image = new Image();
             var fullFilePath = imageUrls[imageIndex];
+            try
+            {
 
-            BitmapImage bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.UriSource = new Uri(fullFilePath, UriKind.Absolute);
-            bitmap.EndInit();
+                BitmapImage bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.UriSource = new Uri(fullFilePath, UriKind.Absolute);
+                bitmap.EndInit();
 
-            image.Source = bitmap;
-            picHolder.Source = image.Source;
+                image.Source = bitmap;
+                picHolder.Source = image.Source;
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception by setting the Source to a default image
+                BitmapImage defaultImage = new BitmapImage(new Uri("/Resources/Images/image_unavailable.png", UriKind.Relative));
+                image.Source = defaultImage;
 
+            }
             app = (App)Application.Current;
             app.ChangeLanguage(SRB);
             LanguageButtonClickCount = 0;
@@ -104,13 +113,24 @@ namespace InitialProject.View.Guest2
             var image = new Image();
             var fullFilePath = imageUrls[imageIndex];
 
-            BitmapImage bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.UriSource = new Uri(fullFilePath, UriKind.Absolute);
-            bitmap.EndInit();
+            try
+            {
 
-            image.Source = bitmap;
-            picHolder.Source = image.Source;
+                BitmapImage bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.UriSource = new Uri(fullFilePath, UriKind.Absolute);
+                bitmap.EndInit();
+
+                image.Source = bitmap;
+                picHolder.Source = image.Source;
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception by setting the Source to a default image
+                BitmapImage defaultImage = new BitmapImage(new Uri("/Resources/Images/image_unavailable.png", UriKind.Relative));
+                image.Source = defaultImage;
+
+            }
         }
 
         private void PreviousButton_Click(object sender, RoutedEventArgs e)
@@ -125,13 +145,24 @@ namespace InitialProject.View.Guest2
             var image = new Image();
             var fullFilePath = imageUrls[imageIndex];
 
-            BitmapImage bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.UriSource = new Uri(fullFilePath, UriKind.Absolute);
-            bitmap.EndInit();
+            try
+            {
 
-            image.Source = bitmap;
-            picHolder.Source = image.Source;
+                BitmapImage bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.UriSource = new Uri(fullFilePath, UriKind.Absolute);
+                bitmap.EndInit();
+
+                image.Source = bitmap;
+                picHolder.Source = image.Source;
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception by setting the Source to a default image
+                BitmapImage defaultImage = new BitmapImage(new Uri("/Resources/Images/image_unavailable.png", UriKind.Relative));
+                image.Source = defaultImage;
+
+            }
         }
 
         #endregion
