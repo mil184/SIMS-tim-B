@@ -14,6 +14,7 @@ using InitialProject.Repository.Interfaces;
 using InitialProject.Resources.Injector;
 using System.Windows.Controls;
 using Xceed.Wpf.Toolkit.Primitives;
+using InitialProject.Repository;
 
 namespace InitialProject.View.Guest1
 {
@@ -285,20 +286,39 @@ namespace InitialProject.View.Guest1
             ObservableCollection<GuestAccommodationDTO> dto = new ObservableCollection<GuestAccommodationDTO>();
             foreach (Accommodation accommodation in accommodations)
             {
+                string imageUrl = GetImageUrlForAccommodation(accommodation);
                 dto.Add(new GuestAccommodationDTO(accommodation.Id, accommodation.Name,
                     _locationService.GetById(accommodation.LocationId).Country,
                      _locationService.GetById(accommodation.LocationId).City,
-                     accommodation.Type, accommodation.MaxGuests, accommodation.MinReservationDays, accommodation.CancellationPeriod, accommodation.OwnerId));
+                     accommodation.Type, accommodation.MaxGuests, accommodation.MinReservationDays, accommodation.CancellationPeriod, accommodation.OwnerId, imageUrl));
             }
             return dto;
         }
         public GuestAccommodationDTO ConvertToDTO(Accommodation accommodation)
         {
+            string imageUrl = GetImageUrlForAccommodation(accommodation);
             return new GuestAccommodationDTO(accommodation.Id, accommodation.Name,
                    _locationService.GetById(accommodation.LocationId).Country,
                    _locationService.GetById(accommodation.LocationId).City,
-                   accommodation.Type, accommodation.MaxGuests, accommodation.MinReservationDays, accommodation.CancellationPeriod, accommodation.OwnerId);
+                   accommodation.Type, accommodation.MaxGuests, accommodation.MinReservationDays, accommodation.CancellationPeriod, accommodation.OwnerId, imageUrl);
 
+        }
+
+        private string GetImageUrlForAccommodation(Accommodation accommodation)
+        {
+            var images = _imageRepository.GetAll();
+
+            if (accommodation.ImageIds.Count > 0)
+            {
+                var firstImageId = accommodation.ImageIds[0];
+                var image = images.FirstOrDefault(i => i.Id == firstImageId);
+                if (image != null)
+                {
+                    return image.Url;
+                }
+            }
+
+            return null;
         }
 
         public AccommodationRatingsDTO ConvertToDTO(AccommodationReservation reservation)

@@ -29,15 +29,15 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Border BorderThickness="2" BorderBrush="#abc4e0" Height="70" Width="300" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" CornerRadius="10">
+        <Border BorderThickness="2" BorderBrush="#1a21f0" Height="70" Width="380" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" CornerRadius="10">
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal" Margin="5">
-                    <TextBlock Text="Accommodation name: " FontSize="14" FontStyle="Italic"/>
-                    <TextBlock Text="{Binding SelectedUnratedAccommodation.AccommodationName}" FontSize="14" FontStyle="Italic"/>
+                    <TextBlock Text="Accommodation name: " FontSize="15" FontWeight="Bold" FontStyle="Italic"/>
+                    <TextBlock Text="{Binding SelectedUnratedAccommodation.AccommodationName}" FontSize="15" FontWeight="Bold" FontStyle="Italic"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="5">
-                    <TextBlock Text="Owner: " FontSize="14" FontStyle="Italic"/>
-                    <TextBlock Text="{Binding SelectedUnratedAccommodation.UserName}" FontSize="14" FontStyle="Italic"/>
+                    <TextBlock Text="Owner: " FontSize="15" FontWeight="Bold" FontStyle="Italic"/>
+                    <TextBlock Text="{Binding SelectedUnratedAccommodation.UserName}" FontSize="15" FontWeight="Bold" FontStyle="Italic"/>
                 </StackPanel>
             </StackPanel>
         </Border>
@@ -81,10 +81,10 @@
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="4">
-            <Button Content="Recommendation for renovation" Command="{Binding RecommendRenovationCommand}" Height="40" Width="280" Margin="10" FontSize="16" Background="#97b9de">
+            <Button Content="Recommendation for renovation" Command="{Binding RecommendRenovationCommand}" Height="40" Width="280" Margin="10" FontSize="16" FontWeight="Medium" Background="#97b9de">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="20" Background="{TemplateBinding Background}" BorderThickness="2" BorderBrush="#6d87a3">
+                        <Border CornerRadius="20" Background="{TemplateBinding Background}" BorderThickness="2" BorderBrush="#0578f5">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
@@ -93,19 +93,19 @@
         </StackPanel>
         
         <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="4" Grid.Column="1">
-            <Button Content="Save" Command="{Binding SaveEvaluateCommand}" Height="40" Width="110" Margin="10" FontSize="16" Background="#97b9de">
+            <Button Content="Save" Command="{Binding SaveEvaluateCommand}" Height="40" Width="110" Margin="10" FontSize="16" FontWeight="Medium" Background="#97b9de">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="20" Background="{TemplateBinding Background}" BorderThickness="2" BorderBrush="#6d87a3">
+                        <Border CornerRadius="20" Background="{TemplateBinding Background}" BorderThickness="2" BorderBrush="#0578f5">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
                 </Button.Template>
             </Button>
-            <Button Content="Cancel" Command="{Binding CancelEvaluateCommand}" Height="40" Width="110" FontSize="16" Margin="30,10,10,10" Background="#97b9de">
+            <Button Content="Cancel" Command="{Binding CancelEvaluateCommand}" Height="40" Width="110" FontSize="16" FontWeight="Medium" Margin="30,10,10,10" Background="#97b9de">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="20" Background="{TemplateBinding Background}" BorderThickness="2" BorderBrush="#6d87a3">
+                        <Border CornerRadius="20" Background="{TemplateBinding Background}" BorderThickness="2" BorderBrush="#0578f5">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>

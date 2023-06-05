@@ -28,19 +28,19 @@
             <TextBox x:Name="commentTextBox" Text="{Binding Path=Comment, UpdateSourceTrigger=PropertyChanged}" Width="400" Height="150" Margin="10,10,10,0" FontSize="14" HorizontalAlignment="Left"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="3">
-            <Button x:Name="save" Content="Save" Command="{Binding CreateForumCommand}" Width="120" Height="40" HorizontalAlignment="Center" Margin="150,0,40,0" Background="#97b9de">
+            <Button x:Name="save" Content="Save" Command="{Binding CreateForumCommand}" Width="120" Height="40" HorizontalAlignment="Center" Margin="150,0,40,0" FontSize="16" FontWeight="Medium" Background="#97b9de">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="20" Background="{TemplateBinding Background}" BorderThickness="2" BorderBrush="#6d87a3">
+                        <Border CornerRadius="20" Background="{TemplateBinding Background}" BorderThickness="2" BorderBrush="#0578f5">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
                 </Button.Template>
             </Button>
-            <Button x:Name="cancel" Content="Cancel" Command="{Binding CancelCommand}" Width="120" Height="40" HorizontalAlignment="Center" Background="#97b9de">
+            <Button x:Name="cancel" Content="Cancel" Command="{Binding CancelCommand}" Width="120" Height="40" HorizontalAlignment="Center" FontSize="16" FontWeight="Medium" Background="#97b9de">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="20" Background="{TemplateBinding Background}" BorderThickness="2" BorderBrush="#6d87a3">
+                        <Border CornerRadius="20" Background="{TemplateBinding Background}" BorderThickness="2" BorderBrush="#0578f5">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>

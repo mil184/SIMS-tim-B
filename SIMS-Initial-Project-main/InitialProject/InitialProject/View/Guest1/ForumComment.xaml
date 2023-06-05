@@ -14,15 +14,15 @@
             <RowDefinition Height="2*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Border BorderThickness="2" BorderBrush="#abc4e0" Height="70" Width="300" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" CornerRadius="10">
+        <Border BorderThickness="2" BorderBrush="#1a21f0" Height="70" Width="300" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" CornerRadius="10">
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal" Margin="5">
-                    <TextBlock Text="Country: " FontSize="14" FontStyle="Italic"/>
-                    <TextBlock Text="{Binding SelectedForum.Country}" FontSize="14" FontStyle="Italic"/>
+                    <TextBlock Text="Country: " FontSize="15" FontWeight="Bold" FontStyle="Italic"/>
+                    <TextBlock Text="{Binding SelectedForum.Country}" FontSize="15" FontWeight="Bold" FontStyle="Italic"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="5">
-                    <TextBlock Text="City: " FontSize="14" FontStyle="Italic"/>
-                    <TextBlock Text="{Binding SelectedForum.City}" FontSize="14" FontStyle="Italic"/>
+                    <TextBlock Text="City: " FontSize="15" FontWeight="Bold" FontStyle="Italic"/>
+                    <TextBlock Text="{Binding SelectedForum.City}" FontSize="15" FontWeight="Bold" FontStyle="Italic"/>
                 </StackPanel>
             </StackPanel>
         </Border>
@@ -33,19 +33,19 @@
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Grid.Row="2">
-            <Button x:Name="add" Content="Add" Command="{Binding AddCommentCommand}" Width="120" Height="40" HorizontalAlignment="Center" Margin="100,0,40,0" Background="#97b9de">
+            <Button x:Name="add" Content="Add" Command="{Binding AddCommentCommand}" Width="120" Height="40" HorizontalAlignment="Center" Margin="100,0,40,0" FontSize="16" FontWeight="Medium" Background="#97b9de">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="20" Background="{TemplateBinding Background}" BorderThickness="2" BorderBrush="#6d87a3">
+                        <Border CornerRadius="20" Background="{TemplateBinding Background}" BorderThickness="2" BorderBrush="#0578f5">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
                 </Button.Template>
             </Button>
-            <Button x:Name="cancel" Content="Cancel" Command="{Binding CancelCommentCommand}" Width="120" Height="40" HorizontalAlignment="Center" Background="#97b9de">
+            <Button x:Name="cancel" Content="Cancel" Command="{Binding CancelCommentCommand}" Width="120" Height="40" HorizontalAlignment="Center" FontSize="16" FontWeight="Medium" Background="#97b9de">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="20" Background="{TemplateBinding Background}" BorderThickness="2" BorderBrush="#6d87a3">
+                        <Border CornerRadius="20" Background="{TemplateBinding Background}" BorderThickness="2" BorderBrush="#0578f5">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>

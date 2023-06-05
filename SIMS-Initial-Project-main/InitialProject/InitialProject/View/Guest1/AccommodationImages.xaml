@@ -23,22 +23,22 @@
 
         <Image Name="picHolder" Grid.Column="1" Grid.Row="1" Stretch="Uniform"/>
 
-        <Button Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left" Width="100" Height="40" Click="backButton_Click" Margin="90,0,0,0" Background="White">
+        <Button Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left" Width="120" Height="40" Click="backButton_Click" Margin="90,0,0,0" Background="White">
             <Image Source="/Resources/Images/leftArrow.png"/>
             <Button.Template>
                 <ControlTemplate TargetType="Button">
-                    <Border CornerRadius="20" Background="{TemplateBinding Background}" BorderBrush="#abc4e0" BorderThickness="2">
+                    <Border CornerRadius="20" Background="{TemplateBinding Background}" BorderBrush="#0578f5" BorderThickness="2">
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                 </ControlTemplate>
             </Button.Template>
         </Button>
 
-        <Button Grid.Column="1" Grid.Row="2" HorizontalAlignment="Right" Width="100" Height="40" Click="nextButton_Click_1" Margin="0,0,90,0" Background="White">
+        <Button Grid.Column="1" Grid.Row="2" HorizontalAlignment="Right" Width="120" Height="40" Click="nextButton_Click_1" Margin="0,0,90,0" Background="White">
             <Image Source="/Resources/Images/rightArrow.png" />
             <Button.Template>
                 <ControlTemplate TargetType="Button">
-                    <Border CornerRadius="20" Background="{TemplateBinding Background}" BorderBrush="#abc4e0" BorderThickness="2">
+                    <Border CornerRadius="20" Background="{TemplateBinding Background}" BorderBrush="#0578f5" BorderThickness="2">
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                 </ControlTemplate>

@@ -17,19 +17,19 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Border BorderThickness="2" BorderBrush="#abc4e0" Height="105" Width="300" HorizontalAlignment="Left" Margin="10" CornerRadius="10">
+        <Border BorderThickness="2" BorderBrush="#1a21f0" Height="105" Width="300" HorizontalAlignment="Left" Margin="10" CornerRadius="10">
            <StackPanel Orientation="Vertical" >
               <StackPanel Orientation="Horizontal" Margin="5">
-                 <TextBlock Text="Accommodation id: " FontSize="17" FontStyle="Italic"/>
-                 <TextBlock Text="{Binding SelectedReservation.AccommodationId}" FontSize="17" FontStyle="Italic"/>
+                 <TextBlock Text="Accommodation id: " FontSize="15" FontWeight="Bold" FontStyle="Italic"/>
+                 <TextBlock Text="{Binding SelectedReservation.AccommodationId}" FontSize="15" FontWeight="Bold" FontStyle="Italic"/>
               </StackPanel>
               <StackPanel Orientation="Horizontal" Margin="5">
-                 <TextBlock Text="Start date: " FontSize="17" FontStyle="Italic"/>
-                    <TextBlock Text="{Binding SelectedReservation.StartDate, StringFormat={}{0:dd.MM.yyyy} }" FontSize="17" FontStyle="Italic"/>
+                 <TextBlock Text="Start date: " FontSize="15" FontWeight="Bold" FontStyle="Italic"/>
+                 <TextBlock Text="{Binding SelectedReservation.StartDate, StringFormat={}{0:dd.MM.yyyy} }" FontSize="15" FontWeight="Bold" FontStyle="Italic"/>
               </StackPanel>
               <StackPanel Orientation="Horizontal" Margin="5">
-                 <TextBlock Text="End date: " FontSize="17" FontStyle="Italic" />
-                    <TextBlock Text="{Binding SelectedReservation.EndDate, StringFormat={}{0:dd.MM.yyyy}}" FontSize="17" FontStyle="Italic"/>
+                  <TextBlock Text="End date: " FontSize="15" FontWeight="Bold" FontStyle="Italic" />
+                  <TextBlock Text="{Binding SelectedReservation.EndDate, StringFormat={}{0:dd.MM.yyyy}}" FontSize="15" FontWeight="Bold" FontStyle="Italic"/>
               </StackPanel>
            </StackPanel>
         </Border>
@@ -45,19 +45,19 @@
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Margin="0,90,0,0" Grid.Row="3">
-            <Button x:Name="send" Content="Send" Command="{Binding SendRequestCommand}" Width="110" Height="40" HorizontalAlignment="Center" Margin="140,0,40,0" Background="#97b9de">
+            <Button x:Name="send" Content="Send" Command="{Binding SendRequestCommand}" Width="120" Height="40" HorizontalAlignment="Center" Margin="120,0,40,0" FontSize="16" FontWeight="Medium" Background="#97b9de">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="20" Background="{TemplateBinding Background}" BorderThickness="2" BorderBrush="#6d87a3">
+                        <Border CornerRadius="20" Background="{TemplateBinding Background}" BorderThickness="2" BorderBrush="#0578f5">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
                 </Button.Template>
             </Button>
-            <Button x:Name="cancel" Content="Cancel" Command="{Binding CancelRequestCommand}" Width="110" Height="40" HorizontalAlignment="Center" Background="#97b9de">
+            <Button x:Name="cancel" Content="Cancel" Command="{Binding CancelRequestCommand}" Width="120" Height="40" HorizontalAlignment="Center" FontSize="16" FontWeight="Medium" Background="#97b9de">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="20" Background="{TemplateBinding Background}" BorderThickness="2" BorderBrush="#6d87a3">
+                        <Border CornerRadius="20" Background="{TemplateBinding Background}" BorderThickness="2" BorderBrush="#0578f5">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
