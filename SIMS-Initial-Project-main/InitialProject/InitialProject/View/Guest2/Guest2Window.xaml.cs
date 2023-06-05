@@ -52,6 +52,8 @@ namespace InitialProject.View.Guest2
         public int AcceptedToursCount { get; set; }
         public int DeniedToursCount { get; set; }
 
+        public ObservableCollection<ComplexTourRequestDTO> ComplexTourDTOs { get; set; }
+
         private readonly TourService _tourService;
         private readonly LocationService _locationService;
         private readonly ImageRepository _imageRepository;
@@ -61,6 +63,7 @@ namespace InitialProject.View.Guest2
         private readonly TourRatingService _tourRatingService;
         private readonly VoucherService _voucherService;
         private readonly TourRequestService _tourRequestService;
+        private readonly ComplexTourService _complexTourService;
 
         #region Properties
 
@@ -199,6 +202,9 @@ namespace InitialProject.View.Guest2
             _tourRequestService = new TourRequestService();
             _tourRequestService.Subscribe(this);
 
+            _complexTourService = new ComplexTourService();
+            _complexTourService.Subscribe(this);
+
             Tours = new ObservableCollection<Tour>(_tourService.GetReservableTours());
             TourDTOs = ConvertToDTO(new List<Tour>(Tours));
 
@@ -209,6 +215,7 @@ namespace InitialProject.View.Guest2
             TourRequests = new ObservableCollection<TourRequest>(_tourRequestService.GetGuestRequests(LoggedInUser));
             TourRequestsForYear = new ObservableCollection<TourRequest>();
             TourRequestDTOs = new ObservableCollection<Guest2TourRequestDTO>(TourRequestDTOConverter.ConvertToDTOList(_tourRequestService.GetGuestRequests(LoggedInUser)));
+            ComplexTourDTOs = new ObservableCollection<ComplexTourRequestDTO>(ComplexTourRequestDTOConverter.ConvertToDTOList(_complexTourService.GetAll(), _locationService, _tourRequestService));
 
             CheckedTours = new List<Tour>();
             foreach (int id in _tourReservationService.GetCheckedTourIds(LoggedInUser))
@@ -249,6 +256,8 @@ namespace InitialProject.View.Guest2
 
             AlterVoucherSectionVisibility();
             AlterTourTrackingVisibility();
+
+            
         }
 
         private void NotifyAcceptedLanguages()
@@ -337,6 +346,10 @@ namespace InitialProject.View.Guest2
 
             TourRequestYears.Clear();
             FormTourRequestYears();
+
+            
+            ComplexTourDTOs.Clear();
+            FormComplexTourRequestDTOs();
         }
 
         public void NotifyOnAcceptedRequest()
@@ -730,6 +743,14 @@ namespace InitialProject.View.Guest2
             }
         }
 
+        public void FormComplexTourRequestDTOs()
+        {
+            foreach(var complexTour in _complexTourService.GetAll())
+            {
+                ComplexTourDTOs.Add(ComplexTourRequestDTOConverter.ConvertToDTO(complexTour, _locationService, _tourRequestService));
+            }
+        }
+
         private void YearStatisticSelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             List<TourRequest> tourRequestsForYear = _tourRequestService.GetByYear(LoggedInUser, SelectedStatisticYear);
@@ -935,6 +956,16 @@ namespace InitialProject.View.Guest2
 
         #region Information popups
 
+        private void ComplexTours_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            ComplexToursPopup.IsOpen = true;
+        }
+
+        private void ComplexTours_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            ComplexToursPopup.IsOpen = false;
+        }
+
         private void FiltrationImage_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
             FiltrationPopup.IsOpen = true;
@@ -1002,5 +1033,11 @@ namespace InitialProject.View.Guest2
 
         }
 
+        private void ComplexWindow(object sender, RoutedEventArgs e)
+        {
+            ComplexTourRequestViewModel complexTourRequestViewModel = new ComplexTourRequestViewModel(_userRepository, _locationService, _tourRequestService, _complexTourService, LoggedInUser, app.Lang);
+            ComplexTourRequest complexTourRequest = new ComplexTourRequest(complexTourRequestViewModel);
+            complexTourRequest.Show();
+        }
     }
 }

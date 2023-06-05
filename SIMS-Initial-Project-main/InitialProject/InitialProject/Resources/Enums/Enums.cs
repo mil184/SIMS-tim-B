@@ -30,4 +30,11 @@
         invalid,
         accepted
     }
+
+    public enum ComplexTourStatus
+    {
+        pending,
+        invalid,
+        accepted
+    }
 }

@@ -18,10 +18,13 @@ using MenuNavigation.Commands;
 
 namespace InitialProject.ViewModel.Guest2
 {
-    public class RequestTourViewModel : INotifyPropertyChanged, IObserver
+    public class ComplexTourRequestViewModel : INotifyPropertyChanged, IObserver
     {
         public Action CloseAction { get; set; }
         public User LoggedInUser { get; set; }
+
+        public ComplexTour ComplexTour { get; set; }
+        public ObservableCollection<Location> TourRequestLocations { get; set; }
 
         public ObservableCollection<String> cbCountryItemsSource { get; set; }
         public ObservableCollection<String> cbCityItemsSource { get; set; }
@@ -33,7 +36,13 @@ namespace InitialProject.ViewModel.Guest2
 
         private readonly LocationService _locationService;
         private readonly TourRequestService _tourRequestService;
-        private readonly UserService _userService;
+        private readonly ComplexTourService _complexTourService;
+
+        public RelayCommand SubmitRequestCommand { get; set; }
+        public RelayCommand SubmitComplexTourRequestCommand { get; set; }
+        public RelayCommand ExitCommand { get; set; }
+        public RelayCommand ChangeLanguageCommand { get; set; }
+        public RelayCommand CountrySelectionChangedCommand { get; set; }
 
         #region Properties
 
@@ -196,16 +205,6 @@ namespace InitialProject.ViewModel.Guest2
 
         #endregion
 
-        public RelayCommand SubmitRequestCommand { get; set; }
-        public RelayCommand ExitCommand { get; set; }
-        public RelayCommand ChangeLanguageCommand { get; set; }
-        public RelayCommand CountrySelectionChangedCommand { get; set; }
-
-        public int LanguageButtonClickCount { get; set; }
-        private App app;
-        private const string SRB = "sr-Latn-RS";
-        private const string ENG = "en-US";
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -213,12 +212,21 @@ namespace InitialProject.ViewModel.Guest2
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public RequestTourViewModel(UserService userService, LocationService locationService, TourRequestService tourRequestService, User user, string lang)
+        public void Update()
         {
-            _userService = userService;
+            //
+        }
+
+        public ComplexTourRequestViewModel(UserRepository userRepository, LocationService locationService, TourRequestService tourRequestService, ComplexTourService complexTourService, User user, string lang)
+        {
             _locationService = locationService;
+            _locationService.Subscribe(this);
+
             _tourRequestService = tourRequestService;
             _tourRequestService.Subscribe(this);
+
+            _complexTourService = complexTourService;
+            _complexTourService.Subscribe(this);
 
             cbCountryItemsSource = new ObservableCollection<string>();
             cbCityItemsSource = new ObservableCollection<string>();
@@ -227,17 +235,68 @@ namespace InitialProject.ViewModel.Guest2
             StartDate = DateTime.Now;
             EndDate = DateTime.Now;
 
+            ComplexTour = new ComplexTour();
+            TourRequestLocations = new ObservableCollection<Location>();
+
             InitializeCountryDropdown();
             InitializeTimeComboBoxes();
 
             SubmitRequestCommand = new RelayCommand(Execute_SubmitRequestCommand);
+            SubmitComplexTourRequestCommand = new RelayCommand(Execute_SubmitComplexTourRequestCommand);
             ExitCommand = new RelayCommand(Execute_ExitCommand);
-            ChangeLanguageCommand = new RelayCommand(Execute_ChangeLanguageCommand);
-            CountrySelectionChangedCommand = new RelayCommand(Execute_CountrySelectionChangedCommand);
+            //ChangeLanguageCommand = new RelayCommand(Execute_ChangeLanguageCommand);
+            CountrySelectionChangedCommand = new RelayCommand(Execute_CountrySelectionChangedCommand);  
+        }
 
-            app = (App)Application.Current;
-            app.ChangeLanguage(lang);
-            InitializeLanguageButton(lang);
+        private void Execute_SubmitComplexTourRequestCommand(object obj)
+        {
+            _complexTourService.Save(ComplexTour);
+            MessageBox.Show("Successfully submitted a complex tour!");
+            CloseAction();
+        }
+
+
+        private void Execute_SubmitRequestCommand(object obj)
+        {
+            CreateTourRequest();
+            ClearPropertyInputs();
+        }
+
+        private void CreateTourRequest()
+        {
+            Location tourLocation = _locationService.GetLocation(Country, City);
+            TourRequest tourRequest = new TourRequest(
+                tourLocation.Id,
+                Description,
+                Language,
+                int.Parse(MaxGuests),
+                StartDateTime,
+                EndDateTime,
+                LoggedInUser.Id,
+                true
+                );
+
+            TourRequest savedRequest = _tourRequestService.Save(tourRequest);
+
+            ComplexTour.AvailableTourRequestIds.Add(savedRequest.Id);
+
+            TourRequestLocations.Add(tourLocation);
+
+            MessageBox.Show("Successfully submitted a tour!");
+        }
+
+        private void ClearPropertyInputs()
+        {
+            Description = "";
+            Language = "";
+            MaxGuests = "";
+            Country = null;
+            City = null;
+        }
+
+        private void Execute_ExitCommand(object obj)
+        {
+            CloseAction();
         }
 
         private void InitializeTimeComboBoxes()
@@ -246,7 +305,7 @@ namespace InitialProject.ViewModel.Guest2
             StartMinutes = new ObservableCollection<string>();
             EndHours = new ObservableCollection<string>();
             EndMinutes = new ObservableCollection<string>();
-            
+
             for (int i = 0; i < 24; i++)
             {
                 string hour = i.ToString("D2");
@@ -269,67 +328,15 @@ namespace InitialProject.ViewModel.Guest2
             }
         }
 
-        private void InitializeLanguageButton(string lang)
-        {
-            if (lang == SRB)
-            {
-                LanguageButtonClickCount = 0;
-                return;
-            }
-
-            LanguageButtonClickCount = 1;
-        }
-
-        private void Execute_SubmitRequestCommand(object obj)
-        {
-            CreateTourRequest();
-            CloseAction();
-        }
-
-        private void Execute_ChangeLanguageCommand(object obj)
-        {
-            LanguageButtonClickCount++;
-
-            if (LanguageButtonClickCount % 2 == 1)
-            {
-                app.ChangeLanguage(ENG);
-                return;
-            }
-
-            app.ChangeLanguage(SRB);
-        }
-
-        private void Execute_ExitCommand(object obj)
-        {
-            CloseAction();
-        }
-
-        private void CreateTourRequest()
-        {
-            Location tourLocation = _locationService.GetLocation(Country, City);
-
-            TourRequest tourRequest = new TourRequest(
-                tourLocation.Id,
-                Description,
-                Language,
-                int.Parse(MaxGuests),
-                StartDateTime,
-                EndDateTime,
-                LoggedInUser.Id,
-                false
-                ) ;
-
-            _tourRequestService.Save(tourRequest);
-        }
-
-        public void Update()
-        {
-            //
-        }
-
         private void InitializeCountryDropdown()
         {
             cbCountryItemsSource = new ObservableCollection<String>(_locationService.GetCountries().OrderBy(c => c));
+        }
+
+        public void InitializeCityDropdown()
+        {
+            ClearCityItems();
+            LoadCitiesForSelectedCountry();
         }
 
         private void Execute_CountrySelectionChangedCommand(object obj)
@@ -337,17 +344,19 @@ namespace InitialProject.ViewModel.Guest2
             InitializeCityDropdown();
         }
 
-        public void InitializeCityDropdown()
-         {         
-            ClearCityItems();
-            LoadCitiesForSelectedCountry();     
-         }
-
         public void ClearCityItems()
         {
             if (cbCityItemsSource != null)
             {
                 cbCityItemsSource.Clear();
+            }
+        }
+
+        public void ClearCountryItems()
+        {
+            if (cbCountryItemsSource != null)
+            {
+                cbCountryItemsSource.Clear();
             }
         }
 

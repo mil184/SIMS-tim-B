@@ -264,7 +264,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ViewModel\Guest2\" />
     <Folder Include="ViewModel\Guest1\" />
   </ItemGroup>
 

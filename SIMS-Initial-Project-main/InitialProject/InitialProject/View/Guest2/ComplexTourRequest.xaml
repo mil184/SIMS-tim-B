@@ -1,0 +1,188 @@
+﻿<Window x:Class="InitialProject.View.Guest2.ComplexTourRequest"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:ns="clr-namespace:InitialProject.Localization"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:local="clr-namespace:InitialProject.View.Guest2"
+        mc:Ignorable="d"
+        Title="DMJM-Tours" Icon ="/Resources/Images/favicon.ico"
+        Height="768" Width="1024">
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="70" />
+        </Grid.RowDefinitions>
+
+        <Grid Background="White" Grid.Row="0">
+            
+            <Border BorderBrush="#DDDDDD" BorderThickness="2" Margin="3">
+                <Grid Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="7*"/>
+                        <ColumnDefinition Width="3*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Resources/Images/favicon.ico" Margin="10" HorizontalAlignment="Left"/>
+                        <TextBlock FontSize="60" FontFamily="Bernard MT" FontWeight="Bold" VerticalAlignment="Center">
+                            DMJM Tours
+                        </TextBlock>
+                    </StackPanel>
+
+
+
+                    <!--<StackPanel Grid.Column="1" Margin="10">
+                        <Button FontSize="18" Margin="0,0,0,5" Height="35" HorizontalAlignment="Stretch">
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/Resources/Images/theme.png" Margin="0"/>
+                                    <TextBlock Text="{ns:Loc Theme}"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+
+                        <Button FontSize="18" Height="35" HorizontalAlignment="Stretch" Command="{Binding ChangeLanguageCommand}">
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/Resources/Images/language.png" Width="Auto" Margin="5"/>
+                                    <TextBlock Text="{ns:Loc LanguageBtn}"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>-->
+                    <!--</StackPanel>-->
+                </Grid>
+            </Border>
+        </Grid>
+
+
+        <Grid Grid.Row="1">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="600"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0">
+                <GroupBox Margin="10">
+                    <GroupBox.Header>
+                        <Label Content="Request a tour"
+                            FontSize="25" FontWeight="Bold" />
+                    </GroupBox.Header>
+
+                    <Grid>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+
+                        <Label Grid.Row="0" Grid.Column="0" FontSize="20" FontWeight="Bold" Height="40" Margin="5" Content="Country: "/>
+                        <Label Grid.Row="1" Grid.Column="0" FontSize="20" FontWeight="Bold" Height="40" Margin="5" Content="City: "/>
+                        <Label Grid.Row="2" Grid.Column="0" FontSize="20" FontWeight="Bold" Height="40" Margin="5" Content="Description: "/>
+                        <Label Grid.Row="3" Grid.Column="0" FontSize="20" FontWeight="Bold" Height="40" Margin="5" Content="Language: "/>
+                        <Label Grid.Row="4" Grid.Column="0" FontSize="20" FontWeight="Bold" Height="40" Margin="5" Content="Max Guests: "/>
+                        <Label Grid.Row="5" Grid.Column="0" FontSize="20" FontWeight="Bold" Height="40" Margin="5" Content="Start Date and Time: "/>
+                        <Label Grid.Row="6" Grid.Column="0" FontSize="20" FontWeight="Bold" Height="40" Margin="5" Content="End Date and Time: "/>
+
+                        <Button Grid.Row="7" Grid.ColumnSpan="2"
+                                Height="40" Width="160" FontSize="20"
+                                Content="{ns:Loc Submit}" Command="{Binding SubmitRequestCommand}"/>
+
+
+                        <!--<StackPanel Margin ="0, 20, 240, 20" Grid.Column="1" HorizontalAlignment="Right">-->
+                        <ComboBox Grid.Row="0" Grid.Column="1" Height="40" Margin="10" ItemsSource="{Binding cbCountryItemsSource}" SelectedItem="{Binding Country}" IsEnabled="True">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectionChanged" >
+                                    <i:InvokeCommandAction Command="{Binding CountrySelectionChangedCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ComboBox>
+                        <ComboBox Grid.Row="1" Grid.Column="1" Height="40" Margin="10" ItemsSource="{Binding cbCityItemsSource}" SelectedItem="{Binding City}" IsEnabled="True"/>
+
+                        <TextBox Grid.Row="2" Grid.Column="1" Height="40" Margin="10" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                        <TextBox Grid.Row="3" Grid.Column="1" Height="40" Margin="10" Text="{Binding Language, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                        <TextBox Grid.Row="4" Grid.Column="1" Height="40" Margin="10" Text="{Binding MaxGuests, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                        <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" Height="40" Margin="10">
+                            <DatePicker Width="160" SelectedDate="{Binding StartDate, UpdateSourceTrigger=PropertyChanged}" Margin="5, 0, 5, 0"/>
+                            <ComboBox Name ="StartHour_cb" SelectedItem="{Binding StartHour, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding StartHours}" Width="70" Margin="5, 0, 5, 0"/>
+                            <ComboBox Name ="StartMinute_cb" SelectedItem="{Binding StartMinute, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding StartMinutes}" Width="70" Margin="5, 0, 5, 0"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal" Height="40" Margin="10">
+
+
+                            <DatePicker SelectedDate="{Binding EndDate, UpdateSourceTrigger=PropertyChanged}" Width="160" Margin="5, 0, 5, 0"/>
+                            <ComboBox Name ="EndHour_cb" SelectedItem="{Binding EndHour, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding EndHours}" Width="70" Margin="5, 0, 5, 0"/>
+                            <ComboBox Name ="EndMinute_cb" SelectedItem="{Binding EndMinute, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding EndMinutes}" Width="70" Margin="5, 0, 5, 0"/>
+
+                        </StackPanel>
+
+                    </Grid>
+                </GroupBox>
+
+
+                
+
+            </Grid>
+            <GroupBox Grid.Column="1" Margin="0,10,10,10">
+                <GroupBox.Header>
+                    <Label Content="Complex Tour Overview"
+                            FontSize="25" FontWeight="Bold" />
+                </GroupBox.Header>
+
+                <Grid>
+                    
+
+                    <GroupBox Margin="50">
+                        <GroupBox.Header>
+                            <Label Content="Submitted regular tours:"
+                                   FontSize="20" FontWeight="Bold" />
+                        </GroupBox.Header>
+
+                        <ScrollViewer Margin="10" VerticalScrollBarVisibility="Auto">
+                            <DataGrid FontSize="20" AutoGenerateColumns="false" IsReadOnly="True"
+                                      ItemsSource="{Binding TourRequestLocations}">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="{ns:Loc DGCity}"  Binding="{Binding City}" Width="*" />
+                                    <DataGridTextColumn Header="{ns:Loc DGCountry}"  Binding="{Binding Country}" Width="*" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ScrollViewer>
+                    </GroupBox>
+                    
+                </Grid>
+
+                
+                
+            </GroupBox>
+            </Grid>
+
+
+        <StackPanel Grid.Row="3" Margin="10" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="{ns:Loc Submit}" Command="{Binding SubmitComplexTourRequestCommand}" FontSize="20" Height="40" Width="160" Margin="5, 5, 10, 5" />
+            <Button Command="{Binding ExitCommand}"  FontSize="20" Height="40" Width="160" Margin="5, 5, 10, 5">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Resources/Images/cross.png" Width="25" Margin="5" VerticalAlignment="Center"/>
+                        <TextBlock Text="{ns:Loc Exit}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>

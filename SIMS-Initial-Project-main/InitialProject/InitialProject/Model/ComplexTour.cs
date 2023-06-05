@@ -1,4 +1,5 @@
-﻿using InitialProject.Serializer;
+﻿using InitialProject.Resources.Enums;
+using InitialProject.Serializer;
 using Org.BouncyCastle.Asn1.Mozilla;
 using Org.BouncyCastle.Asn1.Ocsp;
 using System;
@@ -15,23 +16,27 @@ namespace InitialProject.Model
         public int Id { get; set; }
         public List<int> AvailableTourRequestIds { get; set; }
         public Dictionary<int,int> AcceptedTourIdsByGuideIds { get; set; }
+        public ComplexTourStatus Status { get; set; }
+
         public ComplexTour() 
         {
             AvailableTourRequestIds = new List<int>();
             AcceptedTourIdsByGuideIds = new Dictionary<int, int>();
+            Status = ComplexTourStatus.pending;
         }
 
         public string[] ToCSV()
         {
             string[] csvValues = {
 
-        Id.ToString(),
+                Id.ToString(),
 
-        string.Join(",", AvailableTourRequestIds),
+                string.Join(",", AvailableTourRequestIds),
 
-        string.Join(",", AcceptedTourIdsByGuideIds
-                .Select(entry => $"{entry.Key}:{entry.Value}")
-                .ToArray())
+                string.Join(",", AcceptedTourIdsByGuideIds
+                        .Select(entry => $"{entry.Key}:{entry.Value}")
+                        .ToArray()),
+                Status.ToString()
 
         };
 
@@ -62,6 +67,8 @@ namespace InitialProject.Model
                     }
                 }
             }
+
+            Status = Enum.Parse<ComplexTourStatus>(values[3]);
         }
 
     }
