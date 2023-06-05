@@ -5,6 +5,7 @@ using InitialProject.Repository;
 using InitialProject.Resources.Observer;
 using InitialProject.Resources.UIHelper;
 using InitialProject.Service;
+using InitialProject.View.Guest2;
 using InitialProject.ViewModel.Guide;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
@@ -434,7 +435,37 @@ namespace InitialProject.View.Guide
             IntervalChooser intervalChooser = new IntervalChooser(_tourService, _locationService, CurrentUser);
             intervalChooser.ShowDialog();
         }
-
+        private string _upcomingToursSearchInput;
+        public string UpcomingToursSearchInput
+        {
+            get => _upcomingToursSearchInput;
+            set
+            {
+                if (value != _upcomingToursSearchInput)
+                {
+                    _upcomingToursSearchInput = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private void UpcomingToursSearchText_Changed(object sender, TextChangedEventArgs e)
+        {
+            UpcomingTours.Clear();
+            if (!string.IsNullOrEmpty(UpcomingToursSearchInput))
+            {
+                foreach (Tour tour in _tourService.FilterTours(UpcomingToursSearchInput, _tourService.GetUpcomingTours(CurrentUser)))
+                {
+                    UpcomingTours.Add(GuideDTOConverter.ConvertToDTO(tour, _locationService));
+                }
+            }
+            else
+            {
+                foreach (Tour tour in _tourService.GetUpcomingTours(CurrentUser))
+                {
+                    UpcomingTours.Add(GuideDTOConverter.ConvertToDTO(tour, _locationService));
+                }
+            }
+        }
         #endregion
 
         #region FinishedToursTab
@@ -522,6 +553,37 @@ namespace InitialProject.View.Guide
             if (SelectedFinishedTourDTO != null)
                 SelectFinishedTour();
         }
+        private string _finishedToursSearchInput;
+        public string FinishedToursSearchInput
+        {
+            get => _finishedToursSearchInput;
+            set
+            {
+                if (value != _finishedToursSearchInput)
+                {
+                    _finishedToursSearchInput = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private void FinishedToursSearchText_Changed(object sender, TextChangedEventArgs e)
+        {
+            FinishedTours.Clear();
+            if (!string.IsNullOrEmpty(FinishedToursSearchInput))
+            {
+                foreach (Tour tour in _tourService.FilterTours(FinishedToursSearchInput, _tourService.GetFinishedTours(CurrentUser)))
+                {
+                    FinishedTours.Add(GuideDTOConverter.ConvertToDTO(tour, _locationService));
+                }
+            }
+            else
+            {
+                foreach (Tour tour in _tourService.GetFinishedTours(CurrentUser))
+                {
+                    FinishedTours.Add(GuideDTOConverter.ConvertToDTO(tour, _locationService));
+                }
+            }
+        }
         #endregion
 
         #region RatedToursTab
@@ -542,7 +604,37 @@ namespace InitialProject.View.Guide
             if (SelectedRatedTourDTO != null)
                 SelectRatedTour();
         }
-
+        private string _ratedToursSearchInput;
+        public string RatedToursSearchInput
+        {
+            get => _ratedToursSearchInput;
+            set
+            {
+                if (value != _ratedToursSearchInput)
+                {
+                    _ratedToursSearchInput = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private void RatedToursSearchText_Changed(object sender, TextChangedEventArgs e)
+        {
+            RatedTours.Clear();
+            if (!string.IsNullOrEmpty(RatedToursSearchInput))
+            {
+                foreach (Tour tour in _tourService.FilterTours(RatedToursSearchInput, _tourService.GetRatedTours(CurrentUser)))
+                {
+                    RatedTours.Add(GuideDTOConverter.ConvertToDTO(tour, _locationService));
+                }
+            }
+            else
+            {
+                foreach (Tour tour in _tourService.GetRatedTours(CurrentUser))
+                {
+                    RatedTours.Add(GuideDTOConverter.ConvertToDTO(tour, _locationService));
+                }
+            }
+        }
         #endregion
 
         #region RequestsTab
@@ -670,7 +762,7 @@ namespace InitialProject.View.Guide
             RequestParameters.City = RequestCityInput;
             RequestParameters.Country = RequestCountryInput;
         }
-     /*   private void UpdateRequests()
+        private void UpdateRequests()
         {
 
             PendingRequests.Clear();
@@ -684,7 +776,7 @@ namespace InitialProject.View.Guide
                 PendingRequests.Add(dto);
             }
 
-        }*/
+        }
         private void PendingRequests_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             CreateTourBasedOnRequest();
@@ -700,6 +792,37 @@ namespace InitialProject.View.Guide
                 createTour.ShowDialog();
             }
         }
+        private string _pendingRequestsSearchInput;
+        public string PendingRequestsSearchInput
+        {
+            get => _pendingRequestsSearchInput;
+            set
+            {
+                if (value != _pendingRequestsSearchInput)
+                {
+                    _pendingRequestsSearchInput = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private void PendingRequestsSearchText_Changed(object sender, TextChangedEventArgs e)
+        {
+            PendingRequests.Clear();
+            if (!string.IsNullOrEmpty(PendingRequestsSearchInput))
+            {
+                foreach (TourRequest tourRequest in _tourRequestService.FilterRequests(PendingRequestsSearchInput, _tourRequestService.GetPendingRequests(CurrentUser)))
+                {
+                    PendingRequests.Add(GuideDTOConverter.ConvertToDTO(tourRequest, _locationService));
+                }
+            }
+            else
+            {
+                foreach (TourRequest tourRequest in _tourRequestService.GetPendingRequests(CurrentUser))
+                {
+                    PendingRequests.Add(GuideDTOConverter.ConvertToDTO(tourRequest, _locationService));
+                }
+            }
+        }
         #endregion
 
         #region CompexTours
@@ -713,6 +836,37 @@ namespace InitialProject.View.Guide
                 ShowComplexTourViewModel showComplexTourViewModel = new ShowComplexTourViewModel(GuideDTOConverter.ConvertToComplexTour(SelectedComplexTourDTO,_complexTourService), _tourRequestService, _locationService, _complexTourService, CurrentUser, _checkpointService, _imageRepository, _tourService);
                 ShowComplexTour showComplexTour = new ShowComplexTour(showComplexTourViewModel);
                 showComplexTour.ShowDialog();
+            }
+        }
+        private string _complexToursSearchInput;
+        public string ComplexToursSearchInput
+        {
+            get => _complexToursSearchInput;
+            set
+            {
+                if (value != _complexToursSearchInput)
+                {
+                    _complexToursSearchInput = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private void ComplexTourRequestsSearchText_Changed(object sender, TextChangedEventArgs e)
+        {
+            ComplexTourRequests.Clear();
+            if (!string.IsNullOrEmpty(ComplexToursSearchInput))
+            {
+                foreach (ComplexTour tour in _complexTourService.FilterTours(ComplexToursSearchInput, _complexTourService.GetAvailableComplexTours(CurrentUser)))
+                {
+                    ComplexTourRequests.Add(GuideDTOConverter.ConvertToDTO(tour, _tourRequestService, _locationService, _complexTourService));
+                }
+            }
+            else
+            {
+                foreach (ComplexTour tour in _complexTourService.GetAvailableComplexTours(CurrentUser))
+                {
+                    ComplexTourRequests.Add(GuideDTOConverter.ConvertToDTO(tour, _tourRequestService, _locationService, _complexTourService));
+                }
             }
         }
         #endregion

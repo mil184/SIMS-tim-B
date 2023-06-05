@@ -17,11 +17,14 @@ namespace InitialProject.Service
     {
         private readonly IComplexTourRepository _complexTourRepository;
         private readonly TourService _tourService;
-
+        private readonly TourRequestService _tourRequestService;
+        private readonly LocationService _locationService;
         public ComplexTourService()
         {
             _complexTourRepository = Injector.CreateInstance<IComplexTourRepository>();
             _tourService = new TourService();
+            _tourRequestService = new TourRequestService();
+            _locationService = new LocationService();
         }   
  
 
@@ -65,6 +68,35 @@ namespace InitialProject.Service
                 }
             }
             return tours;
+        }
+        public List<ComplexTour> FilterTours(string input, List<ComplexTour> tours)
+        {
+
+            List<ComplexTour> byCountry = new List<ComplexTour>();
+            List<ComplexTour> byCity = new List<ComplexTour>();
+            List<ComplexTour> byLanguage = new List<ComplexTour>();
+
+            foreach (var tour in tours)
+            {
+                foreach (int id in tour.AvailableTourRequestIds)
+                {
+                    if (_locationService.GetById(_tourRequestService.GetById(id).LocationId).Country.ToLower().Replace(" ", "").Contains(input.ToLower().Replace(" ", "")))
+                    {
+                        byCountry.Add(tour);
+                    }
+                    if (_locationService.GetById(_tourRequestService.GetById(id).LocationId).City.ToLower().Replace(" ", "").Contains(input.ToLower().Replace(" ", "")))
+                    {
+                        byCity.Add(tour);
+                    }
+                    if (_tourRequestService.GetById(id).Language.ToLower().Replace(" ", "").Contains(input.ToLower().Replace(" ", "")))
+                    {
+                        byLanguage.Add(tour);
+                    }
+                }
+            }
+            List<ComplexTour> combinedList = byCountry.Union(byCity).Union(byLanguage).Distinct().ToList();
+
+            return combinedList;
         }
         public int GetNumberOfAvailableTours(ComplexTour complexTour) 
         {

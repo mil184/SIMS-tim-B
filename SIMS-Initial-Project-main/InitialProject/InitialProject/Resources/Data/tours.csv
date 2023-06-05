@@ -20,4 +20,8 @@
 20|Example Tour Name|189|Some tour|Japanese|390|0|23.5.2023. 23:59:00|3|3|86|115,116,117,118,119,120|-1|False|True|False|True|-1
 21|wdqa|256|wwds|wdas|111|8|5.6.2023. 23:59:00|11|3|95|157,158,159,160|-1|False|True|False|True|-1
 22|Name|267|23|32|321|0|5.6.2023. 23:11:00|3|3|98|164,165,166|-1|False|True|False|False|-1
-23|Some tour|9|Best Tour Ever|English|45|0|5.6.2023. 23:59:00|11,5|3|99|167,168,169|-1|False|False|False|False|-1
+23|Some tour|9|Best Tour Ever|English|45|0|5.6.2023. 23:59:00|11,5|3|99|167,168,169|-1|False|True|False|False|-1
+24|Oh mein got!|112|Oh mein got|German|45|0|25.6.2023. 23:59:00|11,5|3|99|167,168,169|-1|False|False|False|False|-1
+25|Oh mein got!German|243|Oh mein got|English|45|0|25.6.2023. 23:59:00|11,5|3|99|167,168,169|-1|False|False|False|False|-1
+26|Oh mein got!|243|Oh mein got|English|45|0|25.6.2023. 23:59:00|11,5|3|99|167,168,169|-1|False|False|True|False|-1
+27|Oh mein got!|241|Oh mein got|German|45|0|25.6.2023. 23:59:00|11,5|3|99|167,168,169|-1|False|False|False|False|-1

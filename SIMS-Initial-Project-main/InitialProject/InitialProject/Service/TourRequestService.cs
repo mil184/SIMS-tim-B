@@ -224,7 +224,54 @@ namespace InitialProject.Service
 
             return requests;
         }
+        public List<TourRequest> FilterRequests(string input, List<TourRequest> requests)
+        {
 
+            List<TourRequest> byCountry = new List<TourRequest>();
+
+            foreach (var request in requests)
+            {
+                if (_locationService.GetById(request.LocationId).Country.ToLower().Replace(" ", "").Contains(input.ToLower().Replace(" ", "")))
+                {
+                    byCountry.Add(request);
+                }
+            }
+            List<TourRequest> byCity = new List<TourRequest>();
+
+            foreach (var request in requests)
+            {
+                if (_locationService.GetById(request.LocationId).City.ToLower().Replace(" ", "").Contains(input.ToLower().Replace(" ", "")))
+                {
+                    byCity.Add(request);
+                }
+            }
+            List<TourRequest> byLanguage = new List<TourRequest>();
+
+            foreach (var request in requests)
+            {
+                if (request.Language.ToLower().Replace(" ", "").Contains(input.ToLower().Replace(" ", "")))
+                {
+                    byLanguage.Add(request);
+                }
+            }
+
+            List<TourRequest> byGuests = new List<TourRequest>();
+            if (int.TryParse(input, out int x))
+            {
+                foreach (var request in requests)
+                {
+                    if (request.MaxGuests >= x)
+                    {
+                        byLanguage.Add(request);
+                    }
+                }
+
+            }
+    
+            List<TourRequest> combinedList = byCountry.Union(byCity).Union(byLanguage).Union(byGuests).Distinct().ToList();
+
+            return combinedList;
+        }
         public int GetTotalGuestCountForYear(List<TourRequest> tourRequests)
         {
             int counter = 0;

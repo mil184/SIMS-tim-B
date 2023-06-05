@@ -123,18 +123,15 @@ namespace InitialProject.Converters
             foreach (int requestId in complexTour.AvailableTourRequestIds)
             {
                 Location location = locationService.GetById(tourRequestService.GetById(requestId).LocationId);
-                if (!addedLocationIds.Contains(location.Id))
-                {
+
                     locations += location.City + ", " + location.Country + "\n";
                     addedLocationIds.Add(location.Id);
-                }
 
-                string language = tourRequestService.GetById(requestId).Language;
-                if (!addedLanguages.Contains(language))
-                {
+                    string language = tourRequestService.GetById(requestId).Language;
+
                     languages += language += "\n";
                     addedLanguages.Add(language);
-                }
+
             }
 
             // Remove the last "\n" from locations and languages if they are not empty

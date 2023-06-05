@@ -247,17 +247,6 @@
                                                 <DropShadowEffect Color="#FFA500" BlurRadius="10" ShadowDepth="0"/>
                                             </Setter.Value>
                                         </Setter>
-                                        <Trigger.EnterActions>
-                                            <BeginStoryboard x:Name="GlowingEffectStoryboard">
-                                                <Storyboard>
-                                                    <ThicknessAnimation Storyboard.TargetName="HeaderContentPresenter" Storyboard.TargetProperty="(FrameworkElement.Margin)" From="10,2,10,2" To="10,-8,10,2" Duration="0:0:1.5" AutoReverse="True" RepeatBehavior="Forever"/>
-                                                    <DoubleAnimation Storyboard.TargetName="HeaderContentPresenter" Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.Opacity)" From="0.5" To="1" Duration="0:0:0.8" AutoReverse="True" RepeatBehavior="Forever"/>
-                                                </Storyboard>
-                                            </BeginStoryboard>
-                                        </Trigger.EnterActions>
-                                        <Trigger.ExitActions>
-                                            <StopStoryboard BeginStoryboardName="GlowingEffectStoryboard"/>
-                                        </Trigger.ExitActions>
                                     </Trigger>
                                     <Trigger Property="IsSelected" Value="False">
                                         <Setter Property="Foreground" Value="#007ACC"/>
@@ -343,13 +332,13 @@
                             </Button.Template>
                         </Button>
                     </StackPanel>
-                    <Grid Grid.Column="2" VerticalAlignment="Bottom" Margin="10">
+                    <Grid Grid.Column="2" VerticalAlignment="Bottom" Margin="10" HorizontalAlignment= "Right">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"></ColumnDefinition>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <Image Width="30" Height="30" Source="/Resources/Images/magnifying-glass.png" />
-                        <TextBox Grid.Column="1" BorderThickness="1" Margin="10" FontSize="16" Height="30" TextChanged="CurrentToursSearchText_Changed" Text="{Binding CurrentToursSearchInput, UpdateSourceTrigger=PropertyChanged}">
+                        <TextBox Grid.Column="1" BorderThickness="1" Margin="10" FontSize="16" Height="30" Width="300" TextChanged="CurrentToursSearchText_Changed" Text="{Binding CurrentToursSearchInput, UpdateSourceTrigger=PropertyChanged}">
                         </TextBox>
                     </Grid>
 
@@ -431,8 +420,8 @@
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
+ 
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="5*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"></RowDefinition>
@@ -516,13 +505,13 @@
                             </Button.Template>
                         </Button>
                     </StackPanel>
-                    <Grid Grid.Column="2" VerticalAlignment="Bottom" Margin="10">
+                    <Grid Grid.Column="2" VerticalAlignment="Bottom" Margin="10" HorizontalAlignment= "Right">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"></ColumnDefinition>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <Image Width="30" Height="30" Source="/Resources/Images/magnifying-glass.png" />
-                        <TextBox Grid.Column="1" BorderThickness="1" Margin="10" FontSize="16" Height="30">
+                        <TextBox Grid.Column="1" BorderThickness="1" Margin="10" FontSize="16" Height="30" Width="300" TextChanged="UpcomingToursSearchText_Changed" Text="{Binding UpcomingToursSearchInput, UpdateSourceTrigger=PropertyChanged}">
                         </TextBox>
                     </Grid>
 
@@ -590,12 +579,33 @@
                         <RowDefinition Height="Auto"></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
+
+
+                    <GroupBox Grid.Column="0" Header="Most Visited"  FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2" Margin="10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <ComboBox Name="Years_cb" SelectionChanged="Years_cb_SelectionChanged" Grid.Column="0" FontSize="16" Height="30" Margin="10"/>
+                            <Grid Grid.Column="1" Margin="10" HorizontalAlignment="Center">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <TextBlock Foreground="#FFA500" Grid.Column="1" Grid.Row="0" Text="{Binding MostVisited.Name, FallbackValue=Tour}" FontSize="21" FontWeight="Bold"/>
+                                <TextBlock Foreground="#FFA500" Grid.Column="1" Grid.Row="1" Text="{Binding MostVisited.Location, FallbackValue=Name}"  FontSize="16" />
+                                <TextBlock Foreground="#FFA500" Grid.Column="1" Grid.Row="2" Text="{Binding MostVisited.NumberOfGuestsMessage, FallbackValue=GuestCount}"  FontSize="16" />
+                            </Grid>
+                        </Grid>
+                    </GroupBox>
                     <Grid Grid.Column="1">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <Button  Grid.Row="0"  Content="  Select Finished Tour&#x0a;         (ENTER)" Margin="10" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" Click="StatisticsButton_Click" HorizontalAlignment="Right">
+                        <Button  Grid.Row="1"  Content="  Select Finished Tour&#x0a;         (ENTER)" Margin="10" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" Click="StatisticsButton_Click" HorizontalAlignment="Center">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -619,39 +629,18 @@
                                 </ControlTemplate>
                             </Button.Template>
                         </Button>
-                        <Grid Grid.Row="1" VerticalAlignment="Bottom" Margin="10">
+                        <Grid Grid.Row="0" VerticalAlignment="Bottom" Margin="10" HorizontalAlignment="Center">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"></ColumnDefinition>
-                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
-                            <Image Width="30" Height="30" Source="/Resources/Images/magnifying-glass.png" />
-                            <TextBox Grid.Column="1" BorderThickness="1" Margin="10" FontSize="16" Height="30">
+                            <Image Width="30" Height="30" Source="/Resources/Images/magnifying-glass.png" HorizontalAlignment="Right"/>
+                            <TextBox Grid.Column="1" BorderThickness="1" Margin="10" FontSize="16" Height="30" Width="300" TextChanged="FinishedToursSearchText_Changed" Text="{Binding FinishedToursSearchInput, UpdateSourceTrigger=PropertyChanged}">
                             </TextBox>
                         </Grid>
                     </Grid>
-
-                    <GroupBox Grid.Column="0" Header="Most Visited"  FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <ComboBox Name="Years_cb" SelectionChanged="Years_cb_SelectionChanged" Grid.Column="0" FontSize="16" Height="30" Margin="10"/>
-                            <Grid Grid.Column="1" Margin="10" HorizontalAlignment="Center">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-                                <TextBlock Foreground="#FFA500" Grid.Column="1" Grid.Row="0" Text="{Binding MostVisited.Name, FallbackValue=Tour}" FontSize="21" FontWeight="Bold"/>
-                                <TextBlock Foreground="#FFA500" Grid.Column="1" Grid.Row="1" Text="{Binding MostVisited.Location, FallbackValue=Name}"  FontSize="16" />
-                                <TextBlock Foreground="#FFA500" Grid.Column="1" Grid.Row="2" Text="{Binding MostVisited.NumberOfGuestsMessage, FallbackValue=GuestCount}"  FontSize="16" />
-                            </Grid>
-                        </Grid>
-                    </GroupBox>
-
-                    <GroupBox Grid.Row="1" Header="Finished Tours"  FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2" Grid.ColumnSpan="3" Margin="10 0 10 10">
-                        <DataGrid ItemsSource="{Binding FinishedTours}" SelectedItem="{Binding Path=SelectedFinishedTourDTO}" AutoGenerateColumns="False" Margin="10" FontSize="20" Focusable="True" SelectionMode="Single" Name="FinishedToursDataGrid" IsReadOnly="True" MouseDoubleClick="FinishedToursDataGrid_MouseDoubleClick">
+                    <GroupBox Grid.Row="1" Header="Finished Tours"  FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2" Grid.ColumnSpan="3" Margin="10">
+                        <DataGrid ItemsSource="{Binding FinishedTours}" SelectedItem="{Binding Path=SelectedFinishedTourDTO}" AutoGenerateColumns="False" Margin="10"  FontSize="20" Focusable="True" SelectionMode="Single" Name="FinishedToursDataGrid" IsReadOnly="True" MouseDoubleClick="FinishedToursDataGrid_MouseDoubleClick">
                             <DataGrid.Columns>
 
                                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*">
@@ -748,11 +737,10 @@
                     <Grid Grid.Column="2" VerticalAlignment="Bottom" Margin="10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"></ColumnDefinition>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <Image Width="30" Height="30" Source="/Resources/Images/magnifying-glass.png" />
-                        <TextBox Grid.Column="1" BorderThickness="1" Margin="10" FontSize="16" Height="30">
-                        </TextBox>
+                        <TextBox Grid.Column="1" BorderThickness="1" Margin="10" FontSize="16" Height="30" Width="300" TextChanged="RatedToursSearchText_Changed" Text="{Binding RatedToursSearchInput, UpdateSourceTrigger=PropertyChanged}">                        </TextBox>
                     </Grid>
 
                     <GroupBox Grid.Row="1" Header="Rated Tours"  FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2" Grid.ColumnSpan="3" Margin="10 0 10 10">
@@ -827,58 +815,62 @@
                 <TabItem.Header>
                     <TextBlock Text="Requests" FontSize="17"/>
                 </TabItem.Header>
-                <StackPanel Margin="10">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <GroupBox Header="Filters"  FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2"
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="0.75*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <GroupBox Header="Filters"  FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2"
                     HorizontalAlignment="Stretch" Margin="10">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <StackPanel Orientation="Vertical" Margin="5" Grid.Row="0" Grid.Column="0">
-                                    <TextBlock Text="City:" Margin="0 0 0 5" FontSize="14"/>
-                                    <ComboBox Width="200" Height="20" FontSize="11" SelectionChanged="ComboBox_SelectionChanged" ItemsSource="{Binding Path=RequestCities, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding Path=RequestCityInput, UpdateSourceTrigger=PropertyChanged}" IsEditable="True" />
-                                </StackPanel>
-                                <StackPanel Orientation="Vertical" Margin="5" Grid.Row="0" Grid.Column="1">
-                                    <TextBlock Text="Country:" Margin="0 0 0 5" FontSize="14"/>
-                                    <ComboBox Width="200" Height="20" FontSize="11" SelectionChanged="ComboBox_SelectionChanged" ItemsSource="{Binding Path=RequestCountries, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding Path=RequestCountryInput, UpdateSourceTrigger=PropertyChanged}" IsEditable="True"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Vertical" Margin="5" Grid.Row="0" Grid.Column="2">
-                                    <TextBlock Text="Guests:" Margin="0 0 0 5" FontSize="14"/>
-                                    <TextBox Width="150" Height="20" FontSize="11"  TextChanged="Text_Changed" Text="{Binding Path=RequestMaxGuestsInput, UpdateSourceTrigger=PropertyChanged}"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Vertical" Margin="5" Grid.Row="1" Grid.Column="0">
-                                    <TextBlock Text="Start Date:" Margin="0 0 0 5" FontSize="14"/>
-                                    <DatePicker Width="200" Height="20" FontSize="11" SelectedDateChanged="Date_SelectionChanged" SelectedDate= "{Binding Path=RequestStartDateInput, UpdateSourceTrigger=PropertyChanged}"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Vertical" Margin="5" Grid.Row="1" Grid.Column="1">
-                                    <TextBlock Text="End Date:" Margin="0 0 0 5" FontSize="14"/>
-                                    <DatePicker Width="200" Height="20" FontSize="11" SelectedDateChanged="Date_SelectionChanged" SelectedDate= "{Binding Path =RequestEndDateInput, UpdateSourceTrigger=PropertyChanged}" />
-                                </StackPanel>
-                                <StackPanel Orientation="Vertical" Margin="5" Grid.Row="1" Grid.Column="2">
-                                    <TextBlock Text="Language:" Margin="0 0 0 5" FontSize="14"/>
-                                    <TextBox Width="150" FontSize="11" Height="20" TextChanged="Text_Changed" Text="{Binding Path=RequestLanguageInput, UpdateSourceTrigger=PropertyChanged}"/>
-                                </StackPanel>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Orientation="Vertical" Margin="5" Grid.Row="0" Grid.Column="0">
+                                <TextBlock Text="City:" Margin="0 0 0 5" FontSize="14"/>
+                                <ComboBox Width="200" Height="20" FontSize="11" SelectionChanged="ComboBox_SelectionChanged" ItemsSource="{Binding Path=RequestCities, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding Path=RequestCityInput, UpdateSourceTrigger=PropertyChanged}" IsEditable="True" />
+                            </StackPanel>
+                            <StackPanel Orientation="Vertical" Margin="5" Grid.Row="0" Grid.Column="1">
+                                <TextBlock Text="Country:" Margin="0 0 0 5" FontSize="14"/>
+                                <ComboBox Width="200" Height="20" FontSize="11" SelectionChanged="ComboBox_SelectionChanged" ItemsSource="{Binding Path=RequestCountries, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding Path=RequestCountryInput, UpdateSourceTrigger=PropertyChanged}" IsEditable="True"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Vertical" Margin="5" Grid.Row="0" Grid.Column="2">
+                                <TextBlock Text="Guests:" Margin="0 0 0 5" FontSize="14"/>
+                                <TextBox Width="150" Height="20" FontSize="11"  TextChanged="Text_Changed" Text="{Binding Path=RequestMaxGuestsInput, UpdateSourceTrigger=PropertyChanged}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Vertical" Margin="5" Grid.Row="1" Grid.Column="0">
+                                <TextBlock Text="Start Date:" Margin="0 0 0 5" FontSize="14"/>
+                                <DatePicker Width="200" Height="20" FontSize="11" SelectedDateChanged="Date_SelectionChanged" SelectedDate= "{Binding Path=RequestStartDateInput, UpdateSourceTrigger=PropertyChanged}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Vertical" Margin="5" Grid.Row="1" Grid.Column="1">
+                                <TextBlock Text="End Date:" Margin="0 0 0 5" FontSize="14"/>
+                                <DatePicker Width="200" Height="20" FontSize="11" SelectedDateChanged="Date_SelectionChanged" SelectedDate= "{Binding Path =RequestEndDateInput, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Vertical" Margin="5" Grid.Row="1" Grid.Column="2">
+                                <TextBlock Text="Language:" Margin="0 0 0 5" FontSize="14"/>
+                                <TextBox Width="150" FontSize="11" Height="20" TextChanged="Text_Changed" Text="{Binding Path=RequestLanguageInput, UpdateSourceTrigger=PropertyChanged}"/>
+                            </StackPanel>
 
-                            </Grid>
-                        </GroupBox>
-
-
-
-                        <Button Grid.Column="2" Content="Select Request&#x0a;     (ENTER)" Margin="0 0 5 0" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" Click="StatisticsButton_Click">
+                        </Grid>
+                    </GroupBox>
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Button Grid.Row="1" Content="Select Request&#x0a;     (ENTER)" Margin="0 0 5 0" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" Click="StatisticsButton_Click">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -902,24 +894,77 @@
                                 </ControlTemplate>
                             </Button.Template>
                         </Button>
+                        <Grid Grid.Row="0" VerticalAlignment="Bottom" Margin="10" HorizontalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Image Width="30" Height="30" Source="/Resources/Images/magnifying-glass.png" HorizontalAlignment="Right"/>
+                            <TextBox Grid.Column="1" BorderThickness="1" Margin="10" FontSize="16" Height="30" Width="300" TextChanged="PendingRequestsSearchText_Changed" Text="{Binding PendingRequestsSearchInput, UpdateSourceTrigger=PropertyChanged}">
+
+                            </TextBox>
+                        </Grid>
                     </Grid>
-                    <GroupBox Header="Pending Requests"  FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2">
-                        <DataGrid Height ="210" ItemsSource="{Binding PendingRequests}" SelectedItem="{Binding Path=SelectedPendingRequestDTO}" AutoGenerateColumns="False" Name="PendingRequestsDataGrid" IsReadOnly="true" MouseDoubleClick="PendingRequests_MouseDoubleClick" Margin="10 10 10 10">
-                            <DataGrid.CellStyle>
-                                <Style TargetType="DataGridCell">
-                                    <Setter Property="FontSize" Value="18"/>
-                                    <Setter Property="Padding" Value="10"/>
-                                </Style>
-                            </DataGrid.CellStyle>
+                    <GroupBox Grid.Row="1" Header="Pending Requests"  FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2" Grid.ColumnSpan="3" Margin="10">
+                        <DataGrid ItemsSource="{Binding PendingRequests}" SelectedItem="{Binding Path=SelectedPendingRequestDTO}" AutoGenerateColumns="False" Margin="10"  FontSize="20" Focusable="True" SelectionMode="Single" Name="PendingRequestsDataGrid" IsReadOnly="True" MouseDoubleClick="PendingRequests_MouseDoubleClick">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Location" Binding="{Binding Location}" Width="*" FontSize="18"/>
-                                <DataGridTextColumn Header="Language" Binding="{Binding Language}" Width="*" FontSize="18"/>
-                                <DataGridTextColumn Header="Guest Number" Binding="{Binding MaximumGuests}" Width="1*" FontSize="18"/>
-                                <DataGridTextColumn Header="Timespan" Binding="{Binding Interval}" Width="1.5*" FontSize="18"/>
+
+                                <DataGridTextColumn Header="Location" Binding="{Binding Location}" Width="*">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Header="Language" Binding="{Binding Language}" Width="*">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Header="Guests" Binding="{Binding MaximumGuests}" Width="*">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="Timespan" Binding="{Binding Interval}" Width="*">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+                                </DataGridTextColumn>
+
                             </DataGrid.Columns>
                         </DataGrid>
+
                     </GroupBox>
-                </StackPanel>
+                </Grid>
             </TabItem>
             <TabItem>
                 <TabItem.Header>
@@ -1045,16 +1090,22 @@
                 <TabItem.Header>
                     <TextBlock Text="Complex Tours" FontSize="17"/>
                 </TabItem.Header>
-                <StackPanel Margin="10">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="14*" />
-                            <ColumnDefinition Width="251*"/>
-                            <ColumnDefinition Width="109*"/>
-                            <ColumnDefinition Width="501*"/>
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <Button Grid.Column="4" Content="Select Complex Tour&#x0a;         (ENTER)" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Center" Click="StartTourButton_Click">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Horizontal" Grid.Row="0">
+
+
+
+                        <Button Grid.Column="3" Content="Select Complex Tour&#x0a;          (ENTER)" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Right" Margin="10" Click="RatingsButton_Click">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -1078,27 +1129,71 @@
                                 </ControlTemplate>
                             </Button.Template>
                         </Button>
+
+                    </StackPanel>
+                    <Grid Grid.Column="2" VerticalAlignment="Bottom" Margin="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Image Width="30" Height="30" Source="/Resources/Images/magnifying-glass.png" />
+                        <TextBox Grid.Column="1" BorderThickness="1" Margin="10" FontSize="16" Height="30" Width="300" TextChanged="ComplexTourRequestsSearchText_Changed" Text="{Binding ComplexToursSearchInput, UpdateSourceTrigger=PropertyChanged}"/>
                     </Grid>
-                    <GroupBox Header="Complex Tour Requests" FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2">
-                        <StackPanel Margin="0 20 0 0">
-                            <ScrollViewer Height="300" VerticalScrollBarVisibility="Auto">
-                                <DataGrid Margin ="10" ItemsSource="{Binding ComplexTourRequests}" SelectedItem="{Binding Path=SelectedComplexTourDTO}" AutoGenerateColumns="False" Name="ComplexTourRequestsDataGrid" IsReadOnly="true" MouseDoubleClick="ComplexTourRequestsDataGrid_MouseDoubleClick" HorizontalAlignment="Stretch">
-                                    <DataGrid.CellStyle>
-                                        <Style TargetType="DataGridCell">
-                                            <Setter Property="FontSize" Value="18"/>
-                                            <Setter Property="Padding" Value="10"/>
+
+                    <GroupBox Grid.Row="1" Header="Rated Tours"  FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2" Grid.ColumnSpan="3" Margin="10 0 10 10">
+                        <DataGrid ItemsSource="{Binding ComplexTourRequests}" SelectedItem="{Binding Path=SelectedComplexTourDTO}" AutoGenerateColumns="False" Margin="10" FontSize="20" Focusable="True" SelectionMode="Single" Name="ComplexToursDataGrid" IsReadOnly="True" MouseDoubleClick="ComplexTourRequestsDataGrid_MouseDoubleClick">
+                            <DataGrid.Columns>
+
+                                <DataGridTextColumn Header="Locations" Binding="{Binding Locations}" Width="*">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                            <Setter Property="VerticalAlignment" Value="Center" />
                                         </Style>
-                                    </DataGrid.CellStyle>
-                                    <DataGrid.Columns>
-                                        <DataGridTextColumn Header="Locations" Binding="{Binding Locations}" Width="*" FontSize="18"/>
-                                        <DataGridTextColumn Header="Languages" Binding="{Binding Languages}" Width="*" FontSize="18"/>
-                                        <DataGridTextColumn Header="Available Tours" Binding="{Binding Path=NumberOfAvailableTours}" Width="0.6*" FontSize="18"/>
-                                    </DataGrid.Columns>
-                                </DataGrid>
-                            </ScrollViewer>
-                        </StackPanel>
+                                    </DataGridTextColumn.ElementStyle>
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                            <Setter Property="VerticalContentAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Header="Languages" Binding="{Binding Languages}" Width="*">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                            <Setter Property="VerticalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                            <Setter Property="VerticalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Header="Number Of Available Tours" Binding="{Binding NumberOfAvailableTours}" Width="*">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                            <Setter Property="VerticalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                            <Setter Property="VerticalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+                                </DataGridTextColumn>
+
+                            </DataGrid.Columns>
+                        </DataGrid>
+
                     </GroupBox>
-                </StackPanel>
+                </Grid>
             </TabItem>
         </TabControl>
     </Grid>

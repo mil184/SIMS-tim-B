@@ -89,7 +89,7 @@ namespace InitialProject.Service
 
             foreach (var tour in tours)
             {
-                if (tour.Name.ToLower().Contains(input.ToLower()))
+                if (tour.Name.ToLower().Replace(" ", "").Contains(input.ToLower().Replace(" ", "")))
                 {
                     byName.Add(tour);
                 }
@@ -98,7 +98,7 @@ namespace InitialProject.Service
 
             foreach (var tour in tours)
             {
-                if (_locationService.GetById(tour.LocationId).Country.ToLower().Contains(input.ToLower()))
+                if (_locationService.GetById(tour.LocationId).Country.ToLower().Replace(" ", "").Contains(input.ToLower().Replace(" ", "")))
                 {
                     byCountry.Add(tour);
                 }
@@ -107,12 +107,21 @@ namespace InitialProject.Service
 
             foreach (var tour in tours)
             {
-                if (_locationService.GetById(tour.LocationId).City.ToLower().Contains(input.ToLower()))
+                if (_locationService.GetById(tour.LocationId).City.ToLower().Replace(" ", "").Contains(input.ToLower().Replace(" ", "")))
                 {
                     byCity.Add(tour);
                 }
             }
-            List<Tour> combinedList = byName.Union(byCountry).Union(byCity).Distinct().ToList();
+            //List<Tour> byLanguage= new List<Tour>();
+
+            //foreach (var tour in tours)
+            //{
+            //    if (tour.Language.ToLower().Replace(" ", "").Contains(input.ToLower().Replace(" ", "")))
+            //    {
+            //        byLanguage.Add(tour);
+            //    }
+            //}
+            List<Tour> combinedList = byName.Union(byCountry).Union(byCity)/*.Union(byLanguage)*/.Distinct().ToList();
 
             return combinedList;
         }
