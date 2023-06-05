@@ -23,7 +23,8 @@ namespace InitialProject.Converters
                     locationService.GetById(tour.LocationId).Country,
                     locationService.GetById(tour.LocationId).City,
                     tour.StartTime,
-                    tour.CurrentGuestCount);
+                    tour.CurrentGuestCount,
+                    tour.IsActive);
         }
         static public List<GuideTourDTO> ConvertToDTO(List<Tour> tours, LocationService locationService)
         {

@@ -43,6 +43,7 @@
     <None Remove="Resources\Images\language.png" />
     <None Remove="Resources\Images\leftArrow.png" />
     <None Remove="Resources\Images\logo.png" />
+    <None Remove="Resources\Images\magnifying-glass.png" />
     <None Remove="Resources\Images\menu.png" />
     <None Remove="Resources\Images\mail.png" />
     <None Remove="Resources\Images\owner.png" />
@@ -164,6 +165,9 @@
     <Resource Include="Resources\Images\leftArrow.png" />
     <Resource Include="Resources\Images\logo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\magnifying-glass.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
 
     <Resource Include="Resources\Images\menu.png" />

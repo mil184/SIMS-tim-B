@@ -17,12 +17,12 @@ namespace InitialProject.Model.DTO
         public DateTime StartTime { get; set; }
         public int NumberOfGuests { get; set; }
         public string NumberOfGuestsMessage { get; set; }
-
+        public bool IsActive { get; set; }
         public GuideTourDTO()
         {
 
         }
-        public GuideTourDTO(int id, string name, string country, string city, DateTime startTime, int numberOfGuests)
+        public GuideTourDTO(int id, string name, string country, string city, DateTime startTime, int numberOfGuests, bool isActive)
         {
             Id = id;
             Name = name;
@@ -32,6 +32,7 @@ namespace InitialProject.Model.DTO
             Location = city + ", " + country;
             NumberOfGuests = numberOfGuests;
             NumberOfGuestsMessage = numberOfGuests.ToString() + " people visited";
+            IsActive = isActive;
         }
     }
 }

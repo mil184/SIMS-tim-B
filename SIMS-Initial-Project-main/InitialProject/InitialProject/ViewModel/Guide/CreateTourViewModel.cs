@@ -97,6 +97,9 @@ namespace InitialProject.ViewModel.Guide
             TourLanguage = Request.Language;
             MaximumGuests = Request.MaxGuests.ToString();
             TourCountry = _locationService.GetById(Request.LocationId).Country;
+
+            IsEnabledCityComboBox = true;
+            CountrySelectionChangedCommand.Execute(null);
             TourCity = _locationService.GetById(Request.LocationId).City;
             if (DateSlot == null)
             {
