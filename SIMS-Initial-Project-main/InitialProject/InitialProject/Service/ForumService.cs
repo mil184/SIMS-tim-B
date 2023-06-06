@@ -5,6 +5,7 @@ using InitialProject.Resources.Injector;
 using InitialProject.Resources.Observer;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,18 @@ namespace InitialProject.Service
         public ForumService()
         {
             _forumRepository = Injector.CreateInstance<IForumRepository>();
+        }
+
+        public Forum GetById(int id)
+        {
+            foreach (Forum forum in _forumRepository.GetAll())
+            {
+                if (forum.Id == id)
+                {
+                    return forum;
+                }
+            }
+            return null;
         }
 
         public Forum Save(Forum forum)

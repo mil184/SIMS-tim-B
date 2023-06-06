@@ -60,6 +60,9 @@
             <Button.Effect>
                 <DropShadowEffect Color="Black" />
             </Button.Effect>
+            <ToolTipService.ToolTip>
+                <TextBlock Text="See your accommodations or even renovate them"></TextBlock>
+            </ToolTipService.ToolTip>
         </Button>
         <Button Grid.Row="0" Grid.Column="1" Width="190" Height="140" Background="#381C74" Command="{Binding NavigateToRenovationsPageCommand}">
             <StackPanel Orientation="Horizontal">
@@ -70,6 +73,9 @@
             <Button.Effect>
                 <DropShadowEffect Color="Black" />
             </Button.Effect>
+            <ToolTipService.ToolTip>
+                <TextBlock Text="Your renovations"></TextBlock>
+            </ToolTipService.ToolTip>
         </Button>
         <Button Grid.Row="1" Grid.Column="0" Width="190" Height="140" Background="#381C74" Command="{Binding NavigateToGuestReviewPageCommand}">
             <StackPanel Orientation="Horizontal">
@@ -79,6 +85,9 @@
             <Button.Effect>
                 <DropShadowEffect Color="Black" />
             </Button.Effect>
+            <ToolTipService.ToolTip>
+                <TextBlock Text="Say something about your guests"></TextBlock>
+            </ToolTipService.ToolTip>
         </Button>
         <Button Grid.Row="1" Grid.Column="1" Width="190" Height="140" Background="#FF684CA4" Foreground="White" Command="{Binding NavigateToRatingsPageCommand}">
             <StackPanel Orientation="Horizontal">
@@ -88,6 +97,9 @@
             <Button.Effect>
                 <DropShadowEffect Color="Black" />
             </Button.Effect>
+            <ToolTipService.ToolTip>
+                <TextBlock Text="See what people said about you"></TextBlock>
+            </ToolTipService.ToolTip>
         </Button>
         <Button Grid.Row="2" Grid.Column="0" Width="190" Height="140" Background="#FF684CA4" Foreground="White"  Command="{Binding NavigateToRescheduleRequestsPageCommand}">
             <StackPanel Orientation="Horizontal">
@@ -97,8 +109,11 @@
             <Button.Effect>
                 <DropShadowEffect Color="Black" />
             </Button.Effect>
+            <ToolTipService.ToolTip>
+                <TextBlock Text="Somebody wants to reschedule their reservation!"></TextBlock>
+            </ToolTipService.ToolTip>
         </Button>
-        <Button Grid.Row="2" Grid.Column="1" Width="190" Height="140" Background="#381C74" Foreground="White">
+        <Button Grid.Row="2" Grid.Column="1" Width="190" Height="140" Background="#381C74" Foreground="White" Command="{Binding NavigateToForumsPageCommand}">
             <StackPanel Orientation="Horizontal">
                 <Image Source="/Resources/Images/OwnerIcons/forum.png" Height="24" Width="24" Margin="7"/>
                 <TextBlock Margin="7" VerticalAlignment="Center" FontSize="14">Forums</TextBlock>
@@ -106,6 +121,9 @@
             <Button.Effect>
                 <DropShadowEffect Color="Black" />
             </Button.Effect>
+            <ToolTipService.ToolTip>
+                <TextBlock Text="Forums"></TextBlock>
+            </ToolTipService.ToolTip>
         </Button>
         <Button Grid.Row="3" Grid.Column="0" Width="190" Height="140" Background="#381C74" Foreground="White" Command="{Binding GenerateReportCommand}">
             <StackPanel Orientation="Horizontal">
@@ -115,6 +133,9 @@
             <Button.Effect>
                 <DropShadowEffect Color="Black" />
             </Button.Effect>
+            <ToolTipService.ToolTip>
+                <TextBlock Text="Generate a report based on your grades"></TextBlock>
+            </ToolTipService.ToolTip>
         </Button>
         <Button Grid.Row="3" Grid.Column="1" Width="190" Height="140" Background="#FF684CA4" Foreground="White" Command="{Binding PlayMusicCommand}">
             <StackPanel Orientation="Horizontal">
@@ -124,6 +145,9 @@
             <Button.Effect>
                 <DropShadowEffect Color="Black" />
             </Button.Effect>
+            <ToolTipService.ToolTip>
+                <TextBlock Text="Something to lighten up the mood"></TextBlock>
+            </ToolTipService.ToolTip>
         </Button>
     </Grid>
 </Page>

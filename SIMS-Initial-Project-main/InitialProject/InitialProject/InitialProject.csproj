@@ -84,9 +84,11 @@
     <None Remove="Resources\Images\OwnerIcons\review.png" />
     <None Remove="Resources\Images\OwnerIcons\reviewDark.png" />
     <None Remove="Resources\Images\OwnerIcons\sad.png" />
+    <None Remove="Resources\Images\OwnerIcons\star.png" />
     <None Remove="Resources\Images\OwnerIcons\stats.png" />
     <None Remove="Resources\Images\OwnerIcons\talking2.png" />
     <None Remove="Resources\Images\OwnerIcons\time.jpg" />
+    <None Remove="Resources\Images\OwnerIcons\warning.png" />
     <None Remove="Resources\Images\OwnerIcons\worker.png" />
     <None Remove="Resources\Images\pdf.jpg" />
     <None Remove="Resources\Images\red-x.png" />
@@ -210,9 +212,11 @@
     <Resource Include="Resources\Images\OwnerIcons\review.png" />
     <Resource Include="Resources\Images\OwnerIcons\reviewDark.png" />
     <Resource Include="Resources\Images\OwnerIcons\sad.png" />
+    <Resource Include="Resources\Images\OwnerIcons\star.png" />
     <Resource Include="Resources\Images\OwnerIcons\stats.png" />
     <Resource Include="Resources\Images\OwnerIcons\talking2.png" />
     <Resource Include="Resources\Images\OwnerIcons\time.jpg" />
+    <Resource Include="Resources\Images\OwnerIcons\warning.png" />
     <Resource Include="Resources\Images\OwnerIcons\worker.png" />
     <Resource Include="Resources\Images\pdf.jpg" />
     <Resource Include="Resources\Images\red-x.png">
@@ -305,7 +309,6 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <Folder Include="ViewModel\Owner\" />
   </ItemGroup>
 
 </Project>

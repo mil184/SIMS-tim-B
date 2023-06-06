@@ -1,4 +1,5 @@
 ﻿using InitialProject.Model;
+using InitialProject.Repository;
 using InitialProject.Repository.Interfaces;
 using InitialProject.Resources.Injector;
 using InitialProject.Resources.Observer;
@@ -17,6 +18,31 @@ namespace InitialProject.Service
         public CommentService()
         {
             _commentRepository = Injector.CreateInstance<ICommentRepository>();
+        }
+
+        public List<ForumComment> GetCommentsByForumId(int forumId)
+        {
+            List<ForumComment> comments = new List<ForumComment>();
+            foreach (ForumComment comment in _commentRepository.GetAll())
+            {
+                if (comment.ForumId == forumId)
+                {
+                    comments.Add(comment);
+                }
+            }
+            return comments;
+        }
+
+        public ForumComment GetById(int id)
+        {
+            foreach (ForumComment comment in _commentRepository.GetAll())
+            {
+                if (comment.Id == id)
+                {
+                    return comment;
+                }
+            }
+            return null;
         }
 
         public ForumComment Save(ForumComment forumComment)

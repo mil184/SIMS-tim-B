@@ -173,6 +173,7 @@
             <Button.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Log out" Command="{Binding LogOutCommand}" />
+                    <ToggleButton IsChecked="{Binding DisableTooltips}">Toggle ToolTips</ToggleButton>
                 </ContextMenu>
             </Button.ContextMenu>
         </Button>

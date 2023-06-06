@@ -10,10 +10,12 @@ using System.IO;
 using System.Media;
 using System.Windows.Controls;
 using System.Windows.Navigation;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace InitialProject.ViewModel.Owner
 {
-    public class OwnerMainWindowViewModel
+    public class OwnerMainWindowViewModel : INotifyPropertyChanged
     {
         public OwnerMainWindow MainWindow { get; set; }
         public User LoggedInUser { get; set; }
@@ -24,6 +26,20 @@ namespace InitialProject.ViewModel.Owner
         private readonly AccommodationService _accommodationService;
         private readonly AccommodationRatingService _ratingService;
 
+        private bool _disableTooltips;
+        public bool DisableTooltips
+        {
+            get { return _disableTooltips; }
+            set
+            {
+                if (_disableTooltips != value)
+                {
+                    _disableTooltips = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public RelayCommand NavigateToHomePageCommand { get; set; }
         public RelayCommand NavigateBackCommand { get; set; }
         public RelayCommand NavigateToAccommodationsPageCommand { get; set; }
@@ -31,6 +47,7 @@ namespace InitialProject.ViewModel.Owner
         public RelayCommand NavigateToGuestReviewPageCommand { get; set; }
         public RelayCommand NavigateToRatingsPageCommand { get; set; }
         public RelayCommand NavigateToRescheduleRequestsPageCommand { get; set; }
+        public RelayCommand NavigateToForumsPageCommand { get; set; }
         public RelayCommand GenerateReportCommand { get; set; }
         public RelayCommand PlayMusicCommand { get; set; }
         public RelayCommand LogOutCommand { get; set; }
@@ -74,6 +91,12 @@ namespace InitialProject.ViewModel.Owner
         {
             Page reschedules = new RescheduleRequestsPage(NavService, LoggedInUser);
             NavService.Navigate(reschedules);
+        }
+
+        private void Execute_NavigateToForumsPageCommand(object obj)
+        {
+            Page forums = new ForumsPage(NavService, LoggedInUser);
+            NavService.Navigate(forums);
         }
 
         private void Execute_GenerateReportCommand(object obj)
@@ -193,6 +216,7 @@ namespace InitialProject.ViewModel.Owner
             NavigateToGuestReviewPageCommand = new RelayCommand(Execute_NavigateToGuestReviewPageCommand, CanExecute_Command);
             NavigateToRatingsPageCommand = new RelayCommand(Execute_NavigateToRatingsPageCommand, CanExecute_Command);
             NavigateToRescheduleRequestsPageCommand = new RelayCommand(Execute_NavigateToRescheduleRequestsPageCommand, CanExecute_Command);
+            NavigateToForumsPageCommand = new RelayCommand(Execute_NavigateToForumsPageCommand, CanExecute_Command);
             GenerateReportCommand = new RelayCommand(Execute_GenerateReportCommand, CanExecute_Command);
             PlayMusicCommand = new RelayCommand(Execute_PlayMusicCommand, CanExecute_Command);
             LogOutCommand = new RelayCommand(Execute_LogOutCommand, CanExecute_Command);
@@ -204,6 +228,12 @@ namespace InitialProject.ViewModel.Owner
             IsPlaying = false;
             Player = new SoundPlayer("../../../Resources/Sounds/music.wav");
             Player.Load();
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
