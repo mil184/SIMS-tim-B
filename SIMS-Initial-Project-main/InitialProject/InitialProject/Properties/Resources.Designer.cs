@@ -97,6 +97,15 @@ namespace InitialProject.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pregled kompleksne ture.
+        /// </summary>
+        public static string ComplexTourOverview {
+            get {
+                return ResourceManager.GetString("ComplexTourOverview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Zahtevanje kompleksnih tura.
         /// </summary>
         public static string ComplexTourRequestingTab {
@@ -250,6 +259,15 @@ namespace InitialProject.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Vreme završavanja:.
+        /// </summary>
+        public static string EndDateTime {
+            get {
+                return ResourceManager.GetString("EndDateTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Izlaz.
         /// </summary>
         public static string Exit {
@@ -291,6 +309,33 @@ namespace InitialProject.Properties {
         public static string FiltrationInfo {
             get {
                 return ResourceManager.GetString("FiltrationInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Završene Ture.
+        /// </summary>
+        public static string FinishedTours {
+            get {
+                return ResourceManager.GetString("FinishedTours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Odaberite završenu turu kako biste ocenili..
+        /// </summary>
+        public static string FinishedToursInfo {
+            get {
+                return ResourceManager.GetString("FinishedToursInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prosečan broj gostiju za odabranu godinu:.
+        /// </summary>
+        public static string guestStatistic {
+            get {
+                return ResourceManager.GetString("guestStatistic", resourceCulture);
             }
         }
         
@@ -367,6 +412,15 @@ namespace InitialProject.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Grafik jezika.
+        /// </summary>
+        public static string languageChart {
+            get {
+                return ResourceManager.GetString("languageChart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 3. Kako biste ocenili vodičevo poznavanje jezika?*.
         /// </summary>
         public static string LanguageQuestion {
@@ -385,11 +439,38 @@ namespace InitialProject.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Prikaz broja zahteva spram jezika:.
+        /// </summary>
+        public static string languageStatistic {
+            get {
+                return ResourceManager.GetString("languageStatistic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Grafik lokacija.
+        /// </summary>
+        public static string locationChart {
+            get {
+                return ResourceManager.GetString("locationChart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lokacije.
         /// </summary>
         public static string LocationsDG {
             get {
                 return ResourceManager.GetString("LocationsDG", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prikaz statusa zahteva spram lokacija:.
+        /// </summary>
+        public static string locationStatistic {
+            get {
+                return ResourceManager.GetString("locationStatistic", resourceCulture);
             }
         }
         
@@ -408,6 +489,15 @@ namespace InitialProject.Properties {
         public static string MaxGuests {
             get {
                 return ResourceManager.GetString("MaxGuests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tvoji zahtevi za ture.
+        /// </summary>
+        public static string myTourRequests {
+            get {
+                return ResourceManager.GetString("myTourRequests", resourceCulture);
             }
         }
         
@@ -493,6 +583,24 @@ namespace InitialProject.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Zahtevaj turu.
+        /// </summary>
+        public static string requestATour {
+            get {
+                return ResourceManager.GetString("requestATour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zahtevaj turu.
+        /// </summary>
+        public static string requestATourBtn {
+            get {
+                return ResourceManager.GetString("requestATourBtn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Zahtevaj složenu turu.
         /// </summary>
         public static string requestComplexTour {
@@ -570,6 +678,15 @@ namespace InitialProject.Properties {
         public static string Submit {
             get {
                 return ResourceManager.GetString("Submit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Poslate ture:.
+        /// </summary>
+        public static string SubmittedRegularTours {
+            get {
+                return ResourceManager.GetString("SubmittedRegularTours", resourceCulture);
             }
         }
         
@@ -799,6 +916,15 @@ namespace InitialProject.Properties {
         public static string Welcome {
             get {
                 return ResourceManager.GetString("Welcome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prikaz broja zahteva spram godine:.
+        /// </summary>
+        public static string yearStatistic {
+            get {
+                return ResourceManager.GetString("yearStatistic", resourceCulture);
             }
         }
         
