@@ -114,24 +114,19 @@ namespace InitialProject.Converters
         {
             string locations = "";
             string languages = "";
-            int numberOfTours = 0;
+            string numberOfGuests = "";
 
-            List<int> addedLocationIds = new List<int>();
-            List<string> addedLanguages = new List<string>();
-            numberOfTours = complexTourService.GetNumberOfAvailableTours(complexTour);
 
             foreach (int requestId in complexTour.AvailableTourRequestIds)
             {
-                Location location = locationService.GetById(tourRequestService.GetById(requestId).LocationId);
-
+                    Location location = locationService.GetById(tourRequestService.GetById(requestId).LocationId);
                     locations += location.City + ", " + location.Country + "\n";
-                    addedLocationIds.Add(location.Id);
 
                     string language = tourRequestService.GetById(requestId).Language;
-
                     languages += language += "\n";
-                    addedLanguages.Add(language);
 
+                    int guestNumber = tourRequestService.GetById(requestId).MaxGuests;
+                     numberOfGuests += guestNumber.ToString() + "\n";
             }
 
             // Remove the last "\n" from locations and languages if they are not empty
@@ -141,7 +136,10 @@ namespace InitialProject.Converters
             if (!string.IsNullOrEmpty(languages))
                 languages = languages.TrimEnd('\n');
 
-            return new GuideComplexTourDTO(complexTour.Id, locations, languages, numberOfTours.ToString());
+            if (!string.IsNullOrEmpty(numberOfGuests))
+                numberOfGuests = numberOfGuests.TrimEnd('\n');
+
+            return new GuideComplexTourDTO(complexTour.Id, locations, languages, numberOfGuests.ToString());
         }
 
         static public ComplexTour ConvertToComplexTour(GuideComplexTourDTO dto, ComplexTourService complexTourService)

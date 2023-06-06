@@ -1,4 +1,5 @@
 ﻿using InitialProject.ViewModel.Guide;
+using MenuNavigation.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,11 @@ namespace InitialProject.View.Guide
             InitializeComponent();
             _viewModel = showComplexTourViewModel;
             DataContext = _viewModel;
+
+            _viewModel.CancelCommand = new RelayCommand(obj =>
+            {
+                    this.Close();
+            });
         }
         private void Request_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

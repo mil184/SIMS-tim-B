@@ -47,6 +47,7 @@ namespace InitialProject.View.Guide
         public User CurrentUser { get; set; }
         public int CurrentTourSortIndex;
         public int CurrentRequestSortIndex;
+        public int CurrentComplexTourSortIndex;
         public GuideWindow(User user)
         {
             InitializeComponent();
@@ -94,6 +95,7 @@ namespace InitialProject.View.Guide
 
             CurrentTourSortIndex = 0;
             CurrentRequestSortIndex = 0;
+            CurrentComplexTourSortIndex = 0;
 
             //ComplexTour ct = new ComplexTour();
 
@@ -831,9 +833,14 @@ namespace InitialProject.View.Guide
 
         private void ComplexTourRequestsDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            OpenComplexTourWindow();
+        }
+
+        public void OpenComplexTourWindow() 
+        {
             if (SelectedComplexTourDTO != null)
             {
-                ShowComplexTourViewModel showComplexTourViewModel = new ShowComplexTourViewModel(GuideDTOConverter.ConvertToComplexTour(SelectedComplexTourDTO,_complexTourService), _tourRequestService, _locationService, _complexTourService, CurrentUser, _checkpointService, _imageRepository, _tourService);
+                ShowComplexTourViewModel showComplexTourViewModel = new ShowComplexTourViewModel(GuideDTOConverter.ConvertToComplexTour(SelectedComplexTourDTO, _complexTourService), _tourRequestService, _locationService, _complexTourService, CurrentUser, _checkpointService, _imageRepository, _tourService);
                 ShowComplexTour showComplexTour = new ShowComplexTour(showComplexTourViewModel);
                 showComplexTour.ShowDialog();
             }
@@ -1304,6 +1311,10 @@ namespace InitialProject.View.Guide
                         if (SelectedPendingRequestDTO != null)
                             CreateTourBasedOnRequest();
                         break;
+                    case 6:
+                        if (SelectedComplexTourDTO != null)
+                            OpenComplexTourWindow();
+                        break;
                     default:
                         return;
                 }
@@ -1335,6 +1346,7 @@ namespace InitialProject.View.Guide
             if (Keyboard.IsKeyDown(Key.LeftCtrl) && e.Key == Key.L)
             {
                 var currentDataGrid = GetCurrentDataGrid();
+                if (currentDataGrid == null) return;
                 var firstItem = GetFirstItem(currentDataGrid);
                 SelectAndScrollTo(firstItem, currentDataGrid);
                 e.Handled = true;
@@ -1374,6 +1386,10 @@ namespace InitialProject.View.Guide
             if (grid == PendingRequestsDataGrid)
             {
                 sortColumn = GetNextSortColumnRequests();
+            }
+            else if (grid == ComplexToursDataGrid)
+            {
+                sortColumn = GetNextSortColumnComplexTours();
             }
             else
             {
@@ -1423,6 +1439,10 @@ namespace InitialProject.View.Guide
             { 
                 sortColumn = GetNextSortColumnRequests();
             }
+            else if (grid == ComplexToursDataGrid)
+            {
+                sortColumn = GetNextSortColumnComplexTours();
+            }
             else 
             {
                 sortColumn = GetNextSortColumnTours();
@@ -1467,6 +1487,8 @@ namespace InitialProject.View.Guide
                     return RatedToursDataGrid;
                 case 4:
                     return PendingRequestsDataGrid;
+                case 6:
+                    return ComplexToursDataGrid;
                 default:
                     return null;
             }
@@ -1504,6 +1526,24 @@ namespace InitialProject.View.Guide
                 case 3:
                     CurrentRequestSortIndex = 0;
                     return "StartTime";
+                default:
+                    return "";
+            }
+        }
+        private string GetNextSortColumnComplexTours()
+        {
+            switch (CurrentRequestSortIndex)
+            {
+                case 0:
+                    CurrentRequestSortIndex++;
+                    return "Locations";
+                case 1:
+                    CurrentRequestSortIndex++;
+                    return "Languages";
+                case 2:
+                    CurrentRequestSortIndex = 0;
+                    return "NumberOfGuests";
+
                 default:
                     return "";
             }

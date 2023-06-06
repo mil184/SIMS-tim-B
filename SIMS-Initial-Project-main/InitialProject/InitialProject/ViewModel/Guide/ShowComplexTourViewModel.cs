@@ -1,4 +1,5 @@
-﻿using InitialProject.Converters;
+﻿using InitialProject.Commands;
+using InitialProject.Converters;
 using InitialProject.Model;
 using InitialProject.Model.DTO;
 using InitialProject.Repository;
@@ -11,6 +12,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace InitialProject.ViewModel.Guide
 {
@@ -73,5 +76,16 @@ namespace InitialProject.ViewModel.Guide
             createTour.ShowDialog();
         }
 
+        public RelayCommand CancelCommand { get; set; }
+        public RelayCommand CreateTourCommand { get; set; }
+
+        public void InitializeCommands()
+        {
+            CreateTourCommand = new RelayCommand(CreateTour);
+        }
+        private void CreateTour(object parameter)
+        {
+            CreateTour();
+        }
     }
 }

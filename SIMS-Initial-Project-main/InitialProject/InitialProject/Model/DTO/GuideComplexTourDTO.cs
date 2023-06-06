@@ -11,17 +11,16 @@ namespace InitialProject.Model.DTO
         public int Id { get; set; }
         public string Locations { get; set; }
         public string Languages { get; set; }
-
-        public string NumberOfAvailableTours { get; set; }  
+        public string NumberOfGuests { get; set; }
 
         public GuideComplexTourDTO() { }
 
-        public GuideComplexTourDTO(int id, string locations, string languages, string numberOfAvailableTours)
+        public GuideComplexTourDTO(int id, string locations, string languages, string numberOfGuests)
         {
             Id = id;
             Locations = locations;
             Languages = languages;
-            NumberOfAvailableTours = numberOfAvailableTours;
+            NumberOfGuests = numberOfGuests;
         }
 
     }

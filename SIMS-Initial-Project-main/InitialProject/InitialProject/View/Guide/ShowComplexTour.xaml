@@ -5,7 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InitialProject.View.Guide"
         mc:Ignorable="d"
-        Title="ShowComplexTour" Height="600" Width="1024">
+        Title="ShowComplexTour" Height="600" Width="1024"
+        WindowStartupLocation="CenterScreen">
+    <Window.InputBindings>
+        <KeyBinding Key="Escape" Command="{Binding CancelCommand}" />
+    </Window.InputBindings>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
@@ -17,28 +21,65 @@
         </Grid.ColumnDefinitions>
 
         <GroupBox Header="Available Tour Requests" FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2" Margin="5">
-            <DataGrid  ItemsSource="{Binding AvailableRequests}" SelectedItem="{Binding Path=SelectedAvailableRequestDTO}" AutoGenerateColumns="False" IsReadOnly="true"  Margin="10 10 10 10" SelectionChanged="Request_SelectionChanged">
-                <DataGrid.CellStyle>
-                    <Style TargetType="DataGridCell">
-                        <Setter Property="FontSize" Value="14"/>
-                    </Style>
-                </DataGrid.CellStyle>
+            <DataGrid ItemsSource="{Binding AvailableRequests}" SelectedItem="{Binding Path=SelectedAvailableRequestDTO}" AutoGenerateColumns="False" IsReadOnly="true" Margin="10 10 10 10" FontSize="20"  Focusable="True" SelectionMode="Single" SelectionChanged="Request_SelectionChanged">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Location" Binding="{Binding Location}" Width="*" FontSize="14"/>
-                    <DataGridTextColumn Header="Language" Binding="{Binding Language}" Width="*" FontSize="14"/>
-                    <DataGridTextColumn Header="Guests" Binding="{Binding MaximumGuests}" Width="*" FontSize="14"/>
+                    <DataGridTextColumn Header="Location" Binding="{Binding Location}" Width="*">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Language" Binding="{Binding Language}" Width="*">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Guest Count" Binding="{Binding MaximumGuests}" Width="*">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </GroupBox>
         <GroupBox Header="Available Dates" Grid.Column="1" FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2" Margin="5">
-            <DataGrid  ItemsSource="{Binding DateSlots}" SelectedItem="{Binding Path=SelectedDateSlot}" AutoGenerateColumns="False" IsReadOnly="true"  Margin="10 10 10 10" MouseDoubleClick="DateMouse_Click">
-                <DataGrid.CellStyle>
-                    <Style TargetType="DataGridCell">
-                        <Setter Property="FontSize" Value="14"/>
-                    </Style>
-                </DataGrid.CellStyle>
+            <DataGrid ItemsSource="{Binding DateSlots}" SelectedItem="{Binding Path=SelectedDateSlot}" AutoGenerateColumns="False" IsReadOnly="True" Margin="10 10 10 10" FontSize="20"  Focusable="True" SelectionMode="Single">
+                <DataGrid.InputBindings>
+                    <KeyBinding Key="Return" Command="{Binding CreateTourCommand}" />
+                </DataGrid.InputBindings>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Available Time Slots" Binding="{Binding Date}" Width="*" FontSize="14"/>
+                    <DataGridTextColumn Header="Available Dates" Binding="{Binding Date,StringFormat={}{0:dd.M.yyyy.}}" Width="*">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </GroupBox>

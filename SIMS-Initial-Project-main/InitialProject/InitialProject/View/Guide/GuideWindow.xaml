@@ -1174,7 +1174,7 @@
                                     </DataGridTextColumn.HeaderStyle>
                                 </DataGridTextColumn>
 
-                                <DataGridTextColumn Header="Number Of Available Tours" Binding="{Binding NumberOfAvailableTours}" Width="*">
+                                <DataGridTextColumn Header="Suggested Guest Count" Binding="{Binding NumberOfGuests}" Width="*">
                                     <DataGridTextColumn.ElementStyle>
                                         <Style TargetType="TextBlock">
                                             <Setter Property="HorizontalAlignment" Value="Center" />
