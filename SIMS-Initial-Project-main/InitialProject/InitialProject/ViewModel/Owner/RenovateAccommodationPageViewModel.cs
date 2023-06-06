@@ -20,6 +20,7 @@ namespace InitialProject.ViewModel.Owner
         public DateTime SelectedDate { get; set; }
 
         private readonly AccommodationRenovationService _accommodationRenovationService;
+        private bool IsClicked { get; set; }
 
         private DateTime _startDate;
         public DateTime StartDate
@@ -111,6 +112,7 @@ namespace InitialProject.ViewModel.Owner
 
         private void Execute_FindTimeSlotsCommand(object obj)
         {
+            IsClicked = true;
             Dates.Clear();
             FormDates();
         }
@@ -136,7 +138,7 @@ namespace InitialProject.ViewModel.Owner
             TimeSpan duration = EndDate - StartDate;
             int NumberOfDays = (int)duration.TotalDays;
             int days;
-            int.TryParse(Duration, out days);
+            if (!int.TryParse(Duration, out days)) return false;
             return StartDate <= EndDate && days <= ++NumberOfDays && StartDate >= DateTime.Now;
         }
 
@@ -150,6 +152,7 @@ namespace InitialProject.ViewModel.Owner
             navigationService = navService;
             LoggedInUser = user;
             SelectedAccommodation = selectedAccommodation;
+            IsClicked = false;
 
             FindTimeSlotsCommand = new RelayCommand(Execute_FindTimeSlotsCommand, CanFind_Command);
             SelectionChangedCommand = new RelayCommand(Execute_SelectionChangedCommand, CanExecute_Command);
@@ -189,15 +192,18 @@ namespace InitialProject.ViewModel.Owner
                 if (columnName == "Duration")
                 {
                     if (string.IsNullOrEmpty(Duration))
+                        if (IsClicked)
                         return "This field is required";
 
                     if (!int.TryParse(Duration, out TryParseNumber))
-                        return "This field should be a number";
+                        if (IsClicked)
+                            return "This field should be a number";
                 }
                 else if (columnName == "Description")
                 {
                     if (string.IsNullOrEmpty(Description))
-                        return "This field is required";
+                        if (IsClicked)
+                            return "This field is required";
                 }
 
                 return null;

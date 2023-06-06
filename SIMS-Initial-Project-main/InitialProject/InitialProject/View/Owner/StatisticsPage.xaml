@@ -17,31 +17,31 @@
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal">
-            <ComboBox Name="Years">
+            <ComboBox Name="Years" FontFamily="Comic Sans MS">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged" >
                         <i:InvokeCommandAction Command="{Binding ChangeYearCommand}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </ComboBox>
-            <Label Name="label"></Label>
+            <Label Name="label" FontFamily="Comic Sans MS"></Label>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Orientation="Vertical" Margin="10">
-            <lvc:CartesianChart Series="{Binding Series1}" LegendLocation="Right" Height="250">
+            <lvc:CartesianChart Series="{Binding Series1}" LegendLocation="Right" Height="250" FontFamily="Comic Sans MS">
                 <lvc:CartesianChart.AxisX>
-                    <lvc:Axis Title="Date" Labels="{Binding Labels1}" />
+                    <lvc:Axis Title="Date" Labels="{Binding Labels1}" FontFamily="Comic Sans MS"/>
                 </lvc:CartesianChart.AxisX>
                 <lvc:CartesianChart.AxisY>
-                    <lvc:Axis Title="Count" />
+                    <lvc:Axis Title="Count" FontFamily="Comic Sans MS"/>
                 </lvc:CartesianChart.AxisY>
             </lvc:CartesianChart>
-            <lvc:CartesianChart Series="{Binding Series2}" LegendLocation="Right" Height="250">
+            <lvc:CartesianChart Series="{Binding Series2}" LegendLocation="Right" Height="250" FontFamily="Comic Sans MS">
                 <lvc:CartesianChart.AxisX>
-                    <lvc:Axis Title="Date" Labels="{Binding Labels2}" />
+                    <lvc:Axis Title="Date" Labels="{Binding Labels2}" FontFamily="Comic Sans MS"/>
                 </lvc:CartesianChart.AxisX>
                 <lvc:CartesianChart.AxisY>
-                    <lvc:Axis Title="Count" />
+                    <lvc:Axis Title="Count" FontFamily="Comic Sans MS"/>
                 </lvc:CartesianChart.AxisY>
             </lvc:CartesianChart>
             <Label Name="MonthlyReservations"></Label>

@@ -22,6 +22,9 @@
             <Hyperlink Foreground="White" Command="{Binding NavigateToMinStatisticsPageCommand}">
                 <TextBlock Text="{Binding LeastPopular}" FontSize="14" FontFamily="Comic Sans MS"></TextBlock>
             </Hyperlink>
+            <ToolTipService.ToolTip>
+                <TextBlock Text="We recommend you maybe shut this one down?"></TextBlock>
+            </ToolTipService.ToolTip>
         </TextBlock>
         <Button Grid.Row="1" Grid.Column="1" Height="50" Width="50" Command="{Binding AddAccommodationCommand}" Background="Transparent">
             <Image Source="/Resources/Images/OwnerIcons/image.png"></Image>
@@ -30,6 +33,9 @@
             <Hyperlink Foreground="White" Command="{Binding NavigateToMaxStatisticsPageCommand}">
                 <TextBlock Text="{Binding MostPopular}" FontSize="14" FontFamily="Comic Sans MS"></TextBlock>
             </Hyperlink>
+            <ToolTipService.ToolTip>
+                <TextBlock Text="Maybe open a new accommodation here?"></TextBlock>
+            </ToolTipService.ToolTip>
         </TextBlock>
         <DataGrid ItemsSource="{Binding Path=Accommodations, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.ColumnSpan="3"
                   SelectedItem="{Binding Path=SelectedAccommodation, UpdateSourceTrigger=PropertyChanged}"

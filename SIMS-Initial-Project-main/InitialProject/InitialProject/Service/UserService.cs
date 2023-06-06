@@ -19,12 +19,19 @@ namespace InitialProject.Service
         private readonly IUserRepository _userRepository;
         private readonly AccommodationReservationService _accommodationReservationService;
         private readonly TourService _tourService;
+        private readonly AccommodationService _accommodationService;
 
         public UserService()
         {
             _userRepository = Injector.CreateInstance<IUserRepository>();
             _accommodationReservationService = new AccommodationReservationService();
             _tourService = new TourService();
+            _accommodationService = new AccommodationService();
+        }
+
+        public bool HasAccommodation(int id, int locationId)
+        {
+            return _accommodationService.GetAccommodationsByLocation(id, locationId).Count() != 0;
         }
 
         public User GetByUsername(string username)

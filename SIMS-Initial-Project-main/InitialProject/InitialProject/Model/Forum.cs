@@ -52,5 +52,23 @@ namespace InitialProject.Model
             GuestCommentsCount = Convert.ToInt32(values[6]);
             OwnerCommentsCount = Convert.ToInt32(values[7]);
         }
+
+        public ImageSource TypeImage
+        {
+            get
+            {
+                string imagePath;
+                if (GuestCommentsCount >= 20 && OwnerCommentsCount >= 10)
+                {
+                    imagePath = "/Resources/Images/OwnerIcons/star.png";
+                }
+                else
+                {
+                    imagePath = "";
+                }
+
+                return new BitmapImage(new Uri(imagePath, UriKind.Relative));
+            }
+        }
     }
 }

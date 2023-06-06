@@ -81,6 +81,22 @@ namespace InitialProject.Service
 
             return accommodations;
         }
+
+        public List<Accommodation> GetAccommodationsByLocation(int ownerId, int locationId)
+        {
+            var accommodations = new List<Accommodation>();
+
+            foreach (var accommodation in _accommodationRepository.GetAll())
+            {
+                if (accommodation.OwnerId == ownerId && accommodation.LocationId == locationId)
+                {
+                    accommodations.Add(accommodation);
+                }
+            }
+
+            return accommodations;
+        }
+
         public List<Accommodation> GetByCityName(string city)
         {
             var accommodationsByCityName = new List<Accommodation>();

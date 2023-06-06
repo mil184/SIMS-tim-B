@@ -27,9 +27,9 @@
                     </Style>
                 </DataGrid.CellStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding AccommodationId}" Width="Auto" FontSize="20" ></DataGridTextColumn>
-                    <DataGridTextColumn Binding="{Binding StartDate, StringFormat='dd-MM-yyyy'}" Width="*" FontSize="20" ></DataGridTextColumn>
-                    <DataGridTextColumn Binding="{Binding EndDate, StringFormat='dd-MM-yyyy'}" Width="*" FontSize="20" ></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding AccommodationName}" Width="Auto" FontSize="18" ></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding StartDate, StringFormat='dd-MM-yyyy'}" Width="*" FontSize="18" ></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding EndDate, StringFormat='dd-MM-yyyy'}" Width="*" FontSize="18" ></DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </GroupBox>
@@ -55,9 +55,9 @@
                     </Style>
                 </DataGrid.CellStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding AccommodationId}" Width="Auto" FontSize="20" ></DataGridTextColumn>
-                    <DataGridTextColumn Binding="{Binding StartDate, StringFormat='dd-MM-yyyy'}" Width="*" FontSize="20" ></DataGridTextColumn>
-                    <DataGridTextColumn Binding="{Binding EndDate, StringFormat='dd-MM-yyyy'}" Width="*" FontSize="20" ></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding AccommodationName}" Width="Auto" FontSize="18" ></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding StartDate, StringFormat='dd-MM-yyyy'}" Width="*" FontSize="18" ></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding EndDate, StringFormat='dd-MM-yyyy'}" Width="*" FontSize="18" ></DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </GroupBox>

@@ -5,8 +5,10 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 using MenuNavigation.Commands;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 
@@ -26,6 +28,7 @@ namespace InitialProject.ViewModel.Owner
         public RelayCommand NavigateToGuestReviewPageCommand { get; set; }
         public RelayCommand NavigateToRatingsPageCommand { get; set; }
         public RelayCommand NavigateToRescheduleRequestsPageCommand { get; set; }
+        public RelayCommand NavigateToForumsPageCommand { get; set; }
         public RelayCommand GenerateReportCommand { get; set; }
         public RelayCommand PlayMusicCommand { get; set; }
 
@@ -57,6 +60,12 @@ namespace InitialProject.ViewModel.Owner
         {
             Page reschedules = new RescheduleRequestsPage(navigationService, LoggedInUser);
             navigationService.Navigate(reschedules);
+        }
+
+        private void Execute_NavigateToForumsPageCommand(object obj)
+        {
+            Page forums = new ForumsPage(navigationService, LoggedInUser);
+            navigationService.Navigate(forums);
         }
 
         private void Execute_GenerateReportCommand(object obj)
@@ -167,6 +176,7 @@ namespace InitialProject.ViewModel.Owner
             NavigateToGuestReviewPageCommand = new RelayCommand(Execute_NavigateToGuestReviewPageCommand, CanExecute_Command);
             NavigateToRatingsPageCommand = new RelayCommand(Execute_NavigateToRatingsPageCommand, CanExecute_Command);
             NavigateToRescheduleRequestsPageCommand = new RelayCommand(Execute_NavigateToRescheduleRequestsPageCommand, CanExecute_Command);
+            NavigateToForumsPageCommand = new RelayCommand(Execute_NavigateToForumsPageCommand, CanExecute_Command);
             GenerateReportCommand = new RelayCommand(Execute_GenerateReportCommand, CanExecute_Command);
             PlayMusicCommand = new RelayCommand(Execute_PlayMusicCommand, CanExecute_Command);
 
