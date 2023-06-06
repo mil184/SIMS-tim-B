@@ -1,4 +1,5 @@
 ﻿using InitialProject.Model;
+using InitialProject.Model.DTO;
 using InitialProject.Repository;
 using InitialProject.Repository.Interfaces;
 using InitialProject.Resources.Enums;
@@ -38,6 +39,21 @@ namespace InitialProject.Service
                     _accommodationRepository.Update(accommodation);
                 }
             }
+        }
+
+        public List<int> GetAllLocations(int ownerId)
+        {
+            List<int> retval = new List<int>();
+
+            foreach (Accommodation accommodation in _accommodationRepository.GetAll())
+            {
+                if (accommodation.OwnerId == ownerId)
+                {
+                    retval.Add(accommodation.LocationId);
+                }
+            }
+
+            return retval;
         }
 
         public Accommodation GetAccommodationByLocation(int locationId)

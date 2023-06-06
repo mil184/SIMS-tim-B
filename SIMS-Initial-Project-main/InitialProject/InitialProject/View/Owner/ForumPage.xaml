@@ -111,6 +111,9 @@
                     <TextBox.InputBindings>
                         <KeyBinding Key="Return" Command="{Binding EnterCommand}"></KeyBinding>
                     </TextBox.InputBindings>
+                    <ToolTipService.ToolTip>
+                        <TextBlock Text="Press Return to send"></TextBlock>
+                    </ToolTipService.ToolTip>
                 </TextBox>
             </DockPanel>
         </GroupBox>

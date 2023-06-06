@@ -63,6 +63,9 @@
                             <StackPanel Orientation="Vertical">
                                 <Button Height="30" Background="Transparent" Command="{Binding DataContext.NavigateToStatisticsPageCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}">
                                     <Image Source="/Resources/Images/OwnerIcons/stats.png"></Image>
+                                    <ToolTipService.ToolTip>
+                                        <TextBlock Text="See how's this accommodation doing"></TextBlock>
+                                    </ToolTipService.ToolTip>
                                 </Button>
                             </StackPanel>
                         </DataTemplate>
@@ -74,6 +77,9 @@
                             <StackPanel Orientation="Vertical">
                                 <Button Height="30" Background="Transparent" Command="{Binding DataContext.RenovateAccommodationCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}">
                                     <Image Source="/Resources/Images/OwnerIcons/renovation.png" />
+                                    <ToolTipService.ToolTip>
+                                        <TextBlock Text="Appoint a renovation"></TextBlock>
+                                    </ToolTipService.ToolTip>
                                 </Button>
                             </StackPanel>
                         </DataTemplate>

@@ -21,6 +21,9 @@
                     <i:InvokeCommandAction Command="{Binding NavigateToForumPageCommand}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
+            <ToolTipService.ToolTip>
+                <TextBlock Text="Double click to open"></TextBlock>
+            </ToolTipService.ToolTip>
             <DataGrid.CellStyle>
                 <Style TargetType="{x:Type DataGridCell}">
                     <Setter Property="VerticalAlignment" Value="Center" />

@@ -31,57 +31,58 @@ namespace InitialProject.ViewModel.Owner
         private void Execute_ChangeYearCommand(object obj)
         {
             SelectedYear = int.Parse(MainPage.Years.SelectedItem.ToString());
-            MainPage.MonthlyReservations.Content = "JAN: " + _accommodationReservationService.GetReservationsByMonth(SelectedAccommodation.Id, SelectedYear, 1).Count
-                + " FEB: " + _accommodationReservationService.GetReservationsByMonth(SelectedAccommodation.Id, SelectedYear, 2).Count
-                + " MAR: " + _accommodationReservationService.GetReservationsByMonth(SelectedAccommodation.Id, SelectedYear, 3).Count
-                + " APR: " + _accommodationReservationService.GetReservationsByMonth(SelectedAccommodation.Id, SelectedYear, 4).Count
-                + " MAY: " + _accommodationReservationService.GetReservationsByMonth(SelectedAccommodation.Id, SelectedYear, 5).Count
-                + " JUN: " + _accommodationReservationService.GetReservationsByMonth(SelectedAccommodation.Id, SelectedYear, 6).Count
-                + " JUL: " + _accommodationReservationService.GetReservationsByMonth(SelectedAccommodation.Id, SelectedYear, 7).Count
-                + " AUG: " + _accommodationReservationService.GetReservationsByMonth(SelectedAccommodation.Id, SelectedYear, 8).Count
-                + " SEP: " + _accommodationReservationService.GetReservationsByMonth(SelectedAccommodation.Id, SelectedYear, 9).Count
-                + " OCT: " + _accommodationReservationService.GetReservationsByMonth(SelectedAccommodation.Id, SelectedYear, 10).Count
-                + " NOV: " + _accommodationReservationService.GetReservationsByMonth(SelectedAccommodation.Id, SelectedYear, 11).Count
-                + " DEC: " + _accommodationReservationService.GetReservationsByMonth(SelectedAccommodation.Id, SelectedYear, 12).Count;
 
-            MainPage.MonthlyCancellations.Content = "JAN: " + _reservationCancellationService.GetCancellationsByMonth(SelectedAccommodation.Id, SelectedYear, 1).Count
-                + " FEB: " + _reservationCancellationService.GetCancellationsByMonth(SelectedAccommodation.Id, SelectedYear, 2).Count
-                + " MAR: " + _reservationCancellationService.GetCancellationsByMonth(SelectedAccommodation.Id, SelectedYear, 3).Count
-                + " APR: " + _reservationCancellationService.GetCancellationsByMonth(SelectedAccommodation.Id, SelectedYear, 4).Count
-                + " MAY: " + _reservationCancellationService.GetCancellationsByMonth(SelectedAccommodation.Id, SelectedYear, 5).Count
-                + " JUN: " + _reservationCancellationService.GetCancellationsByMonth(SelectedAccommodation.Id, SelectedYear, 6).Count
-                + " JUL: " + _reservationCancellationService.GetCancellationsByMonth(SelectedAccommodation.Id, SelectedYear, 7).Count
-                + " AUG: " + _reservationCancellationService.GetCancellationsByMonth(SelectedAccommodation.Id, SelectedYear, 8).Count
-                + " SEP: " + _reservationCancellationService.GetCancellationsByMonth(SelectedAccommodation.Id, SelectedYear, 9).Count
-                + " OCT: " + _reservationCancellationService.GetCancellationsByMonth(SelectedAccommodation.Id, SelectedYear, 10).Count
-                + " NOV: " + _reservationCancellationService.GetCancellationsByMonth(SelectedAccommodation.Id, SelectedYear, 11).Count
-                + " DEC: " + _reservationCancellationService.GetCancellationsByMonth(SelectedAccommodation.Id, SelectedYear, 12).Count;
+            MainPage.res1.Content = _accommodationReservationService.GetReservationsByMonth(SelectedAccommodation.Id, SelectedYear, 1).Count;
+            MainPage.res2.Content = _accommodationReservationService.GetReservationsByMonth(SelectedAccommodation.Id, SelectedYear, 2).Count;
+            MainPage.res3.Content = _accommodationReservationService.GetReservationsByMonth(SelectedAccommodation.Id, SelectedYear, 3).Count;
+            MainPage.res4.Content = _accommodationReservationService.GetReservationsByMonth(SelectedAccommodation.Id, SelectedYear, 4).Count;
+            MainPage.res5.Content = _accommodationReservationService.GetReservationsByMonth(SelectedAccommodation.Id, SelectedYear, 5).Count;
+            MainPage.res6.Content = _accommodationReservationService.GetReservationsByMonth(SelectedAccommodation.Id, SelectedYear, 6).Count;
+            MainPage.res7.Content = _accommodationReservationService.GetReservationsByMonth(SelectedAccommodation.Id, SelectedYear, 7).Count;
+            MainPage.res8.Content = _accommodationReservationService.GetReservationsByMonth(SelectedAccommodation.Id, SelectedYear, 8).Count;
+            MainPage.res9.Content = _accommodationReservationService.GetReservationsByMonth(SelectedAccommodation.Id, SelectedYear, 9).Count;
+            MainPage.res10.Content = _accommodationReservationService.GetReservationsByMonth(SelectedAccommodation.Id, SelectedYear, 10).Count;
+            MainPage.res11.Content = _accommodationReservationService.GetReservationsByMonth(SelectedAccommodation.Id, SelectedYear, 11).Count;
+            MainPage.res12.Content = _accommodationReservationService.GetReservationsByMonth(SelectedAccommodation.Id, SelectedYear, 12).Count;
 
-            MainPage.MonthlyReschedules.Content = "JAN: " + _rescheduleRequestService.GetReschedulesByMonth(SelectedAccommodation.Id, SelectedYear, 1).Count
-                + " FEB: " + _rescheduleRequestService.GetReschedulesByMonth(SelectedAccommodation.Id, SelectedYear, 2).Count
-                + " MAR: " + _rescheduleRequestService.GetReschedulesByMonth(SelectedAccommodation.Id, SelectedYear, 3).Count
-                + " APR: " + _rescheduleRequestService.GetReschedulesByMonth(SelectedAccommodation.Id, SelectedYear, 4).Count
-                + " MAY: " + _rescheduleRequestService.GetReschedulesByMonth(SelectedAccommodation.Id, SelectedYear, 5).Count
-                + " JUN: " + _rescheduleRequestService.GetReschedulesByMonth(SelectedAccommodation.Id, SelectedYear, 6).Count
-                + " JUL: " + _rescheduleRequestService.GetReschedulesByMonth(SelectedAccommodation.Id, SelectedYear, 7).Count
-                + " AUG: " + _rescheduleRequestService.GetReschedulesByMonth(SelectedAccommodation.Id, SelectedYear, 8).Count
-                + " SEP: " + _rescheduleRequestService.GetReschedulesByMonth(SelectedAccommodation.Id, SelectedYear, 9).Count
-                + " OCT: " + _rescheduleRequestService.GetReschedulesByMonth(SelectedAccommodation.Id, SelectedYear, 10).Count
-                + " NOV: " + _rescheduleRequestService.GetReschedulesByMonth(SelectedAccommodation.Id, SelectedYear, 11).Count
-                + " DEC: " + _rescheduleRequestService.GetReschedulesByMonth(SelectedAccommodation.Id, SelectedYear, 12).Count;
+            MainPage.can1.Content = _reservationCancellationService.GetCancellationsByMonth(SelectedAccommodation.Id, SelectedYear, 1).Count;
+            MainPage.can2.Content = _reservationCancellationService.GetCancellationsByMonth(SelectedAccommodation.Id, SelectedYear, 2).Count;
+            MainPage.can3.Content = _reservationCancellationService.GetCancellationsByMonth(SelectedAccommodation.Id, SelectedYear, 3).Count;
+            MainPage.can4.Content = _reservationCancellationService.GetCancellationsByMonth(SelectedAccommodation.Id, SelectedYear, 4).Count;
+            MainPage.can5.Content = _reservationCancellationService.GetCancellationsByMonth(SelectedAccommodation.Id, SelectedYear, 5).Count;
+            MainPage.can6.Content = _reservationCancellationService.GetCancellationsByMonth(SelectedAccommodation.Id, SelectedYear, 6).Count;
+            MainPage.can7.Content = _reservationCancellationService.GetCancellationsByMonth(SelectedAccommodation.Id, SelectedYear, 7).Count;
+            MainPage.can8.Content = _reservationCancellationService.GetCancellationsByMonth(SelectedAccommodation.Id, SelectedYear, 8).Count;
+            MainPage.can9.Content = _reservationCancellationService.GetCancellationsByMonth(SelectedAccommodation.Id, SelectedYear, 9).Count;
+            MainPage.can10.Content = _reservationCancellationService.GetCancellationsByMonth(SelectedAccommodation.Id, SelectedYear, 10).Count;
+            MainPage.can11.Content = _reservationCancellationService.GetCancellationsByMonth(SelectedAccommodation.Id, SelectedYear, 11).Count;
+            MainPage.can12.Content = _reservationCancellationService.GetCancellationsByMonth(SelectedAccommodation.Id, SelectedYear, 12).Count;
 
-            MainPage.MonthlyRecommendations.Content = "JAN: " + _renovationRecommendationService.GetRecommendationsByMonth(SelectedAccommodation.Id, SelectedYear, 1).Count
-                + " FEB: " + _renovationRecommendationService.GetRecommendationsByMonth(SelectedAccommodation.Id, SelectedYear, 2).Count
-                + " MAR: " + _renovationRecommendationService.GetRecommendationsByMonth(SelectedAccommodation.Id, SelectedYear, 3).Count
-                + " APR: " + _renovationRecommendationService.GetRecommendationsByMonth(SelectedAccommodation.Id, SelectedYear, 4).Count
-                + " MAY: " + _renovationRecommendationService.GetRecommendationsByMonth(SelectedAccommodation.Id, SelectedYear, 5).Count
-                + " JUN: " + _renovationRecommendationService.GetRecommendationsByMonth(SelectedAccommodation.Id, SelectedYear, 6).Count
-                + " JUL: " + _renovationRecommendationService.GetRecommendationsByMonth(SelectedAccommodation.Id, SelectedYear, 7).Count
-                + " AUG: " + _renovationRecommendationService.GetRecommendationsByMonth(SelectedAccommodation.Id, SelectedYear, 8).Count
-                + " SEP: " + _renovationRecommendationService.GetRecommendationsByMonth(SelectedAccommodation.Id, SelectedYear, 9).Count
-                + " OCT: " + _renovationRecommendationService.GetRecommendationsByMonth(SelectedAccommodation.Id, SelectedYear, 10).Count
-                + " NOV: " + _renovationRecommendationService.GetRecommendationsByMonth(SelectedAccommodation.Id, SelectedYear, 11).Count
-                + " DEC: " + _renovationRecommendationService.GetRecommendationsByMonth(SelectedAccommodation.Id, SelectedYear, 12).Count;
+            MainPage.resc1.Content = _rescheduleRequestService.GetReschedulesByMonth(SelectedAccommodation.Id, SelectedYear, 1).Count;
+            MainPage.resc2.Content = _rescheduleRequestService.GetReschedulesByMonth(SelectedAccommodation.Id, SelectedYear, 2).Count;
+            MainPage.resc3.Content = _rescheduleRequestService.GetReschedulesByMonth(SelectedAccommodation.Id, SelectedYear, 3).Count;
+            MainPage.resc4.Content = _rescheduleRequestService.GetReschedulesByMonth(SelectedAccommodation.Id, SelectedYear, 4).Count;
+            MainPage.resc5.Content = _rescheduleRequestService.GetReschedulesByMonth(SelectedAccommodation.Id, SelectedYear, 5).Count;
+            MainPage.resc6.Content = _rescheduleRequestService.GetReschedulesByMonth(SelectedAccommodation.Id, SelectedYear, 6).Count;
+            MainPage.resc7.Content = _rescheduleRequestService.GetReschedulesByMonth(SelectedAccommodation.Id, SelectedYear, 7).Count;
+            MainPage.resc8.Content = _rescheduleRequestService.GetReschedulesByMonth(SelectedAccommodation.Id, SelectedYear, 8).Count;
+            MainPage.resc9.Content = _rescheduleRequestService.GetReschedulesByMonth(SelectedAccommodation.Id, SelectedYear, 9).Count;
+            MainPage.resc10.Content = _rescheduleRequestService.GetReschedulesByMonth(SelectedAccommodation.Id, SelectedYear, 10).Count;
+            MainPage.resc11.Content = _rescheduleRequestService.GetReschedulesByMonth(SelectedAccommodation.Id, SelectedYear, 11).Count;
+            MainPage.resc12.Content = _rescheduleRequestService.GetReschedulesByMonth(SelectedAccommodation.Id, SelectedYear, 12).Count;
+
+            MainPage.rec1.Content = _renovationRecommendationService.GetRecommendationsByMonth(SelectedAccommodation.Id, SelectedYear, 1).Count;
+            MainPage.rec2.Content = _renovationRecommendationService.GetRecommendationsByMonth(SelectedAccommodation.Id, SelectedYear, 2).Count;
+            MainPage.rec3.Content = _renovationRecommendationService.GetRecommendationsByMonth(SelectedAccommodation.Id, SelectedYear, 3).Count;
+            MainPage.rec4.Content = _renovationRecommendationService.GetRecommendationsByMonth(SelectedAccommodation.Id, SelectedYear, 4).Count;
+            MainPage.rec5.Content = _renovationRecommendationService.GetRecommendationsByMonth(SelectedAccommodation.Id, SelectedYear, 5).Count;
+            MainPage.rec6.Content = _renovationRecommendationService.GetRecommendationsByMonth(SelectedAccommodation.Id, SelectedYear, 6).Count;
+            MainPage.rec7.Content = _renovationRecommendationService.GetRecommendationsByMonth(SelectedAccommodation.Id, SelectedYear, 7).Count;
+            MainPage.rec8.Content = _renovationRecommendationService.GetRecommendationsByMonth(SelectedAccommodation.Id, SelectedYear, 8).Count;
+            MainPage.rec9.Content = _renovationRecommendationService.GetRecommendationsByMonth(SelectedAccommodation.Id, SelectedYear, 9).Count;
+            MainPage.rec10.Content = _renovationRecommendationService.GetRecommendationsByMonth(SelectedAccommodation.Id, SelectedYear, 10).Count;
+            MainPage.rec11.Content = _renovationRecommendationService.GetRecommendationsByMonth(SelectedAccommodation.Id, SelectedYear, 11).Count;
+            MainPage.rec12.Content = _renovationRecommendationService.GetRecommendationsByMonth(SelectedAccommodation.Id, SelectedYear, 12).Count;
         }
 
         private bool CanExecute_Command(object obj)
@@ -156,7 +157,9 @@ namespace InitialProject.ViewModel.Owner
             {
                 MainPage.Years.Items.Add(i.ToString());
             }
-            MainPage.label.Content = "The busiest year was: " + _accommodationReservationService.GetBusiestYear(SelectedAccommodation.Id).ToString();
+            MainPage.Years.SelectedIndex = 0;
+            MainPage.label1.Content = "The busiest year was " + _accommodationReservationService.GetBusiestYear(SelectedAccommodation.Id).ToString() + "!";
+            MainPage.label2.Content = "The busiest year was " + _accommodationReservationService.GetBusiestYear(SelectedAccommodation.Id).ToString() + "!";
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
