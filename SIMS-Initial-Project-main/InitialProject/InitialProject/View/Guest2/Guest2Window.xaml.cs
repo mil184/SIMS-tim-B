@@ -257,8 +257,7 @@ namespace InitialProject.View.Guest2
 
             AlterVoucherSectionVisibility();
             AlterTourTrackingVisibility();
-
-            
+            AlterComplexToursDataGridVisibility();
         }
 
         private void NotifyAcceptedLanguages()
@@ -1151,6 +1150,15 @@ namespace InitialProject.View.Guest2
                 NoTourActive.Visibility = Visibility.Visible;
                 CurrentlyActiveTourColumn.Visibility = Visibility.Collapsed;
                 TourTrackingColumn.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void AlterComplexToursDataGridVisibility()
+        {
+            if (_complexTourService.GetAllByUser(LoggedInUser).Count == 0)
+            {
+                NoComplexToursLabel.Visibility = Visibility.Visible;
+                ComplexTourRequestsDataGrid.Visibility = Visibility.Collapsed;
             }
         }
 

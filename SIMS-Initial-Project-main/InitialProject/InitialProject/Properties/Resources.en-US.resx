@@ -270,6 +270,9 @@
   <data name="Next" xml:space="preserve">
     <value>Next</value>
   </data>
+  <data name="noComplexTourRequests" xml:space="preserve">
+    <value>Nemate zahteve za kompleksne ture.</value>
+  </data>
   <data name="NoSpacesAvailable" xml:space="preserve">
     <value>There are no spaces left for chosen tour. Here are all available tours in the same city:</value>
   </data>

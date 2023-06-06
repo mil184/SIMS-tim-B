@@ -520,6 +520,15 @@ namespace InitialProject.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You haven&apos;t requested any complex tours..
+        /// </summary>
+        public static string noComplexTourRequests {
+            get {
+                return ResourceManager.GetString("noComplexTourRequests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nije ostalo nijedno slobodno mesto na odabranoj turi. Prikazane su dostupne ture u istom gradu:.
         /// </summary>
         public static string NoSpacesAvailable {
