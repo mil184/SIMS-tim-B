@@ -2,16 +2,46 @@
 using InitialProject.Repository;
 using InitialProject.Resources.Observer;
 using System.Collections.Generic;
+using System.Windows;
 
 namespace InitialProject.Service
 {
     public class TourReservationService
     {
         private readonly TourReservationRepository _tourReservationRepository;
+        private readonly VoucherService _voucherService;
 
         public TourReservationService()
         {
             _tourReservationRepository = new TourReservationRepository();
+            _voucherService = new VoucherService();
+        }
+
+        public void noname(TourReservation tourReservation)  // poziva se kad se rezervise
+        {
+            int year = tourReservation.ReservationTime.Year;
+            List<TourReservation> reservationList = new List<TourReservation>();
+
+            foreach(var reservation in GetAll())
+            {
+                if(reservation.ReservationTime.Year == year)
+                {
+                    reservationList.Add(reservation);
+                }
+            }
+
+            if (reservationList.Count == 5)
+            {
+                Voucher voucher = new Voucher("5 tours", System.DateTime.Now, System.DateTime.Now.AddMonths(6), tourReservation.UserId);
+                _voucherService.Save(voucher);
+                MessageBox.Show("You've recieved a voucher!");
+
+                foreach(var reservation in reservationList)
+                {
+                    reservation.GotVoucher = true;
+                    Update(reservation);
+                }
+            }
         }
 
         public List<int> GetUncheckedUserIdsByTour(Tour tour)

@@ -381,7 +381,7 @@ namespace InitialProject.View.Guest2
 
                 if (tourRequest.Status == InitialProject.Resources.Enums.RequestStatus.accepted && !tourRequest.MessageShown)
                 {
-                    GetAcceptedRequestMessageBox(location, tourRequest)
+                    GetAcceptedRequestMessageBox(location, tourRequest);
                     tourRequest.MessageShown = true;
                     _tourRequestService.Update(tourRequest);
                 }
@@ -411,7 +411,7 @@ namespace InitialProject.View.Guest2
                     return;
                 }
 
-                MessageBoxResult result = new MessageBoxResult;
+                MessageBoxResult result = new MessageBoxResult();
 
                 if (app.Lang == ENG)
                 {
@@ -586,7 +586,8 @@ namespace InitialProject.View.Guest2
                 SelectedGuest2TourDTO.TourId,
                 personCount,
                 double.Parse(AverageAge),
-                voucherId);
+                voucherId,
+                System.DateTime.Now);
 
             if (CheckIfReservationAlreadyExists(tourReservation))
             {
@@ -598,6 +599,9 @@ namespace InitialProject.View.Guest2
             }
 
             ShowSuccessfulReservationMessage(app.Lang);
+
+            _tourReservationService.noname(tourReservation);
+            Update();
         }
 
         private void ShowSuccessfulReservationMessage(string lang)
