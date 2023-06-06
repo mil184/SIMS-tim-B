@@ -258,6 +258,11 @@ namespace InitialProject.View.Guest2
             AlterVoucherSectionVisibility();
             AlterTourTrackingVisibility();
             AlterComplexToursDataGridVisibility();
+
+            foreach(var complexTour in _complexTourService.GetAllByUser(LoggedInUser))
+            {
+                _complexTourService.AlterStatus(complexTour);
+            }
         }
 
         private void NotifyAcceptedLanguages()

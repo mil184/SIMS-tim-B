@@ -26,7 +26,47 @@ namespace InitialProject.Service
             _tourRequestService = new TourRequestService();
             _locationService = new LocationService();
         }   
+
+        public void AlterStatus(ComplexTour complexTour)
+        {
+            AlterAcceptedStatus(complexTour);
+            AlterInvalidStatus(complexTour);
+        }
  
+        public void AlterAcceptedStatus(ComplexTour complexTour)
+        {
+            foreach(var id in complexTour.TourRequestIds)
+            {
+                if (_tourRequestService.GetById(id).Status != Resources.Enums.RequestStatus.accepted)
+                {
+                    return;
+                }
+
+                complexTour.Status = Resources.Enums.ComplexTourStatus.accepted;
+            }
+        }
+
+        public void AlterInvalidStatus(ComplexTour complexTour)
+        {
+            TourRequest first = _tourRequestService.GetById(complexTour.TourRequestIds[0]);
+            DateTime firstStartDate = first.StartTime;
+
+            if (firstStartDate > firstStartDate.AddDays(2))
+            {
+                return;
+            }
+
+            foreach (var id in complexTour.TourRequestIds)
+            {
+                if (_tourRequestService.GetById(id).Status == Resources.Enums.RequestStatus.accepted)
+                {
+                    return;
+                }
+
+                complexTour.Status = Resources.Enums.ComplexTourStatus.invalid;
+            }
+        }
+
         public List<ComplexTour> GetAllByUser (User user)
         {
             List<ComplexTour> complexTours = new List<ComplexTour>();
