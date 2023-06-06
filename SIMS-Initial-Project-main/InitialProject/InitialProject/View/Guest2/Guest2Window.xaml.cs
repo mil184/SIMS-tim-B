@@ -413,12 +413,12 @@ namespace InitialProject.View.Guest2
 
                 MessageBoxResult result = new MessageBoxResult();
 
-                if (app.Lang == ENG)
+                if (app != null && app.Lang == ENG)
                 {
                     result = MessageBox.Show("Please confirm your arrival at " + CheckedTours[0].Name, "Arrival Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Information);
                 }
 
-                if (app.Lang == SRB)
+                if (app != null && app.Lang == SRB)
                 {
                     result = MessageBox.Show("Potvrdite svoj dolazak na turi " + CheckedTours[0].Name, "Potvrda dolaska", MessageBoxButton.YesNo, MessageBoxImage.Information);
                 }
