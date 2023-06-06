@@ -15,6 +15,13 @@ using InitialProject.Resources.Injector;
 using System.Windows.Controls;
 using Xceed.Wpf.Toolkit.Primitives;
 using InitialProject.Repository;
+using System.Diagnostics;
+using System.Text;
+using iTextSharp.text;
+using System.IO;
+using PdfSharpCore.Drawing;
+using PdfSharpCore;
+using PdfSharpCore.Pdf;
 
 namespace InitialProject.View.Guest1
 {
@@ -678,6 +685,51 @@ namespace InitialProject.View.Guest1
                 ShowComments showComment = new ShowComments(SelectedForum, _commentService, LoggedInUser);
                 showComment.ShowDialog();
             }
+        }
+
+        private void GenerateReport_Click(object sender, RoutedEventArgs e)
+        {
+            PdfDocument document = new PdfDocument();
+            PdfPage page = new PdfPage();
+            document.Pages.Add(page);
+
+            XGraphics gfx = XGraphics.FromPdfPage(page);
+            XFont titleFont = new XFont("Arial", 16, XFontStyle.Bold);
+            XFont subtitleFont = new XFont("Arial", 12, XFontStyle.Bold);
+            XFont contentFont = new XFont("Arial", 10, XFontStyle.Regular);
+
+            List<RescheduleRequest> rescheduleRequests = _rescheduleRequestService.GetAll();
+
+            XRect pageBounds = new XRect(40, 40, page.Width - 80, page.Height - 80);
+            XRect titleBounds = new XRect(pageBounds.Left, pageBounds.Top, pageBounds.Width, 30);
+            XRect tableBounds = new XRect(pageBounds.Left, pageBounds.Top + 50, pageBounds.Width, pageBounds.Height - 50);
+
+            gfx.DrawString("Reschedule Request Reports", titleFont, XBrushes.Black, titleBounds, XStringFormats.Center);
+
+            int headerXPos = (int)tableBounds.Left;
+            int headerYPos = (int)tableBounds.Top;
+            int columnWidthAccommodationId = (int)(tableBounds.Width * 0.3);
+            int columnWidthStatus = (int)(tableBounds.Width * 0.2);
+            int columnWidthComment = (int)(tableBounds.Width * 0.4);
+
+            gfx.DrawString("Accommodation Id", subtitleFont, XBrushes.Black, new XRect(headerXPos, headerYPos, columnWidthAccommodationId, 20), XStringFormats.CenterLeft);
+            gfx.DrawString("Status", subtitleFont, XBrushes.Black, new XRect(headerXPos + columnWidthAccommodationId, headerYPos, columnWidthStatus, 20), XStringFormats.CenterLeft);
+            gfx.DrawString("Comment", subtitleFont, XBrushes.Black, new XRect(headerXPos + columnWidthAccommodationId + columnWidthStatus, headerYPos, columnWidthComment, 20), XStringFormats.CenterLeft);
+
+            int dataYPos = headerYPos + 20;
+            foreach (RescheduleRequest rescheduleRequest in rescheduleRequests)
+            {
+                gfx.DrawString(rescheduleRequest.AccommodationId.ToString(), contentFont, XBrushes.Black, new XRect(headerXPos, dataYPos, columnWidthAccommodationId, 20), XStringFormats.CenterLeft);
+                gfx.DrawString(rescheduleRequest.Status.ToString(), contentFont, XBrushes.Black, new XRect(headerXPos + columnWidthAccommodationId, dataYPos, columnWidthStatus, 20), XStringFormats.CenterLeft);
+                gfx.DrawString(rescheduleRequest.Comment, contentFont, XBrushes.Black, new XRect(headerXPos + columnWidthAccommodationId + columnWidthStatus, dataYPos, columnWidthComment, 20), XStringFormats.CenterLeft);
+
+                dataYPos += 20;
+            }
+
+            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\rescheduleRequestReport.pdf";
+            document.Save(filePath);
+
+            Process.Start(new ProcessStartInfo(filePath) { UseShellExecute = true });
         }
     }
 }
