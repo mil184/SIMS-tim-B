@@ -27,6 +27,20 @@ namespace InitialProject.Service
             _locationService = new LocationService();
         }   
  
+        public List<ComplexTour> GetAllByUser (User user)
+        {
+            List<ComplexTour> complexTours = new List<ComplexTour>();
+
+            foreach(var tour in _complexTourRepository.GetAll())
+            {
+                if (tour.GuestId == user.Id)
+                {
+                    complexTours.Add(tour);
+                }
+            }
+
+            return complexTours;
+        }
 
         public List<DateOnly> GetAvailableTimeSlots(User user, ComplexTour complexTour, TourRequest tourRequest)
         {

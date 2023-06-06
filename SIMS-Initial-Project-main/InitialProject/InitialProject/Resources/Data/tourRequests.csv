@@ -1,8 +1,8 @@
 1|129|ssss|German|11|09-Jul-23 12:00:00 AM|23-Jul-23 11:59:59 PM|pending|5|3|31-May-23 10:16:59 PM|False|False|False|01-Jan-01 1:01:01 AM|True
 2|213|omg desc|English|132|02-Jun-23 12:00:00 AM|29-Jun-23 11:59:59 PM|invalid|5|3|31-May-23 10:16:59 PM|False|False|False|01-Jan-01 1:01:01 AM|True
 3|213|omg another|French|132|20-Jun-23 12:00:00 AM|14-Aug-23 11:59:59 PM|pending|5|3|31-May-23 10:16:59 PM|False|False|False|01-Jan-01 1:01:01 AM|True
-4|142|hhh|Serbian|34|04-Jun-23 1:01:00 AM|07-Jun-23 11:14:00 AM|invalid|5|-1|04-Jun-23 11:31:54 AM|False|False|False|01-Jan-01 1:01:01 AM|False
-5|142|ggg|Serbian|32|04-Jun-23 1:01:00 AM|05-Jun-23 11:14:00 AM|invalid|5|-1|04-Jun-23 12:29:49 PM|False|False|False|01-Jan-01 1:01:01 AM|False
+4|142|hhh|Serbian|34|04-Jun-23 1:01:00 AM|07-Jun-23 11:14:00 AM|invalid|5|-1|04-Jun-23 11:31:54 AM|False|True|False|01-Jan-01 1:01:01 AM|False
+5|142|ggg|Serbian|32|04-Jun-23 1:01:00 AM|05-Jun-23 11:14:00 AM|invalid|5|-1|04-Jun-23 12:29:49 PM|False|True|False|01-Jan-01 1:01:01 AM|False
 6|348|ddd|dd|32|04-Jun-23 3:03:00 AM|07-Jun-23 11:13:00 AM|invalid|5|-1|04-Jun-23 12:31:03 PM|False|False|False|01-Jan-01 1:01:01 AM|False
 7|14|tamara gdje si|Brchanski|11|05-Jun-23 12:12:00 PM|18-Jun-23 1:11:00 PM|invalid|5|-1|04-Jun-23 12:41:02 PM|False|False|False|01-Jan-01 1:01:01 AM|True
 8|142|dsa|dsa|43|06-Jun-23 12:12:00 PM|22-Jun-23 10:13:00 AM|invalid|5|-1|04-Jun-23 12:45:33 PM|False|False|False|01-Jan-01 1:01:01 AM|True

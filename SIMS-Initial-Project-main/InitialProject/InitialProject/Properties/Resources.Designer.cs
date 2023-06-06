@@ -79,6 +79,15 @@ namespace InitialProject.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Odabrani datumi.
+        /// </summary>
+        public static string ChosenDatesDG {
+            get {
+                return ResourceManager.GetString("ChosenDatesDG", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 4. Dodati komentar:*.
         /// </summary>
         public static string CommentQuestion {
@@ -660,6 +669,15 @@ namespace InitialProject.Properties {
         public static string StartDateTime {
             get {
                 return ResourceManager.GetString("StartDateTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status.
+        /// </summary>
+        public static string StatusDG {
+            get {
+                return ResourceManager.GetString("StatusDG", resourceCulture);
             }
         }
         
