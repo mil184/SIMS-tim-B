@@ -598,7 +598,8 @@ namespace InitialProject.View.Guest2
                 SaveNewReservation(tourReservation);
             }
 
-            ShowSuccessfulReservationMessage(app.Lang);
+            TourReservationMessage tourReservationMessage = new TourReservationMessage();
+            tourReservationMessage.Show();
 
             _tourReservationService.AcquireVoucher(tourReservation);
             Update();
