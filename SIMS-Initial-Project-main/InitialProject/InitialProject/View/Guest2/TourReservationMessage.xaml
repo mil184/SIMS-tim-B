@@ -28,11 +28,11 @@
 
             <Button Grid.Column="0"
                     FontSize="20" Height="40" Margin="10"
-                    Content="Ok" Click="Button_Click"/>
+                    Content="Ok" Click="OkButton_Click"/>
 
             <Button Grid.Column="1"
                     FontSize="20" Height="40" Margin="10"
-                    Content="Print a Report" Click="Button_Click_1"/>
+                    Content="Print a Report" Click="PrintReportButton_Click"/>
         </Grid>
     </Grid>
 </Window>

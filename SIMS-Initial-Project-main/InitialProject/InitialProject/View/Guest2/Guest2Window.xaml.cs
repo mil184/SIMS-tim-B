@@ -598,7 +598,7 @@ namespace InitialProject.View.Guest2
                 SaveNewReservation(tourReservation);
             }
 
-            TourReservationMessage tourReservationMessage = new TourReservationMessage();
+            TourReservationMessage tourReservationMessage = new TourReservationMessage(tourReservation, LoggedInUser, _tourService, _locationService, _userService);
             tourReservationMessage.Show();
 
             _tourReservationService.AcquireVoucher(tourReservation);
