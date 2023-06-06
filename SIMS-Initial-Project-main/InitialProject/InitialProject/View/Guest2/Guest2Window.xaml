@@ -542,12 +542,6 @@
                             <GroupBox.Header>
                                 <StackPanel Orientation="Horizontal">
                                     <Label FontSize="25" FontWeight="Bold" Content="{ns:Loc TrackTour}"/>
-                                    <Image x:Name="TrackingImage" Source="/Resources/Images/info.png" 
-                                        Height="30" Margin ="5, 0, 0, 0 " HorizontalAlignment="Left" VerticalAlignment="Center"
-                                        MouseEnter="TrackingImage_MouseEnter" MouseLeave="TrackingImage_MouseLeave" />
-                                    <Popup x:Name="TrackingPopup" Placement="Right" PlacementTarget="{Binding ElementName=TrackingImage}" IsOpen="False">
-                                        <TextBlock Text="{ns:Loc TrackingInfo}" Background="#96CDFA" Padding="5" TextWrapping="Wrap" Width="300"/>
-                                    </Popup>
                                 </StackPanel>
                             </GroupBox.Header>
                             <DataGrid x:Name="CheckpointsDataGrid" 
@@ -587,9 +581,17 @@
                 <StackPanel Margin="10">
 
                     <!-- Tour overview section -->
-                    <GroupBox Margin="20" FontSize="20">
+                    <GroupBox Margin="50, 50, 50, 20" FontSize="20">
                         <GroupBox.Header>
-                            <Label FontSize="25" FontWeight="Bold">Finished tours</Label>
+                            <StackPanel Orientation="Horizontal">
+                                <Label FontSize="25" FontWeight="Bold" Content="{ns:Loc FinishedTours}"/>
+                                <Image x:Name="FinishedToursImage" Source="/Resources/Images/info.png" 
+                                        Height="30" Margin ="5, 0, 0, 0 " HorizontalAlignment="Left" VerticalAlignment="Center"
+                                        MouseEnter="FinishedToursImage_MouseEnter" MouseLeave="FinishedToursImage_MouseLeave" />
+                                <Popup x:Name="FinishedToursPopup" Placement="Right" PlacementTarget="{Binding ElementName=FinishedToursImage}" IsOpen="False">
+                                    <TextBlock Text="{ns:Loc FinishedToursInfo}" Background="#96CDFA" Padding="5" TextWrapping="Wrap" Width="300"/>
+                                </Popup>
+                            </StackPanel>
                         </GroupBox.Header>
 
                         <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -622,7 +624,7 @@
 
                     <!-- Rate Tour -->
 
-                    <Button Margin="20" Content="{ns:Loc RateTourBtn}" Width="200" Height="40" HorizontalAlignment="Center" Click="RateButton_Click"/>
+                    <Button Margin="30" Content="{ns:Loc RateTourBtn}" Width="200" Height="40" HorizontalAlignment="Center" Click="RateButton_Click"/>
 
                 </StackPanel>
             </TabItem>
@@ -647,24 +649,24 @@
 
                         <Button Grid.Column="0"
                                 Width="160" Height="40" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"
-                                Content="Request a tour"
+                                Content="{ns:Loc requestATourBtn}"
                                 Click="RequestButton_Click"/>
 
                         <GroupBox Grid.Column="1" Margin="0, 20, 20, 20">
                             <GroupBox.Header>
-                                <Label Content="My Tour Requests"
+                                <Label Content="{ns:Loc myTourRequests}"
                                        FontSize="25" FontWeight="Bold"/>
                             </GroupBox.Header>
 
                             <DataGrid ItemsSource="{Binding TourRequestDTOs}"
                                       AutoGenerateColumns="False" IsReadOnly="True">
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Country" Binding="{Binding Country}" Width="*"/>
-                                    <DataGridTextColumn Header="City" Binding="{Binding City}" Width="*"/>
-                                    <DataGridTextColumn Header="Language" Binding="{Binding Language}" Width="*"/>
-                                    <DataGridTextColumn Header="Start Date" Binding="{Binding StartTime, StringFormat={}{0:MM/dd/yyyy}}" Width="*"/>
-                                    <DataGridTextColumn Header="End Date" Binding="{Binding EndTime, StringFormat={}{0:MM/dd/yyyy}}" Width="*"/>
-                                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*"/>
+                                    <DataGridTextColumn Header="{ns:Loc CountryDG}" Binding="{Binding Country}" Width="*"/>
+                                    <DataGridTextColumn Header="{ns:Loc CityDG}" Binding="{Binding City}" Width="*"/>
+                                    <DataGridTextColumn Header="{ns:Loc LanguageDG}" Binding="{Binding Language}" Width="*"/>
+                                    <DataGridTextColumn Header="{ns:Loc StartDateDG}" Binding="{Binding StartTime, StringFormat={}{0:MM/dd/yyyy}}" Width="*"/>
+                                    <DataGridTextColumn Header="{ns:Loc EndDateDG}" Binding="{Binding EndTime, StringFormat={}{0:MM/dd/yyyy}}" Width="*"/>
+                                    <DataGridTextColumn Header="{ns:Loc Status}" Binding="{Binding Status}" Width="*"/>
                                 </DataGrid.Columns>
                             </DataGrid>
                         </GroupBox>
@@ -689,7 +691,7 @@
 
                             <TextBlock HorizontalAlignment="Center"
                                        FontSize="20" FontWeight="Bold" Margin="10" TextWrapping="WrapWithOverflow" 
-                                       Text="Tour request status statistics for chosen year:"/>
+                                       Text="{ns:Loc yearStatistic}"/>
                             <ComboBox Grid.Row="1" Margin="10" Width="160" Height="40" 
                                       ItemsSource="{Binding TourRequestYears}" SelectedItem="{Binding SelectedStatisticYear}" SelectionChanged="YearStatisticSelectionChanged"/>
                             <TextBlock Grid.Row="2" x:Name="StatusStatisticTB" FontSize="20" TextWrapping="WrapWithOverflow" HorizontalAlignment="Center" Margin="0, 0, 0, 20"/>
@@ -706,7 +708,7 @@
                             </Grid.RowDefinitions>
 
                             <TextBlock Grid.Row="0" FontSize="20" FontWeight="Bold" Margin="10" TextWrapping="WrapWithOverflow" HorizontalAlignment="Center"
-                                       Text="Average guest count for chosen year:"/>
+                                       Text="{ns:Loc guestStatistic}"/>
                             <ComboBox Margin="10" Width="160" Height="40" Grid.Row="1"
                                       ItemsSource="{Binding TourRequestYears}" SelectedItem="{Binding SelectedStatisticGuestYear}" SelectionChanged="GuestYearStatisticSelectionChanged"/>
                             <TextBlock x:Name="GuestStatisticTB" FontSize="20" Grid.Row="2" TextWrapping="WrapWithOverflow" HorizontalAlignment="Center" Margin="10" />
@@ -727,17 +729,17 @@
 
                             <TextBlock Grid.Column="0" Margin="10" 
                                        FontSize="20" FontWeight="Bold" TextWrapping="WrapWithOverflow" HorizontalAlignment="Center"
-                                       Text="Number of requests for each language:"/>
+                                       Text="{ns:Loc languageStatistic}"/>
                             <Button Grid.Column="1" Margin="10"
                                     Width="160" Height="40" FontSize="20"
-                                    Content="Language Chart" Click="LanguageStatisicButton_Click"/>
+                                    Content="{ns:Loc languageChart}" Click="LanguageStatisicButton_Click"/>
 
                             <TextBlock Grid.Column="2" Margin="10"
                                        FontSize="20" FontWeight="Bold" TextWrapping="WrapWithOverflow" HorizontalAlignment="Center"
-                                       Text="Number of requests for each location:"/>
+                                       Text="{ns:Loc locationStatistic}"/>
                             <Button Grid.Column="3" Margin="10, 10, 10, 20"
                                     Width="160" Height="40" FontSize="20"
-                                    Content="Location Chart" Click="LocationStatisicButton_Click"/>
+                                    Content="{ns:Loc locationChart}" Click="LocationStatisicButton_Click"/>
                         </StackPanel>
 
                     </Grid>
@@ -802,16 +804,16 @@
 
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="250"/>
+                        <RowDefinition Height="auto"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
 
-                    <Button Grid.Row="0"
+                    <Button Grid.Row="0" Margin="50"
                         Height="40" Width="260" FontSize="20"
                         Content="{ns:Loc requestComplexTour}" 
                         Click="ComplexWindow"/>
 
-                    <GroupBox Grid.Row="1" Margin ="30" >
+                    <GroupBox Grid.Row="1" Margin ="50, 0, 50, 50" >
                         <GroupBox.Header>
                             <StackPanel Orientation="Horizontal">
                                 <Label FontSize="25" FontWeight="Bold" Content="{ns:Loc ComplexTours}"/>
@@ -836,12 +838,8 @@
                             </DataGrid>
                         </ScrollViewer>
                     </GroupBox>
-                    
-                </Grid>
 
-                
-                
-                
+                </Grid>
 
             </TabItem>
 
