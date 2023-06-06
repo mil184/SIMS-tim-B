@@ -74,13 +74,14 @@ namespace InitialProject.View.Guest2
                 gfx.DrawString("User details", subtitleFont, XBrushes.Black, userDetailsBounds, XStringFormats.TopLeft);
 
                 string firstName = LoggedInUser.Username;
-                string id = TourReservation.UserId.ToString();
+               // string id = TourReservation.UserId.ToString();
                 Tour tour = _tourService.GetById(TourReservation.TourId);
                 Location location = _locationService.GetById(tour.LocationId);
                 User guide = _userService.GetById(tour.GuideId);
                 string tourName = tour.Name;
                 string tourLocation = location.City + ", " + location.Country;
                 string date = TourReservation.ReservationTime.ToString();
+                string tourdate = tour.StartTime.ToString();
                 string guests = TourReservation.PersonCount.ToString();
                 string tourGuide = guide.Username;
 
@@ -88,8 +89,11 @@ namespace InitialProject.View.Guest2
                 gfx.DrawString("First Name:", contentFont, XBrushes.Black, userDetailsTextBounds, XStringFormats.TopLeft);
                 gfx.DrawString(firstName, contentFont, XBrushes.Black, new XRect(userDetailsTextBounds.Left + 100, userDetailsTextBounds.Top, 200, 12), XStringFormats.TopLeft);
 
-                gfx.DrawString("ID:", contentFont, XBrushes.Black, new XRect(userDetailsTextBounds.Left, userDetailsTextBounds.Bottom + 5, 200, 12), XStringFormats.TopLeft);
-                gfx.DrawString(id, contentFont, XBrushes.Black, new XRect(userDetailsTextBounds.Left + 100, userDetailsTextBounds.Bottom + 5, 200, 12), XStringFormats.TopLeft);
+                gfx.DrawString("Reservation Date:", contentFont, XBrushes.Black, new XRect(userDetailsTextBounds.Left, userDetailsTextBounds.Bottom + 5, 200, 12), XStringFormats.TopLeft);
+                gfx.DrawString(date, contentFont, XBrushes.Black, new XRect(userDetailsTextBounds.Left + 100, userDetailsTextBounds.Bottom + 5, 200, 12), XStringFormats.TopLeft);
+
+                //gfx.DrawString("ID:", contentFont, XBrushes.Black, new XRect(userDetailsTextBounds.Left, userDetailsTextBounds.Bottom + 5, 200, 12), XStringFormats.TopLeft);
+                //gfx.DrawString(id, contentFont, XBrushes.Black, new XRect(userDetailsTextBounds.Left + 100, userDetailsTextBounds.Bottom + 5, 200, 12), XStringFormats.TopLeft);
 
                 int paragraphSpace = 20;
                 XRect tourDetailsBounds = new XRect(contentBounds.Left, userDetailsTextBounds.Bottom + paragraphSpace, 150, 20);
@@ -102,8 +106,8 @@ namespace InitialProject.View.Guest2
                 gfx.DrawString("Location:", contentFont, XBrushes.Black, new XRect(tourDetailsTextBounds.Left, tourDetailsTextBounds.Bottom + 5, 200, 12), XStringFormats.TopLeft);
                 gfx.DrawString(tourLocation, contentFont, XBrushes.Black, new XRect(tourDetailsTextBounds.Left + 100, tourDetailsTextBounds.Bottom + 5, 200, 12), XStringFormats.TopLeft);
 
-                gfx.DrawString("Date:", contentFont, XBrushes.Black, new XRect(tourDetailsTextBounds.Left, tourDetailsTextBounds.Bottom + 20, 200, 12), XStringFormats.TopLeft);
-                gfx.DrawString(date, contentFont, XBrushes.Black, new XRect(tourDetailsTextBounds.Left + 100, tourDetailsTextBounds.Bottom + 20, 200, 12), XStringFormats.TopLeft);
+                gfx.DrawString("Tour Date:", contentFont, XBrushes.Black, new XRect(tourDetailsTextBounds.Left, tourDetailsTextBounds.Bottom + 20, 200, 12), XStringFormats.TopLeft);
+                gfx.DrawString(tourdate, contentFont, XBrushes.Black, new XRect(tourDetailsTextBounds.Left + 100, tourDetailsTextBounds.Bottom + 20, 200, 12), XStringFormats.TopLeft);
 
                 gfx.DrawString("Guests:", contentFont, XBrushes.Black, new XRect(tourDetailsTextBounds.Left, tourDetailsTextBounds.Bottom + 35, 200, 12), XStringFormats.TopLeft);
                 gfx.DrawString(guests, contentFont, XBrushes.Black, new XRect(tourDetailsTextBounds.Left + 100, tourDetailsTextBounds.Bottom + 35, 200, 12), XStringFormats.TopLeft);
@@ -115,7 +119,7 @@ namespace InitialProject.View.Guest2
                 int headerYPos = (int)tourDetailsTextBounds.Bottom + paragraphSpace;
                 int columnWidth = (int)contentBounds.Width / 4;
 
-                string filePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\voucher_report.pdf";
+                string filePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\reservation_report.pdf";
                 document.Save(filePath);
 
                 Process.Start(new ProcessStartInfo(filePath) { UseShellExecute = true });
