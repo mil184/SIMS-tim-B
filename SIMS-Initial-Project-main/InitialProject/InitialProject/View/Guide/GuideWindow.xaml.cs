@@ -41,7 +41,7 @@ namespace InitialProject.View.Guide
         private readonly ImageRepository _imageRepository;
         private readonly CheckpointService _checkpointService;
         private readonly UserService _userService;
-        private readonly VoucherRepository _voucherRepository;
+        private readonly VoucherService _voucherService;
         private readonly TourRequestService _tourRequestService;
         private readonly ComplexTourService _complexTourService;
         public User CurrentUser { get; set; }
@@ -72,8 +72,8 @@ namespace InitialProject.View.Guide
             _userService = new UserService();
             _userService.Subscribe(this);
 
-            _voucherRepository = new VoucherRepository();
-            _voucherRepository.Subscribe(this);
+            _voucherService = new VoucherService();
+            _voucherService.Subscribe(this);
 
             _tourRatingService = new TourRatingService();
             _tourRatingService.Subscribe(this);
@@ -206,6 +206,48 @@ namespace InitialProject.View.Guide
             signInForm.Show();
             Close();
 
+        }
+        private bool ResignConfirmation() 
+        {
+            return MessageBoxResult.Yes ==  MessageBox.Show($"Are you sure you want to resign as a tour guide?", "Resign Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+        }
+        private void Resign() 
+        {
+
+            foreach(Tour tour in _tourService.GetUpcomingTours(CurrentUser)) 
+            {
+                foreach(TourReservation reservation in _tourReservationService.GetReservationsByTourId(tour.Id)) 
+                {
+                    bool hasVoucherByGuide = false;
+                    foreach (Voucher voucher in _voucherService.GetUserVouchers(_userService.GetById(reservation.UserId)))
+                    {
+                        if (voucher.GuideId == CurrentUser.Id)
+                        {
+                            UpdateOldVoucher(voucher);
+                            hasVoucherByGuide = true;
+                        }
+
+                    }
+                    if (!hasVoucherByGuide)
+                    {
+                        AddNewVoucher(tour, reservation.UserId);
+                    }
+
+                }
+            }
+                _tourService.AbortAllUpcomingTours(CurrentUser);
+        }
+
+        public void AddNewVoucher(Tour tour, int guestId) 
+        {
+            Voucher voucher = new Voucher(tour.Name, DateTime.Now, DateTime.Now.AddYears(2), guestId);
+            voucher.GuideId = CurrentUser.Id;
+            _voucherService.Save(voucher);
+        }
+        public void UpdateOldVoucher(Voucher voucher)
+        {
+            voucher.GuideId = -1;
+            _voucherService.Update(voucher);
         }
         #endregion
 
@@ -414,7 +456,7 @@ namespace InitialProject.View.Guide
                 {
                     vouchersAdded.Add(userId);
                     Voucher voucher = new Voucher(tour.Name, DateTime.Now, DateTime.Now.AddYears(1), userId);
-                    _voucherRepository.Save(voucher);
+                    _voucherService.Save(voucher);
                 }
             }
         }
@@ -1266,6 +1308,7 @@ namespace InitialProject.View.Guide
             PreviewKeyDown += SortAsc_PreviewKeyDown;
             PreviewKeyDown += SortDesc_PreviewKeyDown;
             PreviewKeyDown += ReportWindow_PreviewKeyDown;
+            PreviewKeyDown += Resign_PreviewKeyUp;
         }
         private void LogOut_PreviewKeyDown(object sender, KeyEventArgs e)
         {
@@ -1293,6 +1336,14 @@ namespace InitialProject.View.Guide
                 CreateTourViewModel createTourViewModel = new CreateTourViewModel(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService, null, null, _complexTourService, null, null);
                 CreateTourWindow createTour = new CreateTourWindow(createTourViewModel);
                 createTour.ShowDialog();
+                e.Handled = true;
+            }
+        }
+        private void Resign_PreviewKeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.SystemKey == Key.Q && e.KeyboardDevice.Modifiers == ModifierKeys.Alt)
+            {
+                if (ResignConfirmation()) Resign();
                 e.Handled = true;
             }
         }

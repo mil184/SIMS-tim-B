@@ -103,6 +103,19 @@ namespace InitialProject.Service
             return null;
         }
 
+        public List<TourReservation> GetReservationsByTourId(int tourId)
+        {
+            List<TourReservation> tourReservations = new List<TourReservation>();
+
+            foreach (TourReservation tourReservation in GetAll())
+            {
+                if (tourId == tourReservation.TourId)
+                { 
+                    tourReservations.Add(tourReservation);
+                }
+            }
+            return tourReservations;
+        }
         public int GetUnder18Count(Tour tour)
         {
             List<TourReservation> _tourReservations = _tourReservationRepository.GetAll();
