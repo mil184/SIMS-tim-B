@@ -541,12 +541,6 @@
                             <GroupBox.Header>
                                 <StackPanel Orientation="Horizontal">
                                     <Label FontSize="25" FontWeight="Bold" Content="{ns:Loc TrackTour}"/>
-                                    <Image x:Name="TrackingImage" Source="/Resources/Images/info.png" 
-                                        Height="30" Margin ="5, 0, 0, 0 " HorizontalAlignment="Left" VerticalAlignment="Center"
-                                        MouseEnter="TrackingImage_MouseEnter" MouseLeave="TrackingImage_MouseLeave" />
-                                    <Popup x:Name="TrackingPopup" Placement="Right" PlacementTarget="{Binding ElementName=TrackingImage}" IsOpen="False">
-                                        <TextBlock Text="{ns:Loc TrackingInfo}" Background="#96CDFA" Padding="5" TextWrapping="Wrap" Width="300"/>
-                                    </Popup>
                                 </StackPanel>
                             </GroupBox.Header>
                             <DataGrid x:Name="CheckpointsDataGrid" 

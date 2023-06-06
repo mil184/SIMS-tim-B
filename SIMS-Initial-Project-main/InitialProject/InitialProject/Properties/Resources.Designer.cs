@@ -97,6 +97,15 @@ namespace InitialProject.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pregled kompleksne ture.
+        /// </summary>
+        public static string ComplexTourOverview {
+            get {
+                return ResourceManager.GetString("ComplexTourOverview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Zahtevanje kompleksnih tura.
         /// </summary>
         public static string ComplexTourRequestingTab {
@@ -574,7 +583,7 @@ namespace InitialProject.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Zahtevaj turu:.
+        ///   Looks up a localized string similar to Zahtevaj turu.
         /// </summary>
         public static string requestATour {
             get {
@@ -669,6 +678,15 @@ namespace InitialProject.Properties {
         public static string Submit {
             get {
                 return ResourceManager.GetString("Submit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Poslate ture:.
+        /// </summary>
+        public static string SubmittedRegularTours {
+            get {
+                return ResourceManager.GetString("SubmittedRegularTours", resourceCulture);
             }
         }
         

@@ -129,6 +129,9 @@
   <data name="ComplexTourInfo" xml:space="preserve">
     <value>Complex tours consist of more than one regular tour.</value>
   </data>
+  <data name="ComplexTourOverview" xml:space="preserve">
+    <value>Complex Tour Overview</value>
+  </data>
   <data name="ComplexTourRequestingTab" xml:space="preserve">
     <value>Complex Tour Requesting</value>
   </data>
@@ -289,7 +292,7 @@
     <value>Rate This Tour</value>
   </data>
   <data name="requestATour" xml:space="preserve">
-    <value>Request A Tour:</value>
+    <value>Request A Tour</value>
   </data>
   <data name="requestATourBtn" xml:space="preserve">
     <value>Request a Tour</value>
@@ -320,6 +323,9 @@
   </data>
   <data name="Submit" xml:space="preserve">
     <value>Submit</value>
+  </data>
+  <data name="SubmittedRegularTours" xml:space="preserve">
+    <value>Submitted regular tours:</value>
   </data>
   <data name="Theme" xml:space="preserve">
     <value>Theme</value>
