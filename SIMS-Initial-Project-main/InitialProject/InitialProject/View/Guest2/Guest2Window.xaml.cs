@@ -600,7 +600,7 @@ namespace InitialProject.View.Guest2
 
             ShowSuccessfulReservationMessage(app.Lang);
 
-            _tourReservationService.noname(tourReservation);
+            _tourReservationService.AcquireVoucher(tourReservation);
             Update();
         }
 

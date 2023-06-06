@@ -17,7 +17,7 @@ namespace InitialProject.Service
             _voucherService = new VoucherService();
         }
 
-        public void noname(TourReservation tourReservation)  // poziva se kad se rezervise
+        public void AcquireVoucher(TourReservation tourReservation)
         {
             int year = tourReservation.ReservationTime.Year;
             List<TourReservation> reservationList = new List<TourReservation>();
