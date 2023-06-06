@@ -13,41 +13,139 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal">
-            <ComboBox Name="Years" FontFamily="Comic Sans MS">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="SelectionChanged" >
-                        <i:InvokeCommandAction Command="{Binding ChangeYearCommand}"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </ComboBox>
-            <Label Name="label" FontFamily="Comic Sans MS"></Label>
-        </StackPanel>
+        <TabControl Width="400" Height="650">
+            <TabItem Header="Graphs" Width="198" FontFamily="Comic Sans MS">
+                <StackPanel Orientation="Vertical" Margin="10">
+                    <Label Name="label1" FontFamily="Comic Sans MS" HorizontalAlignment="Center"></Label>
+                    <lvc:CartesianChart Series="{Binding Series1}" LegendLocation="Right" Height="250" FontFamily="Comic Sans MS">
+                        <lvc:CartesianChart.AxisX>
+                            <lvc:Axis Title="Date" Labels="{Binding Labels1}" FontFamily="Comic Sans MS"/>
+                        </lvc:CartesianChart.AxisX>
+                        <lvc:CartesianChart.AxisY>
+                            <lvc:Axis Title="Count" FontFamily="Comic Sans MS"/>
+                        </lvc:CartesianChart.AxisY>
+                    </lvc:CartesianChart>
+                    <lvc:CartesianChart Series="{Binding Series2}" LegendLocation="Right" Height="250" FontFamily="Comic Sans MS">
+                        <lvc:CartesianChart.AxisX>
+                            <lvc:Axis Title="Date" Labels="{Binding Labels2}" FontFamily="Comic Sans MS"/>
+                        </lvc:CartesianChart.AxisX>
+                        <lvc:CartesianChart.AxisY>
+                            <lvc:Axis Title="Count" FontFamily="Comic Sans MS"/>
+                        </lvc:CartesianChart.AxisY>
+                    </lvc:CartesianChart>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Yearly stats" Width="198" FontFamily="Comic Sans MS">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition Height="25"></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Row="1" Orientation="Vertical" Margin="10">
-            <lvc:CartesianChart Series="{Binding Series1}" LegendLocation="Right" Height="250" FontFamily="Comic Sans MS">
-                <lvc:CartesianChart.AxisX>
-                    <lvc:Axis Title="Date" Labels="{Binding Labels1}" FontFamily="Comic Sans MS"/>
-                </lvc:CartesianChart.AxisX>
-                <lvc:CartesianChart.AxisY>
-                    <lvc:Axis Title="Count" FontFamily="Comic Sans MS"/>
-                </lvc:CartesianChart.AxisY>
-            </lvc:CartesianChart>
-            <lvc:CartesianChart Series="{Binding Series2}" LegendLocation="Right" Height="250" FontFamily="Comic Sans MS">
-                <lvc:CartesianChart.AxisX>
-                    <lvc:Axis Title="Date" Labels="{Binding Labels2}" FontFamily="Comic Sans MS"/>
-                </lvc:CartesianChart.AxisX>
-                <lvc:CartesianChart.AxisY>
-                    <lvc:Axis Title="Count" FontFamily="Comic Sans MS"/>
-                </lvc:CartesianChart.AxisY>
-            </lvc:CartesianChart>
-            <Label Name="MonthlyReservations"></Label>
-            <Label Name="MonthlyCancellations"></Label>
-            <Label Name="MonthlyReschedules"></Label>
-            <Label Name="MonthlyRecommendations"></Label>
-        </StackPanel>
+                    <ComboBox Name="Years" Grid.Row="1" Grid.ColumnSpan="5" FontFamily="Comic Sans MS" HorizontalAlignment="Center">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged" >
+                                <i:InvokeCommandAction Command="{Binding ChangeYearCommand}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </ComboBox>
+
+                    <Label Grid.Row="0" Grid.ColumnSpan="5" HorizontalAlignment="Center" Name="label2"></Label>
+
+                    <Label Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" FontWeight="Bold">Month</Label>
+                    <Label Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" FontWeight="Bold">Reserevations</Label>
+                    <Label Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" FontWeight="Bold">Cancellations</Label>
+                    <Label Grid.Row="2" Grid.Column="3" HorizontalAlignment="Center" FontWeight="Bold">Reschedules</Label>
+                    <Label Grid.Row="2" Grid.Column="4" HorizontalAlignment="Center" FontWeight="Bold">Recommends</Label>
+                    
+                    <Label Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center">JAN</Label>
+                    <Label Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center">FEB</Label>
+                    <Label Grid.Row="5" Grid.Column="0" HorizontalAlignment="Center">MAR</Label>
+                    <Label Grid.Row="6" Grid.Column="0" HorizontalAlignment="Center">APR</Label>
+                    <Label Grid.Row="7" Grid.Column="0" HorizontalAlignment="Center">MAY</Label>
+                    <Label Grid.Row="8" Grid.Column="0" HorizontalAlignment="Center">JUN</Label>
+                    <Label Grid.Row="9" Grid.Column="0" HorizontalAlignment="Center">JUL</Label>
+                    <Label Grid.Row="10" Grid.Column="0" HorizontalAlignment="Center">AUG</Label>
+                    <Label Grid.Row="11" Grid.Column="0" HorizontalAlignment="Center">SEP</Label>
+                    <Label Grid.Row="12" Grid.Column="0" HorizontalAlignment="Center">OCT</Label>
+                    <Label Grid.Row="13" Grid.Column="0" HorizontalAlignment="Center">NOV</Label>
+                    <Label Grid.Row="14" Grid.Column="0" HorizontalAlignment="Center">DEC</Label>
+
+                    <Label Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" Name="res1"></Label>
+                    <Label Grid.Row="4" Grid.Column="1" HorizontalAlignment="Center" Name="res2"></Label>
+                    <Label Grid.Row="5" Grid.Column="1" HorizontalAlignment="Center" Name="res3"></Label>
+                    <Label Grid.Row="6" Grid.Column="1" HorizontalAlignment="Center" Name="res4"></Label>
+                    <Label Grid.Row="7" Grid.Column="1" HorizontalAlignment="Center" Name="res5"></Label>
+                    <Label Grid.Row="8" Grid.Column="1" HorizontalAlignment="Center" Name="res6"></Label>
+                    <Label Grid.Row="9" Grid.Column="1" HorizontalAlignment="Center" Name="res7"></Label>
+                    <Label Grid.Row="10" Grid.Column="1" HorizontalAlignment="Center" Name="res8"></Label>
+                    <Label Grid.Row="11" Grid.Column="1" HorizontalAlignment="Center" Name="res9"></Label>
+                    <Label Grid.Row="12" Grid.Column="1" HorizontalAlignment="Center" Name="res10"></Label>
+                    <Label Grid.Row="13" Grid.Column="1" HorizontalAlignment="Center" Name="res11"></Label>
+                    <Label Grid.Row="14" Grid.Column="1" HorizontalAlignment="Center" Name="res12"></Label>
+
+                    <Label Grid.Row="3" Grid.Column="2" HorizontalAlignment="Center" Name="can1"></Label>
+                    <Label Grid.Row="4" Grid.Column="2" HorizontalAlignment="Center" Name="can2"></Label>
+                    <Label Grid.Row="5" Grid.Column="2" HorizontalAlignment="Center" Name="can3"></Label>
+                    <Label Grid.Row="6" Grid.Column="2" HorizontalAlignment="Center" Name="can4"></Label>
+                    <Label Grid.Row="7" Grid.Column="2" HorizontalAlignment="Center" Name="can5"></Label>
+                    <Label Grid.Row="8" Grid.Column="2" HorizontalAlignment="Center" Name="can6"></Label>
+                    <Label Grid.Row="9" Grid.Column="2" HorizontalAlignment="Center" Name="can7"></Label>
+                    <Label Grid.Row="10" Grid.Column="2" HorizontalAlignment="Center" Name="can8"></Label>
+                    <Label Grid.Row="11" Grid.Column="2" HorizontalAlignment="Center" Name="can9"></Label>
+                    <Label Grid.Row="12" Grid.Column="2" HorizontalAlignment="Center" Name="can10"></Label>
+                    <Label Grid.Row="13" Grid.Column="2" HorizontalAlignment="Center" Name="can11"></Label>
+                    <Label Grid.Row="14" Grid.Column="2" HorizontalAlignment="Center" Name="can12"></Label>
+
+                    <Label Grid.Row="3" Grid.Column="3" HorizontalAlignment="Center" Name="resc1"></Label>
+                    <Label Grid.Row="4" Grid.Column="3" HorizontalAlignment="Center" Name="resc2"></Label>
+                    <Label Grid.Row="5" Grid.Column="3" HorizontalAlignment="Center" Name="resc3"></Label>
+                    <Label Grid.Row="6" Grid.Column="3" HorizontalAlignment="Center" Name="resc4"></Label>
+                    <Label Grid.Row="7" Grid.Column="3" HorizontalAlignment="Center" Name="resc5"></Label>
+                    <Label Grid.Row="8" Grid.Column="3" HorizontalAlignment="Center" Name="resc6"></Label>
+                    <Label Grid.Row="9" Grid.Column="3" HorizontalAlignment="Center" Name="resc7"></Label>
+                    <Label Grid.Row="10" Grid.Column="3" HorizontalAlignment="Center" Name="resc8"></Label>
+                    <Label Grid.Row="11" Grid.Column="3" HorizontalAlignment="Center" Name="resc9"></Label>
+                    <Label Grid.Row="12" Grid.Column="3" HorizontalAlignment="Center" Name="resc10"></Label>
+                    <Label Grid.Row="13" Grid.Column="3" HorizontalAlignment="Center" Name="resc11"></Label>
+                    <Label Grid.Row="14" Grid.Column="3" HorizontalAlignment="Center" Name="resc12"></Label>
+
+                    <Label Grid.Row="3" Grid.Column="4" HorizontalAlignment="Center" Name="rec1"></Label>
+                    <Label Grid.Row="4" Grid.Column="4" HorizontalAlignment="Center" Name="rec2"></Label>
+                    <Label Grid.Row="5" Grid.Column="4" HorizontalAlignment="Center" Name="rec3"></Label>
+                    <Label Grid.Row="6" Grid.Column="4" HorizontalAlignment="Center" Name="rec4"></Label>
+                    <Label Grid.Row="7" Grid.Column="4" HorizontalAlignment="Center" Name="rec5"></Label>
+                    <Label Grid.Row="8" Grid.Column="4" HorizontalAlignment="Center" Name="rec6"></Label>
+                    <Label Grid.Row="9" Grid.Column="4" HorizontalAlignment="Center" Name="rec7"></Label>
+                    <Label Grid.Row="10" Grid.Column="4" HorizontalAlignment="Center" Name="rec8"></Label>
+                    <Label Grid.Row="11" Grid.Column="4" HorizontalAlignment="Center" Name="rec9"></Label>
+                    <Label Grid.Row="12" Grid.Column="4" HorizontalAlignment="Center" Name="rec10"></Label>
+                    <Label Grid.Row="13" Grid.Column="4" HorizontalAlignment="Center" Name="rec11"></Label>
+                    <Label Grid.Row="14" Grid.Column="4" HorizontalAlignment="Center" Name="rec12"></Label>
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Page>

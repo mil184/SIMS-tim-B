@@ -152,6 +152,9 @@
                         </Style>
                     </Image.Style>
                 </Image>
+                <ToolTipService.ToolTip>
+                    <TextBlock Text="Home"></TextBlock>
+                </ToolTipService.ToolTip>
             </Button>
         </ToolBar>
         <Button Width="30" HorizontalAlignment="Left" Margin="355,0,0,0" Background="#FF684CA4" Name="BackButton" Visibility="Visible" Command="{Binding NavigateBackCommand}">

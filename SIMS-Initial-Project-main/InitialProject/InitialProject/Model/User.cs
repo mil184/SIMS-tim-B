@@ -18,9 +18,11 @@ namespace InitialProject.Model
         public DateTime? SuperGuestExpirationDate { get; set; }
 
         public List<string> SuperGuideLanguages;
+
+        public int NumberOfNotifications;
         public User() { }
 
-        public User(string username, string password, UserType type, int? numberOfReservations, int? bonusPoints, DateTime? superGuestExpirationDate, List<string> superGuideLanguages)
+        public User(string username, string password, UserType type, int? numberOfReservations, int? bonusPoints, DateTime? superGuestExpirationDate, List<string> superGuideLanguages, int numberOfNotifications)
         {
             Username = username;
             Password = password;
@@ -29,6 +31,7 @@ namespace InitialProject.Model
             BonusPoints = bonusPoints;
             SuperGuestExpirationDate = superGuestExpirationDate;
             SuperGuideLanguages = superGuideLanguages;
+            NumberOfNotifications = numberOfNotifications;
         }
 
         public string[] ToCSV()
@@ -42,7 +45,7 @@ namespace InitialProject.Model
             {
                 superGuideLanguages = string.Join(",", SuperGuideLanguages);
             }
-            string[] csvValues = { Id.ToString(), Username, Password, Type.ToString(), numberOfReservations, bonusPoints, superGuestExpirationDate, superGuideLanguages };
+            string[] csvValues = { Id.ToString(), Username, Password, Type.ToString(), numberOfReservations, bonusPoints, superGuestExpirationDate, superGuideLanguages, NumberOfNotifications.ToString() };
             return csvValues;
         }
 
@@ -63,6 +66,7 @@ namespace InitialProject.Model
                     SuperGuideLanguages.Add(language);
                 }
             }
+            NumberOfNotifications = Convert.ToInt32(values[8]);
         }
     }
 }

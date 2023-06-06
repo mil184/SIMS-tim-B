@@ -171,6 +171,9 @@
                     </Style.Triggers>
                 </Style>
             </Button.Style>
+            <ToolTipService.ToolTip>
+                <TextBlock Text="Add an accommodation to your collection"></TextBlock>
+            </ToolTipService.ToolTip>
         </Button>
     </Grid>
 </Page>

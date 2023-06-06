@@ -122,25 +122,30 @@ namespace InitialProject.ViewModel.Owner
             title.SpacingAfter = 20f;
             document.Add(title);
 
-            PdfPTable table = new PdfPTable(3);
+            PdfPTable table = new PdfPTable(4);
             table.WidthPercentage = 100;
 
             Font headerFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 12);
             PdfPCell headerCell1 = new PdfPCell(new Phrase("Accommodation Name", headerFont));
             PdfPCell headerCell2 = new PdfPCell(new Phrase("Cleanliness", headerFont));
             PdfPCell headerCell3 = new PdfPCell(new Phrase("Correctness", headerFont));
+            PdfPCell headerCell4 = new PdfPCell(new Phrase("Average", headerFont));
             headerCell1.HorizontalAlignment = Element.ALIGN_CENTER;
             headerCell2.HorizontalAlignment = Element.ALIGN_CENTER;
             headerCell3.HorizontalAlignment = Element.ALIGN_CENTER;
+            headerCell4.HorizontalAlignment = Element.ALIGN_CENTER;
             headerCell1.VerticalAlignment = Element.ALIGN_MIDDLE;
             headerCell2.VerticalAlignment = Element.ALIGN_MIDDLE;
             headerCell3.VerticalAlignment = Element.ALIGN_MIDDLE;
+            headerCell4.VerticalAlignment = Element.ALIGN_MIDDLE;
             headerCell1.Border = PdfPCell.NO_BORDER;
             headerCell2.Border = PdfPCell.NO_BORDER;
             headerCell3.Border = PdfPCell.NO_BORDER;
+            headerCell4.Border = PdfPCell.NO_BORDER;
             table.AddCell(headerCell1);
             table.AddCell(headerCell2);
             table.AddCell(headerCell3);
+            table.AddCell(headerCell4);
 
             foreach (var accommodation in _accommodationService.GetByUser(LoggedInUser.Id))
             {
@@ -149,12 +154,15 @@ namespace InitialProject.ViewModel.Owner
                 PdfPCell cell1 = new PdfPCell(new Phrase(accommodation.Name));
                 PdfPCell cell2 = new PdfPCell(new Phrase(cleanliness.ToString()));
                 PdfPCell cell3 = new PdfPCell(new Phrase(corectness.ToString()));
+                PdfPCell cell4 = new PdfPCell(new Phrase(((corectness + cleanliness) / 2).ToString()));
                 cell1.HorizontalAlignment = Element.ALIGN_CENTER;
                 cell2.HorizontalAlignment = Element.ALIGN_CENTER;
                 cell3.HorizontalAlignment = Element.ALIGN_CENTER;
+                cell4.HorizontalAlignment = Element.ALIGN_CENTER;
                 table.AddCell(cell1);
                 table.AddCell(cell2);
                 table.AddCell(cell3);
+                table.AddCell(cell4);
             }
 
             document.Add(table);
