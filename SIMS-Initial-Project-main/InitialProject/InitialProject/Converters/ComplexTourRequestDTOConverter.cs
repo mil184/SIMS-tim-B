@@ -31,16 +31,13 @@ namespace InitialProject.Converters
                 Location location = locationService.GetById(tourRequest.LocationId);
 
                 locations += location.City + ", " + location.Country + "\n";
-                
 
                 languages += tourRequest.Language + "\n";
-                
 
                 startDates += tourRequest.StartTime.ToString() + "\n";
                 
                 endDates += tourRequest.EndTime.ToString() + "\n";
                
-
                 statuses += tourRequest.Status + "\n";
                 
                 if (tourRequest.Status == Resources.Enums.RequestStatus.accepted)
@@ -73,7 +70,7 @@ namespace InitialProject.Converters
             if (!string.IsNullOrEmpty(chosenDates))
                 statuses = statuses.TrimEnd('\n');
 
-            return new ComplexTourRequestDTO(complexTour.Id, locations, languages, startDates, endDates, statuses, chosenDates);
+            return new ComplexTourRequestDTO(complexTour.Id, locations, languages, startDates, endDates, statuses, chosenDates, complexTour.Status.ToString());
         }
         
         static public List<ComplexTourRequestDTO> ConvertToDTOList(List<ComplexTour> complexTours, LocationService locationService, TourRequestService tourRequestService)

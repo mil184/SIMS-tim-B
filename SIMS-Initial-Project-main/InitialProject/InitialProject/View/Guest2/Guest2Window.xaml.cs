@@ -216,7 +216,7 @@ namespace InitialProject.View.Guest2
             TourRequestsForYear = new ObservableCollection<TourRequest>();
             TourRequestDTOs = new ObservableCollection<Guest2TourRequestDTO>(TourRequestDTOConverter.ConvertToDTOList(_tourRequestService.GetGuestRequests(LoggedInUser)));
             
-            ComplexTourDTOs = new ObservableCollection<ComplexTourRequestDTO>(ComplexTourRequestDTOConverter.ConvertToDTOList(_complexTourService.GetAll(), _locationService, _tourRequestService));
+            ComplexTourDTOs = new ObservableCollection<ComplexTourRequestDTO>(ComplexTourRequestDTOConverter.ConvertToDTOList(_complexTourService.GetAllByUser(LoggedInUser), _locationService, _tourRequestService));
 
             CheckedTours = new List<Tour>();
             foreach (int id in _tourReservationService.GetCheckedTourIds(LoggedInUser))
@@ -257,8 +257,12 @@ namespace InitialProject.View.Guest2
 
             AlterVoucherSectionVisibility();
             AlterTourTrackingVisibility();
+            AlterComplexToursDataGridVisibility();
 
-            
+            foreach(var complexTour in _complexTourService.GetAllByUser(LoggedInUser))
+            {
+                _complexTourService.AlterStatus(complexTour);
+            }
         }
 
         private void NotifyAcceptedLanguages()
@@ -829,7 +833,7 @@ namespace InitialProject.View.Guest2
 
         public void FormComplexTourRequestDTOs()
         {
-            foreach(var complexTour in _complexTourService.GetAll())
+            foreach(var complexTour in _complexTourService.GetAllByUser(LoggedInUser))
             {
                 ComplexTourDTOs.Add(ComplexTourRequestDTOConverter.ConvertToDTO(complexTour, _locationService, _tourRequestService));
             }
@@ -1152,6 +1156,15 @@ namespace InitialProject.View.Guest2
                 NoTourActive.Visibility = Visibility.Visible;
                 CurrentlyActiveTourColumn.Visibility = Visibility.Collapsed;
                 TourTrackingColumn.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void AlterComplexToursDataGridVisibility()
+        {
+            if (_complexTourService.GetAllByUser(LoggedInUser).Count == 0)
+            {
+                NoComplexToursLabel.Visibility = Visibility.Visible;
+                ComplexTourRequestsDataGrid.Visibility = Visibility.Collapsed;
             }
         }
 

@@ -79,6 +79,15 @@ namespace InitialProject.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Odabrani datumi.
+        /// </summary>
+        public static string ChosenDatesDG {
+            get {
+                return ResourceManager.GetString("ChosenDatesDG", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 4. Dodati komentar:*.
         /// </summary>
         public static string CommentQuestion {
@@ -511,6 +520,15 @@ namespace InitialProject.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You haven&apos;t requested any complex tours..
+        /// </summary>
+        public static string noComplexTourRequests {
+            get {
+                return ResourceManager.GetString("noComplexTourRequests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nije ostalo nijedno slobodno mesto na odabranoj turi. Prikazane su dostupne ture u istom gradu:.
         /// </summary>
         public static string NoSpacesAvailable {
@@ -660,6 +678,15 @@ namespace InitialProject.Properties {
         public static string StartDateTime {
             get {
                 return ResourceManager.GetString("StartDateTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status.
+        /// </summary>
+        public static string StatusDG {
+            get {
+                return ResourceManager.GetString("StatusDG", resourceCulture);
             }
         }
         
