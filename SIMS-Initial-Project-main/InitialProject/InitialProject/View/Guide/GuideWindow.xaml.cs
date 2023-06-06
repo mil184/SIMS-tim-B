@@ -97,13 +97,6 @@ namespace InitialProject.View.Guide
             CurrentRequestSortIndex = 0;
             CurrentComplexTourSortIndex = 0;
 
-            //ComplexTour ct = new ComplexTour();
-
-            //ct.AvailableTourRequestIds.Add(1);
-            //ct.AvailableTourRequestIds.Add(2);
-
-            //_complexTourService.Save(ct);
-
         }
         private void InitializeCollections()
         {
@@ -128,7 +121,23 @@ namespace InitialProject.View.Guide
 
             Messages = new ObservableCollection<GuideMessage>();
 
-            
+            List<string> currentLanguages = CurrentUser.SuperGuideLanguages;
+            List<string> newLanguages = _userService.QualifiesForSuperGuide(CurrentUser);
+
+            CurrentUser.SuperGuideLanguages = newLanguages;
+            _userService.Update(CurrentUser);
+
+            List<string> addedLanguages = _userService.GetAddedLanguages(currentLanguages, newLanguages);
+            List<string> lostLanguages = _userService.GetLostLanguages(currentLanguages, newLanguages);
+
+            foreach(string language in addedLanguages) 
+            {
+                Messages.Add(new GuideMessage(language, true));
+            }
+            foreach (string language in lostLanguages)
+            {
+                Messages.Add(new GuideMessage(language, false));
+            }
 
         }
 
@@ -214,25 +223,29 @@ namespace InitialProject.View.Guide
         private void Resign() 
         {
 
-            foreach(Tour tour in _tourService.GetUpcomingTours(CurrentUser)) 
+            foreach (Tour tour in _tourService.GetUpcomingTours(CurrentUser))
             {
-                foreach(TourReservation reservation in _tourReservationService.GetReservationsByTourId(tour.Id)) 
+                List<int> addedUserIds = new List<int>();
+                foreach (TourReservation reservation in _tourReservationService.GetReservationsByTourId(tour.Id))
                 {
-                    bool hasVoucherByGuide = false;
-                    foreach (Voucher voucher in _voucherService.GetUserVouchers(_userService.GetById(reservation.UserId)))
+                    if (!addedUserIds.Contains(reservation.UserId))
                     {
-                        if (voucher.GuideId == CurrentUser.Id)
+                        bool hasVoucherByGuide = false;
+                        foreach (Voucher voucher in _voucherService.GetUserVouchers(_userService.GetById(reservation.UserId)))
                         {
-                            UpdateOldVoucher(voucher);
-                            hasVoucherByGuide = true;
+                            if (voucher.GuideId == CurrentUser.Id)
+                            {
+                                UpdateOldVoucher(voucher);
+                                hasVoucherByGuide = true;
+                            }
+
                         }
-
+                        if (!hasVoucherByGuide)
+                        {
+                            AddNewVoucher(tour, reservation.UserId);
+                        }
+                        addedUserIds.Add(reservation.UserId);
                     }
-                    if (!hasVoucherByGuide)
-                    {
-                        AddNewVoucher(tour, reservation.UserId);
-                    }
-
                 }
             }
                 _tourService.AbortAllUpcomingTours(CurrentUser);
@@ -1622,7 +1635,7 @@ namespace InitialProject.View.Guide
             if(SelectedMessage != null) 
             {
                 CurrentUser.SuperGuideLanguages.Remove(SelectedMessage.Language);
-                _userService.Update(CurrentUser);
+                Messages.Remove(SelectedMessage);
             }        
         }
         #endregion
@@ -1641,6 +1654,21 @@ namespace InitialProject.View.Guide
         private void UpdateMessages() 
         {
             Messages.Clear();
+
+            List<string> currentLanguages = CurrentUser.SuperGuideLanguages;
+            List<string> newLanguages = _userService.QualifiesForSuperGuide(CurrentUser);
+
+            List<string> addedLanguages = _userService.GetAddedLanguages(currentLanguages, newLanguages);
+            List<string> lostLanguages = _userService.GetLostLanguages(currentLanguages, newLanguages);
+
+            foreach (string language in addedLanguages)
+            {
+                Messages.Add(new GuideMessage(language, true));
+            }
+            foreach (string language in lostLanguages)
+            {
+                Messages.Add(new GuideMessage(language, false));
+            }
 
         }
         private void UpdateUpcomingTours()

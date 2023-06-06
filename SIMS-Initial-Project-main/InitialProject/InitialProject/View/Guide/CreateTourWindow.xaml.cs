@@ -20,11 +20,6 @@ using System.Windows.Shapes;
 
 namespace InitialProject.View.Guide
 {
-    /// <summary>
-    /// Interaction logic for CreateTourWindow.xaml
-    /// </summary>
-    /// 
-
     public partial class CreateTourWindow : Window
     {
         private CreateTourViewModel _viewModel;

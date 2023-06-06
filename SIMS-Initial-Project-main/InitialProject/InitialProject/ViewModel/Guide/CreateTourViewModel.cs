@@ -1303,7 +1303,7 @@ namespace InitialProject.ViewModel.Guide
 
                 if (PreviousWindowCloseCommand != null) PreviousWindowCloseCommand.Execute(null);
 
-                CancelCommand.Execute(null);
+               // CancelCommand.Execute(null);
             }
         }
         private void UpdateCheckpoints(Tour tour, ObservableCollection<int> checkpointIds) 
