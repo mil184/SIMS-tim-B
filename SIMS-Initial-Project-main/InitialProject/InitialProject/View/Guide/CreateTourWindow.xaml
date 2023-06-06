@@ -226,7 +226,8 @@
                           Grid.Row="0" 
                           Grid.Column="1"
                           FontSize="13"
-                          behaviors:DatePickerBehavior.GotFocusCommand="{Binding DatePickerGotFocusCommand}" behaviors:DatePickerBehavior.LostFocusCommand="{Binding DatePickerLostFocusCommand}"                
+                          behaviors:DatePickerFocusBehavior.GotFocusCommand="{Binding DatePickerGotFocusCommand}"
+                          behaviors:DatePickerFocusBehavior.LostFocusCommand="{Binding DatePickerLostFocusCommand}"  
                           IsDropDownOpen="{Binding Path=IsDatePickerDropDown}"
                           IsEnabled="{Binding Path = IsEnabledDatePicker}"/>
                         </Border>

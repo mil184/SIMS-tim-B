@@ -129,6 +129,9 @@
   <data name="ComplexTourInfo" xml:space="preserve">
     <value>Složene ture se sastoje od više od jedne obične ture.</value>
   </data>
+  <data name="ComplexTourOverview" xml:space="preserve">
+    <value>Pregled kompleksne ture</value>
+  </data>
   <data name="ComplexTourRequestingTab" xml:space="preserve">
     <value>Zahtevanje kompleksnih tura</value>
   </data>
@@ -180,6 +183,9 @@
   <data name="EndDatesDG" xml:space="preserve">
     <value>Završni datumi</value>
   </data>
+  <data name="EndDateTime" xml:space="preserve">
+    <value>Vreme završavanja:</value>
+  </data>
   <data name="Exit" xml:space="preserve">
     <value>Izlaz</value>
   </data>
@@ -194,6 +200,15 @@
   </data>
   <data name="FiltrationInfo" xml:space="preserve">
     <value>Filtracija se koristi da se prikažu samo specifične, relevantne ture kada se unesu željene informacije.</value>
+  </data>
+  <data name="FinishedTours" xml:space="preserve">
+    <value>Završene Ture</value>
+  </data>
+  <data name="FinishedToursInfo" xml:space="preserve">
+    <value>Odaberite završenu turu kako biste ocenili.</value>
+  </data>
+  <data name="guestStatistic" xml:space="preserve">
+    <value>Prosečan broj gostiju za odabranu godinu:</value>
   </data>
   <data name="Guide" xml:space="preserve">
     <value>Vodič:</value>
@@ -219,20 +234,35 @@
   <data name="LanguageBtn" xml:space="preserve">
     <value>Prikaži na engleskom</value>
   </data>
+  <data name="languageChart" xml:space="preserve">
+    <value>Grafik jezika</value>
+  </data>
   <data name="LanguageQuestion" xml:space="preserve">
     <value>3. Kako biste ocenili vodičevo poznavanje jezika?*</value>
   </data>
   <data name="LanguagesDG" xml:space="preserve">
     <value>Jezici</value>
   </data>
+  <data name="languageStatistic" xml:space="preserve">
+    <value>Prikaz broja zahteva spram jezika:</value>
+  </data>
+  <data name="locationChart" xml:space="preserve">
+    <value>Grafik lokacija</value>
+  </data>
   <data name="LocationsDG" xml:space="preserve">
     <value>Lokacije</value>
+  </data>
+  <data name="locationStatistic" xml:space="preserve">
+    <value>Prikaz statusa zahteva spram lokacija:</value>
   </data>
   <data name="LogOut" xml:space="preserve">
     <value>Odjavi se</value>
   </data>
   <data name="MaxGuests" xml:space="preserve">
     <value>Maksimalan broj gostiju:</value>
+  </data>
+  <data name="myTourRequests" xml:space="preserve">
+    <value>Tvoji zahtevi za ture</value>
   </data>
   <data name="Next" xml:space="preserve">
     <value>Sledeća</value>
@@ -261,6 +291,12 @@
   <data name="RateTourBtn" xml:space="preserve">
     <value>Oceni turu</value>
   </data>
+  <data name="requestATour" xml:space="preserve">
+    <value>Zahtevaj turu</value>
+  </data>
+  <data name="requestATourBtn" xml:space="preserve">
+    <value>Zahtevaj turu</value>
+  </data>
   <data name="requestComplexTour" xml:space="preserve">
     <value>Zahtevaj složenu turu</value>
   </data>
@@ -287,6 +323,9 @@
   </data>
   <data name="Submit" xml:space="preserve">
     <value>Poslati</value>
+  </data>
+  <data name="SubmittedRegularTours" xml:space="preserve">
+    <value>Poslate ture:</value>
   </data>
   <data name="Theme" xml:space="preserve">
     <value>Tema</value>
@@ -366,6 +405,9 @@
   </data>
   <data name="Welcome" xml:space="preserve">
     <value>Dobrodošli na DMJM Tours! Šta biste želeli da radite?</value>
+  </data>
+  <data name="yearStatistic" xml:space="preserve">
+    <value>Prikaz broja zahteva spram godine:</value>
   </data>
   <data name="YourVouchers" xml:space="preserve">
     <value>Vaučeri</value>

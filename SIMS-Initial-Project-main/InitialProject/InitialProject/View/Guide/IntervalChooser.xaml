@@ -8,6 +8,10 @@
         Title="IntervalChooser" Height="500" Width="800"
         Background="#F2F2F2"
         WindowStartupLocation="CenterScreen">
+    <Window.InputBindings>
+        <KeyBinding Key="Escape" Command="{Binding CancelCommand}" />
+        <KeyBinding Key="R" Modifiers="Control" Command="{Binding GenerateReportCommand }" />
+    </Window.InputBindings>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -15,36 +19,74 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Border Grid.Row="0" Background="#E9F1F7" BorderThickness="3" BorderBrush="#007ACC" CornerRadius="5" Margin="2">
-            <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Center">
-            <StackPanel Orientation="Horizontal" Margin="10">
-                <TextBlock Text="Start Date:" VerticalAlignment="Center" />
-                    <DatePicker Margin="10" SelectedDate="{Binding Path = StartDateInput,UpdateSourceTrigger=PropertyChanged}" Width="150" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
-            </StackPanel>
+        <Border Grid.Row="0" Background="#E9F1F7" BorderThickness="3" BorderBrush="#007ACC" CornerRadius="5" Margin="2" HorizontalAlignment="Stretch">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <StackPanel Orientation="Horizontal" Margin="10">
+                    <TextBlock Text="Start Date:" VerticalAlignment="Center"/>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock HorizontalAlignment="Center" Text="{Binding Path=LeftDatePickerError}" Foreground="#FFA500"></TextBlock>
+                        <DatePicker Margin="10" SelectedDate="{Binding Path=StartDateInput, UpdateSourceTrigger=PropertyChanged}" Width="150" SelectedDateChanged="DatePicker_SelectedDateChanged" BorderBrush="{Binding Path=LeftDateBorderColor}"/>
+                    </StackPanel>
+                </StackPanel>
 
-            <StackPanel Orientation="Horizontal" Margin="10">
-                <TextBlock Text="End Date:" VerticalAlignment="Center" />
-                    <DatePicker  Margin="10" SelectedDate="{Binding Path = EndDateInput,UpdateSourceTrigger=PropertyChanged}" Width="150" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
+                <StackPanel Orientation="Horizontal" Margin="10">
+                    <TextBlock Text="End Date:" VerticalAlignment="Center" />
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock HorizontalAlignment="Center" Text="{Binding Path=RightDatePickerError}" Foreground="#FFA500"></TextBlock>
+                        <DatePicker Margin="10" SelectedDate="{Binding Path=EndDateInput, UpdateSourceTrigger=PropertyChanged}" Width="150" SelectedDateChanged="DatePicker_SelectedDateChanged" BorderBrush="{Binding Path=RightDateBorderColor}"/>
+                    </StackPanel>
+                </StackPanel>
             </StackPanel>
-        </StackPanel>
-            </Border>
-                <GroupBox Grid.Row="1" Header="Upcoming Tours" FontSize="28" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2">
-            <DataGrid ItemsSource="{Binding UpcomingTours}" AutoGenerateColumns="False" IsReadOnly="true"  HorizontalAlignment="Stretch" Margin="10">
-                <DataGrid.CellStyle>
-                    <Style TargetType="DataGridCell">
-                        <Setter Property="FontSize" Value="18"/>
-                        <Setter Property="Padding" Value="10"/>
-                    </Style>
-                </DataGrid.CellStyle>
+        </Border>
+
+        <GroupBox Grid.Row="1" Header="Upcoming Tours" FontSize="28" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2">
+            <DataGrid ItemsSource="{Binding UpcomingTours}"  AutoGenerateColumns="False" Margin="10" FontSize="20" Focusable="True" Name="UpcomingToursDataGrid" IsReadOnly="True" IsTabStop="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" FontSize="18"/>
-                    <DataGridTextColumn Header="Location" Binding="{Binding Location}" Width="*" FontSize="18"/>
-                    <DataGridTextColumn Header="Start Time" Binding="{Binding Path=StartTime,StringFormat={}{0:dd.M.yyyy. HH:mm}}" Width="*" FontSize="18"/>
+
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Header="Location" Binding="{Binding Location}" Width="*">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Header="Start Date And Time" Binding="{Binding StartTime,StringFormat={}{0:dd.M.yyyy. HH:mm}}" Width="*">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
+
         </GroupBox>
         <StackPanel Grid.Row ="2" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="Generate Report&#x0a;    (CTRL + R)" Margin="10" Height="50" Width="140" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Center" Click="GenerateReport_Click" Grid.ColumnSpan="2">
+            <Button Content="Generate Report&#x0a;    (CTRL + R)" Margin="10" Height="50" Width="140" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Center" IsTabStop="False" Grid.ColumnSpan="2" Command="{Binding GenerateReportCommand}">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -68,7 +110,7 @@
                     </ControlTemplate>
                 </Button.Template>
             </Button>
-            <Button Content="Cancel&#x0a; (ESC)" Margin="10" Height="50" Width="140" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Center" Click="CloseButton_Click" Grid.ColumnSpan="2">
+            <Button Content="Cancel&#x0a; (ESC)" Margin="10" Height="50" Width="140" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Center" Grid.ColumnSpan="2" IsTabStop="False" Command="{Binding CancelCommand}">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">

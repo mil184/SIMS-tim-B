@@ -268,13 +268,25 @@ namespace InitialProject.View.Guest2
             if (requestsAcceptedLanguages.Count != 0)
             {
                 List<string> languages = new List<string>();
-                string message = "Others have acepted the language(s): ";
+                string message = "";
+
+                if (app.Lang == ENG)
+                {
+                    message = "Others have acepted the language(s): ";
+                }
+                
+                if (app.Lang == SRB)
+                {
+                    message = "Drugi su prihvatili jezik(e): ";
+                }
+
                 foreach (TourRequest req in requestsAcceptedLanguages)
                 {
                     message += req.Language + ", ";
                     languages.Add(req.Language);
                 }
                 message = message.TrimEnd(',', ' ');
+
                 bool flag = false;
                 foreach (TourRequest req in _tourRequestService.GetInvalidandPendingRequests(LoggedInUser))
                 {
@@ -296,10 +308,19 @@ namespace InitialProject.View.Guest2
             
             if (requestsAcceptedLocations.Count != 0)
             {
-
                 List<int> locationIds = new List<int>();
+                string message = "";
 
-                string message = "Others have acepted the location(s): ";
+                if (app.Lang == ENG)
+                {
+                    message = "Others have acepted the location(s): ";
+                }
+
+                if (app.Lang == SRB)
+                {
+                    message = "Drugi su prihvatili lokaciju/e: ";
+                }
+
                 foreach (TourRequest req in requestsAcceptedLocations)
                 {
                     message += _locationService.GetById(req.LocationId).City + ", " + _locationService.GetById(req.LocationId).Country + " ,also ";
@@ -360,11 +381,22 @@ namespace InitialProject.View.Guest2
 
                 if (tourRequest.Status == InitialProject.Resources.Enums.RequestStatus.accepted && !tourRequest.MessageShown)
                 {
-                    MessageBox.Show("Your tour request in " + location + " has been accepted. Start time is " + tourRequest.ChosenDate);
+                    GetAcceptedRequestMessageBox(location, tourRequest);
                     tourRequest.MessageShown = true;
                     _tourRequestService.Update(tourRequest);
                 }
             }
+        }
+
+        private void GetAcceptedRequestMessageBox(string location, TourRequest tourRequest)
+        {
+            if (app.Lang == ENG)
+            {
+                MessageBox.Show("Your tour request in " + location + " has been accepted. Start time is " + tourRequest.ChosenDate);
+                return;
+            }
+
+            MessageBox.Show("Tvoj zahtev na lokaciji " + location + " je prihvaćen. Početak je " + tourRequest.ChosenDate);
         }
 
         public void ConfirmArrival()
@@ -379,7 +411,17 @@ namespace InitialProject.View.Guest2
                     return;
                 }
 
-                MessageBoxResult result = MessageBox.Show("Please confirm your arrival at " + CheckedTours[0].Name, "ArrivalConfirmation", MessageBoxButton.YesNo, MessageBoxImage.Information);
+                MessageBoxResult result = new MessageBoxResult();
+
+                if (app != null && app.Lang == ENG)
+                {
+                    result = MessageBox.Show("Please confirm your arrival at " + CheckedTours[0].Name, "Arrival Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Information);
+                }
+
+                if (app != null && app.Lang == SRB)
+                {
+                    result = MessageBox.Show("Potvrdite svoj dolazak na turi " + CheckedTours[0].Name, "Potvrda dolaska", MessageBoxButton.YesNo, MessageBoxImage.Information);
+                }
 
                 if (result == MessageBoxResult.Yes)
                 {
@@ -544,7 +586,8 @@ namespace InitialProject.View.Guest2
                 SelectedGuest2TourDTO.TourId,
                 personCount,
                 double.Parse(AverageAge),
-                voucherId);
+                voucherId,
+                System.DateTime.Now);
 
             if (CheckIfReservationAlreadyExists(tourReservation))
             {
@@ -556,6 +599,9 @@ namespace InitialProject.View.Guest2
             }
 
             ShowSuccessfulReservationMessage(app.Lang);
+
+            _tourReservationService.AcquireVoucher(tourReservation);
+            Update();
         }
 
         private void ShowSuccessfulReservationMessage(string lang)
@@ -631,29 +677,66 @@ namespace InitialProject.View.Guest2
                 int TryParseNumber;
                 if (columnName == "PersonCount")
                 {
-                    if(string.IsNullOrEmpty(PersonCount))
-                        return "Number of guests is required";
-
-                    if(!int.TryParse(PersonCount, out TryParseNumber))
-                        return "This field should be a number";
-                    else
+                    if (app.Lang == ENG)
                     {
-                        if (int.Parse(PersonCount) <= 0)
-                            return "Invalid value";
+                        if (string.IsNullOrEmpty(PersonCount))
+                            return "Number of guests is required!";
+
+                        if (!int.TryParse(PersonCount, out TryParseNumber))
+                            return "This field should be a number!";
+                        else
+                        {
+                            if (int.Parse(PersonCount) <= 0)
+                                return "This number should be greater than zero!";
+                        }
+                    }
+
+                    if (app.Lang == SRB)
+                    {
+                        if (string.IsNullOrEmpty(PersonCount))
+                            return "Broj gostiju je neophodan!";
+
+                        if (!int.TryParse(PersonCount, out TryParseNumber))
+                            return "Ovo polje treba biti broj!";
+                        else
+                        {
+                            if (int.Parse(PersonCount) <= 0)
+                                return "Ovaj broj treba biti veći od nule!";
+                        }
                     }
                 }
                 else if (columnName == "AverageAge")
                 {
-                    if (string.IsNullOrEmpty(AverageAge))
-                        return "Average age of guests is required";
+                    
 
-                    if (!int.TryParse(AverageAge, out TryParseNumber))
-                        return "This field should be a number";
-                    else
+                    if (app.Lang == ENG)
                     {
-                        if (int.Parse(AverageAge) <= 0)
-                            return "Invalid value";
+                        if (string.IsNullOrEmpty(AverageAge))
+                            return "Average age of guests is required";
+
+                        if (!int.TryParse(AverageAge, out TryParseNumber))
+                            return "This field should be a number";
+                        else
+                        {
+                            if (int.Parse(AverageAge) <= 0)
+                                return "Invalid value";
+                        }
                     }
+
+                    if (app.Lang == SRB)
+                    {
+                        if (string.IsNullOrEmpty(PersonCount))
+                            return "Prosečne godine gostiju su neophodne!";
+
+                        if (!int.TryParse(PersonCount, out TryParseNumber))
+                            return "Ovo polje treba biti broj!";
+                        else
+                        {
+                            if (int.Parse(PersonCount) <= 0)
+                                return "Ovaj broj treba biti veći od nule!";
+                        }
+                    }
+
                 }
                 return null;
             }
@@ -761,12 +844,37 @@ namespace InitialProject.View.Guest2
             AcceptedToursCount = acceptedTours.Count();
             DeniedToursCount = deniedTours.Count();
 
+            if (tourRequestsForYear.Count() == 0)
+            {
+                if (app.Lang == ENG)
+                {
+                    StatusStatisticTB.Text = "There were no accepted tours in this year.";
+                }
+
+                if (app.Lang == SRB)
+                {
+                    StatusStatisticTB.Text = "Nema prihvaćenih tura u odabranoj godini.";
+                }
+
+                return;
+            }
+
             int AcceptedPercentage = AcceptedToursCount * 100 / tourRequestsForYear.Count();
             int DeniedPercentage = DeniedToursCount * 100 / tourRequestsForYear.Count();
 
-            StatusStatisticTB.Text = 
-                AcceptedToursCount + " of your tours were accepted. \n" + 
-                DeniedToursCount + " of your tours were denied.";
+            if (app.Lang == ENG)
+            {
+                StatusStatisticTB.Text =
+                    AcceptedPercentage + "% of your tours were accepted. \n" +
+                    DeniedPercentage + "% of your tours were denied.";
+            }
+
+            if (app.Lang == SRB)
+            {
+                StatusStatisticTB.Text =
+                    AcceptedPercentage + "% tvojih tura su prihvaćene. \n" +
+                    DeniedPercentage + "% tvojih tura su odbijene.";
+            }
         }
 
         private void GuestYearStatisticSelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -778,14 +886,32 @@ namespace InitialProject.View.Guest2
             double totalTourRequests = acceptedTourRequestsForYear.Count();
 
             if (totalTourRequests==0)
-            {
-                GuestStatisticTB.Text = "No accepted tour in this year.";
+            {       
+                if (app.Lang == ENG)
+                {
+                    GuestStatisticTB.Text = "There were no accepted tours in this year.";
+                }
+
+                if (app.Lang == SRB)
+                {
+                    GuestStatisticTB.Text = "Nema prihvaćenih tura u odabranoj godini.";
+                }
+
                 return;
             }
             
             double averageGuests = (double)totalGuests / (double)totalTourRequests;
-            GuestStatisticTB.Text = "Average guests:" + averageGuests;
-            
+
+            if (app.Lang == ENG)
+            {
+                GuestStatisticTB.Text = "Average guests:" + averageGuests;
+            }
+
+            if (app.Lang == SRB)
+            {
+                GuestStatisticTB.Text = "Prosečan broj gostiju:" + averageGuests;
+            }
+
         }
 
         public ObservableCollection<Guest2TourDTO> ConvertToDTO(List<Tour> tours)
@@ -812,7 +938,7 @@ namespace InitialProject.View.Guest2
         }
         public Guest2TourDTO ConvertToDTO(Tour tour)
         {
- 
+
             return new Guest2TourDTO(
                 tour.Id,
                 tour.Name,
@@ -864,6 +990,7 @@ namespace InitialProject.View.Guest2
 
             ObservableCollection<Guest2TourDTO> searchResults = ConvertToDTO(result);
             foreach (Guest2TourDTO dto in searchResults)
+
             {
                 TourDTOs.Add(dto);
             }
@@ -956,6 +1083,16 @@ namespace InitialProject.View.Guest2
 
         #region Information popups
 
+        private void FinishedToursImage_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            FinishedToursPopup.IsOpen = true;
+        }
+
+        private void FinishedToursImage_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            FinishedToursPopup.IsOpen = false;
+        }
+
         private void ComplexTours_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
             ComplexToursPopup.IsOpen = true;
@@ -1023,21 +1160,13 @@ namespace InitialProject.View.Guest2
             showTour.Show();
         }
 
-        private void TrackingImage_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-
-        }
-
-        private void TrackingImage_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-
-        }
-
         private void ComplexWindow(object sender, RoutedEventArgs e)
         {
             ComplexTourRequestViewModel complexTourRequestViewModel = new ComplexTourRequestViewModel(_locationService, _tourRequestService, _complexTourService, LoggedInUser, app.Lang);
             ComplexTourRequest complexTourRequest = new ComplexTourRequest(complexTourRequestViewModel);
             complexTourRequest.Show();
         }
+
+        
     }
 }

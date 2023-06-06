@@ -41,6 +41,14 @@ namespace InitialProject.Service
             return activeTours;
         }
 
+        public void AbortAllUpcomingTours(User user) 
+        {
+            foreach (Tour tour in GetUpcomingTours(user))
+            {
+                tour.IsAborted = true;
+                Update(tour);
+            }
+        }
         public Tour GetTourByRequestId(int id)
         {
             Tour requestedTour = new Tour();

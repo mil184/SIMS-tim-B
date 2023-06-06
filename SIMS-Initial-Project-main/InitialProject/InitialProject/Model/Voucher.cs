@@ -15,6 +15,7 @@ namespace InitialProject.Model
         public DateTime ExpirationDateTime { get; set; }
         public bool IsActive { get; set; }
         public int UserId { get; set; }
+        public int GuideId { get; set; }
 
         public Voucher()
         {
@@ -27,6 +28,8 @@ namespace InitialProject.Model
             ExpirationDateTime = expirationDateTime;
             IsActive = true;
             UserId = userId;
+            GuideId = -1;
+
         }
 
         public string[] ToCSV()
@@ -37,7 +40,8 @@ namespace InitialProject.Model
                 StartDateTime.ToString(),
                 ExpirationDateTime.ToString(),
                 IsActive.ToString(),
-                UserId.ToString()
+                UserId.ToString(),
+                GuideId.ToString()
             };
 
             return csvValues;
@@ -51,6 +55,7 @@ namespace InitialProject.Model
             ExpirationDateTime = DateTime.Parse(values[3]);
             IsActive = bool.Parse(values[4]);
             UserId = int.Parse(values[5]);
+            GuideId = int.Parse(values[6]);
         }
     }
 }

@@ -62,7 +62,7 @@ namespace InitialProject.Service
 
             foreach(ComplexTour complexTour in GetAll()) 
             {
-                if (!complexTour.AcceptedTourIdsByGuideIds.ContainsKey(user.Id)) 
+                if (!complexTour.AcceptedTourIdsByGuideIds.ContainsKey(user.Id) && complexTour.AvailableTourRequestIds.Count != 0) 
                 {
                     tours.Add(complexTour);
                 }
@@ -75,10 +75,11 @@ namespace InitialProject.Service
             List<ComplexTour> byCountry = new List<ComplexTour>();
             List<ComplexTour> byCity = new List<ComplexTour>();
             List<ComplexTour> byLanguage = new List<ComplexTour>();
+            List<ComplexTour> byGuests = new List<ComplexTour>();
 
             foreach (var tour in tours)
             {
-                foreach (int id in tour.AvailableTourRequestIds)
+                  foreach (int id in tour.AvailableTourRequestIds)
                 {
                     if (_locationService.GetById(_tourRequestService.GetById(id).LocationId).Country.ToLower().Replace(" ", "").Contains(input.ToLower().Replace(" ", "")))
                     {
@@ -92,9 +93,13 @@ namespace InitialProject.Service
                     {
                         byLanguage.Add(tour);
                     }
+                    if (int.TryParse(input, out int x) && _tourRequestService.GetById(id).MaxGuests >= x)
+                    {
+                        byGuests.Add(tour);
+                    }
                 }
             }
-            List<ComplexTour> combinedList = byCountry.Union(byCity).Union(byLanguage).Distinct().ToList();
+            List<ComplexTour> combinedList = byCountry.Union(byCity).Union(byLanguage).Union(byGuests).Distinct().ToList();
 
             return combinedList;
         }

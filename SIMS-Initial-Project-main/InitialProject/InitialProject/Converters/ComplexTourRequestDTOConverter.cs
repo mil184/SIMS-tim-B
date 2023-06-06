@@ -53,6 +53,13 @@ namespace InitialProject.Converters
                 }
             }
 
+            locations = locations.TrimEnd('\n');
+            languages = languages.TrimEnd('\n');
+            startDates = startDates.TrimEnd('\n');
+            endDates = endDates.TrimEnd('\n');
+            statuses = statuses.TrimEnd('\n');
+            chosenDates = chosenDates.TrimEnd('\n');
+
             if (!string.IsNullOrEmpty(locations))
                 locations = locations.TrimEnd('\n');
             if (!string.IsNullOrEmpty(languages))

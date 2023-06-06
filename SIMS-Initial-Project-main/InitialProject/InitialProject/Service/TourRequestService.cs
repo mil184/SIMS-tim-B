@@ -24,7 +24,6 @@ namespace InitialProject.Service
             _tourService = new TourService();
         }
 
-
         public TourRequest GetSameDetailsTourRequest(User user)
         {
             List<TourRequest> acceptedOtherGuestRequests = GetStatusRequests(GetOtherGuestRequests(user), Resources.Enums.RequestStatus.accepted);

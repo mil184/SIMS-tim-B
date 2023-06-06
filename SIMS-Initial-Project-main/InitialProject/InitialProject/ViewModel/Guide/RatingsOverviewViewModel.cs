@@ -1,4 +1,6 @@
 ﻿using InitialProject.Model.DTO;
+using iTextSharp.text.pdf;
+using MenuNavigation.Commands;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -27,7 +29,7 @@ namespace InitialProject.ViewModel.Guide
 
         public List<string> Urls { get; set; }
 
-        public RatingsOverviewViewModel(GuideRatingDTO guideRatingDTO) 
+        public RatingsOverviewViewModel(GuideRatingDTO guideRatingDTO)
         {
             SelectedDTO = guideRatingDTO;
 
@@ -35,9 +37,10 @@ namespace InitialProject.ViewModel.Guide
             Urls = guideRatingDTO.Urls;
 
             SetImage(imageIndex);
+            InitializeCommands();
         }
 
-        public void PreviousImage() 
+        public void PreviousImage()
         {
             imageIndex--;
             if (imageIndex < 0)
@@ -47,7 +50,7 @@ namespace InitialProject.ViewModel.Guide
 
             SetImage(imageIndex);
         }
-        public void NextImage() 
+        public void NextImage()
         {
             imageIndex++;
             if (imageIndex > Urls.Count - 1)
@@ -83,6 +86,24 @@ namespace InitialProject.ViewModel.Guide
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public RelayCommand CancelCommand { get; set; }
+        public RelayCommand LeftCommand { get; private set; }
+        public RelayCommand RightCommand { get; private set; }
+
+        private void InitializeCommands()
+        {
+            LeftCommand = new RelayCommand(PreviousImage);
+            RightCommand = new RelayCommand(NextImage);
+        }
+        private void NextImage(object parameter)
+        {
+            NextImage();
+        }
+        private void PreviousImage(object parameter)
+        {
+            PreviousImage();
         }
     }
 }

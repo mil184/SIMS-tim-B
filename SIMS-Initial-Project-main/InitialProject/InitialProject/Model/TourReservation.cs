@@ -21,9 +21,12 @@ namespace InitialProject.Model
         public bool IsRated { get; set; }
         public double AverageAge { get; set; }
         public int UsedVoucherId { get; set; }
+        public DateTime ReservationTime { get; set; }
+        public bool GotVoucher { get; set; }
+
         public TourReservation() { }
 
-        public TourReservation(int userId, int tourId, int personCount, double averageAge, int usedVoucher)
+        public TourReservation(int userId, int tourId, int personCount, double averageAge, int usedVoucher, DateTime reservationTime)
         {
             UserId = userId;
             TourId = tourId;
@@ -35,11 +38,13 @@ namespace InitialProject.Model
             IsRated = false;
             AverageAge = averageAge;
             UsedVoucherId = usedVoucher;
+            ReservationTime = reservationTime;
+            GotVoucher = false;
         }
 
         public string[] ToCSV()
         {
-            string[] csvValues = { Id.ToString(), UserId.ToString(), TourId.ToString(), PersonCount.ToString(), CheckpointArrivalId.ToString(), GuestChecked.ToString(), MessageBoxShown.ToString(), GuestArrived.ToString(), IsRated.ToString(), AverageAge.ToString(), UsedVoucherId.ToString() };
+            string[] csvValues = { Id.ToString(), UserId.ToString(), TourId.ToString(), PersonCount.ToString(), CheckpointArrivalId.ToString(), GuestChecked.ToString(), MessageBoxShown.ToString(), GuestArrived.ToString(), IsRated.ToString(), AverageAge.ToString(), UsedVoucherId.ToString(), ReservationTime.ToString(), GotVoucher.ToString() };
             return csvValues;
         }
 
@@ -56,6 +61,8 @@ namespace InitialProject.Model
             IsRated = Convert.ToBoolean(values[8]);
             AverageAge = Convert.ToDouble (values[9]);
             UsedVoucherId = Convert.ToInt32(values[10]);
+            ReservationTime = Convert.ToDateTime(values[11]);
+            GotVoucher = Convert.ToBoolean(values[12]);
         }
     }
 }

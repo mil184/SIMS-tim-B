@@ -41,12 +41,13 @@ namespace InitialProject.View.Guide
         private readonly ImageRepository _imageRepository;
         private readonly CheckpointService _checkpointService;
         private readonly UserService _userService;
-        private readonly VoucherRepository _voucherRepository;
+        private readonly VoucherService _voucherService;
         private readonly TourRequestService _tourRequestService;
         private readonly ComplexTourService _complexTourService;
         public User CurrentUser { get; set; }
         public int CurrentTourSortIndex;
         public int CurrentRequestSortIndex;
+        public int CurrentComplexTourSortIndex;
         public GuideWindow(User user)
         {
             InitializeComponent();
@@ -71,8 +72,8 @@ namespace InitialProject.View.Guide
             _userService = new UserService();
             _userService.Subscribe(this);
 
-            _voucherRepository = new VoucherRepository();
-            _voucherRepository.Subscribe(this);
+            _voucherService = new VoucherService();
+            _voucherService.Subscribe(this);
 
             _tourRatingService = new TourRatingService();
             _tourRatingService.Subscribe(this);
@@ -94,6 +95,7 @@ namespace InitialProject.View.Guide
 
             CurrentTourSortIndex = 0;
             CurrentRequestSortIndex = 0;
+            CurrentComplexTourSortIndex = 0;
 
             //ComplexTour ct = new ComplexTour();
 
@@ -205,6 +207,48 @@ namespace InitialProject.View.Guide
             Close();
 
         }
+        private bool ResignConfirmation() 
+        {
+            return MessageBoxResult.Yes ==  MessageBox.Show($"Are you sure you want to resign as a tour guide?", "Resign Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+        }
+        private void Resign() 
+        {
+
+            foreach(Tour tour in _tourService.GetUpcomingTours(CurrentUser)) 
+            {
+                foreach(TourReservation reservation in _tourReservationService.GetReservationsByTourId(tour.Id)) 
+                {
+                    bool hasVoucherByGuide = false;
+                    foreach (Voucher voucher in _voucherService.GetUserVouchers(_userService.GetById(reservation.UserId)))
+                    {
+                        if (voucher.GuideId == CurrentUser.Id)
+                        {
+                            UpdateOldVoucher(voucher);
+                            hasVoucherByGuide = true;
+                        }
+
+                    }
+                    if (!hasVoucherByGuide)
+                    {
+                        AddNewVoucher(tour, reservation.UserId);
+                    }
+
+                }
+            }
+                _tourService.AbortAllUpcomingTours(CurrentUser);
+        }
+
+        public void AddNewVoucher(Tour tour, int guestId) 
+        {
+            Voucher voucher = new Voucher(tour.Name, DateTime.Now, DateTime.Now.AddYears(2), guestId);
+            voucher.GuideId = CurrentUser.Id;
+            _voucherService.Save(voucher);
+        }
+        public void UpdateOldVoucher(Voucher voucher)
+        {
+            voucher.GuideId = -1;
+            _voucherService.Update(voucher);
+        }
         #endregion
 
         #region TodaysToursTab
@@ -241,7 +285,7 @@ namespace InitialProject.View.Guide
         }
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
-            CreateTourViewModel createTourViewModel = new CreateTourViewModel(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService, null, null, _complexTourService, null);
+            CreateTourViewModel createTourViewModel = new CreateTourViewModel(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService, null, null, _complexTourService, null, null);
             CreateTourWindow createTour = new CreateTourWindow(createTourViewModel);
             createTour.ShowDialog();
         }
@@ -412,7 +456,7 @@ namespace InitialProject.View.Guide
                 {
                     vouchersAdded.Add(userId);
                     Voucher voucher = new Voucher(tour.Name, DateTime.Now, DateTime.Now.AddYears(1), userId);
-                    _voucherRepository.Save(voucher);
+                    _voucherService.Save(voucher);
                 }
             }
         }
@@ -432,7 +476,8 @@ namespace InitialProject.View.Guide
         }
         private void GenerateReportButton_Click(object sender, RoutedEventArgs e)
         {
-            IntervalChooser intervalChooser = new IntervalChooser(_tourService, _locationService, CurrentUser);
+            IntervalChooserViewModel viewModel = new IntervalChooserViewModel(_tourService, _locationService, CurrentUser);
+            IntervalChooser intervalChooser = new IntervalChooser(viewModel);
             intervalChooser.ShowDialog();
         }
         private string _upcomingToursSearchInput;
@@ -787,7 +832,7 @@ namespace InitialProject.View.Guide
             if (SelectedPendingRequestDTO != null)
             {
                 TourRequest request = GuideDTOConverter.ConvertToRequest(SelectedPendingRequestDTO, _tourRequestService);
-                CreateTourViewModel createTourViewModel = new CreateTourViewModel(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService, request, null, _complexTourService, null);
+                CreateTourViewModel createTourViewModel = new CreateTourViewModel(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService, request, null, _complexTourService, null, null);
                 CreateTourWindow createTour = new CreateTourWindow(createTourViewModel);
                 createTour.ShowDialog();
             }
@@ -831,9 +876,14 @@ namespace InitialProject.View.Guide
 
         private void ComplexTourRequestsDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            OpenComplexTourWindow();
+        }
+
+        public void OpenComplexTourWindow() 
+        {
             if (SelectedComplexTourDTO != null)
             {
-                ShowComplexTourViewModel showComplexTourViewModel = new ShowComplexTourViewModel(GuideDTOConverter.ConvertToComplexTour(SelectedComplexTourDTO,_complexTourService), _tourRequestService, _locationService, _complexTourService, CurrentUser, _checkpointService, _imageRepository, _tourService);
+                ShowComplexTourViewModel showComplexTourViewModel = new ShowComplexTourViewModel(GuideDTOConverter.ConvertToComplexTour(SelectedComplexTourDTO, _complexTourService), _tourRequestService, _locationService, _complexTourService, CurrentUser, _checkpointService, _imageRepository, _tourService);
                 ShowComplexTour showComplexTour = new ShowComplexTour(showComplexTourViewModel);
                 showComplexTour.ShowDialog();
             }
@@ -1257,6 +1307,8 @@ namespace InitialProject.View.Guide
             PreviewKeyDown += DataGrid_PreviewKeyDown;
             PreviewKeyDown += SortAsc_PreviewKeyDown;
             PreviewKeyDown += SortDesc_PreviewKeyDown;
+            PreviewKeyDown += ReportWindow_PreviewKeyDown;
+            PreviewKeyDown += Resign_PreviewKeyUp;
         }
         private void LogOut_PreviewKeyDown(object sender, KeyEventArgs e)
         {
@@ -1267,13 +1319,31 @@ namespace InitialProject.View.Guide
                 Close();
             }
         }
+        private void ReportWindow_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.R)
+            {
+                IntervalChooserViewModel viewModel = new IntervalChooserViewModel(_tourService, _locationService, CurrentUser);
+                IntervalChooser intervalChooser = new IntervalChooser(viewModel);
+                intervalChooser.ShowDialog();
+                e.Handled = true;
+            }
+        }
         private void CreateTour_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.A)
             {
-                CreateTourViewModel createTourViewModel = new CreateTourViewModel(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService, null, null, _complexTourService, null);
+                CreateTourViewModel createTourViewModel = new CreateTourViewModel(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService, null, null, _complexTourService, null, null);
                 CreateTourWindow createTour = new CreateTourWindow(createTourViewModel);
                 createTour.ShowDialog();
+                e.Handled = true;
+            }
+        }
+        private void Resign_PreviewKeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.SystemKey == Key.Q && e.KeyboardDevice.Modifiers == ModifierKeys.Alt)
+            {
+                if (ResignConfirmation()) Resign();
                 e.Handled = true;
             }
         }
@@ -1303,6 +1373,10 @@ namespace InitialProject.View.Guide
                     case 4:
                         if (SelectedPendingRequestDTO != null)
                             CreateTourBasedOnRequest();
+                        break;
+                    case 6:
+                        if (SelectedComplexTourDTO != null)
+                            OpenComplexTourWindow();
                         break;
                     default:
                         return;
@@ -1335,6 +1409,7 @@ namespace InitialProject.View.Guide
             if (Keyboard.IsKeyDown(Key.LeftCtrl) && e.Key == Key.L)
             {
                 var currentDataGrid = GetCurrentDataGrid();
+                if (currentDataGrid == null) return;
                 var firstItem = GetFirstItem(currentDataGrid);
                 SelectAndScrollTo(firstItem, currentDataGrid);
                 e.Handled = true;
@@ -1374,6 +1449,10 @@ namespace InitialProject.View.Guide
             if (grid == PendingRequestsDataGrid)
             {
                 sortColumn = GetNextSortColumnRequests();
+            }
+            else if (grid == ComplexToursDataGrid)
+            {
+                sortColumn = GetNextSortColumnComplexTours();
             }
             else
             {
@@ -1423,6 +1502,10 @@ namespace InitialProject.View.Guide
             { 
                 sortColumn = GetNextSortColumnRequests();
             }
+            else if (grid == ComplexToursDataGrid)
+            {
+                sortColumn = GetNextSortColumnComplexTours();
+            }
             else 
             {
                 sortColumn = GetNextSortColumnTours();
@@ -1467,6 +1550,8 @@ namespace InitialProject.View.Guide
                     return RatedToursDataGrid;
                 case 4:
                     return PendingRequestsDataGrid;
+                case 6:
+                    return ComplexToursDataGrid;
                 default:
                     return null;
             }
@@ -1504,6 +1589,24 @@ namespace InitialProject.View.Guide
                 case 3:
                     CurrentRequestSortIndex = 0;
                     return "StartTime";
+                default:
+                    return "";
+            }
+        }
+        private string GetNextSortColumnComplexTours()
+        {
+            switch (CurrentRequestSortIndex)
+            {
+                case 0:
+                    CurrentRequestSortIndex++;
+                    return "Locations";
+                case 1:
+                    CurrentRequestSortIndex++;
+                    return "Languages";
+                case 2:
+                    CurrentRequestSortIndex = 0;
+                    return "NumberOfGuests";
+
                 default:
                     return "";
             }
