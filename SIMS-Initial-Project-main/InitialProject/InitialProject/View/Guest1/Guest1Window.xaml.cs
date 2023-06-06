@@ -492,7 +492,7 @@ namespace InitialProject.View.Guest1
 
         private void GuestWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
-            CheckRescheduleRequestsStatus();
+           // CheckRescheduleRequestsStatus();
             CheckSuperGuestStatus();
         }
 
@@ -730,6 +730,12 @@ namespace InitialProject.View.Guest1
             document.Save(filePath);
 
             Process.Start(new ProcessStartInfo(filePath) { UseShellExecute = true });
+        }
+
+        private void WatchTutorial_Click(object sender, RoutedEventArgs e)
+        {
+            Tutorial tutorial = new Tutorial();
+            tutorial.ShowDialog();
         }
     }
 }

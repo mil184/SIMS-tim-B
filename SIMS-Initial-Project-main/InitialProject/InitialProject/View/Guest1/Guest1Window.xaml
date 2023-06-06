@@ -243,7 +243,7 @@
 
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10,10,60,10">
                         <TextBlock Text="Watch tutorial: " FontWeight="SemiBold" FontSize="16" Margin="10"/>
-                        <Button Width="120" Height="40" Background="White" >
+                        <Button Width="120" Height="40" Background="White" Click="WatchTutorial_Click" >
                             <Image Source="/Resources/Images/video.png" />
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
@@ -427,7 +427,7 @@
                         </StackPanel>
                     </Grid>
 
-                    <ListBox Grid.Row="1" Height="400" Margin="10,5,10,10" ItemsSource="{Binding Path=AvailableAccommodations, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding Path=SelectedAvailableAccommodation, UpdateSourceTrigger=PropertyChanged}">
+                    <ListBox Grid.Row="1" Height="380" Margin="10,5,10,10" ItemsSource="{Binding Path=AvailableAccommodations, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding Path=SelectedAvailableAccommodation, UpdateSourceTrigger=PropertyChanged}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <ScrollViewer  VerticalScrollBarVisibility="Auto">
@@ -511,7 +511,7 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="0.5*"/>
-                        <RowDefinition Height="2.5*"/>
+                        <RowDefinition Height="3*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 

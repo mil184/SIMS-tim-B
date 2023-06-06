@@ -9,13 +9,9 @@
 
   <ItemGroup>
     <Compile Remove="NewFolder1\**" />
-    <Compile Remove="Resources\NewFolder\**" />
     <EmbeddedResource Remove="NewFolder1\**" />
-    <EmbeddedResource Remove="Resources\NewFolder\**" />
     <None Remove="NewFolder1\**" />
-    <None Remove="Resources\NewFolder\**" />
     <Page Remove="NewFolder1\**" />
-    <Page Remove="Resources\NewFolder\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -100,6 +96,8 @@
     <None Remove="Resources\Images\video.png" />
     <None Remove="Resources\Images\view.png" />
     <None Remove="Resources\Images\warning.png" />
+    <None Remove="Resources\Video\Rec 6-6-2023--21-52-22.trec" />
+    <None Remove="Resources\Video\Tutorial.mp4" />
   </ItemGroup>
 
   <ItemGroup>
@@ -256,6 +254,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\video.png" />
+    <Resource Include="Resources\Video\Rec 6-6-2023--21-52-22.trec" />
+    <Resource Include="Resources\Video\Tutorial.mp4" />
   </ItemGroup>
 
   <ItemGroup>

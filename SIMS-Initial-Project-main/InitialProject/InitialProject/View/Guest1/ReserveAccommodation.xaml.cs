@@ -169,6 +169,21 @@ namespace InitialProject.View.Guest1
                 }
             }
         }
+
+        private DatesDTO _selectedItem;
+        public DatesDTO SelectedItem
+        {
+            get => _selectedItem;
+            set
+            {
+                if (value != _selectedItem)
+                {
+                    _selectedItem = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public ReserveAccommodation(GuestAccommodationDTO selectedAccommodation, User user, AccommodationService accommodationService, AccommodationReservationService accommodationReservationService)
         {
             InitializeComponent();
@@ -429,6 +444,33 @@ namespace InitialProject.View.Guest1
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void ReserveAccommodation_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedItem != null)
+            {
+                var messageBoxResult = MessageBox.Show($"Are you sure you want to reserve the date: {SelectedItem.StartDate:d} - {SelectedItem.EndDate:d}", "Reserve Accomodation Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                if (messageBoxResult == MessageBoxResult.Yes)
+                {
+                    var reservation = new AccommodationReservation(LoggedInUser.Id, SelectedAccommodation.Id, SelectedItem.StartDate, SelectedItem.EndDate, NumberOfDays, MaxGuests, SelectedAccommodation.OwnerId, false, SelectedAccommodation.CancellationPeriod, false);
+                    _accommodationReservationService.Save(reservation);
+
+                    MessageBox.Show("Reservation created successfully.");
+                    if (LoggedInUser.Type == UserType.superguest)
+                    {
+                        UpdateUserBonusPoints(LoggedInUser.Id);
+                    }
+                    Close();
+                }
+                return;
+            }
+        }
+
+        private void CancelReservation_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }
