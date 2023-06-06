@@ -65,11 +65,14 @@ namespace InitialProject.Model
             {
                 TourRequestIds.Add(int.Parse(id));
             }
-            foreach (string id in values[2].Split(','))
-            {
-                AvailableTourRequestIds.Add(int.Parse(id));
-            }
 
+            if (values[2].Count() > 0)
+            {
+                foreach (string id in values[2].Split(','))
+                {
+                    AvailableTourRequestIds.Add(int.Parse(id));
+                }
+            }
             string acceptedTourIdsString = values[3];
             if (!string.IsNullOrEmpty(acceptedTourIdsString))
             {

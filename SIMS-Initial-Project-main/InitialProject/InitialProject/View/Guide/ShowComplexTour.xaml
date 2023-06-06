@@ -35,7 +35,7 @@
                             </Style>
                         </DataGridTextColumn.HeaderStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Language" Binding="{Binding Language}" Width="*">
+                    <DataGridTextColumn Header="Language" Binding="{Binding Language}" Width="Auto">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Center" />
@@ -47,7 +47,7 @@
                             </Style>
                         </DataGridTextColumn.HeaderStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Guest Count" Binding="{Binding MaximumGuests}" Width="*">
+                    <DataGridTextColumn Header="Guest Count" Binding="{Binding MaximumGuests}" Width="Auto">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Center" />
@@ -63,7 +63,7 @@
             </DataGrid>
         </GroupBox>
         <GroupBox Header="Available Dates" Grid.Column="1" FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2" Margin="5">
-            <DataGrid ItemsSource="{Binding DateSlots}" SelectedItem="{Binding Path=SelectedDateSlot}" AutoGenerateColumns="False" IsReadOnly="True" Margin="10 10 10 10" FontSize="20"  Focusable="True" SelectionMode="Single">
+            <DataGrid ItemsSource="{Binding DateSlots}" SelectedItem="{Binding Path=SelectedDateSlot}" AutoGenerateColumns="False" IsReadOnly="True" Margin="10 10 10 10" FontSize="20" Focusable="True" SelectionMode="Single">
                 <DataGrid.InputBindings>
                     <KeyBinding Key="Return" Command="{Binding CreateTourCommand}" />
                 </DataGrid.InputBindings>
@@ -83,30 +83,55 @@
                 </DataGrid.Columns>
             </DataGrid>
         </GroupBox>
-
-        <Button Grid.Row="1" Grid.ColumnSpan="2" Content="Select Time Slot&#x0a;       (ENTER)" Margin="5" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2">
-            <Button.Template>
-                <ControlTemplate TargetType="Button">
-                    <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <EventTrigger RoutedEvent="Button.Click">
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="#005F8B" />
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="#00415E" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Button.Template>
-        </Button>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Center">
+            <Button Content="Select Time Slot&#x0a;       (ENTER)" Margin="5" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" IsTabStop="False">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <EventTrigger RoutedEvent="Button.Click">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#005F8B" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#00415E" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <Button Content="Close&#x0a;(ESC)" Margin="5" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" IsTabStop="False">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <EventTrigger RoutedEvent="Button.Click">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetName="border" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" From="#007ACC" To="#005F8B" Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#005F8B" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#00415E" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+        </StackPanel>
     </Grid>
 </Window>

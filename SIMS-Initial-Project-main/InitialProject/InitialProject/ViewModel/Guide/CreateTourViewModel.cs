@@ -41,8 +41,9 @@ namespace InitialProject.ViewModel.Guide
         public TourRequest Request { get; set; }
         public ComplexTour ComplexTour {get; set; }
 
+        public RelayCommand PreviousWindowCloseCommand { get; set; }
         public DateOnly? DateSlot { get; set; }
-        public CreateTourViewModel(User user, TourService tourService, LocationService locationService, ImageRepository imageRepository, CheckpointService checkpointService, TourRequestService tourRequestService, TourRequest request, ComplexTour complexTour, ComplexTourService complexTourService, DateOnly? dateSlot)
+        public CreateTourViewModel(User user, TourService tourService, LocationService locationService, ImageRepository imageRepository, CheckpointService checkpointService, TourRequestService tourRequestService, TourRequest request, ComplexTour complexTour, ComplexTourService complexTourService, DateOnly? dateSlot, RelayCommand closeCommand)
         {
             _tourService = tourService;
             _locationService = locationService;
@@ -67,6 +68,8 @@ namespace InitialProject.ViewModel.Guide
 
             ImageListBorderColor = (SolidColorBrush)(new BrushConverter().ConvertFrom("#007ACC"));
             SetImage(ImageIndex);
+
+            PreviousWindowCloseCommand = closeCommand;
         }
         private void InitializeCollections()
         {
@@ -1298,6 +1301,8 @@ namespace InitialProject.ViewModel.Guide
                 if (ComplexTour != null && DateSlot != null)
                     UpdateComplexTour(savedTour);
 
+                if (PreviousWindowCloseCommand != null) PreviousWindowCloseCommand.Execute(null);
+
                 CancelCommand.Execute(null);
             }
         }
@@ -1886,7 +1891,7 @@ namespace InitialProject.ViewModel.Guide
             {
                 AddImageUrl();
             }
-
+     
             if (IsDatePickerFocused || IsHoursComboBoxFocused || IsMinutesComboBoxFocused)
             {
                 AddDateTime();

@@ -12,6 +12,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -51,6 +52,8 @@ namespace InitialProject.ViewModel.Guide
             }
             DateSlots = new ObservableCollection<DateSlot>();
             _checkpointService = checkpointService;
+
+            InitializeCommands();
         }
         public void UpdateTimeSlots() 
         {
@@ -71,13 +74,13 @@ namespace InitialProject.ViewModel.Guide
         {
             TourRequest selectedRequest = GuideDTOConverter.ConvertToRequest(SelectedAvailableRequestDTO, _tourRequestService);
 
-            CreateTourViewModel createTourViewModel = new CreateTourViewModel(LoggedInUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService, selectedRequest, ComplexTour, _complexTourService, SelectedDateSlot.Date);
+            CreateTourViewModel createTourViewModel = new CreateTourViewModel(LoggedInUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService, selectedRequest, ComplexTour, _complexTourService, SelectedDateSlot.Date, CancelCommand);
             CreateTourWindow createTour = new CreateTourWindow(createTourViewModel);
             createTour.ShowDialog();
         }
 
         public RelayCommand CancelCommand { get; set; }
-        public RelayCommand CreateTourCommand { get; set; }
+        public RelayCommand CreateTourCommand { get; private set; }
 
         public void InitializeCommands()
         {
@@ -85,6 +88,7 @@ namespace InitialProject.ViewModel.Guide
         }
         private void CreateTour(object parameter)
         {
+            MessageBox.Show("Hello");
             CreateTour();
         }
     }

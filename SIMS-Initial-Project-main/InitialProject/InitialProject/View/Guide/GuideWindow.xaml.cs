@@ -243,7 +243,7 @@ namespace InitialProject.View.Guide
         }
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
-            CreateTourViewModel createTourViewModel = new CreateTourViewModel(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService, null, null, _complexTourService, null);
+            CreateTourViewModel createTourViewModel = new CreateTourViewModel(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService, null, null, _complexTourService, null, null);
             CreateTourWindow createTour = new CreateTourWindow(createTourViewModel);
             createTour.ShowDialog();
         }
@@ -434,7 +434,8 @@ namespace InitialProject.View.Guide
         }
         private void GenerateReportButton_Click(object sender, RoutedEventArgs e)
         {
-            IntervalChooser intervalChooser = new IntervalChooser(_tourService, _locationService, CurrentUser);
+            IntervalChooserViewModel viewModel = new IntervalChooserViewModel(_tourService, _locationService, CurrentUser);
+            IntervalChooser intervalChooser = new IntervalChooser(viewModel);
             intervalChooser.ShowDialog();
         }
         private string _upcomingToursSearchInput;
@@ -789,7 +790,7 @@ namespace InitialProject.View.Guide
             if (SelectedPendingRequestDTO != null)
             {
                 TourRequest request = GuideDTOConverter.ConvertToRequest(SelectedPendingRequestDTO, _tourRequestService);
-                CreateTourViewModel createTourViewModel = new CreateTourViewModel(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService, request, null, _complexTourService, null);
+                CreateTourViewModel createTourViewModel = new CreateTourViewModel(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService, request, null, _complexTourService, null, null);
                 CreateTourWindow createTour = new CreateTourWindow(createTourViewModel);
                 createTour.ShowDialog();
             }
@@ -1264,6 +1265,7 @@ namespace InitialProject.View.Guide
             PreviewKeyDown += DataGrid_PreviewKeyDown;
             PreviewKeyDown += SortAsc_PreviewKeyDown;
             PreviewKeyDown += SortDesc_PreviewKeyDown;
+            PreviewKeyDown += ReportWindow_PreviewKeyDown;
         }
         private void LogOut_PreviewKeyDown(object sender, KeyEventArgs e)
         {
@@ -1274,11 +1276,21 @@ namespace InitialProject.View.Guide
                 Close();
             }
         }
+        private void ReportWindow_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.R)
+            {
+                IntervalChooserViewModel viewModel = new IntervalChooserViewModel(_tourService, _locationService, CurrentUser);
+                IntervalChooser intervalChooser = new IntervalChooser(viewModel);
+                intervalChooser.ShowDialog();
+                e.Handled = true;
+            }
+        }
         private void CreateTour_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.A)
             {
-                CreateTourViewModel createTourViewModel = new CreateTourViewModel(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService, null, null, _complexTourService, null);
+                CreateTourViewModel createTourViewModel = new CreateTourViewModel(CurrentUser, _tourService, _locationService, _imageRepository, _checkpointService, _tourRequestService, null, null, _complexTourService, null, null);
                 CreateTourWindow createTour = new CreateTourWindow(createTourViewModel);
                 createTour.ShowDialog();
                 e.Handled = true;
