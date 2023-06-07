@@ -250,14 +250,41 @@ namespace InitialProject.ViewModel.Guest2
             InitializeCountryDropdown();
             InitializeTimeComboBoxes();
 
-            SubmitRequestCommand = new RelayCommand(Execute_SubmitRequestCommand);
-            SubmitComplexTourRequestCommand = new RelayCommand(Execute_SubmitComplexTourRequestCommand);
+            SubmitRequestCommand = new RelayCommand(Execute_SubmitRequestCommand, CanExecute_SubmitRequestCommand);
+            SubmitComplexTourRequestCommand = new RelayCommand(Execute_SubmitComplexTourRequestCommand, CanExecute_SubmitComplexTourRequestCommand);
             ExitCommand = new RelayCommand(Execute_ExitCommand);
             CountrySelectionChangedCommand = new RelayCommand(Execute_CountrySelectionChangedCommand);
 
             app = (App)Application.Current;
 
             counter = 0;
+        }
+
+        private bool CanExecute_SubmitComplexTourRequestCommand(object obj)
+        {
+            return ComplexTour.TourRequestIds.Count() > 1;
+        }
+
+        //private bool CheckTourRequestCount()
+        //{
+        //    if (ComplexTour.TourRequestIds.Count() < 2)
+        //    {
+        //        MessageBox.Show("Moraju biti bar dve!!!");
+        //        return false;
+        //    }
+
+        //    return true;
+        //}
+
+        private bool CanExecute_SubmitRequestCommand(object obj)
+        {
+
+            return Country != null && 
+                City != null && 
+                Description != null && Description != "" &&
+                Language != null && Language != "" &&
+                MaxGuests != null && MaxGuests != "" && !MaxGuests.StartsWith("-") &&
+                EndDate > StartDate;
         }
 
         private void Execute_SubmitComplexTourRequestCommand(object obj)
@@ -267,6 +294,7 @@ namespace InitialProject.ViewModel.Guest2
             MessageBox.Show("Successfully submitted a complex tour!");
             CloseAction();
         }
+
 
 
         private void Execute_SubmitRequestCommand(object obj)
