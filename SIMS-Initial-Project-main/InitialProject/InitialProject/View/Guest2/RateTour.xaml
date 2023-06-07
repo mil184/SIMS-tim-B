@@ -66,7 +66,8 @@
             
         </Grid>
 
-
+        <!--GroupBox Margin="10" Header="hejj">
+        <StackPanel>-->
         <Label Grid.Row="1" FontSize="20" Margin="10" Content ="{ns:Loc KnowledgeQuestion}" />
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10,40,0,0">
             <!--<RadioButton Name="knowledge1" Content="1" Checked="SetRatingForGuideKnowledge" FontSize="20" Margin="10"/>
@@ -146,6 +147,7 @@
             </Button>
             
         </StackPanel>
-
+        <!--</StackPanel>
+        </GroupBox>-->
     </Grid>
 </Window>

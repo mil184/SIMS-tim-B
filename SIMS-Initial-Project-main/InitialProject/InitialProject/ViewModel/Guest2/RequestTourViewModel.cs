@@ -230,7 +230,7 @@ namespace InitialProject.ViewModel.Guest2
             InitializeCountryDropdown();
             InitializeTimeComboBoxes();
 
-            SubmitRequestCommand = new RelayCommand(Execute_SubmitRequestCommand);
+            SubmitRequestCommand = new RelayCommand(Execute_SubmitRequestCommand, CanExecute_SubmitRequestCommand);
             ExitCommand = new RelayCommand(Execute_ExitCommand);
             ChangeLanguageCommand = new RelayCommand(Execute_ChangeLanguageCommand);
             CountrySelectionChangedCommand = new RelayCommand(Execute_CountrySelectionChangedCommand);
@@ -284,6 +284,17 @@ namespace InitialProject.ViewModel.Guest2
         {
             CreateTourRequest();
             CloseAction();
+        }
+
+        private bool CanExecute_SubmitRequestCommand(object obj)
+        {
+
+            return Country != null &&
+                City != null &&
+                Description != null && Description != "" &&
+                Language != null && Language != "" &&
+                MaxGuests != null && MaxGuests != "" && !MaxGuests.StartsWith("-") &&
+                EndDate > StartDate;
         }
 
         private void Execute_ChangeLanguageCommand(object obj)
