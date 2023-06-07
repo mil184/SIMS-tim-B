@@ -17,7 +17,7 @@ namespace InitialProject.Service
             _voucherService = new VoucherService();
         }
 
-        public void AcquireVoucher(TourReservation tourReservation)
+        public Voucher AcquireVoucher(TourReservation tourReservation)
         {
             int year = tourReservation.ReservationTime.Year;
             List<TourReservation> reservationList = new List<TourReservation>();
@@ -41,7 +41,11 @@ namespace InitialProject.Service
                     reservation.GotVoucher = true;
                     Update(reservation);
                 }
+
+                return voucher;
             }
+
+            return null;
         }
 
         public List<TourReservation> GetAllWithUnacquiredVoucher()

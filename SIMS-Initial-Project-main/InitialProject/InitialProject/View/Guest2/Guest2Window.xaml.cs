@@ -482,6 +482,8 @@ namespace InitialProject.View.Guest2
 
             PersonCountTB.Text = "";
             AverageAgeTB.Text = "";
+
+            Update();
         }
 
         #region InvalidInputWarnings
@@ -605,7 +607,9 @@ namespace InitialProject.View.Guest2
             TourReservationMessage tourReservationMessage = new TourReservationMessage(tourReservation, LoggedInUser, _tourService, _locationService, _userService);
             tourReservationMessage.Show();
 
-            _tourReservationService.AcquireVoucher(tourReservation);
+            
+            Vouchers.Add(_tourReservationService.AcquireVoucher(tourReservation));
+
             Update();
         }
 

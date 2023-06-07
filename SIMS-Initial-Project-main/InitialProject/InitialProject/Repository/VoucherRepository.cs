@@ -62,7 +62,7 @@ namespace InitialProject.Repository
 
         public List<Voucher> GetAll()
         {
-            return _vouchers;
+            return _serializer.FromCSV(_filePath);
         }
 
         public void Subscribe(IObserver observer)
