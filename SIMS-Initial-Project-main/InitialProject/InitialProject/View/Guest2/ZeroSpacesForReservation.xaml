@@ -33,26 +33,6 @@
                     </StackPanel>
 
 
-
-                    <!--<StackPanel Grid.Column="1" Margin="10">
-                        <Button FontSize="20" Margin="0,0,0,20" Height="35" HorizontalAlignment="Stretch">
-                            <Button.Content>
-                                <StackPanel Orientation="Horizontal">
-                                    <Image Source="/Resources/Images/theme.png" Margin="0"/>
-                                    <TextBlock Text="{ns:Loc Theme}"/>
-                                </StackPanel>
-                            </Button.Content>
-                        </Button>
-                        <Button FontSize="20" Margin="0,0,0,20" Height="35" HorizontalAlignment="Stretch" Command="{Binding ChangeLanguageCommand}">
-                            <Button.Content>
-                                <StackPanel Orientation="Horizontal">
-                                    <Image Source="/Resources/Images/language.png" Width="Auto" Margin="5"/>
-                                    <TextBlock Text="{ns:Loc LanguageBtn}"/>
-                                </StackPanel>
-                            </Button.Content>
-                        </Button>
-
-                    </StackPanel>-->
                 </Grid>
             </Border>
         </Grid>
@@ -75,15 +55,6 @@
                         <DataGridTextColumn Header="{ns:Loc DGLanguage}" Binding="{Binding Language}" Width="*"/>
                         <DataGridTextColumn Header="{ns:Loc DGGuests}" Binding="{Binding Guests}" Width="*"/>
                         <DataGridTextColumn Header="{ns:Loc DGDuration}" Binding="{Binding Duration}" Width="*"/>
-                        <DataGridTemplateColumn Header="{ns:Loc DGSeeMore}" Width="*">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Button Command="{Binding ShowMoreCommand}">
-                                        <Image Width="10" Source="/Resources/Images/see.png" />
-                                    </Button>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
             </ScrollViewer>

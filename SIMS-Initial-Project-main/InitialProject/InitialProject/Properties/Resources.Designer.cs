@@ -594,6 +594,15 @@ namespace InitialProject.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Oceni turu.
         /// </summary>
+        public static string rateTour {
+            get {
+                return ResourceManager.GetString("rateTour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Oceni turu.
+        /// </summary>
         public static string RateTourBtn {
             get {
                 return ResourceManager.GetString("RateTourBtn", resourceCulture);

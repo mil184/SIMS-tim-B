@@ -294,6 +294,9 @@
   <data name="Previous" xml:space="preserve">
     <value>Previous</value>
   </data>
+  <data name="rateTour" xml:space="preserve">
+    <value>Rate Tour</value>
+  </data>
   <data name="RateTourBtn" xml:space="preserve">
     <value>Rate This Tour</value>
   </data>

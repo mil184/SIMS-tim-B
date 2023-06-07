@@ -294,6 +294,9 @@
   <data name="Previous" xml:space="preserve">
     <value>Prethodna</value>
   </data>
+  <data name="rateTour" xml:space="preserve">
+    <value>Oceni turu</value>
+  </data>
   <data name="RateTourBtn" xml:space="preserve">
     <value>Oceni turu</value>
   </data>

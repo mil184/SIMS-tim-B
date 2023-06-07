@@ -265,17 +265,6 @@ namespace InitialProject.ViewModel.Guest2
             return ComplexTour.TourRequestIds.Count() > 1;
         }
 
-        //private bool CheckTourRequestCount()
-        //{
-        //    if (ComplexTour.TourRequestIds.Count() < 2)
-        //    {
-        //        MessageBox.Show("Moraju biti bar dve!!!");
-        //        return false;
-        //    }
-
-        //    return true;
-        //}
-
         private bool CanExecute_SubmitRequestCommand(object obj)
         {
 
@@ -299,30 +288,6 @@ namespace InitialProject.ViewModel.Guest2
 
         private void Execute_SubmitRequestCommand(object obj)
         {
-            //if (!IsRegularTourCountValid())
-            //{
-            //    return;
-            //}
-
-
-            //if (ComplexTour.TourRequestIds.Count == 0)
-            //{
-            //    MessageBox.Show("USAO U IF == 0");
-
-
-            //    if (app.Lang == ENG)
-            //    {
-            //        MessageBox.Show("Please add at least one tour request!", "Tour request warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-            //    }
-
-            //    if (app.Lang == SRB)
-            //    {
-            //        MessageBox.Show("Molim Vas dodajte barem jedan zahtev za turu!", "Upozorenje o zahtevu za turu", MessageBoxButton.OK, MessageBoxImage.Warning);
-            //    }
-
-            //    return;
-            //}
-
             CreateTourRequest();
             ClearPropertyInputs();
         }

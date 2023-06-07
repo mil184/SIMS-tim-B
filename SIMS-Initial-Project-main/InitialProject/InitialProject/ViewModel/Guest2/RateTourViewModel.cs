@@ -460,63 +460,6 @@ namespace InitialProject.ViewModel.Guest2
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public void Submit()
-        {
-            //if (GuideKnowledge == null)
-            //{
-            //    MessageBox.Show("Please rate your guide's knowledge!", "Guide knowledge warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-            //   // return;
-            //}
-
-            //else if (Interestingness == null)
-            //{
-            //    MessageBox.Show("Please rate tour interestingness!", "Interestingness warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-            //   // return;
-            //}
-
-            //else if (GuideLanguage == null)
-            //{
-            //    MessageBox.Show("Please rate your guide's language!", "Guide language warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-            //    //return;
-            //}
-
-            //else if (Comment == null)
-            //{
-            //    MessageBox.Show("Please add a comment!", "Comment warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-            //    //return;
-            //}
-
-            //else if (ImageUrls.Count == 0)
-            //{
-            //    MessageBox.Show("Please add at least one image!", "Images warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-            //   // return;
-            //}
-             
-
-            //TourRating tourRating = new TourRating(
-            //        SelectedTour.TourId,
-            //        GuideKnowledge,
-            //        GuideLanguage,
-            //        Interestingness,
-            //        Comment,
-            //        _imageIds,
-            //        LoggedInUser.Id);
-
-            //Tour tour = _tourService.GetById(tourRating.TourId);
-            //tour.IsRated = true;
-            //_tourService.Update(tour);
-
-            //TourReservation tourReservation = _tourReservationService.GetReservationByGuestIdAndTourId(LoggedInUser.Id, SelectedTour.TourId);
-            //tourReservation.IsRated = true;
-            //_tourReservationService.Update(tourReservation);
-
-            //_tourRatingService.Save(tourRating);
-
-            //MessageBox.Show("Tour successfuly rated!");
-
-            
-        }
-
         #region NumberPropertySetters
 
         private void SetRatingsForNumberProperties()

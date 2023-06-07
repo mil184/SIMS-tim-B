@@ -113,9 +113,5 @@ namespace InitialProject.ViewModel.Guest2
                 Tours.Add(_tourDTOConverter.ConvertToDTO(tour));
             }
         }
-
-
-
-
     }
 }

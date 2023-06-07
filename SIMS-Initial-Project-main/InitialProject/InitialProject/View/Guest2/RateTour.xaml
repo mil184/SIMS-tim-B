@@ -19,8 +19,6 @@
         <!-- User information section -->
         <Grid Background="White">
 
-            
-
             <Border BorderBrush="#DDDDDD" BorderThickness="2" Margin="3">
                 <Grid Grid.Column="0">
                     <Grid.ColumnDefinitions>
@@ -37,25 +35,6 @@
 
 
 
-                    <!--<StackPanel Grid.Column="1" Margin="10">
-                        <Button FontSize="18" Margin="0,0,0,5" Height="35" HorizontalAlignment="Stretch">
-                            <Button.Content>
-                                <StackPanel Orientation="Horizontal">
-                                    <Image Source="/Resources/Images/theme.png" Margin="0"/>
-                                    <TextBlock Text="{ns:Loc Theme}"/>
-                                </StackPanel>
-                            </Button.Content>
-                        </Button>
-
-                        <Button FontSize="18" Height="35" HorizontalAlignment="Stretch" Command="{Binding ChangeLanguageCommand}">
-                            <Button.Content>
-                                <StackPanel Orientation="Horizontal">
-                                    <Image Source="/Resources/Images/language.png" Width="Auto" Margin="5"/>
-                                    <TextBlock Text="{ns:Loc LanguageBtn}"/>
-                                </StackPanel>
-                            </Button.Content>
-                        </Button>
-                    </StackPanel>-->
                 </Grid>
             </Border>
 
@@ -65,7 +44,7 @@
         <GroupBox Margin="10" Grid.Row="1">
             <GroupBox.Header>
                 <StackPanel Orientation="Horizontal">
-                    <Label FontSize="25" FontWeight="Bold" Content="{ns:Loc AvailableTours}"/>
+                    <Label FontSize="25" FontWeight="Bold" Content="{ns:Loc rateTour}"/>
                     <Image x:Name="ToursImage" Source="/Resources/Images/info.png" 
                                         Height="30" Margin ="5, 0, 0, 0 " HorizontalAlignment="Left" VerticalAlignment="Center">
                         
@@ -132,73 +111,7 @@
         </GroupBox>
 
         
-        
-        <!--<Label Grid.Row="1" FontSize="20" Margin="10" Content ="{ns:Loc KnowledgeQuestion}" />
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10,40,0,0">
-            --><!--<RadioButton Name="knowledge1" Content="1" Checked="SetRatingForGuideKnowledge" FontSize="20" Margin="10"/>
-            <RadioButton Name="knowledge2" Content="2" Checked="SetRatingForGuideKnowledge" FontSize="20" Margin="10"/>
-            <RadioButton Name="knowledge3" Content="3" Checked="SetRatingForGuideKnowledge" FontSize="20" Margin="10"/>
-            <RadioButton Name="knowledge4" Content="4" Checked="SetRatingForGuideKnowledge" FontSize="20" Margin="10"/>
-            <RadioButton Name="knowledge5" Content="5" Checked="SetRatingForGuideKnowledge" FontSize="20" Margin="10"/>--><!--
-
-            <RadioButton Content="1" IsChecked="{Binding Knowledge1IsChecked, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" FontSize="20" Margin="10"/>
-            <RadioButton Content="2" IsChecked="{Binding Knowledge2IsChecked, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" FontSize="20" Margin="10"/>
-            <RadioButton Content="3" IsChecked="{Binding Knowledge3IsChecked, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" FontSize="20" Margin="10"/>
-            <RadioButton Content="4" IsChecked="{Binding Knowledge4IsChecked, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" FontSize="20" Margin="10"/>
-            <RadioButton Content="5" IsChecked="{Binding Knowledge5IsChecked, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" FontSize="20" Margin="10"/>
-        </StackPanel>
-        <Label Grid.Row="1" Margin="10,70,0,0" Content="{ns:Loc VeryBad}"/>
-        <Label Grid.Row="1" Margin="210,70,0,0" Content="{ns:Loc VeryGood}"/>
-
-        <Label Grid.Row="2" FontSize="20" Margin="10" Content="{ns:Loc InterestingnessQuestion}" />
-        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="10,40,0,0">
-            --><!--<RadioButton Name="interestingness1" Content="1" Checked="SetRatingForInterestingness" FontSize="20" Margin="10"/>
-            <RadioButton Name="interestingness2" Content="2" Checked="SetRatingForInterestingness" FontSize="20" Margin="10"/>
-            <RadioButton Name="interestingness3" Content="3" Checked="SetRatingForInterestingness" FontSize="20" Margin="10"/>
-            <RadioButton Name="interestingness4" Content="4" Checked="SetRatingForInterestingness" FontSize="20" Margin="10"/>
-            <RadioButton Name="interestingness5" Content="5" Checked="SetRatingForInterestingness" FontSize="20" Margin="10"/>--><!--
-
-            <RadioButton Content="1" IsChecked="{Binding Interesting1IsChecked, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" FontSize="20" Margin="10"/>
-            <RadioButton Content="2" IsChecked="{Binding Interesting2IsChecked, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" FontSize="20" Margin="10"/>
-            <RadioButton Content="3" IsChecked="{Binding Interesting3IsChecked, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" FontSize="20" Margin="10"/>
-            <RadioButton Content="4" IsChecked="{Binding Interesting4IsChecked, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" FontSize="20" Margin="10"/>
-            <RadioButton Content="5" IsChecked="{Binding Interesting5IsChecked, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" FontSize="20" Margin="10"/>
-        </StackPanel>
-        <Label Grid.Row="2" Margin="10,70,0,0" Content="{ns:Loc VeryBad}"/>
-        <Label Grid.Row="2" Margin="210,70,0,0" Content="{ns:Loc VeryGood}"/>
-
-        <Label Grid.Row="3" FontSize="20" Margin="10" Content="{ns:Loc LanguageQuestion}" />
-        <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="10,40,0,0">
-            --><!--<RadioButton Name="language1" Content="1" Checked="SetRatingForGuideLanguage" FontSize="20" Margin="10"/>
-            <RadioButton Name="language2" Content="2" Checked="SetRatingForGuideLanguage" FontSize="20" Margin="10"/>
-            <RadioButton Name="language3" Content="3" Checked="SetRatingForGuideLanguage" FontSize="20" Margin="10"/>
-            <RadioButton Name="language4" Content="4" Checked="SetRatingForGuideLanguage" FontSize="20" Margin="10"/>
-            <RadioButton Name="language5" Content="5" Checked="SetRatingForGuideLanguage" FontSize="20" Margin="10"/>--><!--
-
-            <RadioButton Content="1" IsChecked="{Binding Language1IsChecked, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" FontSize="20" Margin="10"/>
-            <RadioButton Content="2" IsChecked="{Binding Language2IsChecked, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" FontSize="20" Margin="10"/>
-            <RadioButton Content="3" IsChecked="{Binding Language3IsChecked, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" FontSize="20" Margin="10"/>
-            <RadioButton Content="4" IsChecked="{Binding Language4IsChecked, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" FontSize="20" Margin="10"/>
-            <RadioButton Content="5" IsChecked="{Binding Language5IsChecked, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" FontSize="20" Margin="10"/>
-        </StackPanel>
-        <Label Grid.Row="3" Margin="10,70,0,0" Content="{ns:Loc VeryBad}"/>
-        <Label Grid.Row="3" Margin="210,70,0,0" Content="{ns:Loc VeryGood}"/>
-
-        <StackPanel Grid.Row="4">
-            <Label  FontSize="20" Margin="10" Content="{ns:Loc CommentQuestion}" />
-            <TextBox  x:Name="commentTextBox" Width="469" Height="65" Margin="10, 5, 5, 5" HorizontalAlignment="Left" Text="{Binding Path=Comment, UpdateSourceTrigger=PropertyChanged}"/>
-        </StackPanel>-->
-        
-        <!--<StackPanel Grid.Row="5"  Margin="10" Orientation="Vertical" >
-            <StackPanel Orientation="Horizontal" Height="40" VerticalAlignment="Top">
-                <Label FontSize="20" Content="{ns:Loc ImagesQuestion}" />
-                <TextBox Text="{Binding ImageUrl, Mode=TwoWay}" Width="160" Height="30" Margin="10, 0, 0, 0" />
-                <Button Command="{Binding AddImageCommand}" Width="30" Height="30" Margin="5,5,0,5">
-                    <Image Source="/Resources/Images/upload.png" Height="15" Width="30" />
-                </Button>
-            </StackPanel>
-            <ListBox x:Name="UrlListBox" Width="458" Height="65" Margin="10, 5, 5, 5" HorizontalAlignment="Left" ItemsSource="{Binding ImageUrls}" />
-        </StackPanel>-->
+       
 
         <StackPanel Grid.Row="6" Margin="10" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Content="{ns:Loc Submit}" Command="{Binding SubmitRatingCommand}" FontSize="20" Height="40" Width="160" Margin="5, 5, 10, 5" />

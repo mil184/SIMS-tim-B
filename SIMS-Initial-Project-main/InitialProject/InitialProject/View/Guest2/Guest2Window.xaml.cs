@@ -573,9 +573,6 @@ namespace InitialProject.View.Guest2
 
         private void HandleZeroSpacesForReservation(Tour selectedTour)
         {
-            //var zeroSpacesForReservation = new ZeroSpacesForReservation(SelectedGuest2TourDTO, LoggedInUser, _tourService, _locationService, _userRepository, _voucherService);
-            //zeroSpacesForReservation.ShowDialog();
-
             ZeroSpacesForReservationViewModel zeroSpacesForReservationViewModel = new ZeroSpacesForReservationViewModel(SelectedGuest2TourDTO, _tourService, _locationService, _userService, app.Lang);
             ZeroSpacesForReservation zeroSpacesForReservation = new ZeroSpacesForReservation(zeroSpacesForReservationViewModel);
             zeroSpacesForReservation.Show();
@@ -825,7 +822,7 @@ namespace InitialProject.View.Guest2
         public void FormTourRequestYears()
         {
             TourRequestYears.Clear();
-            TourRequestYears.Add("All time");
+            TourRequestYears.Add("Svih vremena");
 
             foreach (TourRequest tourRequest in _tourRequestService.GetGuestRequests(LoggedInUser))
             {

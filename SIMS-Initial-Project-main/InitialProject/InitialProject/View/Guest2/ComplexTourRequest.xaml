@@ -35,25 +35,7 @@
 
 
 
-                    <!--<StackPanel Grid.Column="1" Margin="10">
-                        <Button FontSize="18" Margin="0,0,0,5" Height="35" HorizontalAlignment="Stretch">
-                            <Button.Content>
-                                <StackPanel Orientation="Horizontal">
-                                    <Image Source="/Resources/Images/theme.png" Margin="0"/>
-                                    <TextBlock Text="{ns:Loc Theme}"/>
-                                </StackPanel>
-                            </Button.Content>
-                        </Button>
-
-                        <Button FontSize="18" Height="35" HorizontalAlignment="Stretch" Command="{Binding ChangeLanguageCommand}">
-                            <Button.Content>
-                                <StackPanel Orientation="Horizontal">
-                                    <Image Source="/Resources/Images/language.png" Width="Auto" Margin="5"/>
-                                    <TextBlock Text="{ns:Loc LanguageBtn}"/>
-                                </StackPanel>
-                            </Button.Content>
-                        </Button>-->
-                    <!--</StackPanel>-->
+                    
                 </Grid>
             </Border>
         </Grid>
@@ -104,8 +86,6 @@
                                 Height="40" Width="160" FontSize="20"
                                 Content="{ns:Loc Submit}" Command="{Binding SubmitRequestCommand}"/>
 
-
-                        <!--<StackPanel Margin ="0, 20, 240, 20" Grid.Column="1" HorizontalAlignment="Right">-->
                         <ComboBox Grid.Row="0" Grid.Column="1" Height="40" Width="300" Margin="10" ItemsSource="{Binding cbCountryItemsSource}" SelectedItem="{Binding Country}" IsEnabled="True">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectionChanged" >
