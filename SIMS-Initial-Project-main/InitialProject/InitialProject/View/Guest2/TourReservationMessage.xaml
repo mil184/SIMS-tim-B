@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InitialProject.View.Guest2"
         mc:Ignorable="d"
-        Title="DMJM-Tours" Icon ="/Resources/Images/favicon.ico"
+        Title="DMJM-Tours" Icon ="/Resources/Images/favicon.ico" WindowStartupLocation="CenterScreen"
         Height="250" Width="350">
     <Grid>
         <Grid.RowDefinitions>

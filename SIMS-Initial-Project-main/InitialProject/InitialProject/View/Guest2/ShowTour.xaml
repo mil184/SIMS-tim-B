@@ -6,7 +6,7 @@
         xmlns:ns="clr-namespace:InitialProject.Localization"
         xmlns:local="clr-namespace:InitialProject.View.Guest2"
         mc:Ignorable="d"
-        Title="DMJM-Tours" Height="768" Width="1024"
+        Title="DMJM-Tours" Height="768" Width="1024" WindowStartupLocation="CenterScreen"
         Icon ="/Resources/Images/favicon.ico">
 
     <Grid>

@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:InitialProject.View.Guest2"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
-        Title="DMJM-Tours" Icon ="/Resources/Images/favicon.ico" Height="768" Width="600">
+        Title="DMJM-Tours" Icon ="/Resources/Images/favicon.ico" Height="768" Width="600" WindowStartupLocation="CenterScreen">
     <Grid>
 
         <Grid.RowDefinitions>

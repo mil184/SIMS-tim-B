@@ -7,7 +7,7 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:local="clr-namespace:InitialProject.View.Guest2"
         mc:Ignorable="d"
-        Title="DMJM-Tours" Icon ="/Resources/Images/favicon.ico"
+        Title="DMJM-Tours" Icon ="/Resources/Images/favicon.ico" WindowStartupLocation="CenterScreen"
         Height="768" Width="600">
     <Grid>
 
