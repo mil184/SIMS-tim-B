@@ -123,6 +123,9 @@
   <data name="AverageAgeQuestion" xml:space="preserve">
     <value>Koje su prosečne godine grupe?</value>
   </data>
+  <data name="ChosenDatesDG" xml:space="preserve">
+    <value>Odabrani datumi</value>
+  </data>
   <data name="CommentQuestion" xml:space="preserve">
     <value>4. Dodati komentar:*</value>
   </data>
@@ -267,6 +270,9 @@
   <data name="Next" xml:space="preserve">
     <value>Sledeća</value>
   </data>
+  <data name="noComplexTourRequests" xml:space="preserve">
+    <value>You haven't requested any complex tours.</value>
+  </data>
   <data name="NoSpacesAvailable" xml:space="preserve">
     <value>Nije ostalo nijedno slobodno mesto na odabranoj turi. Prikazane su dostupne ture u istom gradu:</value>
   </data>
@@ -317,6 +323,9 @@
   </data>
   <data name="StartDateTime" xml:space="preserve">
     <value>Početno vreme:</value>
+  </data>
+  <data name="StatusDG" xml:space="preserve">
+    <value>Status</value>
   </data>
   <data name="StatusesDG" xml:space="preserve">
     <value>Statusi</value>

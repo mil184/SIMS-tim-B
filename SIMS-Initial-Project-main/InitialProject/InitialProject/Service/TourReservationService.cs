@@ -17,12 +17,12 @@ namespace InitialProject.Service
             _voucherService = new VoucherService();
         }
 
-        public void AcquireVoucher(TourReservation tourReservation)
+        public Voucher AcquireVoucher(TourReservation tourReservation)
         {
             int year = tourReservation.ReservationTime.Year;
             List<TourReservation> reservationList = new List<TourReservation>();
 
-            foreach(var reservation in GetAll())
+            foreach(var reservation in GetAllWithUnacquiredVoucher())
             {
                 if(reservation.ReservationTime.Year == year)
                 {
@@ -41,8 +41,28 @@ namespace InitialProject.Service
                     reservation.GotVoucher = true;
                     Update(reservation);
                 }
+
+                return voucher;
             }
+
+            return null;
         }
+
+        public List<TourReservation> GetAllWithUnacquiredVoucher()
+        {
+            List<TourReservation> reservationList = new List<TourReservation>();
+
+            foreach (var reservation in GetAll())
+            {
+                if (!reservation.GotVoucher)
+                {
+                    reservationList.Add(reservation);
+                }
+            }
+
+            return reservationList;
+        }
+           
 
         public List<int> GetUncheckedUserIdsByTour(Tour tour)
         {

@@ -329,7 +329,7 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
                                 <RowDefinition/>
-                                <RowDefinition/>
+                                <RowDefinition />
                             </Grid.RowDefinitions>
 
                             <Grid.ColumnDefinitions>
@@ -825,18 +825,23 @@
                                 </Popup>
                             </StackPanel>
                         </GroupBox.Header>
-                        <ScrollViewer VerticalScrollBarVisibility="Auto">
-                            <DataGrid ItemsSource="{Binding ComplexTourDTOs}" AutoGenerateColumns="False" Name="ComplexTourRequestsDataGrid" IsReadOnly="true" HorizontalAlignment="Center" FontSize="20">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="{ns:Loc LocationsDG}" Binding="{Binding Locations}" Width="*" />
-                                    <DataGridTextColumn Header="{ns:Loc LanguagesDG}" Binding="{Binding Languages}" Width="*" />
-                                    <DataGridTextColumn Header="{ns:Loc StartDatesDG}" Binding="{Binding StartDates}" Width="*" />
-                                    <DataGridTextColumn Header="{ns:Loc EndDatesDG}" Binding="{Binding EndDates}" Width="*" />
-                                    <DataGridTextColumn Header="{ns:Loc StatusesDG}" Binding="{Binding Statuses}" Width="*" />
-                                    <DataGridTextColumn Header="{ns:Loc ChosenDatesDG}" Binding="{Binding ChosenDates}" Width="*" />
-                                </DataGrid.Columns>
-                            </DataGrid>
-                        </ScrollViewer>
+                        <Grid>
+                            <ScrollViewer x:Name="ComplexToursDataGrid" VerticalScrollBarVisibility="Auto">
+                                <DataGrid ItemsSource="{Binding ComplexTourDTOs}" AutoGenerateColumns="False" Name="ComplexTourRequestsDataGrid" IsReadOnly="true" HorizontalAlignment="Center" FontSize="20">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="{ns:Loc LocationsDG}" Binding="{Binding Locations}" Width="*" />
+                                        <DataGridTextColumn Header="{ns:Loc LanguagesDG}" Binding="{Binding Languages}" Width="*" />
+                                        <DataGridTextColumn Header="{ns:Loc StartDatesDG}" Binding="{Binding StartDates}" Width="*" />
+                                        <DataGridTextColumn Header="{ns:Loc EndDatesDG}" Binding="{Binding EndDates}" Width="*" />
+                                        <DataGridTextColumn Header="{ns:Loc StatusesDG}" Binding="{Binding Statuses}" Width="*" />
+                                        <DataGridTextColumn Header="{ns:Loc ChosenDatesDG}" Binding="{Binding ChosenDates}" Width="*" />
+                                        <DataGridTextColumn Header="{ns:Loc StatusDG}" Binding="{Binding Status}" Width="*" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </ScrollViewer>
+                            <Label x:Name="NoComplexToursLabel" Content="{ns:Loc noComplexTourRequests}" Visibility="Hidden" FontSize="25" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                        
                     </GroupBox>
 
                 </Grid>

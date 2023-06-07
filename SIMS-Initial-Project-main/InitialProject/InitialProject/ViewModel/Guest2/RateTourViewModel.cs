@@ -25,9 +25,7 @@ namespace InitialProject.ViewModel.Guest2
         public RelayCommand SubmitRatingCommand { get; set; }
         public RelayCommand ExitCommand { get; set; }
         public RelayCommand AddImageCommand { get; set; }
-        public RelayCommand ChangeLanguageCommand { get; set; }
 
-        public int LanguageButtonClickCount { get; set; }
         private App app;
         private const string SRB = "sr-Latn-RS";
         private const string ENG = "en-US";
@@ -328,39 +326,12 @@ namespace InitialProject.ViewModel.Guest2
             _tourService = tourService;
             _imageRepository = imageRepository;
 
-            
-            SubmitRatingCommand = new RelayCommand(Execute_SubmitRatingCommand);
+            SubmitRatingCommand = new RelayCommand(Execute_SubmitRatingCommand, CanExecute_SubmitRatingCommand);
             ExitCommand = new RelayCommand(Execute_ExitCommand);
             AddImageCommand = new RelayCommand(Execute_AddImageCommand);
-            ChangeLanguageCommand = new RelayCommand(Execute_ChangeLanguageCommand);
 
             app = (App)Application.Current;
             app.ChangeLanguage(lang);
-            InitializeLanguageButton(lang);
-        }
-
-        public void InitializeLanguageButton(string lang)
-        {
-            if (lang == SRB)
-            {
-                LanguageButtonClickCount = 0;
-                return;
-            }
-
-            LanguageButtonClickCount = 1;
-        }
-
-        private void Execute_ChangeLanguageCommand(object obj)
-        {
-            LanguageButtonClickCount++;
-
-            if (LanguageButtonClickCount % 2 == 1)
-            {
-                app.ChangeLanguage(ENG);
-                return;
-            }
-
-            app.ChangeLanguage(SRB);
         }
 
         private void Execute_AddImageCommand(object obj)
@@ -387,23 +358,34 @@ namespace InitialProject.ViewModel.Guest2
             CloseAction();
         }
 
+        private bool CanExecute_SubmitRatingCommand(object obj)
+        {
+            SetRatingsForNumberProperties();
+
+            return GuideKnowledge != 0 &&
+                Interestingness != 0 &&
+                GuideLanguage != 0 &&
+                Comment != null &&
+                ImageUrls.Count != 0;
+        }
+
         private void Execute_SubmitRatingCommand(object obj)
         {
             SetRatingsForNumberProperties();
 
-            if (GuideKnowledge == null)
+            if (GuideKnowledge == 0)
             {
                 MessageBox.Show("Please rate your guide's knowledge!", "Guide knowledge warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                 // return;
             }
 
-            else if (Interestingness == null)
+            else if (Interestingness == 0)
             {
                 MessageBox.Show("Please rate tour interestingness!", "Interestingness warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                 // return;
             }
 
-            else if (GuideLanguage == null)
+            else if (GuideLanguage == 0)
             {
                 MessageBox.Show("Please rate your guide's language!", "Guide language warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                 //return;

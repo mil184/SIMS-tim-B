@@ -15,6 +15,7 @@ using System.Windows.Input;
 using InitialProject.View.Guest2;
 using System.Windows;
 using MenuNavigation.Commands;
+using System.Collections;
 
 namespace InitialProject.ViewModel.Guest2
 {
@@ -202,9 +203,18 @@ namespace InitialProject.ViewModel.Guest2
         public DateTime StartDateTime => StartDate.Date + new TimeSpan(StartHour, StartMinute, 0);
         public DateTime EndDateTime => EndDate.Date + new TimeSpan(EndHour, EndMinute, 0);
 
+        public bool HasErrors => throw new NotImplementedException();
+
         #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
+        public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
+
+        private App app;
+        private const string SRB = "sr-Latn-RS";
+        private const string ENG = "en-US";
+
+        public int counter;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
@@ -240,10 +250,41 @@ namespace InitialProject.ViewModel.Guest2
             InitializeCountryDropdown();
             InitializeTimeComboBoxes();
 
-            SubmitRequestCommand = new RelayCommand(Execute_SubmitRequestCommand);
-            SubmitComplexTourRequestCommand = new RelayCommand(Execute_SubmitComplexTourRequestCommand);
+            SubmitRequestCommand = new RelayCommand(Execute_SubmitRequestCommand, CanExecute_SubmitRequestCommand);
+            SubmitComplexTourRequestCommand = new RelayCommand(Execute_SubmitComplexTourRequestCommand, CanExecute_SubmitComplexTourRequestCommand);
             ExitCommand = new RelayCommand(Execute_ExitCommand);
-            CountrySelectionChangedCommand = new RelayCommand(Execute_CountrySelectionChangedCommand);  
+            CountrySelectionChangedCommand = new RelayCommand(Execute_CountrySelectionChangedCommand);
+
+            app = (App)Application.Current;
+
+            counter = 0;
+        }
+
+        private bool CanExecute_SubmitComplexTourRequestCommand(object obj)
+        {
+            return ComplexTour.TourRequestIds.Count() > 1;
+        }
+
+        //private bool CheckTourRequestCount()
+        //{
+        //    if (ComplexTour.TourRequestIds.Count() < 2)
+        //    {
+        //        MessageBox.Show("Moraju biti bar dve!!!");
+        //        return false;
+        //    }
+
+        //    return true;
+        //}
+
+        private bool CanExecute_SubmitRequestCommand(object obj)
+        {
+
+            return Country != null && 
+                City != null && 
+                Description != null && Description != "" &&
+                Language != null && Language != "" &&
+                MaxGuests != null && MaxGuests != "" && !MaxGuests.StartsWith("-") &&
+                EndDate > StartDate;
         }
 
         private void Execute_SubmitComplexTourRequestCommand(object obj)
@@ -255,8 +296,33 @@ namespace InitialProject.ViewModel.Guest2
         }
 
 
+
         private void Execute_SubmitRequestCommand(object obj)
         {
+            //if (!IsRegularTourCountValid())
+            //{
+            //    return;
+            //}
+
+
+            //if (ComplexTour.TourRequestIds.Count == 0)
+            //{
+            //    MessageBox.Show("USAO U IF == 0");
+
+
+            //    if (app.Lang == ENG)
+            //    {
+            //        MessageBox.Show("Please add at least one tour request!", "Tour request warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            //    }
+
+            //    if (app.Lang == SRB)
+            //    {
+            //        MessageBox.Show("Molim Vas dodajte barem jedan zahtev za turu!", "Upozorenje o zahtevu za turu", MessageBoxButton.OK, MessageBoxImage.Warning);
+            //    }
+
+            //    return;
+            //}
+
             CreateTourRequest();
             ClearPropertyInputs();
         }
@@ -283,6 +349,49 @@ namespace InitialProject.ViewModel.Guest2
             TourRequestLocations.Add(tourLocation);
 
             MessageBox.Show("Successfully submitted a tour!");
+
+            counter++;
+        }
+
+        private bool IsRegularTourCountValid()
+        {
+
+            MessageBox.Show("USAO U METODU IS VALID");
+
+            if (ComplexTour.TourRequestIds.Count == 0)
+            {
+                MessageBox.Show("USAO U IF == 0");
+
+
+                if (app.Lang == ENG)
+                {
+                    MessageBox.Show("Please add at least one tour request!", "Tour request warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+
+                if (app.Lang == SRB)
+                {
+                    MessageBox.Show("Molim Vas dodajte barem jedan zahtev za turu!", "Upozorenje o zahtevu za turu", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+
+                return false;
+            }
+
+            if (ComplexTour.TourRequestIds.Count == 1)
+            {
+                if (app.Lang == ENG)
+                {
+                    MessageBox.Show("Complex tours consist of more than one regular tour!", "Tour requests warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+
+                if (app.Lang == SRB)
+                {
+                    MessageBox.Show("Složene ture se sastoje od više od jedne obične ture!", "Upozorenje o zahtevima za turu", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+
+                return false;
+            }
+
+            return true;
         }
 
         private void ClearPropertyInputs()

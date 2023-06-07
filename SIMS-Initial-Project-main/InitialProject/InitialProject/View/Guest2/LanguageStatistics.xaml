@@ -61,7 +61,7 @@
             <GroupBox.Header>
                 <Label 
                     FontSize="25" FontWeight="Bold"
-                    Content="{ns:Loc LanguageChart}"/>
+                    Content="{ns:Loc languageChart}"/>
             </GroupBox.Header>
         
         <lvc:CartesianChart Series="{Binding LanguageSeriesCollection}" Margin="20">
