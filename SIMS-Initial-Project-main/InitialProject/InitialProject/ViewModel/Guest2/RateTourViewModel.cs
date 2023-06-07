@@ -25,12 +25,28 @@ namespace InitialProject.ViewModel.Guest2
         public RelayCommand SubmitRatingCommand { get; set; }
         public RelayCommand ExitCommand { get; set; }
         public RelayCommand AddImageCommand { get; set; }
+        public RelayCommand ToursImage_MouseEnter { get; set; }
+        public RelayCommand ToursImage_MouseLeave { get; set; }
 
         private App app;
         private const string SRB = "sr-Latn-RS";
         private const string ENG = "en-US";
 
         #region Properties
+
+        public bool _isOpen;
+        public bool IsOpen
+        {
+            get => _isOpen;
+            set
+            {
+                if (_isOpen != value)
+                {
+                    _isOpen = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         public string _imageUrl;
         public string ImageUrl
@@ -329,9 +345,21 @@ namespace InitialProject.ViewModel.Guest2
             SubmitRatingCommand = new RelayCommand(Execute_SubmitRatingCommand, CanExecute_SubmitRatingCommand);
             ExitCommand = new RelayCommand(Execute_ExitCommand);
             AddImageCommand = new RelayCommand(Execute_AddImageCommand);
+            ToursImage_MouseEnter = new RelayCommand(Execute_ToursImage_MouseEnter);
+            ToursImage_MouseLeave = new RelayCommand(Execute_ToursImage_MouseLeave);
 
             app = (App)Application.Current;
             app.ChangeLanguage(lang);
+        }
+
+        private void Execute_ToursImage_MouseLeave(object obj)
+        {
+            IsOpen = false;
+        }
+
+        private void Execute_ToursImage_MouseEnter(object obj)
+        {
+            IsOpen = true;
         }
 
         private void Execute_AddImageCommand(object obj)
