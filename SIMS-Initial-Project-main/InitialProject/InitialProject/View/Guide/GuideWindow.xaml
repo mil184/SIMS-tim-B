@@ -734,7 +734,7 @@
                         </Button>
 
                     </StackPanel>
-                    <Grid Grid.Column="2" VerticalAlignment="Bottom" Margin="10">
+                    <Grid Grid.Column="2" VerticalAlignment="Bottom" Margin="10" HorizontalAlignment="Right">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"></ColumnDefinition>
                             <ColumnDefinition Width="Auto"></ColumnDefinition>
@@ -751,12 +751,6 @@
                                     <DataGridTextColumn.ElementStyle>
                                         <Style TargetType="TextBlock">
                                             <Setter Property="HorizontalAlignment" Value="Center" />
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding IsActive}" Value="True">
-                                                    <Setter Property="Foreground" Value="#FFA500" />
-                                                    <Setter Property="FontWeight" Value="Bold" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
                                         </Style>
                                     </DataGridTextColumn.ElementStyle>
                                     <DataGridTextColumn.HeaderStyle>
@@ -770,12 +764,6 @@
                                     <DataGridTextColumn.ElementStyle>
                                         <Style TargetType="TextBlock">
                                             <Setter Property="HorizontalAlignment" Value="Center" />
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding IsActive}" Value="True">
-                                                    <Setter Property="Foreground" Value="#FFA500" />
-                                                    <Setter Property="FontWeight" Value="Bold" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
                                         </Style>
                                     </DataGridTextColumn.ElementStyle>
                                     <DataGridTextColumn.HeaderStyle>
@@ -789,12 +777,6 @@
                                     <DataGridTextColumn.ElementStyle>
                                         <Style TargetType="TextBlock">
                                             <Setter Property="HorizontalAlignment" Value="Center" />
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding IsActive}" Value="True">
-                                                    <Setter Property="Foreground" Value="#FFA500" />
-                                                    <Setter Property="FontWeight" Value="Bold" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
                                         </Style>
                                     </DataGridTextColumn.ElementStyle>
                                     <DataGridTextColumn.HeaderStyle>
@@ -970,120 +952,64 @@
                 <TabItem.Header>
                     <TextBlock Text="Request Statistics" FontSize="17"/>
                 </TabItem.Header>
-                <Grid Margin="10">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="287*"/>
-                        <ColumnDefinition Width="538*"/>
-                        <ColumnDefinition Width="179*"/>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <GroupBox Header="Filters" FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2" Margin="10,10,10,10">
-                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="10">
-                                <StackPanel Margin="10">
-                                    <TextBlock Text="Year:" FontSize="18"/>
-                                    <ComboBox Width="90" FontSize="18" ItemsSource="{Binding Path=StatisticsYears, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding Path=StatisticsYearInput, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cbStatisticsYear_SelectionChanged"/>
-                                </StackPanel>
-                                <StackPanel Margin="10">
-                                    <TextBlock Text="Month:" FontSize="18" />
-                                    <ComboBox Width="90" FontSize="18" ItemsSource="{Binding Path=StatisticsMonths, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding Path=StatisticsMonthInput, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=IsMonthClickable, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cbStatisticsMonth_SelectionChanged"/>
-                                </StackPanel>
+                    <GroupBox Header="Filters" FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2" Margin="10" HorizontalAlignment="Stretch" Grid.ColumnSpan="3">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"></RowDefinition>
+                                <RowDefinition Height="*"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="0" Margin="10">
+                                <TextBlock Text="Year:" FontSize="18"/>
+                                <ComboBox  FontSize="18" ItemsSource="{Binding Path=StatisticsYears, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding Path=StatisticsYearInput, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cbStatisticsYear_SelectionChanged"/>
                             </StackPanel>
-                            <StackPanel Margin="10">
-                                <TextBlock Text="City:" FontSize="18" Margin="10 0 0 0"/>
-                                <ComboBox Width="200" FontSize="18" ItemsSource = "{Binding Path = StatisticsCities, UpdateSourceTrigger=PropertyChanged}"  SelectedItem="{Binding Path = StatisticsCityInput, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cbStatisticsCity_SelectionChanged"/>
+
+                            <StackPanel Grid.Row="0" Grid.Column="1" Margin="10">
+                                <TextBlock Text="Month:" FontSize="18" />
+                                <ComboBox  FontSize="18" ItemsSource="{Binding Path=StatisticsMonths, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding Path=StatisticsMonthInput, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=IsMonthClickable, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cbStatisticsMonth_SelectionChanged"/>
                             </StackPanel>
-                            <StackPanel Margin="10">
+                            <StackPanel Margin="10" Grid.Row="1" Grid.Column="0">
                                 <TextBlock Text="Country:" FontSize="18" Margin="10 0 0 0"/>
-                                <ComboBox Width="200" FontSize="18" ItemsSource = "{Binding Path = StatisticsCountries, UpdateSourceTrigger=PropertyChanged}"  SelectedItem="{Binding Path = StatisticsCountryInput, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cbStatisticsCountry_SelectionChanged"/>
+                                <ComboBox  FontSize="18" ItemsSource = "{Binding Path = StatisticsCountries, UpdateSourceTrigger=PropertyChanged}"  SelectedItem="{Binding Path = StatisticsCountryInput, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cbStatisticsCountry_SelectionChanged"/>
                             </StackPanel>
-                            <StackPanel Margin="10">
+                            <StackPanel Margin="10" Grid.Row="1" Grid.Column="1">
+                                <TextBlock Text="City:" FontSize="18" Margin="10 0 0 0"/>
+                                <ComboBox FontSize="18" ItemsSource = "{Binding Path = StatisticsCities, UpdateSourceTrigger=PropertyChanged}"  SelectedItem="{Binding Path = StatisticsCityInput, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="cbStatisticsCity_SelectionChanged"/>
+                            </StackPanel>
+                            <StackPanel Margin="10" Grid.RowSpan="2" Grid.Column="2" VerticalAlignment="Center">
                                 <TextBlock Text="Language:" FontSize="18" Margin="10 0 0 0"/>
-                                <TextBox Width="200" FontSize="18" Text="{Binding Path = StatisticsLanguageInput, UpdateSourceTrigger=PropertyChanged}" TextChanged="cbStatisticsLanguage_SelectionChanged"/>
+                                <TextBox  FontSize="18" Text="{Binding Path = StatisticsLanguageInput, UpdateSourceTrigger=PropertyChanged}" TextChanged="cbStatisticsLanguage_SelectionChanged"/>
                             </StackPanel>
-                        </StackPanel>
+
+                        </Grid>
                     </GroupBox>
-                    <Grid Grid.Column="1" Margin="10,10,10,10" Grid.ColumnSpan="2">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                        </Grid.RowDefinitions>
-                        <GroupBox Header="Language Only" FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2"
-                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
-                            <Grid Margin="5">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="1*"/>
-                                    <RowDefinition Height="1*"/>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width ="1*"/>
-                                    <ColumnDefinition Width ="1*"/>
-                                </Grid.ColumnDefinitions>
-                                <Border Grid.Row="0" Grid.Column="0" Background="#E9F1F7" BorderThickness="3" BorderBrush="#007ACC">
-                                    <TextBox Foreground="#007ACC" FontWeight="DemiBold" Text="Language" IsReadOnly="True"  HorizontalAlignment="Center" Background="#E9F1F7" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
-                                </Border>
-                                <Border Grid.Row="0" Grid.Column="1" Background="#E9F1F7" BorderThickness="3" BorderBrush="#007ACC">
-                                    <TextBox Foreground="#007ACC" FontWeight="DemiBold" Text="Number Of Requests" IsReadOnly="True"  HorizontalAlignment="Center" Background="#E9F1F7" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
-                                </Border>
-                                <Border Grid.Row="1" Grid.Column="0" Background="#F5F5F5" BorderThickness="3" BorderBrush="#007ACC">
-                                    <TextBox  Text="{Binding Path = LanguageR, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"  HorizontalAlignment="Center" Background="#F5F5F5" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
-                                </Border>
-                                <Border Grid.Row="1" Grid.Column="1" Background="#F5F5F5" BorderThickness="3" BorderBrush="#007ACC">
-                                    <TextBox  Text="{Binding Path = LanguageRequestsCount, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"  HorizontalAlignment="Center" Background="#F5F5F5" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
-                                </Border>
-                            </Grid>
-                        </GroupBox>
-                        <GroupBox Grid.Row="1" Header="Location Only" FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2"
-                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
-                            <Grid Margin="5">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="1*"/>
-                                    <RowDefinition Height="1*"/>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <Border Grid.Row="0" Grid.Column="0" Background="#E9F1F7" BorderThickness="3" BorderBrush="#007ACC">
-                                    <TextBox Foreground="#007ACC" FontWeight="DemiBold" Text="Location" IsReadOnly="True"  HorizontalAlignment="Center" Background="#E9F1F7" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
-                                </Border>
-                                <Border Grid.Row="0" Grid.Column="1" Background="#E9F1F7" BorderThickness="3" BorderBrush="#007ACC">
-                                    <TextBox Foreground="#007ACC" FontWeight="DemiBold" Text="Number Of Requests" IsReadOnly="True"  HorizontalAlignment="Center" Background="#E9F1F7" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
-                                </Border>
-                                <Border Grid.Row="1" Grid.Column="0" Background="#F5F5F5" BorderThickness="3" BorderBrush="#007ACC">
-                                    <TextBox  Text="{Binding Path = Location, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"  HorizontalAlignment="Center" Background="#F5F5F5" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
-                                </Border>
-                                <Border Grid.Row="1" Grid.Column="1" Background="#F5F5F5" BorderThickness="3" BorderBrush="#007ACC">
-                                    <TextBox  Text="{Binding Path = LocationRequestsCount, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"  HorizontalAlignment="Center" Background="#F5F5F5" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
-                                </Border>
-                            </Grid>
-                        </GroupBox>
-                        <GroupBox Grid.Row="2" Header="Language And Location" FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2"
-                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
-                            <Grid Margin="5">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="1*"/>
-                                    <RowDefinition Height="1*"/>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <Border Grid.Row="0" Grid.Column="0" Background="#E9F1F7" BorderThickness="3" BorderBrush="#007ACC">
-                                    <TextBox Foreground="#007ACC" FontWeight="DemiBold" Text="Location And Language" IsReadOnly="True"  HorizontalAlignment="Center" Background="#E9F1F7" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
-                                </Border>
-                                <Border Grid.Row="0" Grid.Column="1" Background="#E9F1F7" BorderThickness="3" BorderBrush="#007ACC">
-                                    <TextBox Foreground="#007ACC" FontWeight="DemiBold" Text="Number Of Requests" IsReadOnly="True"  HorizontalAlignment="Center" Background="#E9F1F7" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
-                                </Border>
-                                <Border Grid.Row="1" Grid.Column="0" Background="#F5F5F5" BorderThickness="3" BorderBrush="#007ACC">
-                                    <TextBox  Text="{Binding Path = LanguageAndLocation, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"  HorizontalAlignment="Center" Background="#F5F5F5" BorderThickness="0" VerticalAlignment="Center" FontSize="20"/>
-                                </Border>
-                                <Border Grid.Row="1" Grid.Column="1" Background="#F5F5F5" BorderThickness="3" BorderBrush="#007ACC">
-                                    <TextBox  Text="{Binding Path = LanguageLocationRequestsCount, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"  HorizontalAlignment="Center" Background="#F5F5F5" BorderThickness="0" VerticalAlignment="Center" FontSize="27"/>
-                                </Border>
-                            </Grid>
-                        </GroupBox>
-                    </Grid>
+                    <GroupBox Header="Language Only" FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2" Margin="10"
+           HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1">
+                        <TextBlock Text="{Binding LanguageRequestsCount, UpdateSourceTrigger=PropertyChanged    }"  FontSize="150" Foreground="#FFA500" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                    </GroupBox>
+                    <GroupBox Header="Location Only" FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2" Margin="10"
+           HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="1">
+                        <TextBlock Text="{Binding LocationRequestsCount, UpdateSourceTrigger=PropertyChanged}"  FontSize="150" Foreground="#FFA500" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                    </GroupBox>
+                    <GroupBox Header="Language+Location " FontSize="32" Foreground="#007ACC" BorderBrush="#007ACC" BorderThickness="2" Margin="10"
+           HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="2">
+                        <TextBlock Text="{Binding LanguageLocationRequestsCount, UpdateSourceTrigger=PropertyChanged}"  FontSize="150" Foreground="#FFA500" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                    </GroupBox>
                 </Grid>
             </TabItem>
             <TabItem>
@@ -1131,7 +1057,7 @@
                         </Button>
 
                     </StackPanel>
-                    <Grid Grid.Column="2" VerticalAlignment="Bottom" Margin="10">
+                    <Grid Grid.Column="2" VerticalAlignment="Bottom" Margin="10" HorizontalAlignment="Right">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"></ColumnDefinition>
                             <ColumnDefinition Width="Auto"></ColumnDefinition>

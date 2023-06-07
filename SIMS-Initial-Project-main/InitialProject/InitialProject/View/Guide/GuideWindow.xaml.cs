@@ -791,18 +791,18 @@ namespace InitialProject.View.Guide
                 RequestCityInput = string.Empty;
 
             UpdateSearchParameters();
-           // UpdateRequests();
+            UpdateRequests();
         }
 
         private void Text_Changed(object sender, TextChangedEventArgs e)
         {
             UpdateSearchParameters();
-           // UpdateRequests();
+           UpdateRequests();
         }
         private void Date_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             UpdateSearchParameters();
-          //  UpdateRequests();
+            UpdateRequests();
         }
         private void UpdateSearchParameters()
         {
@@ -825,7 +825,7 @@ namespace InitialProject.View.Guide
 
             PendingRequests.Clear();
 
-            List<TourRequest> result = _tourRequestService.Filter(RequestParameters, _tourRequestService.GetPendingRequests(CurrentUser));
+            List<TourRequest> result = _tourRequestService.Filter(RequestParameters, CurrentUser);
 
             List<GuideRequestDTO> searchResults = GuideDTOConverter.ConvertToDTO(result, _locationService);
 
@@ -868,7 +868,7 @@ namespace InitialProject.View.Guide
             PendingRequests.Clear();
             if (!string.IsNullOrEmpty(PendingRequestsSearchInput))
             {
-                foreach (TourRequest tourRequest in _tourRequestService.FilterRequests(PendingRequestsSearchInput, _tourRequestService.GetPendingRequests(CurrentUser)))
+                foreach (TourRequest tourRequest in _tourRequestService.Search(PendingRequestsSearchInput, _tourRequestService.GetPendingRequests(CurrentUser)))
                 {
                     PendingRequests.Add(GuideDTOConverter.ConvertToDTO(tourRequest, _locationService));
                 }
@@ -1113,13 +1113,11 @@ namespace InitialProject.View.Guide
                 IsMonthClickable = true;
 
 
-            UpdateGridNames();
             UpdateGridCounts();
         }
 
         private void cbStatisticsMonth_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            UpdateGridNames();
             UpdateGridCounts();
         }
 
@@ -1128,7 +1126,6 @@ namespace InitialProject.View.Guide
             if (StatisticsCityInput != "-")
                 StatisticsCountryInput = _locationService.GetCountryByCity(StatisticsCityInput);
 
-            UpdateGridNames();
             UpdateGridCounts();
         }
 
@@ -1138,50 +1135,15 @@ namespace InitialProject.View.Guide
             if (!_locationService.GetCitiesByCountry(StatisticsCountryInput).Contains(StatisticsCityInput))
                 StatisticsCityInput = "-";
 
-            UpdateGridNames();
             UpdateGridCounts();
 
         }
 
         private void cbStatisticsLanguage_SelectionChanged(object sender, TextChangedEventArgs e)
         {
-            UpdateGridNames();
             UpdateGridCounts();
         }
 
-        private void UpdateGridNames()
-        {
-            if (string.IsNullOrEmpty(StatisticsLanguageInput))
-                LanguageR = "No language selected.";
-            else
-                LanguageR = StatisticsLanguageInput;
-
-            if (StatisticsCityInput == "-" && StatisticsCountryInput == "-")
-                Location = "No location selected.";
-
-            if (StatisticsCityInput == "-" && StatisticsCountryInput != "-")
-                Location = StatisticsCountryInput;
-
-            if (StatisticsCityInput != "-" && StatisticsCountryInput != "-")
-                Location = StatisticsCityInput + ", " + StatisticsCountryInput;
-
-            if (string.IsNullOrEmpty(StatisticsLanguageInput) && Location == "No location selected.")
-            {
-                LanguageAndLocation = "Language and Location not selected.";
-            }
-            if (string.IsNullOrEmpty(StatisticsLanguageInput) && Location != "No location selected.")
-            {
-                LanguageAndLocation = "Language not selected.";
-            }
-            if (!string.IsNullOrEmpty(StatisticsLanguageInput) && Location == "No location selected.")
-            {
-                LanguageAndLocation = "Location not selected.";
-            }
-            if (!string.IsNullOrEmpty(StatisticsLanguageInput) && Location != "No location selected.")
-            {
-                LanguageAndLocation = Location + " in " + LanguageR;
-            }
-        }
         private void UpdateGridCounts()
         {
 
@@ -1193,22 +1155,19 @@ namespace InitialProject.View.Guide
             RequestStatisticsParameters.StartDate = GetStartDate();
             RequestStatisticsParameters.EndDate = GetEndDate();
 
-            LanguageRequestsCount = _tourRequestService.Filter(UpdateForLanguages(RequestStatisticsParameters), _tourRequestService.GetAll()).Count;
-            LocationRequestsCount = _tourRequestService.Filter(UpdateForLocations(RequestStatisticsParameters), _tourRequestService.GetAll()).Count;
-            LanguageLocationRequestsCount = _tourRequestService.Filter(RequestStatisticsParameters, _tourRequestService.GetAll()).Count;
+            //string x = RequestStatisticsParameters.Country + "\n" + RequestStatisticsParameters.City + "\n" + RequestStatisticsParameters.Language + "\n" + RequestStatisticsParameters.StartDate.Value.ToString() + "\n" + RequestStatisticsParameters.EndDate.Value.ToString();
 
-        }
+            //MessageBox.Show(x);
 
-        private RequestFilterParameters UpdateForLanguages(RequestFilterParameters parameters) 
-        {
-            parameters.Country = null;
-            parameters.City = null;
-            return parameters;
-        }
-        private RequestFilterParameters UpdateForLocations(RequestFilterParameters parameters)
-        {
-            parameters.Language = null;
-            return parameters;
+            RequestFilterParameters paramsLanguage = new RequestFilterParameters(null, null, RequestStatisticsParameters.Language, null, RequestStatisticsParameters.StartDate, RequestStatisticsParameters.EndDate);
+            RequestFilterParameters paramsLocation = new RequestFilterParameters(RequestStatisticsParameters.Country, RequestStatisticsParameters.City , null, null, RequestStatisticsParameters.StartDate, RequestStatisticsParameters.EndDate);
+            RequestFilterParameters paramsBoth = new RequestFilterParameters(RequestStatisticsParameters.Country, RequestStatisticsParameters.City, RequestStatisticsParameters.Language, null, RequestStatisticsParameters.StartDate, RequestStatisticsParameters.EndDate);
+
+            LanguageRequestsCount = _tourRequestService.Filter(paramsLanguage, null).Count; 
+            LocationRequestsCount = _tourRequestService.Filter(paramsLocation, null).Count;
+            LanguageLocationRequestsCount = _tourRequestService.Filter(paramsBoth, null).Count;
+
+            //MessageBox.Show(LanguageRequestsCount.ToString() + "\n" + LocationRequestsCount.ToString() + "\n" + LanguageLocationRequestsCount.ToString());
         }
         private DateTime? GetStartDate() 
         {
@@ -1223,7 +1182,7 @@ namespace InitialProject.View.Guide
             }
             if (StatisticsYearInput != "Alltime" && StatisticsMonthInput != "-")
             {
-                return new DateTime(int.Parse(StatisticsYearInput), int.Parse(StatisticsMonthInput), 1, 0, 0, 0);
+                return new DateTime(int.Parse(StatisticsYearInput), GetMonthValue().Value, 1, 0, 0, 0);
             }
 
             return null;
@@ -1241,7 +1200,7 @@ namespace InitialProject.View.Guide
             }
             if (StatisticsYearInput != "Alltime" && StatisticsMonthInput != "-")
             {
-                return new DateTime(int.Parse(StatisticsYearInput), GetMonthValue().Value, DateTime.DaysInMonth(int.Parse(StatisticsYearInput), int.Parse(StatisticsMonthInput)), 23, 59, 59);
+                return new DateTime(int.Parse(StatisticsYearInput), GetMonthValue().Value, DateTime.DaysInMonth(int.Parse(StatisticsYearInput), GetMonthValue().Value), 23, 59, 59);
             }
 
             return null;

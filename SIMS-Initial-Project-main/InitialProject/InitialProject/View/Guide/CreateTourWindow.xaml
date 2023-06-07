@@ -174,7 +174,7 @@
                          IsEnabled="{Binding Path = IsEnabledMaximumGuestsTextBox}"/>
                         </Border>
                     </StackPanel>
-                    <TextBlock Text="Druation:" 
+                    <TextBlock Text="Duration:" 
                            Grid.Row="6" 
                            Grid.Column="0" 
                            FontSize="13" 
@@ -267,7 +267,7 @@
                           IsDropDownOpen="{Binding Path=IsMinutesComboBoxDropDown}"
                           IsEnabled="{Binding Path = IsEnabledMinutesComboBox}"/>
                             </Border>
-                            <Button Content="Add (ENTER)" Height="30" Width="80" FontSize="11" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2"  Command="{Binding AddDateCommand}"  IsEnabled="{Binding IsEnabledButton}" Margin="20 0 0 0">
+                            <Button Content="Add (ENTER)" Height="30" Width="80" FontSize="11" Background="{Binding ButtonBackgroundColorAddDate}" Foreground="White" BorderBrush="#007ACC" BorderThickness="2"  Command="{Binding AddDateCommand}"  IsEnabled="{Binding IsEnabledButton}" Margin="20 0 0 0">
                                 <Button.Template>
                                     <ControlTemplate TargetType="Button">
                                         <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -356,7 +356,7 @@
                          Height="20"
                          behaviors:TextBoxBehavior.GotFocusCommand="{Binding CheckpointTextBoxGotFocusCommand}" behaviors:TextBoxBehavior.LostFocusCommand="{Binding CheckpointTextBoxLostFocusCommand}"
                          IsEnabled="{Binding Path = IsEnabledCheckpointNameTextBox}"/>
-                        <Button Content="Add (ENTER)" Height="30" Width="80" FontSize="11" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2"  Command="{Binding AddCheckpointCommand}"  IsEnabled="{Binding IsEnabledButton}" Margin="20 0 0 0" HorizontalAlignment="Right">
+                        <Button Content="Add (ENTER)" Height="30" Width="80" FontSize="11" Background="{Binding ButtonBackgroundColorAddCheckpoint}" Foreground="White" BorderBrush="#007ACC" BorderThickness="2"  Command="{Binding AddCheckpointCommand}"  IsEnabled="{Binding IsEnabledButton}" Margin="20 0 0 0" HorizontalAlignment="Right">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -446,7 +446,7 @@
                         Width="250"
                         Height="20"
                          IsEnabled="{Binding Path = IsEnabledImageUrlTextBox}"/>
-                        <Button Content="Add (ENTER)" Height="30" Width="80" FontSize="11" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" IsEnabled="{Binding IsEnabledButton}" Margin="20 0 0 0" Command="{Binding AddImageUrlCommand}">
+                        <Button Content="Add (ENTER)" Height="30" Width="80" FontSize="11" Background="{Binding ButtonBackgroundColorAddImage}" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" IsEnabled="{Binding IsEnabledButton}" Margin="20 0 0 0" Command="{Binding AddImageUrlCommand}">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">
@@ -568,7 +568,7 @@
                     </StackPanel>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" >
-                    <Button Content="    Save&#x0a;(CTRL + S)" Width="100" Height="60" Background="#007ACC" Foreground="White" FontSize="15" BorderThickness="0" Padding="5 0" Command="{Binding CreateTourCommand}" Margin="5" IsEnabled="{Binding IsEnabledButton}">
+                    <Button Content="    Save&#x0a;(CTRL + S)" Width="100" Height="60" Background="{Binding ButtonBackgroundColorSave}" Foreground="White" FontSize="15" BorderThickness="0" Padding="5 0" Command="{Binding CreateTourCommand}" Margin="5" IsEnabled="{Binding IsEnabledButton}">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">

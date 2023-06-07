@@ -4,6 +4,7 @@ using InitialProject.Repository.Interfaces;
 using InitialProject.Resources.Injector;
 using InitialProject.Resources.Observer;
 using InitialProject.View.Guest2;
+using Org.BouncyCastle.Asn1.Ocsp;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
@@ -223,7 +224,7 @@ namespace InitialProject.Service
 
             return requests;
         }
-        public List<TourRequest> FilterRequests(string input, List<TourRequest> requests)
+        public List<TourRequest> Search(string input, List<TourRequest> requests)
         {
 
             List<TourRequest> byCountry = new List<TourRequest>();
@@ -459,57 +460,77 @@ namespace InitialProject.Service
             return requests;
         }
 
-        public List<TourRequest> Filter(RequestFilterParameters parameters, List<TourRequest> requests)
+        public List<TourRequest> Filter(RequestFilterParameters parameters, User user)
         {
-  
-            if(!string.IsNullOrEmpty(parameters.Country)) 
+            List<TourRequest> requests = new List<TourRequest>();
+            if (user == null) 
             {
-                requests = requests.Where(r => _locationService.GetById(r.LocationId).Country == parameters.Country).ToList();
+                requests = HandleAllRequests(parameters);
+                return requests;
+            }
+            else
+            {
+                requests = GetPendingRequests(user);
+            }
+
+            if (!string.IsNullOrEmpty(parameters.Country)) 
+            {
+               requests = requests.Intersect(GetByCountry(user, parameters.Country)).ToList();
             }
 
             if (!string.IsNullOrEmpty(parameters.City))
             {
-                requests = requests.Where(r => _locationService.GetById(r.LocationId).City == parameters.City).ToList();
+                requests = requests.Intersect(GetByCity(user, parameters.City)).ToList();
             }
 
             if (!string.IsNullOrEmpty(parameters.Language))
             {
-                requests = requests.Where(r => r.Language.Contains(parameters.Language)).ToList();
+                requests = requests.Intersect(GetByLanguage(user, parameters.Language)).ToList();
             }
             if (parameters.MaxGuests != null)
             {
-                requests = requests.Where(r => r.MaxGuests >= parameters.MaxGuests).ToList();
+                requests = requests.Intersect(GetByMaxGuests(user, parameters.MaxGuests.Value)).ToList();
             }
             if (parameters.StartDate != null)
             {
-                requests = requests.Where(r => r.StartTime >= parameters.StartDate).ToList();
+                requests = requests.Intersect(GetByStartDate(user, parameters.StartDate.Value)).ToList();
             }
             if (parameters.EndDate != null)
             {
-                requests = requests.Where(r => r.EndTime <= parameters.EndDate).ToList();
+                requests = requests.Intersect(GetByEndDate(user, parameters.EndDate.Value)).ToList();
             }
-            //if (parameters.Year != "Alltime" && parameters.Month != null)
-            //{
-            //    int year = int.Parse(parameters.Year);
-            //    int month = parameters.Month.Value;
-
-            //    DateTime startTime = new DateTime(year, month, 1, 0, 0, 0);
-            //    DateTime endTime = new DateTime(year, month, DateTime.DaysInMonth(year, month), 23, 59, 59);
-
-            //    requests = requests.Where(r => r.StartTime >= startTime && r.EndTime <= endTime).ToList();
-            //}
-            //if (parameters.Year != "Alltime" && parameters.Month == null)
-            //{
-            //    int year = int.Parse(parameters.Year);
-
-            //    DateTime startTime = new DateTime(year, 1, 1, 0, 0, 0);
-            //    DateTime endTime = new DateTime(year, 12, 31, 23, 59, 59);
-
-            //    requests = requests.Where(r => r.StartTime >= startTime && r.EndTime <= endTime).ToList();
-            //}
-
 
             return requests; 
+        }
+        private List<TourRequest> HandleAllRequests(RequestFilterParameters parameters) 
+        {
+            List<TourRequest> requests = GetAll();
+
+            if (!string.IsNullOrEmpty(parameters.Country))
+            {
+                requests = requests.Intersect(requests.Where(r => _locationService.GetById(r.LocationId).Country == parameters.Country)).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(parameters.City))
+            {
+                requests = requests.Intersect(requests.Where(r => _locationService.GetById(r.LocationId).City == parameters.Country)).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(parameters.Language))
+            {
+                requests = requests.Intersect(requests.Where(r => r.Language.Replace(" ", "").ToLower() == parameters.Language.Replace(" ", "").ToLower())).ToList();
+            }
+
+            if (parameters.StartDate != null)
+            {
+                requests = requests.Intersect(requests.Where(r => r.StartTime >= parameters.StartDate)).ToList();
+            }   
+            if (parameters.EndDate != null)
+            {
+                requests = requests.Intersect(requests.Where(r => r.EndTime <= parameters.EndDate)).ToList();
+            }
+
+            return requests;
         }
         public List<string> GetAllLanguages() 
         {
@@ -534,7 +555,7 @@ namespace InitialProject.Service
             {
                 RequestFilterParameters parameters = new RequestFilterParameters(null,null, language, null, null,null);
 
-                int count = Filter(parameters,GetAll()).Count;
+                int count = Filter(parameters,null).Count;
 
                 if (count > maxValue)
                 {
@@ -555,7 +576,7 @@ namespace InitialProject.Service
 
                 RequestFilterParameters parameters = new RequestFilterParameters(null, city, null, null, null, null);
 
-                int count = Filter(parameters, GetAll()).Count;
+                int count = Filter(parameters, null).Count;
 
                 if (count > maxValue)
                 {
@@ -573,7 +594,7 @@ namespace InitialProject.Service
             {
                 RequestFilterParameters parameters = new RequestFilterParameters(country, null, null, null, null, null);
 
-                int count = Filter(parameters, GetAll()).Count;
+                int count = Filter(parameters, null).Count;
 
                 if (count > maxValue)
                 {

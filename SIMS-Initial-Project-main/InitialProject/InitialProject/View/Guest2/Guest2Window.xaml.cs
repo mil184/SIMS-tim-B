@@ -205,7 +205,9 @@ namespace InitialProject.View.Guest2
             _complexTourService = new ComplexTourService();
             _complexTourService.Subscribe(this);
 
-            Tours = new ObservableCollection<Tour>(_tourService.GetReservableTours());
+            Tours = new ObservableCollection<Tour>(_tourService.GetReservableTours()
+         .OrderByDescending(tour => _userService.GetById(tour.GuideId).SuperGuideLanguages.Count > 0 ? 1 : 0));
+
             TourDTOs = ConvertToDTO(new List<Tour>(Tours));
 
             List<Voucher> UserVouchers = _voucherService.GetUserVouchers(LoggedInUser);

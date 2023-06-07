@@ -127,7 +127,7 @@
         </Border>
 
         <StackPanel Grid.Row="7" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,10">
-            <Button Grid.Column="0" Content=" Close&#x0a; (ESC)" Margin="0 0 10 0" Height="50" Width="130" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Left" Command="{Binding CancelCommand}">
+            <Button Grid.Column="0" Content=" Close&#x0a; (ESC)" Margin="0 0 10 0" Height="60" Width="180" FontSize="16" Background="#007ACC" Foreground="White" BorderBrush="#007ACC" BorderThickness="2" HorizontalAlignment="Left" Command="{Binding CancelCommand}">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="border" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20">

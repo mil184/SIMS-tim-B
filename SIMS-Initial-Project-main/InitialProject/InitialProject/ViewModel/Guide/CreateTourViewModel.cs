@@ -70,6 +70,11 @@ namespace InitialProject.ViewModel.Guide
             SetImage(ImageIndex);
 
             PreviousWindowCloseCommand = closeCommand;
+
+            ButtonBackgroundColorAddDate= new SolidColorBrush((Color)ColorConverter.ConvertFromString("#007ACC"));
+            ButtonBackgroundColorAddImage = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#007ACC"));
+            ButtonBackgroundColorAddCheckpoint = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#007ACC"));
+            ButtonBackgroundColorSave = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#007ACC"));
         }
         private void InitializeCollections()
         {
@@ -967,6 +972,8 @@ namespace InitialProject.ViewModel.Guide
             IsMinutesComboBoxDropDown = false;
             await Task.Delay(Duration * 10);
 
+            await DateButton();
+ 
             AddDateTime();
             await Task.Delay(Duration*10);
 
@@ -991,6 +998,7 @@ namespace InitialProject.ViewModel.Guide
             IsMinutesComboBoxDropDown = false;
             await Task.Delay(Duration * 10);
 
+            await DateButton();
             AddDateTime();
             await Task.Delay(Duration * 20);
 
@@ -1004,6 +1012,7 @@ namespace InitialProject.ViewModel.Guide
             }
             await Task.Delay(Duration*10);
 
+            await CheckpointButton();
             AddCheckpoint();
 
 
@@ -1013,7 +1022,7 @@ namespace InitialProject.ViewModel.Guide
                 await Task.Delay(Duration);
             }
             await Task.Delay(Duration*10);
-
+            await CheckpointButton();
             AddCheckpoint();
 
 
@@ -1023,7 +1032,7 @@ namespace InitialProject.ViewModel.Guide
                 await Task.Delay(Duration);
             }
             await Task.Delay(Duration*10);
-
+            await CheckpointButton();
             AddCheckpoint();
 
 
@@ -1033,7 +1042,7 @@ namespace InitialProject.ViewModel.Guide
                 await Task.Delay(Duration);
             }
             await Task.Delay(Duration*10);
-
+            await CheckpointButton();
             AddCheckpoint();
 
             await Task.Delay(Duration * 20);
@@ -1042,14 +1051,80 @@ namespace InitialProject.ViewModel.Guide
         {
             ImageUrl = "https://planetofhotels.com/guide/sites/default/files/styles/paragraph__hero_banner__hb_image__1880bp/public/hero_banner/shitennoji-temple_optimized.jpg";
             await Task.Delay(Duration*25);
+            await ImageButton();
             AddImageUrl();
             await Task.Delay(Duration * 150);
-
+            await SaveButton();
+        }
+        private async Task ImageButton()
+        {
+            ButtonBackgroundColorAddImage = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00415E"));
+            await Task.Delay(200);
+            ButtonBackgroundColorAddImage = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#007ACC"));
+        }
+        private async Task DateButton()
+        {
+            ButtonBackgroundColorAddDate = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00415E"));
+            await Task.Delay(200);
+            ButtonBackgroundColorAddDate = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#007ACC"));
+        }
+        private async Task CheckpointButton()
+        {
+            ButtonBackgroundColorAddCheckpoint = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00415E"));
+            await Task.Delay(200);
+            ButtonBackgroundColorAddCheckpoint = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#007ACC"));
+        }
+        private async Task SaveButton()
+        {
+            ButtonBackgroundColorSave = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00415E"));
+            await Task.Delay(200);
+            ButtonBackgroundColorSave = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#007ACC"));
         }
         private async Task ClearAll()
         {
             Empty();
             await Task.Delay(Duration * 10);
+        }
+
+        private SolidColorBrush _buttonBackgroundColorAddImage;
+        public SolidColorBrush ButtonBackgroundColorAddImage
+        {
+            get { return _buttonBackgroundColorAddImage; }
+            set
+            {
+                _buttonBackgroundColorAddImage = value;
+                OnPropertyChanged(nameof(ButtonBackgroundColorAddImage));
+            }
+        }
+        private SolidColorBrush _buttonBackgroundColorAddDate;
+        public SolidColorBrush ButtonBackgroundColorAddDate
+        {
+            get { return _buttonBackgroundColorAddDate; }
+            set
+            {
+                _buttonBackgroundColorAddDate = value;
+                OnPropertyChanged(nameof(ButtonBackgroundColorAddDate));
+            }
+        }
+        private SolidColorBrush _buttonBackgroundColorAddCheckpoint;
+        public SolidColorBrush ButtonBackgroundColorAddCheckpoint
+        {
+            get { return _buttonBackgroundColorAddCheckpoint; }
+            set
+            {
+                _buttonBackgroundColorAddCheckpoint = value;
+                OnPropertyChanged(nameof(ButtonBackgroundColorAddCheckpoint));
+            }
+        }
+        private SolidColorBrush _buttonBackgroundColorSave;
+        public SolidColorBrush ButtonBackgroundColorSave
+        {
+            get { return _buttonBackgroundColorSave; }
+            set
+            {
+                _buttonBackgroundColorSave = value;
+                OnPropertyChanged(nameof(ButtonBackgroundColorSave));
+            }
         }
         #endregion
 
